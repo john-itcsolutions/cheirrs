@@ -100,7 +100,7 @@ class BaseModel(db.Model):
             db.session.rollback()
             return None
 
-print('The Schemas are: %s' % schemas)
+print("The Schemas are: %s" % schemas)
 
 # At this stage we are still developing this __init__.py file
 # to produce a complete database connection and set of Models 
@@ -116,6 +116,7 @@ print('The Schemas are: %s' % schemas)
             for table_name in insp.get_table_names(schema=schema):
                 table = Table('table_name', meta, autoload=True, autoload_with=engine)
                 primaryKeyColName = Table.primary_key.columns.values()[0].name
+                print("Primary key Col Name is %s" % primaryKeyColName)
                 logging.debug('table: %s' % table_name)
             
                 for column in insp.get_columns(table_name, schema=schema):
