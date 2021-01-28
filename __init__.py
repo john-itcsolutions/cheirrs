@@ -1,4 +1,4 @@
-from sqlalchemy import MetaData, Table, Column, Integer, String, create_engine
+from sqlalchemy import *
 from sqlalchemy.engine import reflection
 from sqlalchemy.engine import inspect
 
@@ -16,14 +16,14 @@ logging.basicConfig(filename='models.py', level=logging.DEBUG, format='')
 
 # Create connection string & engine
 db_uri = "postgresql+psycopg2://postgres:Buddha10@10.186.165.230:5432/general"
-engine = create_engine(db_uri, echo=False)
+db = create_engine(db_uri, echo=False)
 
 meta = MetaData()
 
 # Performs database schema inspection
-insp = Inspector.from_engine(engine)
+insp = Inspector.from_engine(db)
 
-schemas = inspector.get_schema_names()
+schemas = insp.get_schema_names()
 
 class BaseModel(db.Model):
 
@@ -100,16 +100,16 @@ class BaseModel(db.Model):
             db.session.rollback()
             return None
 
-logging.debug('The Schemas are: %s' % schemas)
+print('The Schemas are: %s' % schemas)
 
         for schema in schemas:
             logging.debug('schema: %s' % schema)
         
-            for table_name in inspector.get_table_names(schema=schema):
+            for table_name in insp.get_table_names(schema=schema):
                 table = Table('table_name', meta, autoload=True, autoload_with=engine)
                 primaryKeyColName = Table.primary_key.columns.values()[0].name
                 logging.debug('table: %s' % table_name)
             
-                for column in inspector.get_columns(table_name, schema=schema):
+                for column in insp.get_columns(table_name, schema=schema):
                     logging.debug('Column: %s' % column)
                 
