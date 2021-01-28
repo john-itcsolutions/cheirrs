@@ -1,6 +1,6 @@
 ## INTRODUCTION:
 
-# Smart
+# CHEIRRS
 Project based on  Lxd, Juju, Charms and Kubernetes merged with Cyber Republic's Elastos Smartweb gRPC-based Blockchain and Database Server and SQLAlchemy.
 
 To tackle a full Kubernetes installation, ideally you would need a 32 GB RAM; 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, your Kubeflow installation will go much more easily with an 8 core Host rather than a 4 core one. You really need an Accelerator NVIDIA GPU of at least 10GB vRAM. ITCSA is using a 24GB NVIDIA Tesla K80.
@@ -56,7 +56,6 @@ Nevertheless, if you wish to go on to build a full set of nodes enabled on Kuber
 On host terminal, preferably in a directory within the 2nd HDD if available, to save working files in case of a crash:
 
 Install lxd
-<<<<<<< HEAD
 
 `sudo snap install lxd`
 
@@ -114,120 +113,10 @@ Follow the above instructions carefully inside this virtual machine. Passthrough
 Note; you are user 'ubuntu' here, so if you need a new password, just
 
 `sudo passwd ubuntu`
-
-=======
-
-`sudo snap install lxd`
-
-`sudo lxd init`
-
-Note: Currently, Charmed Kubernetes only supports dir as a storage option and does not support ipv6, which should be set to none from the init script. Additional profiles will be added automatically to LXD to support the requirements of Charmed Kubernetes.
-
-Install juju
-
-`sudo snap install juju --classic`
-
-Create a Juju Controller for this Cloud
-
-`juju bootstrap localhost`
-
-It's essential to add a model named "k8s"
-
-`juju add-model k8s`
-
-Deploy the Kubernetes Charm
-
-`juju deploy charmed-kubernetes`
-
-`juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
-
-`juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
-
-At this stage your lxd/juju assemblage is converging towards stability. You can observe the status of the assemblage with
-
-`watch -c juju status --color` or, `juju status` for short.
-
-It may take a few hours if your network is slow. Be patient. When you see everything 'green' except possibly the 2 masters in a permamnent "wait" state ("Waiting for 3 kube-system pods to start"), you may continue.
-
-Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically). Note; when lxd was set up, storage space was also set up on the local SSD.
-
-`juju deploy -n 2 postgresql --storage pgdata=lxd,50G`
-
-Deploy Redis master and slave, make the master contactable, and relate them:
-
-`juju deploy redis redis-mas`
-
-`juju deploy redis redis-slav`
-
-`juju expose redis-mas`
-
-`juju add-relation redis-mas:master redis-slav:slave`
-
-Follow the instructions here:
-https://www.tensorflow.org/install/pip to install TensorFlow onto a machine of your choice.
-
-Choose your machine and `juju ssh <machine-number>`
-
-Follow the above instructions carefully inside this virtual machine. Passthrough is natively enabled to the Accelerator GPU.
-
-Note; you are user 'ubuntu' here, so if you need a new password, just
-
-`sudo passwd ubuntu`
-
->>>>>>> 1930985d688c16feff6566930398dc08d2c8c81b
-.. and enter your chosen password twice. (Automatic, developer's 'sudo')
-
-______________________________________________________________________________
-
-## Preliminaries:
-
-IN HOST TERMINAL:
- 
-<<<<<<< HEAD
- 
- `sudo nano /etc/docker/daemon.json`
-
- You need to have something like:
- 
-`{`
-
-`  insecure-registries : [10.184.36.90:32000,`
-
-`                           ]`
-
-`}`
-
-where the Ip Address must match your primary node address. (Use `multipass list` on the host)
-
-Then:
-
-`sudo systemctl daemon-reload`
-
-`sudo systemctl restart docker`
-
-`docker tag redis:5.0.4 10.184.36.90:32000/redis:5.0.4`
-
-`docker tag postgis/postgis 10.184.36.90:32000/postgis/postgis:1`
-
-Now push the images to the microk8s registry:
-
-`docker push 10.184.36.90:32000/redis:5.0.4`
-
-`docker push 10.184.36.90:32000/postgis/postgis:1`
-
-(Remember to change the above Ip Addresses to match your own node address for master node!)
-=======
->>>>>>> 1930985d688c16feff6566930398dc08d2c8c81b
-
-_____________________________________________________________
-
-## DATABASE & REDIS:- Set Up secrets:
-
-
 
 ___________________________________________________________________________________________
 
- 
+ ## DATABASE & REDIS:- Set Up:
 
 NOTE: As yet Redis is not programmed to act as a Query Cache Server. This requires investment of time and effort in analysis of your DApp's requirements.
 
@@ -259,7 +148,7 @@ __________________________________________________________________
 
 ## Copy sql scripts; Build Database Schema:
 
-From primary, in shared/../smart-web-postgresql-grpc/app/smart-web/grpc_adenine/database/scripts folder:
+From primary, in /elastos-smartweb-service/grpc_adenine/database/scripts folder:
 
 `juju scp create_table_scripts.sql <machine number of postgresql master>:/var/lib/postgresql/10/main/`
 
@@ -318,24 +207,15 @@ Check off users:
 `\du`
 
 `\dt ` should reveal no instances (in default public schema)
-<<<<<<< HEAD
-=======
 
 `set search_path to cheirrs;`
->>>>>>> 1930985d688c16feff6566930398dc08d2c8c81b
 
 .. now, `\dt` should reveal a full set of 600+ tables in 2 categories: 1) accounting_<xyz> and 2) uc_<uvw> ('uc_' for use_case)
 
-<<<<<<< HEAD
-.. now, `\dt` should reveal a full set of 600+ tables in 2 categories: 1) accounting_<xyz> and 2) uc_<uvw> ('uc_' for use_case)
-=======
 Identical results will appear for:
->>>>>>> 1930985d688c16feff6566930398dc08d2c8c81b
 
 `set search_path to cheirrs_oseer;`
 
-<<<<<<< HEAD
-=======
 and,
 
 `set search_path to a_horse;`
@@ -344,7 +224,6 @@ when you run
 
 `\dt`
 
->>>>>>> 1930985d688c16feff6566930398dc08d2c8c81b
 In postgres master machine:
 
 Exit psql shell:
@@ -380,12 +259,9 @@ Now we turn to setting up the Blockchain/Database gRPC Server Deployment,
 
 In a Host terminal,
 
-<<<<<<< HEAD
-=======
-`git clone https://gitlab.com/john_olsenjohn-itcsolutions/smart`
+`git clone https://gitlab.com/john_olsenjohn-itcsolutions/cheirrs`
 
->>>>>>> 1930985d688c16feff6566930398dc08d2c8c81b
-`cd path/to/smart`
+`cd path/to/cheirrs`
 
 `sudo apt-get update`
 
@@ -393,9 +269,10 @@ In a Host terminal,
 
 `sudo apt-get install -y postfix`
 
-Gitlab offers a container registry, along with a code repository. Sign up for your own. 
+Gitlab offers a container registry, along with a code repository. Sign up for your own.
 
-<<<<<<< HEAD
+Once set up in gitlab, create a blank repo, then in Host terminal:
+
 `sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:1 .`
 
 `ssh-keygen -t ed25519 -C "your-key"`
@@ -403,8 +280,8 @@ Gitlab offers a container registry, along with a code repository. Sign up for yo
 `cat ~/.ssh/id_ed25519.pub`
 
 `docker push registry.gitlab.com/<your_gitlab_name>/smart:1`
-=======
-From smart directory:
+
+From cheirrs directory:
 
 `sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:1 .`
 
@@ -417,37 +294,16 @@ From smart directory:
 `git push -u origin --all`
 
 `git push -u origin --tags`
->>>>>>> 1930985d688c16feff6566930398dc08d2c8c81b
 
-Next, move to a primary node terminal:
+Next, in Host terminal:
 
-`cd path/to/smart`
+`cd path/to/cheirrs`
 
 Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along the image tags in both the tag given for the Dockerfile build target, and the kubernetes smart-web.yml file that references that image (smart-web.yml is in the root directory of "smart").
 
-`microk8s kubectl apply -f smart-web.yml`
+`kubectl apply -f smart-web.yml`
 
-`watch microk8s kubectl get pods`
-
-If errors or excessive delays:
-
-`microk8s kubectl describe pods` will give error messages of sorts.
-
-Also `microk8s kubectl logs deployment/smart-web` can assist.
-
-if successful, or even to set up in a crash loop in order to get IP Addresses to configure postgresql's host-based access, as follows:
-
-`microk8s kubectl exec -it postgres-0 -- sh`
-
-and inside the master postgres container
-
-`nano /var/lib/postgresql/data/pgdata/pg_hba.conf`
-
-making sure to enable the subnet for all the containers on the database node. (redis, smart-web, and when completed, smart-client) with a CIDR of /24. eg 10.1.34.0/24 would represent one subnet where all addresses begin with 10.1.34. Since all communicating containers are together on "database", we only need to specify a single subnet by looking up pod details with
-
-`microk8s kubectl describe pods`
-
-and noting the three common initial fields of the IP Addresses of the pods in the database node. The subnet is constucted as field-1.field-2.field-3.0/24
+`watch kubectl get pods`
 
 _____________________________________________________________
 
