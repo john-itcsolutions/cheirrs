@@ -1,0 +1,172 @@
+series: bionic
+applications:
+  containerd:
+    charm: cs:~containers/containerd-100
+    series: focal
+    annotations:
+      bundleURL: cs:bundle/charmed-kubernetes-559
+      gui-x: "475"
+      gui-y: "800"
+  easyrsa:
+    charm: cs:~containers/easyrsa-342
+    series: focal
+    num_units: 1
+    to:
+    - "0"
+    annotations:
+      bundleURL: cs:bundle/charmed-kubernetes-559
+      gui-x: "90"
+      gui-y: "420"
+    constraints: root-disk=8192
+  etcd:
+    charm: cs:~containers/etcd-546
+    series: focal
+    num_units: 3
+    to:
+    - "1"
+    - "2"
+    - "3"
+    options:
+      channel: 3.4/stable
+    annotations:
+      bundleURL: cs:bundle/charmed-kubernetes-559
+      gui-x: "800"
+      gui-y: "420"
+    constraints: root-disk=8192
+  flannel:
+    charm: cs:~containers/flannel-514
+    series: focal
+    annotations:
+      bundleURL: cs:bundle/charmed-kubernetes-559
+      gui-x: "475"
+      gui-y: "605"
+  kubeapi-load-balancer:
+    charm: cs:~containers/kubeapi-load-balancer-754
+    series: focal
+    num_units: 1
+    to:
+    - "4"
+    expose: true
+    annotations:
+      bundleURL: cs:bundle/charmed-kubernetes-559
+      gui-x: "450"
+      gui-y: "250"
+    constraints: mem=4096 root-disk=8192
+  kubernetes-master:
+    charm: cs:~containers/kubernetes-master-926
+    series: focal
+    num_units: 2
+    to:
+    - "5"
+    - "6"
+    options:
+      channel: 1.20/stable
+      proxy-extra-args: proxy-mode=userspace
+    annotations:
+      bundleURL: cs:bundle/charmed-kubernetes-559
+      gui-x: "800"
+      gui-y: "850"
+    constraints: cpu-cores=2 mem=4096 root-disk=16384
+  kubernetes-worker:
+    charm: cs:~containers/kubernetes-worker-718
+    series: focal
+    num_units: 3
+    to:
+    - "7"
+    - "8"
+    - "9"
+    expose: true
+    options:
+      channel: 1.20/stable
+      proxy-extra-args: proxy-mode=userspace
+    annotations:
+      bundleURL: cs:bundle/charmed-kubernetes-559
+      gui-x: "90"
+      gui-y: "850"
+    constraints: cpu-cores=4 mem=4096 root-disk=16384
+  postgresql:
+    charm: cs:postgresql-215
+    num_units: 2
+    to:
+    - "15"
+    - "16"
+  redis-mas:
+    charm: cs:trusty/redis-0
+    series: trusty
+    num_units: 1
+    to:
+    - "13"
+  redis-slav:
+    charm: cs:trusty/redis-0
+    series: trusty
+    num_units: 1
+    to:
+    - "14"
+machines:
+  "0":
+    constraints: root-disk=8192
+    series: focal
+  "1":
+    constraints: root-disk=8192
+    series: focal
+  "2":
+    constraints: root-disk=8192
+    series: focal
+  "3":
+    constraints: root-disk=8192
+    series: focal
+  "4":
+    constraints: mem=4096 root-disk=8192
+    series: focal
+  "5":
+    constraints: cpu-cores=2 mem=4096 root-disk=16384
+    series: focal
+  "6":
+    constraints: cpu-cores=2 mem=4096 root-disk=16384
+    series: focal
+  "7":
+    constraints: cpu-cores=4 mem=4096 root-disk=16384
+    series: focal
+  "8":
+    constraints: cpu-cores=4 mem=4096 root-disk=16384
+    series: focal
+  "9":
+    constraints: cpu-cores=4 mem=4096 root-disk=16384
+    series: focal
+  "13":
+    series: trusty
+  "14":
+    series: trusty
+  "15": {}
+  "16": {}
+relations:
+- - kubernetes-master:kube-api-endpoint
+  - kubeapi-load-balancer:apiserver
+- - kubernetes-master:loadbalancer
+  - kubeapi-load-balancer:loadbalancer
+- - kubernetes-master:kube-control
+  - kubernetes-worker:kube-control
+- - kubernetes-master:certificates
+  - easyrsa:client
+- - etcd:certificates
+  - easyrsa:client
+- - kubernetes-master:etcd
+  - etcd:db
+- - kubernetes-worker:certificates
+  - easyrsa:client
+- - kubernetes-worker:kube-api-endpoint
+  - kubeapi-load-balancer:website
+- - kubeapi-load-balancer:certificates
+  - easyrsa:client
+- - flannel:etcd
+  - etcd:db
+- - flannel:cni
+  - kubernetes-master:cni
+- - flannel:cni
+  - kubernetes-worker:cni
+- - containerd:containerd
+  - kubernetes-worker:container-runtime
+- - containerd:containerd
+  - kubernetes-master:container-runtime
+- - redis-mas:master
+  - redis-slav:slave
