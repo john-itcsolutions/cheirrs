@@ -148,7 +148,7 @@ __________________________________________________________________
 
 ## Copy sql scripts; Build Database Schema:
 
-From primary, in /elastos-smartweb-service/grpc_adenine/database/scripts folder:
+From Host, in /elastos-smartweb-service/grpc_adenine/database/scripts folder:
 
 `juju scp create_table_scripts.sql <machine number of postgresql master>:/var/lib/postgresql/10/main/`
 
@@ -271,15 +271,7 @@ In a Host terminal,
 
 Gitlab offers a container registry, along with a code repository. Sign up for your own.
 
-Once set up in gitlab, create a blank repo, then in Host terminal:
-
-`sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:1 .`
-
-`ssh-keygen -t ed25519 -C "your-key"`
-
-`cat ~/.ssh/id_ed25519.pub`
-
-`docker push registry.gitlab.com/<your_gitlab_name>/smart:1`
+Once set up in gitlab, create a blank repo, then;
 
 From cheirrs directory:
 
@@ -287,9 +279,11 @@ From cheirrs directory:
 
 `ssh-keygen -t ed25519 -C "your-key"`
 
-`cat ~/.ssh/id_ed25519.pub`
+`cat ~/.ssh/id_ed25519.pub` and configure gitlab login.
 
-`git remote add origin git@gitlab.com:<your_gitlab_name>/smart.git`
+`docker push registry.gitlab.com/<your_gitlab_name>/smart:1`
+
+`git remote add origin git@gitlab.com:<your_gitlab_name>/cheirrs.git`
 
 `git push -u origin --all`
 
@@ -299,7 +293,7 @@ Next, in Host terminal:
 
 `cd path/to/cheirrs`
 
-Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along the image tags in both the tag given for the Dockerfile build target, and the kubernetes smart-web.yml file that references that image (smart-web.yml is in the root directory of "smart").
+Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along the image tags in both the tag given for the Dockerfile build target, and the kubernetes smart-web.yml file that references that image (smart-web.yml is in the root directory of "cheirrs").
 
 `kubectl apply -f smart-web.yml`
 
