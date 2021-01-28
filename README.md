@@ -283,7 +283,7 @@ From elastos-smartweb-service directory (where a Dockerfile is located):
 
 `sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:1 .`
 
-`ssh-keygen -t ed25519 -C "your-key"`
+`ssh-keygen -t ed25519 -C "<your-key-title>"`
 
 Go to gitlab account, copy result of the following cat command to your clipboard.
 
@@ -303,7 +303,9 @@ In cheirrs dir:
 
 From cheirrs dir:
 
-Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along the image tags in both the tag given for the Dockerfile build target, and the kubernetes smart-web.yml file that references that image (smart-web.yml is in the root directory of "cheirrs").
+Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along the image tags in both the tag given (at the command line - sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:<your-tag>) when you build from the Dockerfile to its target, and the kubernetes smart-web.yml file that references that image (ie: "smart:<your-tag>"). 
+
+(smart-web.yml is in the root directory of "cheirrs")
 
 `kubectl apply -f smart-web.yml`
 
