@@ -15,7 +15,7 @@ import logging
 logging.basicConfig(filename='models.py', level=logging.DEBUG, format='')
 
 # Create connection string & engine
-db_uri = "postgresql+psycopg2://postgres:Buddha10@10.186.165.230:5432/general"
+db_uri = "postgresql+psycopg2://postgres:Buddha10@postgresql:5432/general"
 db = create_engine(db_uri, echo=False)
 
 meta = MetaData()
