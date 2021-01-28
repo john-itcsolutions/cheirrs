@@ -102,6 +102,14 @@ class BaseModel(db.Model):
 
 print('The Schemas are: %s' % schemas)
 
+# At this stage we are still developing this __init__.py file
+# to produce a complete database connection and set of Models 
+# for SQLAlchemy to use, prior to the running of server.py.
+# This initialisation process should only happen once per 
+# application startup. We use the logging module in python to 
+# print to a file. Using the BaseModel above shortens the coding 
+# process considerably.
+
         for schema in schemas:
             logging.debug('schema: %s' % schema)
         
