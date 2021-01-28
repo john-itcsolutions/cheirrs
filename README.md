@@ -261,7 +261,13 @@ In a Host terminal,
 
 `git clone https://gitlab.com/john_olsenjohn-itcsolutions/cheirrs`
 
+NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included a version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, by defining a BaseModel class and abstracting from this to build a full set of Models, using SQLAlchemy's methods of Database Reflection. However we need to re-insert the root-directory-version at /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
+
 `cd path/to/cheirrs`
+
+`sudo rm -f grpc_adenine/__init__.py`
+
+`cp __init__.py grpc_adenine/`
 
 `sudo apt-get update`
 
@@ -273,13 +279,19 @@ Gitlab offers a container registry, along with a code repository. Sign up for yo
 
 Once set up in gitlab, create a blank repo, then;
 
-From cheirrs directory:
+From elastos-smartweb-service directory (where a Dockerfile is located):
 
 `sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:1 .`
 
 `ssh-keygen -t ed25519 -C "your-key"`
 
+Go to gitlab account, copy result of the following cat command to your clipboard.
+
 `cat ~/.ssh/id_ed25519.pub` and configure gitlab login.
+
+`cd ../`
+
+In cheirrs dir:
 
 `docker push registry.gitlab.com/<your_gitlab_name>/smart:1`
 
@@ -289,9 +301,7 @@ From cheirrs directory:
 
 `git push -u origin --tags`
 
-Next, in Host terminal:
-
-`cd path/to/cheirrs`
+From cheirrs dir:
 
 Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along the image tags in both the tag given for the Dockerfile build target, and the kubernetes smart-web.yml file that references that image (smart-web.yml is in the root directory of "cheirrs").
 
