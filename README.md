@@ -131,6 +131,8 @@ _
 
 `juju relate discourse postgresql:db-admin`
 
+Au fin du jour, nous avons été déçus .. 
+
 
 _______________________________________________________________________________________
  
