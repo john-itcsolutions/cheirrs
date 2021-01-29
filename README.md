@@ -159,6 +159,12 @@ https://www.tensorflow.org/install/pip to install TensorFlow onto a worker node 
 
 Choose your machine and `juju ssh <machine-number>`
 
+During the instructions, after upgrading pip but before installing tensorflow, you would be well advised to install testresources with:
+
+`pip install testresources`
+
+as the package is otherwise missing.
+
 Follow the above instructions carefully inside this virtual machine. Passthrough is natively enabled to the Accelerator GPU.
 
 Good luck! (see either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  download "An Introduction to Statistical Learning"; Gareth James et al.). 
