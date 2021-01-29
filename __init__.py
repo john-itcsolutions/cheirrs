@@ -107,7 +107,7 @@ print("The Schemas are: %s" % schemas)
 # for SQLAlchemy to use, prior to the running of server.py.
 # This initialisation process should only happen once per 
 # application (re-)start. We use the logging module in python to 
-# print to a file. Using the BaseModel Class above shortens the 
+# print to a file. Extending the BaseModel Class above shortens the 
 # coding process considerably.
 
         for schema in schemas:
