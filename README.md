@@ -147,7 +147,7 @@ Good luck! (see either https://statlearning.com/ (the Authors' own website) - or
 
 Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
 
-AI (Artificial Intelligence) involves further technical solutions to involve the results of the deployment of models in industrial and commercial production applications, to achieve economic benefits.
+AI (Artificial Intelligence) involves further technical solutions to involve the results of the deployment of models in industrial and commercial production applications, to achieve economic and strategic benefits.
 
 _____________________________________________________________________
 
