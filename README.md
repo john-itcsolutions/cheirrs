@@ -136,7 +136,7 @@ On juju you will need to have available, and allow for, 16GB of RAM at least, an
 
 For genuine processing capacity, also necessary is at least 10GB of GPU Accelerator Card RAM. The card needs to be CUDA Architecture-compatible.
 
-`juju add-model kubeflow`
+`juju add-model --config cores=4 kubeflow`
 
 `juju deploy charmed-kubernetes`
 
