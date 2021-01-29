@@ -15,7 +15,7 @@ See our website at https://www.itcsolutions.com.au/kubernetes-yaml-file-example/
 
 ## Get:
 
-Docker for Ubuntu: https://docs.docker.com/engine/install/ubuntu/
+Docker for Ubuntu: https://docs.docker.com/engine/install/ubuntu/  - SAFEST WAY!
 
 Remember to
 
@@ -91,17 +91,13 @@ It may take a few hours if your network is slow. Be patient. When you see everyt
 
 Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically). Note; when lxd was set up, storage space was also set up on the local SSD.
 
-`juju deploy -n 2 postgresql --storage pgdata=lxd,50G`
+`juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,50G postgresql`
 
 Deploy Redis master and slave, make the master contactable, and relate them:
 
-`juju deploy redis redis-mas`
+`juju deploy cs:~redis-charmers/redis`
 
-`juju deploy redis redis-slav`
-
-`juju expose redis-mas`
-
-`juju add-relation redis-mas:master redis-slav:slave`
+`juju expose redis`
 
 Follow the instructions here:
 https://www.tensorflow.org/install/pip to install TensorFlow onto a machine of your choice.
@@ -120,11 +116,23 @@ ________________________________________________________________________________
 
 NOTE: As yet Redis is not programmed to act as a Query Cache Server. This requires investment of time and effort in analysis of your DApp's requirements.
 
-________________________________________________________________________________________
+As a separate matter, ITCSA is experimenting with the "discourse" charm to link the redis and postgres machines. See https://charmhub.io/discourse/docs/database-relations
+
+`juju deploy cs:~discourse-charmers/discourse-k8s`
+
+The charm will not function without a connection to a PostgreSQL database and Redis, so they do need to be running and ready first.
+_
+`juju config discourse redis_host=${REDIS_IP}`
+
+(where you need to replace ${REDIS_IP} with the IP of the redis machine - see:
+
+`juju status`
+)
+
+`juju relate discourse postgresql:db-admin`
 
 
-
- _________________________________________________________________
+_______________________________________________________________________________________
  
 
 ## KUBEFLOW and Machine Learning (Artificial Intelligence & Statistical Learning)
@@ -143,9 +151,6 @@ _____________________________________________________________________
 
 ## DATABASE
 
-__________________________________________________________________
-
-
 ## Copy sql scripts; Build Database Schema:
 
 From Host, in /elastos-smartweb-service/grpc_adenine/database/scripts folder:
@@ -158,15 +163,15 @@ From Host, in /elastos-smartweb-service/grpc_adenine/database/scripts folder:
 
 ## The following 3 commands would be possible only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
 
-`juju scp ../../cheirrs_backup.sql <machine number of postgresql master>:/var/lib/postgresql/10/main/`
+`juju scp ../../cheirrs_backup.sql <machine number of postgresql>:/var/lib/postgresql/10/main/`
 
-`juju scp ../../cheirrs_oseer_backup.sql <machine number of postgresql master>:/var/lib/postgresql/10/main/`
+`juju scp ../../cheirrs_oseer_backup.sql <machine number of postgresql>:/var/lib/postgresql/10/main/`
 
-`juju scp ../../a_horse_backup.sql <machine number of postgresql master>:/var/lib/postgresql/10/main/`
+`juju scp ../../a_horse_backup.sql <machine number of postgresql>:/var/lib/postgresql/10/main/`
 
 exec into master db container:
 
-`juju ssh <machine number of postgresql master>`
+`juju ssh <machine number of postgresql>`
 
 Inside postgres master container:
 
@@ -261,7 +266,7 @@ In a Host terminal,
 
 `git clone https://gitlab.com/john_olsenjohn-itcsolutions/cheirrs`
 
-NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included a version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, by defining a BaseModel class and abstracting from this to build a full set of Models, using SQLAlchemy's methods of Database Reflection. However we need to re-insert the root-directory-version at /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
+NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included a version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, by defining a BaseModel class and abstracting from this to build a full set of Models, using SQLAlchemy's methods of Fine-Grained Database Reflection. However we need to re-insert the root-directory-version at /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
 
 `cd path/to/cheirrs`
 
@@ -277,21 +282,17 @@ NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/
 
 Gitlab offers a container registry, along with a code repository. Sign up for your own.
 
-Once set up in gitlab, create a blank repo, then;
+Once set up in gitlab, create a blank repo, and find "Personal Access Tokens" in your personal settings. Obtain and record your token, which you use as a password to login to your Gitlab-hosted Docker container repo.
+
+`docker login -u "<your-gitlab-name>" -p "<your-20-char-token>" registry.gitlab.com
 
 From elastos-smartweb-service directory (where a Dockerfile is located):
 
 `sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:1 .`
 
-`ssh-keygen -t ed25519 -C "<your-key-title>"`
-
-Go to gitlab account, copy result of the following cat command to your clipboard.
-
-`cat ~/.ssh/id_ed25519.pub` and configure gitlab login.
-
 `cd ../`
 
-In cheirrs dir:
+In cheirrs/elastos-smartweb-service dir:
 
 `docker push registry.gitlab.com/<your_gitlab_name>/smart:1`
 
@@ -308,6 +309,8 @@ Now, you need to ensure the image tags in the .yml files you are about to build 
 (smart-web.yml is in the root directory of "cheirrs")
 
 `kubectl apply -f smart-web.yml`
+
+With TensorFlow on one Kubernetes-worker node, this leaves one vm each for the 2 replica of "smart".
 
 `watch kubectl get pods`
 
