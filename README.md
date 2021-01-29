@@ -99,13 +99,6 @@ Deploy Redis master and slave, make the master contactable, and relate them:
 
 `juju expose redis`
 
-Follow the instructions here:
-https://www.tensorflow.org/install/pip to install TensorFlow onto a machine of your choice.
-
-Choose your machine and `juju ssh <machine-number>`
-
-Follow the above instructions carefully inside this virtual machine. Passthrough is natively enabled to the Accelerator GPU.
-
 Note; you are user 'ubuntu' here, so if you need a new password, just
 
 `sudo passwd ubuntu`
@@ -118,7 +111,7 @@ NOTE: As yet Redis is not programmed to act as a Query Cache Server. This requir
 
 As a separate matter, ITCSA is experimenting with the "discourse" charm to link the redis and postgres machines. See https://charmhub.io/discourse/docs/database-relations
 
-`juju deploy cs:~discourse-charmers/discourse-k8s`
+`juju deploy cs:~discourse-charmers/discourse-k8s` or even `juju deploy cs:~discourse-charmers/discourse`
 
 The charm will not function without a connection to a PostgreSQL database and Redis, so they do need to be running and ready first.
 _
@@ -139,15 +132,34 @@ ________________________________________________________________________________
 
 ## KUBEFLOW and Machine Learning (Artificial Intelligence & Statistical Learning)
 
-On juju you will need to have available, and allow for, 16GB of RAM at least, and 4 cpu cores in your 'kubeflow' virtual machine.
+On juju you will need to have available, and allow for, 16GB of RAM at least, and 4 cpu cores in your 'kubeflow' virtual machine. This means you need a second model which you configure at 4 cores (if you have an 8 core or better machine).
 
 For genuine processing capacity, also necessary is at least 10GB of GPU Accelerator Card RAM. The card needs to be CUDA Architecture-compatible.
+
+`juju add-model kubeflow`
+
+`juju deploy charmed-kubernetes`
+
+`juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
+
+`juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
+
+After the model has converged and settled, as with k8s model:
+
+`juju ssh <kubernetes-worker machine number>`
+
+Follow the instructions here:
+https://www.tensorflow.org/install/pip to install TensorFlow onto a worker node of your choice.
+
+Choose your machine and `juju ssh <machine-number>`
+
+Follow the above instructions carefully inside this virtual machine. Passthrough is natively enabled to the Accelerator GPU.
 
 Good luck! (see either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  download "An Introduction to Statistical Learning"; Gareth James et al.). 
 
 Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
 
-AI (Artificial Intelligence) involves further technical solutions to involve the results of the deployment of models in industrial and commercial production applications, to achieve economic and strategic benefits.
+AI (Artificial Intelligence) includes further technical solutions to involve the results of the deployment of models in industrial and commercial production applications, to achieve economic and strategic benefits.
 
 _____________________________________________________________________
 
@@ -286,7 +298,7 @@ Gitlab offers a container registry, along with a code repository. Sign up for yo
 
 Once set up in gitlab, create a blank repo, and find "Personal Access Tokens" in your personal settings. Obtain and record your token, which you use as a password to login to your Gitlab-hosted Docker container repo.
 
-`docker login -u "<your-gitlab-name>" -p "<your-20-char-token>" registry.gitlab.com
+`docker login -u "<your-gitlab-name>" -p "<your-20-char-token>" registry.gitlab.com`
 
 From elastos-smartweb-service directory (where a Dockerfile is located):
 
@@ -311,8 +323,6 @@ Now, you need to ensure the image tags in the .yml files you are about to build 
 (smart-web.yml is in the root directory of "cheirrs")
 
 `kubectl apply -f smart-web.yml`
-
-With TensorFlow on one Kubernetes-worker node, this leaves one vm each for the 2 replica of "smart".
 
 `watch kubectl get pods`
 
