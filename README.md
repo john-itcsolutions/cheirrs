@@ -144,7 +144,13 @@ For genuine processing capacity, also necessary is at least 10GB of GPU Accelera
 
 `juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
 
-After the model has converged and settled, as with k8s model:
+After the model has converged and settled, as with k8s model, you will probably require a relational database system. hence we install postgresql a second time here:
+
+`juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,90G postgresql`
+
+`juju deploy cs:~redis-charmers/redis`
+
+`juju expose redis`
 
 `juju ssh <kubernetes-worker machine number>`
 
