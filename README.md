@@ -71,7 +71,7 @@ Create a Juju Controller for this Cloud
 
 `juju bootstrap localhost`
 
-It's essential to add a model named "k8s"
+Add a model named "k8s"
 
 `juju add-model k8s`
 
@@ -93,7 +93,7 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,50G postgresql`
 
-Deploy Redis, make the it contactable:
+Deploy Redis, make it contactable:
 
 `juju deploy cs:~redis-charmers/redis`
 
