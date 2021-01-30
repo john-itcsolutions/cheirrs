@@ -93,7 +93,7 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,50G postgresql`
 
-Deploy Redis master and slave, make the master contactable, and relate them:
+Deploy Redis, make the it contactable:
 
 `juju deploy cs:~redis-charmers/redis`
 
