@@ -377,6 +377,51 @@ Read it slowly, carefully and repeatedly. This represents only the theoretical f
 
 AI (Artificial Intelligence) includes further technical solutions to involve the results of the deployment of models in industrial and commercial production applications, to achieve economic and strategic benefits.
 
+
+## Getting PostGIS and Open Street Map for 'Kubeflow'-PostgreSQL
+
+It's worth noting that PostGIS is capable of storing representations of Neural Networks. The original Design Case for TensorFlow was as a Deep Learning Neural Network Simulator.
+
+Inside your postgresql Master (in "kubeflow" model - 
+Switch models with 
+
+`juju switch <model_name>`
+
+ if necessary, eg you left this track at some stage .. )
+
+`juju ssh <postgresql_Master_machine_number>` 
+
+get ubuntugis repo
+
+`sudo add-apt-repository ppa:ubuntugis/ppa`
+
+`sudo apt update`
+
+`sudo apt-get install postgis`
+
+`sudo apt update`
+
+`sudo apt-get install osm2pgrouting`
+
+
+_________________________________________________________________
+
+## NOW: How to use a spatial database in connection with TensorFlow?
+
+1.
+A Brain and a 3 dimensional spatial database are both correspondent in meta-structure. It is possible to map 3-D neuronal graphs to a spatial database.
+
+2.
+Is it possible, however to model a more-than-3-dimensional Graph and represent it on a PostGIS database?
+
+3.
+It appears to us that since it is possible to serialise all data on a sequential computer, it should be possible to store multi-dimensional graphs in a hyper-spatial database.
+
+4.
+Does PostGIS allow this?
+
+__________________________________________________________________
+
 _________________________________________________________________
 
 
