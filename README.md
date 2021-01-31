@@ -136,13 +136,29 @@ On juju you will need to have available, and allow for, 16GB of RAM at least, an
 
 For genuine processing capacity, also necessary is at least 10GB of GPU Accelerator Card RAM. The card needs to be CUDA Architecture-compatible.
 
-`juju add-model --config cores=4 kubeflow`
+`juju add-model --config cores=4 --config mem=16G kubeflow`
+
+This may seem a large lot for 3 workers at 4 cores and 16GB each, however we will be removing the kubernetes-worker/1 and kubernetes/2 units (--force) as well as one master.
+
+This will leave 1 Master (2 cores default) and 1 x 4-core 16GB RAM worker for tensorflow.
 
 `juju deploy charmed-kubernetes`
 
 `juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
 
 `juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
+
+`juju remove-unit kubernetes-worker/1 --force`
+
+`juju remove-machine <kubernetes-worker/1_machine_number> --force`
+
+`juju remove-unit kubernetes-worker/2 --force`
+
+`juju remove-machine <kubernetes-worker/2_machine_number> --force`
+
+`juju remove-unit kubernetes-master/1 --force`
+
+`juju remove-machine <kubernetes-master/1_machine_number> --force`
 
 After the model has converged and settled, as with k8s model, you will probably require a relational database system. hence we install postgresql a second time here:
 
@@ -152,7 +168,7 @@ After the model has converged and settled, as with k8s model, you will probably 
 
 `juju expose redis`
 
-`juju ssh <kubernetes-worker machine number>`
+`juju ssh <kubernetes-worker_machine_number>`
 
 Follow the instructions here:
 https://www.tensorflow.org/install/pip to install TensorFlow onto a worker node of your choice.
@@ -282,7 +298,26 @@ Try:
 `select * from users;`
 
 You should see the single user's details.
-____________________________________________________________________________________________
+__________________________________________________________________
+
+## Getting PostGIS and Open Street Map
+
+Inside your postgresql Master 
+
+`juju ssh <postgresql_Master_machine_number>` 
+
+get ubuntugis repo
+
+`sudo add-apt-repository ppa:ubuntugis/ppa`
+
+`sudo apt update`
+
+`sudo apt-get install postgis`
+
+`sudo apt update`
+
+`sudo apt-get install osm2pgrouting`
+__________________________________________________________________
 
 ## Blockchains-Database Server (Smart-web) 
 
@@ -292,7 +327,7 @@ In a Host terminal,
 
 `git clone https://gitlab.com/john_olsenjohn-itcsolutions/cheirrs`
 
-NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included a version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, by defining a BaseModel class and abstracting from this to build a full set of Models, using SQLAlchemy's methods of Fine-Grained Database Reflection. However we need to re-insert the root-directory-version at /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
+NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included a version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However we need to re-insert the root-directory-version at /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
 
 `cd path/to/cheirrs`
 

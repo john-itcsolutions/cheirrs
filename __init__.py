@@ -1,169 +1,40 @@
-from sqlalchemy import *
-from sqlalchemy.engine import reflection, inspect
+from sqlalchemy_wrapper import SQLAlchemy
+from decouple import config
+from sqlalchemy import create_engine, MetaData, Table, Column, ForeignKey
+from sqlalchemy.ext.automap import automap_base
 
 import contextlib
 import time
 import sys
 
 import logging
+# Set up logging
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.DEBUG,
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
-from charmhelpers.core.hookenv import (
-    Hooks, config, relation_set, relation_get,
-    local_unit, related_units, remote_unit)
+# Connect to the database
+db_name = config('DB_NAME')
+db_user = config('DB_USER')
+db_password = config('DB_PASSWORD')
+db_host = config('DB_HOST')
+db_port = config('DB_PORT')
 
-class BaseModel(db.Model):
+database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
-    def before_save(self, *args, **kwargs):
-        pass
+try:
+    db_engine = create_engine(database_uri)
+    connection = SQLAlchemy(database_uri)
+except Exception as e:
+    logging.fatal(f"Error while connecting to the database: {e}")
 
-    def after_save(self, *args, **kwargs):
-        pass
+# produce our own MetaData object
+metadata = MetaData(reflect=True)
 
-    def save(self, commit=True):
-        self.before_save()
-        db.session.add(self)
-        if commit:
-            try:
-                db.session.commit()
-            except Exception as e:
-                db.session.rollback()
-                raise e
+metadata.reflect(db_engine)
 
-        self.after_save()
+Base = automap_base(metadata=metadata)
 
-
-    def before_update(self, *args, **kwargs):
-        pass
-
-    def after_update(self, *args, **kwargs):
-        pass
-
-    def update(self, *args, **kwargs):
-        self.before_update(*args, **kwargs)
-        db.session.commit()
-        self.after_update(*args, **kwargs)
-
-    def delete(self, commit=True):
-        db.session.delete(self)
-        if commit:
-            db.session.commit()
-
-    @classmethod
-    def eager(cls, *args):
-        cols = [orm.joinedload(arg) for arg in args]
-        return cls.query.options(*cols)
-
-    @classmethod
-    def before_bulk_create(cls, iterable, *args, **kwargs):
-        pass
-
-    @classmethod
-    def after_bulk_create(cls, model_objs, *args, **kwargs):
-        pass
-
-
-    @classmethod
-    def bulk_create(cls, iterable, *args, **kwargs):
-        cls.before_bulk_create(iterable, *args, **kwargs)
-        model_objs = []
-        for data in iterable:
-            if not isinstance(data, cls):
-                data = cls(**data)
-            model_objs.append(data)
-
-        db.session.bulk_save_objects(model_objs)
-        if kwargs.get('commit', True) is True:
-            db.session.commit()
-        cls.after_bulk_create(model_objs, *args, **kwargs)
-        return model_objs
-
-
-    @classmethod
-    def bulk_create_or_none(cls, iterable, *args, **kwargs):
-        try:
-            return cls.bulk_create(iterable, *args, **kwargs)
-        except exc.IntegrityError as e:
-            db.session.rollback()
-            return None
-
-# Create the models.py file
-# and output every level since 'DEBUG' is used
-# and remove all headers in the output
-# using empty format=''
-logging.basicConfig(filename='models.py', level=logging.DEBUG, format='')
-
-# Create database connection string & engine
-db_uri = "postgresql+psycopg2://postgres:Buddha10@postgresql:5432/general"
-
-db = create_engine(db_uri, echo=False)
-
-meta = MetaData()
-
-# Performs database schema inspection
-insp = Inspector.from_engine(db)
-
-schemas = insp.get_schema_names()
-
-print("The Schemas are: %s" % schemas)
-
-# At this stage we are still developing this __init__.py file
-# to produce a complete database connection and set of Models 
-# for SQLAlchemy to use, prior to the running of server.py.
-# This initialisation process should only happen once per 
-# application (re-)start. We use the logging module in python to 
-# print to a file. Extending the BaseModel Class above shortens the 
-# coding process considerably.
-
-for schema in schemas:
-    logging.debug('schema: %s' % schema)
-
-    for table_name in insp.get_table_names(schema=schema):
-        table = Table('table_name', meta, autoload=True, autoload_with=engine)
-        primaryKeyColName = Table.primary_key.columns.values()[0].name
-        print("Primary key Col Name is %s" % primaryKeyColName)
-        logging.debug('table: %s' % table_name)
-    
-        for column in insp.get_columns(table_name, schema=schema):
-            logging.debug('Column: %s' % column)
-
-hooks = Hooks()
-hook = hooks.hook
-
-@hook
-def db_relation_joined():
-    relation_set('database', config('general'))  # Explicit database name
-    relation_set('roles', 'reporting,standard')  # DB roles required
-    relation_set('extensions', 'postgis,osm2pgrouting' ) # Get PostGIS
-@hook('db-relation-changed', 'db-relation-departed')
-def db_relation_changed():
-    # Rather than try to merge in just this particular database
-    # connection that triggered the hook into our existing connections,
-    # it is easier to iterate over all active related databases and
-    # reset the entire list of connections.
-    conn_str_tmpl = "dbname={dbname} user={user} host={host} port={port}"
-    master_conn_str = None
-    slave_conn_strs = []
-    for db_unit in related_units():
-        if relation_get('database', db_unit) != config('database'):
-            continue  # Not yet acknowledged requested database name.
-
-        allowed_units = relation_get('allowed-units') or ''  # May be None
-        if local_unit() not in allowed_units.split():
-            continue  # Not yet authorized.
-
-        conn_str = conn_str_tmpl.format(**relation_get(unit=db_unit)
-        remote_state = relation_get('state', db_unit)
-
-        if remote_state == 'standalone' and len(active_db_units) == 1:
-            master_conn_str = conn_str
-        elif relation_state == 'master':
-            master_conn_str = conn_str
-        elif relation_state == 'hot standby':
-            slave_conn_strs.append(conn_str)
-
-    update_my_db_config(master=master_conn_str, slaves=slave_conn_strs)
-
-if __name__ == '__init__':
-    hooks.execute(sys.argv)
-
-                
+Base.prepare()
