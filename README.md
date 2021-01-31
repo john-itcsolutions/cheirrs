@@ -127,70 +127,8 @@ _
 Au fin du jour, nous avons été déçus .. 
 
 
-_______________________________________________________________________________________
+________________________________________________________________
  
-
-## KUBEFLOW and Machine Learning (Artificial Intelligence & Statistical Learning)
-
-On juju you will need to have available, and allow for, 16GB of RAM at least, and 4 cpu cores in your 'kubeflow' virtual machine. This means you need a second model which you configure at 4 cores (if you have an 8 core or better machine).
-
-For genuine processing capacity, also necessary is at least 10GB of GPU Accelerator Card RAM. The card needs to be CUDA Architecture-compatible.
-
-`juju add-model --config cores=4 --config mem=16G kubeflow`
-
-This may seem a large lot for 3 workers at 4 cores and 16GB each, however we will be removing the kubernetes-worker/1 and kubernetes/2 units (--force) as well as one master.
-
-This will leave 1 Master (2 cores default) and 1 x 4-core 16GB RAM worker for tensorflow.
-
-`juju deploy charmed-kubernetes`
-
-`juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
-
-`juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
-
-`juju remove-unit kubernetes-worker/1 --force`
-
-`juju remove-machine <kubernetes-worker/1_machine_number> --force`
-
-`juju remove-unit kubernetes-worker/2 --force`
-
-`juju remove-machine <kubernetes-worker/2_machine_number> --force`
-
-`juju remove-unit kubernetes-master/1 --force`
-
-`juju remove-machine <kubernetes-master/1_machine_number> --force`
-
-After the model has converged and settled, as with k8s model, you will probably require a relational database system. hence we install postgresql a second time here:
-
-`juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,90G postgresql`
-
-`juju deploy cs:~redis-charmers/redis`
-
-`juju expose redis`
-
-`juju ssh <kubernetes-worker_machine_number>`
-
-Follow the instructions here:
-https://www.tensorflow.org/install/pip to install TensorFlow onto a worker node of your choice.
-
-Choose your machine and `juju ssh <machine-number>`
-
-During the instructions, after upgrading pip but before installing tensorflow, you would be well advised to install testresources with:
-
-`pip install testresources`
-
-as the package is otherwise missing.
-
-Follow the above instructions carefully inside this virtual machine. Passthrough is natively enabled to the Accelerator GPU.
-
-Good luck! (see either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  download "An Introduction to Statistical Learning"; Gareth James et al.). 
-
-Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
-
-AI (Artificial Intelligence) includes further technical solutions to involve the results of the deployment of models in industrial and commercial production applications, to achieve economic and strategic benefits.
-
-_____________________________________________________________________
-
 ## DATABASE
 
 ## Copy sql scripts; Build Database Schema:
@@ -377,6 +315,69 @@ _____________________________________________________________
 
 ## TESTING
 
+
+_____________________________________________________________
+
+## KUBEFLOW and Machine Learning (Artificial Intelligence & Statistical Learning)
+
+On juju you will need to have available, and allow for, 16GB of RAM at least, and 4 cpu cores in your 'kubeflow' virtual machine. This means you need a second model which you configure at 4 cores (if you have an 8 core or better machine) and mem=16G.
+
+For genuine processing capacity, also necessary is at least 10GB of GPU Accelerator Card RAM. The card needs to be CUDA Architecture-compatible.
+
+`juju add-model --config cores=4 --config mem=16G kubeflow`
+
+This may seem a large lot for 3 workers at 4 cores and 16GB each, however we will be removing the kubernetes-worker/1 and kubernetes/2 units (--force) as well as one master.
+
+This will leave 1 Master (2 cores default) and 1 x 4-core 16GB RAM worker for tensorflow.
+
+`juju deploy charmed-kubernetes`
+
+`juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
+
+`juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
+
+`juju remove-unit kubernetes-worker/1 --force`
+
+`juju remove-machine <kubernetes-worker/1_machine_number> --force`
+
+`juju remove-unit kubernetes-worker/2 --force`
+
+`juju remove-machine <kubernetes-worker/2_machine_number> --force`
+
+`juju remove-unit kubernetes-master/1 --force`
+
+`juju remove-machine <kubernetes-master/1_machine_number> --force`
+
+After the model has converged and settled, as with k8s model, you will probably require a relational database system. hence we install postgresql a second time here:
+
+`juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,90G postgresql`
+
+`juju deploy cs:~redis-charmers/redis`
+
+`juju expose redis`
+
+`juju ssh <kubernetes-worker_machine_number>`
+
+Follow the instructions here:
+https://www.tensorflow.org/install/pip to install TensorFlow onto a worker node of your choice.
+
+Choose your machine and `juju ssh <machine-number>`
+
+During the instructions, after upgrading pip but before installing tensorflow, you would be well advised to install testresources with:
+
+`pip install testresources`
+
+as the package is otherwise missing.
+
+Follow the above instructions carefully inside this virtual machine. Passthrough is natively enabled to the Accelerator GPU.
+
+Good luck! (see either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  download "An Introduction to Statistical Learning"; Gareth James et al.). 
+
+Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
+
+AI (Artificial Intelligence) includes further technical solutions to involve the results of the deployment of models in industrial and commercial production applications, to achieve economic and strategic benefits.
+
+_________________________________________________________________
 
 
 # To be continued ..
