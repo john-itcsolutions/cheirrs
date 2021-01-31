@@ -318,7 +318,7 @@ _____________________________________________________________
 
 _____________________________________________________________
 
-## KUBEFLOW and Machine Learning (Artificial Intelligence & Statistical Learning)
+## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
 
 On juju you will need to have available, and allow for, 16GB of RAM at least, and 4 cpu cores in your 'kubeflow' virtual machine. This means you need a second model which you configure at 4 cores (if you have an 8 core or better machine) and mem=16G.
 

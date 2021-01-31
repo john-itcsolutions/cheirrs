@@ -10,7 +10,7 @@ hook = hooks.hook
 def db_relation_joined():
     relation_set('database', config('general'))  # Explicit database name
     relation_set('roles', 'reporting,standard')  # DB roles required
-    relation_set('extensions', 'postgis,pgroute' ) # Get PostGIS
+    relation_set('extensions', 'postgis,osm2pgrouting') # Get PostGIS
 @hook('db-relation-changed', 'db-relation-departed')
 def db_relation_changed():
     # Rather than try to merge in just this particular database
@@ -40,5 +40,5 @@ def db_relation_changed():
 
     update_my_db_config(master=master_conn_str, slaves=slave_conn_strs)
 
-if __name__ == '__main__':
+if __name__ == '__init__':
     hooks.execute(sys.argv)
