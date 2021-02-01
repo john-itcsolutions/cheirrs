@@ -432,6 +432,9 @@ By adding a capacity for a quasi-synchronous (fourth), "Time" dimension, some ca
 8.
 But could there be other uses for further dimensionality?
 
+9.
+In the same way as rules have been established to fix financial modeling used by Banks to ensure fairness to customers, why not apply a similar approach to the financial models used by Pharmaceutical Companies to determine world pricing. Some of us believe profits are killing and disabling people who would otherwise have a chance in this world.
+
 __________________________________________________________________
 
 _________________________________________________________________
