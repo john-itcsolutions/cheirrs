@@ -37,13 +37,13 @@ lxd, juju and kubernetes. Also:
 
 https://jaas.ai/u/stub/postgresql (PostgreSQL without PostGIS initially)
 
-https://jaas.ai/u/juju/redis-k8s (Redis memory-cached, and backed-up, query server for common and predictable transactions)
+https://jaas.ai/u/juju/redis-charmers (Redis memory-cached, and backed-up, query server for common and predictable transactions)
 
 TensorFlow by Google. https://www.tensorflow.org/install/pip#tensorflow-2-packages-are-available
 
 The predominant language used to code for this project is Python (here, mainly version 3.8).
 
-_______________________________________________________________________________
+_________________________________________________________________
 
 ## SET UP NODES:
 
@@ -93,6 +93,8 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,50G postgresql`
 
+# The second IP address in the above command should be your own   Host's IP Adress.
+
 Deploy Redis, make it contactable:
 
 `juju deploy cs:~redis-charmers/redis`
@@ -103,7 +105,7 @@ Note; you are user 'ubuntu' here, so if you need a new password, just
 
 `sudo passwd ubuntu`
 
-___________________________________________________________________________________________
+_________________________________________________________________
 
  ## DATABASE & REDIS:- Set Up:
 
@@ -313,7 +315,7 @@ Now, you need to ensure the image tags in the .yml files you are about to build 
 
 _____________________________________________________________
 
-## TESTING
+## TESTING the smartweb-service/Blockchains/Postgresql System
 
 
 _____________________________________________________________
