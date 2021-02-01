@@ -420,6 +420,12 @@ It appears to us that since it is possible to serialise all data on a sequential
 4.
 Does PostGIS allow this?
 
+5.
+At the least, PostGIS is commonly used to ADD the informational capacities introduced by a geo-spatial database to Machine Learning Models.
+
+6.
+Therefore one question is: Is there anything to be gained by Hyper-Dimensional Spatialities? Can Machines be taught and learn within a hyper-spatial cosmos? Is that not what they are doing already, mathematically? Can a hyper-spatial database benefit anyone?
+
 __________________________________________________________________
 
 _________________________________________________________________
