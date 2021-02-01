@@ -426,6 +426,9 @@ At the least, PostGIS is commonly used to ADD the informational capacities intro
 6.
 Therefore one question is: Is there anything to be gained by Hyper-Dimensional Spatialities? Can Machines be taught and learn within a hyper-spatial cosmos? Is that not what they are doing already, mathematically? Can a hyper-spatial database benefit anyone?
 
+7.
+By adding a capacity for a fourth, "Time" dimension, some capabilities could be achieved. What could these capacities be?
+
 __________________________________________________________________
 
 _________________________________________________________________
