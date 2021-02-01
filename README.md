@@ -429,6 +429,9 @@ Therefore one question is: Is there anything to be gained by Hyper-Dimensional S
 7.
 By adding a capacity for a quasi-synchronous (fourth), "Time" dimension, some capabilities could be achieved, compared to "chronostatic" geospatial databases. What could these capacities be?
 
+8.
+But could there be other uses for further dimensionality?
+
 __________________________________________________________________
 
 _________________________________________________________________
