@@ -382,7 +382,7 @@ AI (Artificial Intelligence) includes further technical solutions to involve the
 
 It's worth noting that PostGIS is capable of storing representations of Neural Networks. The original Design Case for TensorFlow was as a Deep Learning Neural Network Simulator.
 
-Inside your postgresql Master (in "kubeflow" model - 
+Inside your postgresql Master - in "kubeflow" model - 
 (If necessary switch models with 
 
 `juju switch kubeflow`
