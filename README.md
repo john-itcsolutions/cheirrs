@@ -271,6 +271,12 @@ then, if you `juju status` in the k8s model you will see, at the foot of the out
 An application (and user - here admin) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with:
 
 `juju grant admin consume localhost-localhost:admin/k8s.postgresql`
+
+.. then the authorised user may use:
+
+`juju add-relation application:db localhost-localhost:admin/k8s.postgresql:db`
+
+to connect to the database from the uk8s controller in the kubeflow model (in this case).
 __________________________________________________________________
 
 ## Blockchains-Database Server (Smart-web) 
