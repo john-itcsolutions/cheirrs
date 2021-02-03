@@ -375,32 +375,7 @@ AI (Artificial Intelligence) includes further technical solutions to involve the
 
 It's worth noting that PostGIS is capable of storing representations of Neural Networks. The original Design Case for TensorFlow was as a Deep Learning Neural Network Simulator.
 
-Inside your postgresql Master - in "kubeflow" model - 
-(If necessary switch models with 
-
-`juju switch k8s`
-
- eg if you were still following the kubeflow model track .. )
-
-`juju status`
-
-.. note postgresql Master machine number
-
-`juju ssh <postgresql_Master_machine_number>` 
-
-get ubuntugis repo
-
-`sudo add-apt-repository ppa:ubuntugis/ppa`
-
-`sudo apt update`
-
-`sudo apt-get install postgis`
-
-`sudo apt update`
-
-`sudo apt-get install osm2pgrouting`
-
-
+Your database has already been set up within the cross model referenced database (postgresql) in k8s.
 _________________________________________________________________
 
 ## NOW: How to use a spatial database in connection with TensorFlow?
