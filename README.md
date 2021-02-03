@@ -341,13 +341,13 @@ _____________________________________________________________
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
 
-Unfortunately the charmed system is oriented entirely for Public Clouds when it comes to the Kubeflow charm bundle. However in combination with microk8s, much can still be achieved ..
+Unfortunately the charmed system is oriented for Public Clouds when it comes to the Kubeflow charm bundle. However in combination with microk8s, much can still be achieved ..
 
 On your Ubuntu host, you'll need to install these snaps to get started:
 
-sudo snap install juju --classic
-sudo snap install juju-wait --classic
-sudo snap install juju-helpers --classic
+`sudo snap install juju --classic`
+`sudo snap install juju-wait --classic`
+`sudo snap install juju-helpers --classic`
 
 Next, from the outermost directory in your working system, check out this repository locally:
 
