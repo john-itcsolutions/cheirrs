@@ -402,10 +402,10 @@ Therefore one question is: Is there anything to be gained by Hyper-Dimensional S
 By adding a capacity for a quasi-synchronous (fourth), "Time" dimension, some capabilities could be achieved, compared to "chronostatic" geospatial databases. What could these capacities be?
 
 8.
-But could there be other uses for further dimensionality?
+But could there be other uses for further dimensionality? Or is that already obvious to the cognescenti?
 
 9.
-In the same way as rules have been established to fix financial modeling used by Banks to ensure fairness to customers, why not apply a similar approach to the financial models used by Pharmaceutical Companies to determine world pricing. Some of us believe profits are killing and disabling people who would otherwise have a chance in this world. Just ask about Type 1 Diabetes in the so-called third world.
+In the same way as rules have been established to fix financial modeling used by Banks to ensure fairness to customers (over the centuries), why not apply a similar approach to the global financial models used by Pharmaceutical Companies to determine world pricing. Some of us believe profits are killing and disabling people who would otherwise have a chance in this world. Just ask about Type 1 Diabetes in the so-called third world.
 
 __________________________________________________________________
 
