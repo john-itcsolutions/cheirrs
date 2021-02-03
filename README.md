@@ -349,10 +349,11 @@ sudo snap install juju --classic
 sudo snap install juju-wait --classic
 sudo snap install juju-helpers --classic
 
-Next, check out this repository locally:
+Next, from the outermost directory in your working system, check out this repository locally:
 
 `git clone https://github.com/juju-solutions/bundle-kubeflow.git`
-cd bundle-kubeflow
+
+`cd bundle-kubeflow`
 
 The below commands will assume you are running them from the bundle-kubeflow directory.
 
@@ -386,7 +387,7 @@ Passthrough should be natively enabled to the Accelerator GPU.
 
 ______________________________________________________________
 
-FROM HOST TERMINAL: clone the following repo to your outermost working directory
+<!-- FROM HOST TERMINAL: clone the following repo to your outermost working directory
 
 `cd ../[[../]../], etc`
 
@@ -532,7 +533,7 @@ get ubuntugis repo
 `sudo apt-get install osm2pgrouting`
 
 (Make sure you are running a debian or ubuntu-based version of postgres, not the alpine version)
-
+ -->
 
 ________________________________________________________________
 
