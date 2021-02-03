@@ -387,7 +387,11 @@ Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2.
 
 ______________________________________________________________
 
-# The below commented text refers to setting up a postgres database with PostGIS and Open Street Maps. It appears that the procedure above utilises MongoDB as the persistence store.
+# There is commented-out text below (hidden), refering to setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
+
+To be continued.
+
+______________________________________________________________
 
 <!-- FROM HOST TERMINAL: clone the following repo to your outermost working directory
 
@@ -564,7 +568,7 @@ Is it possible, however to model a more-than-3-dimensional Graph and represent i
 It appears to us that since it is possible to serialise all data on a sequential computer, it should be possible to store multi-dimensional graphs in a hyper-spatial database.
 
 4.
-Does PostGIS allow this?
+Does PostGIS allow this? How to connect PostgreSQL with PostGIS in the above microk8s sub-installation, with TensorFlow?
 
 5.
 At the least, PostGIS is commonly used to ADD the informational capacities introduced by a geo-spatial database to Machine Learning Models.
