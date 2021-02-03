@@ -313,6 +313,10 @@ Now, you need to ensure the image tags in the .yml files you are about to build 
 
 `watch kubectl get pods`
 
+And actually having done all that, we realised that we really must build a "smart-web" charm, rather than simply using kubectl to deploy the software. Otherwise we have no simple mechanisms for smart-web to find and connect to its environment.
+
+TO BE CONTINUED .. we're learning to build charms now ..
+
 _____________________________________________________________
 
 ## TESTING the smartweb-service/Blockchains/Postgresql System
@@ -358,20 +362,9 @@ After the model has converged and settled, as with k8s model, you will probably 
 
 `juju expose redis`
 
-`juju ssh <kubernetes-worker_machine_number>`
+`juju deploy cs:~johnsca/tensorflow-0`
 
-Follow the instructions here:
-https://www.tensorflow.org/install/pip to install TensorFlow onto a worker node of your choice.
-
-Choose your machine and `juju ssh <machine-number>`
-
-During the instructions, after upgrading pip but before installing tensorflow, you would be well advised to install testresources with:
-
-`pip install testresources`
-
-as the package is otherwise missing.
-
-Follow the above instructions carefully inside this virtual machine. Passthrough is natively enabled to the Accelerator GPU.
+Passthrough is natively enabled to the Accelerator GPU.
 
 Good luck! (see either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  download "An Introduction to Statistical Learning"; Gareth James et al.). 
 
