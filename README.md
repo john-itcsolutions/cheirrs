@@ -375,13 +375,15 @@ Finally, you can run these commands to set up microk8s:
 
 `python3 scripts/cli.py microk8s setup --controller uk8s`
 
-`python3 scripts/cli.py deploy-to uk8s`
-
-The deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. In some deployment scenarios, you may need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
+The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. In some deployment scenarios, you may need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
 
 `microk8s.kubectl edit configmap -n kube-system coredns`
 
-Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2.
+Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You will need to use the 'insert' and 'delete' keys carefully! Save and exit as for vim.
+
+`python3 scripts/cli.py deploy-to uk8s`
+
+
 
 (Passthrough should be natively enabled to your Accelerator GPU.)
 
