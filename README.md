@@ -276,7 +276,7 @@ An application (and user - here admin) set to `consume` the postgres service fro
 
 `juju add-relation application:db localhost-localhost:admin/k8s.postgresql:db`
 
-to connect to the database from the uk8s controller in the kubeflow model (in this case).
+to connect "application" to the database from the uk8s controller in the kubeflow model (in this case).
 __________________________________________________________________
 
 ## Blockchains-Database Server (Smart-web) 
