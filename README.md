@@ -381,11 +381,13 @@ The deploy-to command allows manually setting a public address that is used for 
 
 `microk8s.kubectl edit configmap -n kube-system coredns`
 
-Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1.
+Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2.
 
-Passthrough should be natively enabled to the Accelerator GPU.
+(Passthrough should be natively enabled to your Accelerator GPU.)
 
 ______________________________________________________________
+
+# The below commented text refers to setting up a postgres database with PostGIS and Open Street Maps. It appears that the procedure above utilises MongoDB as the persistence store.
 
 <!-- FROM HOST TERMINAL: clone the following repo to your outermost working directory
 
