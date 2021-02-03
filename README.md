@@ -354,9 +354,7 @@ This will leave 1 Master (2 cores default) and 1 x 4-core 16GB RAM worker for te
 
 `juju remove-machine <kubernetes-master/1_machine_number> --force`
 
-After the model has converged and settled, as with k8s model, you will probably require a relational database system. hence we install postgresql a second time here:
-
-`juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,90G postgresql`
+After the model has converged and settled, as with k8s model, you will probably require a relational database system. However we intend to set up the postgresql database in k8s model as a cross model referencing database by setting up an "offer" for it so that applications (charms) from other models may access the database. In this case the tensorflow charm will access postgresql vi cross model referencing, although it may require a caching server as a web interface participant (unsure right now):
 
 `juju deploy cs:~redis-charmers/redis`
 
@@ -380,9 +378,13 @@ It's worth noting that PostGIS is capable of storing representations of Neural N
 Inside your postgresql Master - in "kubeflow" model - 
 (If necessary switch models with 
 
-`juju switch kubeflow`
+`juju switch k8s`
 
- eg if you left this track at some stage .. )
+ eg if you were still following the kubeflow model track .. )
+
+`juju status`
+
+.. note postgresql Master machine number
 
 `juju ssh <postgresql_Master_machine_number>` 
 
