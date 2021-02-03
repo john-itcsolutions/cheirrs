@@ -39,7 +39,7 @@ https://jaas.ai/u/stub/postgresql (PostgreSQL without PostGIS initially)
 
 https://jaas.ai/u/juju/redis-charmers (Redis memory-cached, and backed-up, query server for common and predictable transactions)
 
-TensorFlow by Google. https://www.tensorflow.org/install/pip#tensorflow-2-packages-are-available
+TensorFlow by Google. `juju deploy cs:~johnsca/tensorflow-0`
 
 The predominant language used to code for this project is Python (here, mainly version 3.8).
 
@@ -91,7 +91,7 @@ It may take a few hours if your network is slow. Be patient. When you see everyt
 
 Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically). Note; when lxd was set up, storage space was also set up on the local SSD.
 
-`juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,50G postgresql`
+`juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,100G postgresql`
 
 # The second IP address in the above command should be your own   Host's IP Adress.
 
@@ -137,19 +137,19 @@ ________________________________________________________________
 
 From Host, in /elastos-smartweb-service/grpc_adenine/database/scripts folder:
 
-`juju scp create_table_scripts.sql <machine number of postgresql master>:/var/lib/postgresql/10/main/`
+`juju scp create_table_scripts.sql <machine number of postgresql master>:/`
 
-`juju scp insert_rows_scripts.sql <machine number of postgresql master>:/var/lib/postgresql/10/main/`
+`juju scp insert_rows_scripts.sql <machine number of postgresql master>:/`
 
-`juju scp reset_database.sql <machine number of postgresql master>:/var/lib/postgresql/10/main/`
+`juju scp reset_database.sql <machine number of postgresql master>:/`
 
 ## The following 3 commands would be possible only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
 
-`juju scp ../../cheirrs_backup.sql <machine number of postgresql>:/var/lib/postgresql/10/main/`
+`juju scp ../../cheirrs_backup.sql <machine number of postgresql>:/`
 
-`juju scp ../../cheirrs_oseer_backup.sql <machine number of postgresql>:/var/lib/postgresql/10/main/`
+`juju scp ../../cheirrs_oseer_backup.sql <machine number of postgresql>:/`
 
-`juju scp ../../a_horse_backup.sql <machine number of postgresql>:/var/lib/postgresql/10/main/`
+`juju scp ../../a_horse_backup.sql <machine number of postgresql>:/`
 
 exec into master db container:
 
@@ -165,11 +165,11 @@ Enter your new postgres user's password twice.
 
 `createdb general`
 
-`psql general < /var/lib/postgresql/10/main/cheirrs_backup.sql`
+`psql general < cheirrs_backup.sql`
 
-`psql general < /var/lib/postgresql/10/main/cheirrs_oseer_backup.sql`
+`psql general < cheirrs_oseer_backup.sql`
 
-`psql general < /var/lib/postgresql/10/main/a_horse_backup.sql`
+`psql general < a_horse_backup.sql`
 
 Create users in postgres:
 
@@ -221,9 +221,9 @@ Still inside postgres master machine:
 
 Run Elastos scripts to prepare database public schema for Blockchains interaction;
 
-`psql -h localhost -d general -U gmu -a -q -f /var/lib/postgresql/10/main/create_table_scripts.sql`
+`psql -h localhost -d general -U gmu -a -q -f create_table_scripts.sql`
 
-`psql -h localhost -d general -U gmu -a -q -f /var/lib/postgresql/10/main/insert_rows_scripts.sql`
+`psql -h localhost -d general -U gmu -a -q -f insert_rows_scripts.sql`
 
 Now if you
 
@@ -257,6 +257,17 @@ get ubuntugis repo
 `sudo apt update`
 
 `sudo apt-get install osm2pgrouting`
+
+_________________________________________________________________
+
+## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this cmr-model called 'k8s'.
+
+`juju switch k8s`
+
+`juju offer postgresql:db`
+
+then, if you `juju status` in the k8s model you will see, at the foot of the output, a reference to the Offer.
+
 __________________________________________________________________
 
 ## Blockchains-Database Server (Smart-web) 
@@ -315,7 +326,7 @@ Now, you need to ensure the image tags in the .yml files you are about to build 
 
 And actually having done all that, we realised that we really must build a "smart-web" charm, rather than simply using kubectl to deploy the software. Otherwise we have no simple mechanisms for smart-web to find and connect to its environment.
 
-TO BE CONTINUED .. we're learning to build charms now ..
+# TO BE CONTINUED .. we're learning to build charms now ..
 
 _____________________________________________________________
 
@@ -334,7 +345,7 @@ For genuine processing capacity, also necessary is at least 10GB of GPU Accelera
 
 This may seem a large lot for 3 workers at 4 cores and 16GB each, however we will be removing the kubernetes-worker/1 and kubernetes/2 units (--force) as well as one master.
 
-This will leave 1 Master (2 cores default) and 1 x 4-core 16GB RAM worker for tensorflow.
+This will leave 1 Master (2 cores default) and 1 x 4-core 16GB RAM worker. Note that on a private localhost installation, the model constraints specified are maxima rather than minima, as in the cases of Bare-Metal Clouds and Public Clouds.
 
 `juju deploy charmed-kubernetes`
 
