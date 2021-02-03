@@ -81,7 +81,7 @@ Add a model named "k8s"
 
 Deploy the Kubernetes Charm
 
-`juju deploy charmed-kubernetes`
+`juju deploy cs:bundle/kubernetes-core-1163`
 
 `juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
 
@@ -95,7 +95,7 @@ It may take a few hours if your network is slow. Be patient. When you see everyt
 
 Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically). Note; when lxd was set up, storage space was also set up on the local SSD.
 
-`juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,100G postgresql`
+`juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,50G postgresql`
 
 # The second IP address in the above command should be your own   Host's IP Adress.
 
@@ -109,9 +109,7 @@ Note; you are user 'ubuntu' here, so if you need a new password, just
 
 `sudo passwd ubuntu`
 
-_________________________________________________________________
-
- ## DATABASE & REDIS:- Set Up:
+ <!-- ## DATABASE & REDIS:- Set Up:
 
 NOTE: As yet Redis is not programmed to act as a Query Cache Server. This requires investment of time and effort in analysis of your DApp's requirements.
 
@@ -130,9 +128,7 @@ _
 
 `juju relate discourse postgresql:db-admin`
 
-Au fin du jour, nous avons été déçus .. 
-
-
+Au fin du jour, nous avons été déçus ..  -->
 ________________________________________________________________
  
 ## DATABASE
@@ -244,7 +240,7 @@ Try:
 You should see the single user's details.
 __________________________________________________________________
 
-## Getting PostGIS and Open Street Map
+## Getting PostGIS and Open Street Maps
 
 Inside your postgresql Master 
 
