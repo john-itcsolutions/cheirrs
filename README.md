@@ -91,7 +91,7 @@ At this stage your lxd/juju assemblage is converging towards stability. You can 
 
 `watch -c juju status --color` or, `juju status` for short.
 
-It may take a few hours if your network is slow. Be patient. When you see everything 'green' except possibly the 2 masters in a permamnent "wait" state ("Waiting for 3 kube-system pods to start"), you may continue.
+It may take a few hours if your network is slow. Be patient. When you see everything 'green' except possibly the master in a permamnent "wait" state ("Waiting for 3 kube-system pods to start"), you may continue.
 
 Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically). Note; when lxd was set up, storage space was also set up on the local SSD.
 
@@ -155,7 +155,7 @@ exec into master db container:
 
 `juju ssh <machine number of postgresql>`
 
-Inside postgres master container:
+Now you are inside postgres master container:
 
 `sudo passwd postgres`
 
@@ -268,6 +268,9 @@ _________________________________________________________________
 
 then, if you `juju status` in the k8s model you will see, at the foot of the output, a reference to the Offer.
 
+An application (and user - here admin) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with:
+
+`juju grant admin consume localhost-localhost:postgres/k8s.postgresql`
 __________________________________________________________________
 
 ## Blockchains-Database Server (Smart-web) 
@@ -324,7 +327,7 @@ Now, you need to ensure the image tags in the .yml files you are about to build 
 
 `watch kubectl get pods`
 
-And actually having done all that, we realised that we really must build a "smart-web" charm, rather than simply using kubectl to deploy the software. Otherwise we have no simple mechanisms for smart-web to find and connect to its environment.
+And actually having done all that, we suspect that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software. Otherwise we may have no simple mechanisms for smart-web to find and connect to its environment.
 
 # TO BE CONTINUED .. we're learning to build charms now ..
 
@@ -379,13 +382,13 @@ Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You 
 
 `python3 scripts/cli.py deploy-to uk8s`
 
-
-
 (Passthrough should be natively enabled to your Accelerator GPU.)
 
 ______________________________________________________________
 
 # There is commented-out text below (hidden), refering to setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
+
+As noted above, it is possible, using cross-model referencing, and "offers", to enable an application in a separate controller and model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the localhost-localhost controller and the k8s model therein. (See above at the "## Set up Cross-Model Referenced "offer" .. " heading.)
 
 To be continued.
 
