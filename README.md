@@ -67,6 +67,10 @@ Install juju
 
 `sudo snap install juju --classic`
 
+`sudo snap install juju-wait --classic`
+
+`sudo snap install juju-helpers --classic`
+
 Create a Juju Controller for this Cloud
 
 `juju bootstrap localhost`
@@ -337,56 +341,197 @@ _____________________________________________________________
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
 
-On juju you will need to have available, and allow for, 16GB of RAM at least, and 4 cpu cores in your 'kubeflow' virtual machine. This means you need a second model which you configure at 4 cores (if you have an 8 core or better machine) and mem=16G.
+Unfortunately the charmed system is oriented entirely for Public Clouds when it comes to the Kubeflow charm bundle.
 
-For genuine processing capacity, also necessary is at least 10GB of GPU Accelerator Card RAM. The card needs to be CUDA Architecture-compatible.
+Microk8s is the only way to easily obtain a working Kubeflow/tensorflow installation on your localhost ..
 
-`juju add-model --config cores=4 --config mem=16G kubeflow`
+Setup microk8s directly on the Host:
 
-This may seem a large lot for 3 workers at 4 cores and 16GB each, however we will be removing the kubernetes-worker/1 and kubernetes/2 units (--force) as well as one master.
+(you'll also need to install the microk8s snap:)
 
-This will leave 1 Master (2 cores default) and 1 x 4-core 16GB RAM worker. Note that on a private localhost installation, the model constraints specified are maxima rather than minima, as in the cases of Bare-Metal Clouds and Public Clouds.
+`sudo snap install microk8s --classic`
 
-`juju deploy charmed-kubernetes`
+Next, you will need to add yourself to the microk8s group:
 
-`juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
+`sudo usermod -aG microk8s $USER && newgrp microk8s`
 
-`juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
+Finally, you can run these commands to set up microk8s:
 
-`juju remove-unit kubernetes-worker/1 --force`
+`python3 scripts/cli.py microk8s setup --controller uk8s`
 
-`juju remove-machine <kubernetes-worker/1_machine_number> --force`
+`python3 scripts/cli.py deploy-to uk8s`
 
-`juju remove-unit kubernetes-worker/2 --force`
+The deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. In some deployment scenarios, you may need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
 
-`juju remove-machine <kubernetes-worker/2_machine_number> --force`
+`microk8s.kubectl edit configmap -n kube-system coredns`
 
-`juju remove-unit kubernetes-master/1 --force`
+Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1.
 
-`juju remove-machine <kubernetes-master/1_machine_number> --force`
+Passthrough should be natively enabled to the Accelerator GPU.
 
-After the model has converged and settled, as with k8s model, you will probably require a relational database system. However we intend to set up the postgresql database in k8s model as a cross model referencing database by setting up an "offer" for it so that applications (charms) from other models may access the database. In this case the tensorflow charm will access postgresql vi cross model referencing, although it may require a caching server as a web interface participant (unsure right now):
 
-`juju deploy cs:~redis-charmers/redis`
+FROM HOST TERMINAL: clone the repo to your working directory
 
-`juju expose redis`
+`git clone https://github.com/john-itcsolutions/smart-web-postgresql-grpc`
 
-`juju deploy cs:~johnsca/tensorflow-0`
+`cd smart-web-postgresql-grpc`
 
-Passthrough is natively enabled to the Accelerator GPU.
+______________________________________________________________
 
-Good luck! (see either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  download "An Introduction to Statistical Learning"; Gareth James et al.). 
+## Database Preliminaries:
 
-Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
+IN HOST TERMINAL:
+ 
+ We pull the images we need:
+ 
+ `docker pull redis:5.0.4`
 
-AI (Artificial Intelligence) includes further technical solutions to involve the results of the deployment of models in industrial and commercial production applications, to achieve economic and strategic benefits.
+ `docker pull postgres:10.15`
+ 
+ `sudo nano /etc/docker/daemon.json`
 
+ You need to have something like:
+ 
+`{`
+
+`  insecure-registries : [localhost:32000,`
+
+`                           ]`
+
+`}`
+
+Then:
+
+`sudo systemctl daemon-reload`
+
+`sudo systemctl restart docker`
+
+`docker tag redis:5.0.4 localhost:32000/redis:5.0.4`
+
+`docker tag postgres:10.15 localhost:32000/postgres:10.15`
+
+Now push the images to the microk8s registry:
+
+`docker push localhost:32000/redis:5.0.4`
+
+`docker push localhost:32000/postgres/10:15`
+
+_____________________________________________________________
+
+## DATABASE & REDIS:- Set Up secrets:
+
+In the absence of a database (in the charmed-kubernetes installation) within scope of tensorflow, we will provide a second postgresql replicated set on microk8s.
+
+Note: "You can edit secret.yml, and you would have to edit kustomization.yaml, but then you need to alter the redis.yml as the hash for the keys will change. So you would have to find the hashes in that yml file and alter to match newly created keys - from running `microk8s kubectl apply -k .`"
+
+Run `microk8s kubectl apply -f config/secret.yml` and then `cd config && ./create_configmap.sh`    
+
+`cd ../../`
+
+Generate further secrets from kustomization file (in smart-web-postgresql-grpc dir):
+
+`microk8s kubectl apply -k .`
+
+________________________________________________________________
+
+ ## Set Up Redis
+ 
+ In smart-web-postgresql-grpc directory:
+ 
+ `sudo ./volumes-redis.sh`
+ 
+ `sudo ./copyredisconf.sh`
+ 
+ which copies redis.conf (unedited as yet) to the config directory.
+ 
+ You then need to edit redis.conf in place (ie in /mnt/disk/config-redis) and insert the name of the data backup folder which the dump.rdb file will be placed in. You must search redis.conf for the correct line to edit.
+ 
+ First see what folders you have:
+ 
+ `ls /mnt/disk`
+ 
+ Then:
+ 
+ `sudo nano /mnt/disk/config-redis/redis.conf`
+ 
+ The name of the data backup foldder is /mnt/disk/data-redis, however, relative to the location of redis.conf you need to insert 
+ 
+ `../data-redis`, inside redis.conf, at the approriate position.
+
+`cd /path/to/smart-web-postgresql-grpc`
+
+`microk8s kubectl apply -f redis.yml`
+
+check pods .. `watch microk8s kubectl get pods`
+
+NOTE: As yet Redis is not programmed to act as a Query Cache Server. This requires investment of time and effort in analysis of your DApp's requirements.
+________________________________________________________________
+
+## DATABASE
+## Create places for Persistent Volumes on database node and allow access:
+
+From postgres-statefulset directory:
+
+`sudo ./volumes-postgres.sh`
+
+________________________________________________________________
+
+## Start master and replica:
+
+In primary node, in "shared" directory and inside "smart-web-postgresql-grpc/app/postgres-statefulset" folder, as above, start master postgres server:
+
+`microk8s kubectl apply -f statefulset-master.yml`
+
+`watch microk8s kubectl get pods`
+
+If errors or excessive delay get messages with:
+
+`microk8s kubectl describe pods`
+
+ .. fix errors!
+ 
+ After master is successfully running and ready, start replica server:
+
+`microk8s kubectl apply -f statefulset-replica.yml`
+ 
+ Check pods.
 
 ## Getting PostGIS and Open Street Map for 'Kubeflow'-PostgreSQL
 
 It's worth noting that PostGIS is capable of storing representations of Neural Networks. The original Design Case for TensorFlow was as a Deep Learning Neural Network Simulator.
 
-Your database has already been set up within the cross model referenced database (postgresql) in k8s.
+Inside your postgresql Master ie with
+
+`microk8s exec -it postgresql-0 -- sh` 
+
+get ubuntugis repo
+
+`sudo add-apt-repository ppa:ubuntugis/ppa`
+
+`sudo apt update`
+
+`sudo apt-get install postgis`
+
+`sudo apt update`
+
+`sudo apt-get install osm2pgrouting`
+
+(Make sure you are running a debian or ubuntu-based version of postgres, not the alpine version)
+
+
+________________________________________________________________
+
+Good luck! For refs see:
+
+https://jaas.ai/kubeflow#setup-microk8s and find microk8s section, and following ('Using')
+
+Also refer to any official docs on TensorFlow and its history, background and usage.
+
+(In particular, see either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  download "An Introduction to Statistical Learning"; Gareth James et al.). 
+
+Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
+
+AI (Artificial Intelligence) includes further technical solutions to involve the results of the deployment of models in industrial and commercial production applications, to achieve economic and strategic benefits.
 _________________________________________________________________
 
 ## NOW: How to use a spatial database in connection with TensorFlow?
