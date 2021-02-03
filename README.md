@@ -91,7 +91,19 @@ At this stage your lxd/juju assemblage is converging towards stability. You can 
 
 `watch -c juju status --color` or, `juju status` for short.
 
-It may take a few hours if your network is slow. Be patient. When you see everything 'green' except possibly the master in a permamnent "wait" state ("Waiting for 3 kube-system pods to start"), you may continue.
+It may take a few hours if your network is slow. Be patient. On the other hand you may find you need to remove both the easyrsa/0 and the etcd/0 units and the easyrsa and etcd applications (with --force) before redeploying a new and separate easyrsa on its own machine with:
+
+`juju remove-unit easyrsa/0 --force`
+
+`juju remove-application easyrsa --force`
+
+`juju deploy cs:~yellow/easyrsa-0`
+
+.. and similarly for etcd ..
+
+The earlier in the deployment cycle that you replace easyrsa and etcd the better.
+
+When you see everything 'green' except possibly the master in a permamnent "wait" state ("Waiting for 3 kube-system pods to start"), you may continue.
 
 Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically). Note; when lxd was set up, storage space was also set up on the local SSD.
 
