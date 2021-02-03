@@ -341,11 +341,26 @@ _____________________________________________________________
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
 
-Unfortunately the charmed system is oriented entirely for Public Clouds when it comes to the Kubeflow charm bundle.
+Unfortunately the charmed system is oriented entirely for Public Clouds when it comes to the Kubeflow charm bundle. However in combination with microk8s, much can still be achieved ..
 
-Microk8s is the only way to easily obtain a working Kubeflow/tensorflow installation on your localhost ..
+On your Ubuntu host, you'll need to install these snaps to get started:
 
-Setup microk8s directly on the Host:
+sudo snap install juju --classic
+sudo snap install juju-wait --classic
+sudo snap install juju-helpers --classic
+
+Next, check out this repository locally:
+
+`git clone https://github.com/juju-solutions/bundle-kubeflow.git`
+cd bundle-kubeflow
+
+The below commands will assume you are running them from the bundle-kubeflow directory.
+
+Then, follow the instructions from the subsection below to deploy Kubeflow to microk8s.
+
+Microk8s is the only way to easily obtain a working Kubeflow/tensorflow installation on your localhost without paying cloud fees ..
+
+Setup microk8s directly on the Ubuntu Host:
 
 (you'll also need to install the microk8s snap:)
 
@@ -369,14 +384,15 @@ Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1.
 
 Passthrough should be natively enabled to the Accelerator GPU.
 
+______________________________________________________________
 
-FROM HOST TERMINAL: clone the repo to your working directory
+FROM HOST TERMINAL: clone the following repo to your outermost working directory
+
+`cd ../[[../]../], etc`
 
 `git clone https://github.com/john-itcsolutions/smart-web-postgresql-grpc`
 
 `cd smart-web-postgresql-grpc`
-
-______________________________________________________________
 
 ## Database Preliminaries:
 
@@ -396,8 +412,7 @@ IN HOST TERMINAL:
 
 `  insecure-registries : [localhost:32000,`
 
-`                           ]`
-
+`                     ]`
 `}`
 
 Then:
@@ -527,7 +542,7 @@ https://jaas.ai/kubeflow#setup-microk8s and find microk8s section, and following
 
 Also refer to any official docs on TensorFlow and its history, background and usage.
 
-(In particular, see either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  download "An Introduction to Statistical Learning"; Gareth James et al.). 
+## (In particular, see either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  download "An Introduction to Statistical Learning"; Gareth James et al.). 
 
 Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
 
