@@ -81,7 +81,7 @@ Add a model named "k8s"
 
 Deploy the Kubernetes Charm
 
-`juju deploy cs:bundle/kubernetes-core-1163`
+`juju deploy cs:bundle/charmed-kubernetes-559`
 
 `juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
 
@@ -91,17 +91,13 @@ At this stage your lxd/juju assemblage is converging towards stability. You can 
 
 `watch -c juju status --color` or, `juju status` for short.
 
-It may take a few hours if your network is slow. Be patient. On the other hand you may find you need to remove both the easyrsa/0 and the etcd/0 units and the easyrsa and etcd applications (with --force) before redeploying a new and separate easyrsa on its own machine with:
+It may take a few hours if your network is slow. Be patient. Nevertheless we do not really require 3 workers, 2 masters and 3 etcd's so you may remove these machines.
 
-`juju remove-unit easyrsa/0 --force`
+`juju remove-machine <etcd/1_machine-number> --force`
 
-`juju remove-application easyrsa --force`
+.. and similarly for etcd/2, kubernetes-master/1, kubernetes-worker/1 and kubernetes-worker/2 ..
 
-`juju deploy cs:~yellow/easyrsa-0`
-
-.. and similarly for etcd ..
-
-The earlier in the deployment cycle that you replace easyrsa and etcd the better.
+The earlier in the deployment cycle that you remove these machines the better.
 
 When you see everything 'green' except possibly the master in a permamnent "wait" state ("Waiting for 3 kube-system pods to start"), you may continue.
 
@@ -149,25 +145,17 @@ ________________________________________________________________
 
 From Host, in /elastos-smartweb-service/grpc_adenine/database/scripts folder:
 
-`juju scp create_table_scripts.sql <machine number of postgresql master>:/`
+`juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
-`juju scp insert_rows_scripts.sql <machine number of postgresql master>:/`
+## The following command would be possible only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
 
-`juju scp reset_database.sql <machine number of postgresql master>:/`
-
-## The following 3 commands would be possible only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
-
-`juju scp ../../cheirrs_backup.sql <machine number of postgresql>:/`
-
-`juju scp ../../cheirrs_oseer_backup.sql <machine number of postgresql>:/`
-
-`juju scp ../../a_horse_backup.sql <machine number of postgresql>:/`
+`cd ../../../../../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
 exec into master db container:
 
-`juju ssh <machine number of postgresql>`
+`juju ssh <machine number of postgresql master>`
 
-Now you are inside postgres master container:
+Now you are inside postgres master container, in the /home/ubuntu directory:
 
 `sudo passwd postgres`
 
@@ -254,9 +242,11 @@ __________________________________________________________________
 
 ## Getting PostGIS and Open Street Maps
 
-Inside your postgresql Master 
+Inside your postgresql Master (
 
 `juju ssh <postgresql_Master_machine_number>` 
+
+)
 
 get ubuntugis repo
 
@@ -270,6 +260,23 @@ get ubuntugis repo
 
 `sudo apt-get install osm2pgrouting`
 
+`psql general`
+
+-- Enable PostGIS
+`CREATE EXTENSION postgis;`
+-- enable raster support (for 3+)
+`CREATE EXTENSION postgis_raster;`
+-- Enable Topology
+`CREATE EXTENSION postgis_topology;`
+-- Enable PostGIS Advanced 3D
+-- and other geoprocessing algorithms
+-- sfcgal not available with all distributions
+`CREATE EXTENSION postgis_sfcgal;`
+-- fuzzy matching needed for Tiger
+`CREATE EXTENSION fuzzystrmatch;`
+-- rule based standardizer
+`CREATE EXTENSION address_standardizer;`
+
 _________________________________________________________________
 
 ## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this cmr-model called 'k8s'.
@@ -280,13 +287,15 @@ _________________________________________________________________
 
 then, if you `juju status` in the k8s model you will see, at the foot of the output, a reference to the Offer.
 
-An application (and user - here admin) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with:
+An application (and user - here admin) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with (this needs to be run while in kubeflow model):
 
 `juju grant admin consume localhost-localhost:admin/k8s.postgresql`
 
-.. then the authorised user may use:
+`juju grant ubuntu consume localhost-localhost:ubuntu/k8s.postgresql`
 
-`juju add-relation application:db localhost-localhost:admin/k8s.postgresql:db`
+.. then the authorised user (in the kubeflow model - see below)may use:
+
+`juju add-relation <application>:db localhost-localhost:admin/k8s.postgresql:db`
 
 to connect "application" to the database from the uk8s controller in the kubeflow model (in this case).
 __________________________________________________________________
@@ -360,27 +369,47 @@ _____________________________________________________________
 
 Unfortunately the charmed system is oriented for Public Clouds when it comes to the Kubeflow charm bundle. However in combination with microk8s, much can still be achieved ..
 
-On your Ubuntu host, you'll need to install these snaps to get started:
-
-`sudo snap install juju --classic`
-`sudo snap install juju-wait --classic`
-`sudo snap install juju-helpers --classic`
-
-Next, from the outermost directory in your working system, check out this repository locally:
+From the outermost directory in your working system, check out this repository locally:
 
 `git clone https://github.com/juju-solutions/bundle-kubeflow.git`
 
 `cd bundle-kubeflow`
 
-The below commands will assume you are running them from the bundle-kubeflow directory.
+The below commands will assume you are running them from the bundle-kubeflow directory within your kubeflow vm.
 
 Then, follow the instructions from the subsection below to deploy Kubeflow to microk8s.
 
 Microk8s is the only way to easily obtain a working Kubeflow/tensorflow installation on your localhost without paying cloud fees ..
 
-Setup microk8s directly on the Ubuntu Host:
+Setup microk8s with multipass on the Ubuntu Host:
 
-(you'll also need to install the microk8s snap:)
+`sudo snap install multipass`
+
+`multipass launch -c 4 -d 50G -m 20G -n kubeflow`
+
+(you'll also need to install the microk8s snap on your new vm:)
+
+Enter kubeflow vm:
+
+`multipass shell kubeflow`
+
+inside kubeflow on /home/ubuntu:
+
+`mkdir shared`
+
+On this Ubuntu vm, you'll need to install these snaps to get started:
+
+`sudo snap install juju --classic`
+`sudo snap install juju-wait --classic`
+`sudo snap install juju-helpers --classic`
+
+Then, mount your outer working directory to kubeflow -
+
+`exit`
+
+`multipass mount /path/to/your/working/directory kubeflow:/home/ubuntu/shared`
+
+`multipass shell kubeflow`
 
 `sudo snap install microk8s --classic`
 
@@ -388,7 +417,9 @@ Next, you will need to add yourself to the microk8s group:
 
 `sudo usermod -aG microk8s $USER && newgrp microk8s`
 
-Finally, you can run these commands to set up microk8s:
+Finally, you can run these commands to set up microk8s, but you have to have the cloned "bundle-kubeflow", from the above section, available from /home/ubuntu/shared:
+
+`cd shared/../path/to/bundle-kubeflow`
 
 `python3 scripts/cli.py microk8s setup --controller uk8s`
 
