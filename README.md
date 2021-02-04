@@ -51,7 +51,7 @@ _________________________________________________________________
 
 Development is easiest in Docker as opposed to Kubernetes.
 
-Nevertheless, if you wish to go on to build a full set of nodes enabled on Kubernetes, we use lxd, juju, as follows.
+Nevertheless, if you wish to go on to build a full set of nodes enabled on Kubernetes, we use lxd, juju and microk8s as follows.
 
 On host terminal, preferably in a directory within the 2nd HDD if available, to save working files in case of a crash:
 
@@ -66,10 +66,6 @@ Note: Currently, Charmed Kubernetes only supports dir as a storage option and do
 Install juju
 
 `sudo snap install juju --classic`
-
-`sudo snap install juju-wait --classic`
-
-`sudo snap install juju-helpers --classic`
 
 Create a Juju Controller for this Cloud
 
@@ -91,7 +87,7 @@ At this stage your lxd/juju assemblage is converging towards stability. You can 
 
 `watch -c juju status --color` or, `juju status` for short.
 
-It may take a few hours if your network is slow. Be patient. Nevertheless we do not really require 3 workers, 2 masters and 3 etcd's so you may remove these machines.
+It may take a few hours if your network is slow. Be patient. Nevertheless we do not really require 3 workers, 2 masters and 3 etcd's so you may remove the majority of these machines.
 
 `juju remove-machine <etcd/1_machine-number> --force`
 
@@ -105,9 +101,9 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,50G postgresql`
 
-# The second IP address in the above command should be your own   Host's IP Adress.
+# The second IP address in the above command should be your own  Host's IP Adress.
 
-Deploy Redis, make it contactable:
+Deploy Redis, and make it contactable:
 
 `juju deploy cs:~redis-charmers/redis`
 
@@ -184,6 +180,8 @@ Create users in postgres:
 `create role a_horse_admin with superuser login password 'passwd';`
 
 `create role gmu with login password 'gmu';`
+
+Note for smart-web to work, gmu must exist as a user with password gmu.
 
 Check Schemas: there should be 'public, 'a_horse'; 'cheirrs'; 'cheirrs_oseer'.
 
@@ -264,16 +262,21 @@ get ubuntugis repo
 
 -- Enable PostGIS
 `CREATE EXTENSION postgis;`
+
 -- enable raster support (for 3+)
 `CREATE EXTENSION postgis_raster;`
+
 -- Enable Topology
 `CREATE EXTENSION postgis_topology;`
+
 -- Enable PostGIS Advanced 3D
 -- and other geoprocessing algorithms
 -- sfcgal not available with all distributions
 `CREATE EXTENSION postgis_sfcgal;`
+
 -- fuzzy matching needed for Tiger
 `CREATE EXTENSION fuzzystrmatch;`
+
 -- rule based standardizer
 `CREATE EXTENSION address_standardizer;`
 
@@ -287,17 +290,19 @@ _________________________________________________________________
 
 then, if you `juju status` in the k8s model you will see, at the foot of the output, a reference to the Offer.
 
-An application (and user - here admin) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with (this needs to be run while in kubeflow model):
+An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with (this needs to be run while in kubeflow model):
 
 `juju grant admin consume localhost-localhost:admin/k8s.postgresql`
 
 `juju grant ubuntu consume localhost-localhost:ubuntu/k8s.postgresql`
 
-.. then the authorised user (in the kubeflow model - see below)may use:
+.. then the authorised user (in the kubeflow model - see below) may use:
 
 `juju add-relation <application>:db localhost-localhost:admin/k8s.postgresql:db`
 
-to connect "application" to the database from the uk8s controller in the kubeflow model (in this case).
+`juju add-relation <application>:db localhost-localhost:ubuntu/k8s.postgresql:db`
+
+to connect "application" to the database under "localhost-localhost" controller, from the 'uk8s' controller in the kubeflow model (in this case).
 __________________________________________________________________
 
 ## Blockchains-Database Server (Smart-web) 
@@ -362,7 +367,7 @@ _____________________________________________________________
 
 ## TESTING the smartweb-service/Blockchains/Postgresql System
 
-
+To be continued ..
 _____________________________________________________________
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
@@ -403,7 +408,7 @@ On this Ubuntu vm, you'll need to install these snaps to get started:
 `sudo snap install juju-wait --classic`
 `sudo snap install juju-helpers --classic`
 
-Then, mount your outer working directory to kubeflow -
+Then, mount your outer working directory to kubeflow's shared directory -
 
 `exit`
 
@@ -411,11 +416,15 @@ Then, mount your outer working directory to kubeflow -
 
 `multipass shell kubeflow`
 
+Install microk8s on kubeflow vm:
+
 `sudo snap install microk8s --classic`
 
 Next, you will need to add yourself to the microk8s group:
 
 `sudo usermod -aG microk8s $USER && newgrp microk8s`
+
+`sudo su - $USER`   (quick reset of terminal)
 
 Finally, you can run these commands to set up microk8s, but you have to have the cloned "bundle-kubeflow", from the above section, available from /home/ubuntu/shared:
 
@@ -427,7 +436,7 @@ The upcoming deploy-to command allows manually setting a public address that is 
 
 `microk8s.kubectl edit configmap -n kube-system coredns`
 
-Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You will need to use the 'insert' and 'delete' keys carefully! Save and exit as for vim.
+Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You will need to use the 'insert' and 'delete' keys carefully! Save and exit as for vim.
 
 `python3 scripts/cli.py deploy-to uk8s`
 
@@ -435,7 +444,7 @@ Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You 
 
 ______________________________________________________________
 
-# There is commented-out text below (hidden), refering to setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
+# There is commented-out text below (hidden), refering to setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure (kubeflow) above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
 
 As noted above, it is possible, using cross-model referencing, and "offers", to enable an application in a separate controller and model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the localhost-localhost controller and the k8s model therein. (See above at the "## Set up Cross-Model Referenced "offer" .. " heading.)
 
@@ -599,7 +608,7 @@ https://jaas.ai/kubeflow#setup-microk8s and find microk8s section, and following
 
 Also refer to any official docs on TensorFlow and its history, background and usage.
 
-## (In particular, see either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  download "An Introduction to Statistical Learning"; Gareth James et al.). 
+## (In particular, visit either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  & download "An Introduction to Statistical Learning"; Gareth James et al.). 
 
 Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
 
