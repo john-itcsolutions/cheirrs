@@ -411,6 +411,10 @@ NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/
 
 `sudo apt-get install -y postfix`
 
+From this point there are 2 avenues of progress. The first requires a gitlab account and involves uploading and downloading. The second requires you to set up a local docker registry on the smart-general vm.
+
+## First way:
+
 Gitlab offers a free container registry, along with a free code repository. Sign up for your own.
 
 Once set up in gitlab, create a blank repo, and find "Personal Access Tokens" in your Personal Settings. Obtain and record your token, which you use as a password to login to your Gitlab-hosted Docker container repo.
@@ -434,6 +438,32 @@ In cheirrs dir:
 `git push -u origin --all`
 
 `git push -u origin --tags`
+
+## Second way:
+
+using:
+
+`multipass list`
+
+find the IP Address of your smart-general machine, and copy it to the clipboard:
+
+Create/edit the file:
+
+`sudo nano /etc/docker/daemon.json`
+
+You need to follow the section of the following link that refers to how to set up an insecure local registry on a virtual machine; see https://microk8s.io/docs/registry-built-in
+
+`sudo systemctl daemon-reload`
+
+`sudo systemctl restart docker`
+
+Having set up the correct address in your daemon.json,
+
+From cheirrs/elastos-smartweb-service:
+
+`sudo docker build -t <ip-addr_smart-general>:32000/smart:<your-tag> .`
+
+`cd ../`
 
 From cheirrs dir:
 
