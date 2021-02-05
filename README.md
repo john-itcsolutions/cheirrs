@@ -98,15 +98,15 @@ Next, you will need to add yourself to the microk8s group:
 
 `sudo su - $USER`   (quick reset of terminal)
 
-Then, mount your outer working directory to kubeflow's shared directory -
+Then, mount your outer working directory to smart-general's shared directory -
 
 `exit`
 
 You are now at a Host terminal:
 
-`multipass mount /path/to/your/working/directory kubeflow:/home/ubuntu/shared`
+`multipass mount /path/to/your/working/directory smart-general:/home/ubuntu/shared`
 
-`multipass shell kubeflow`
+`multipass shell smart-general`
 
 Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, mounted and available from /home/ubuntu/shared:
 
@@ -136,7 +136,7 @@ Only when the coredns configmap is correct for your LAN:
 
 (Passthrough should already be natively enabled to your Accelerator GPU.)
 
-On the Host, you can switch between controllers by noting the current controllers known to juju:
+On smart-general, you could switch between other possible controllers by noting the current controllers known to juju:
 
 `juju controllers`
 
@@ -152,11 +152,11 @@ to move between models on the same controller.
 
 ______________________________________________________________
 
-# There is commented-out text below (hidden), refering to setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have with Kubeflow above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
+# There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with TensorFlow above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
 
 As noted above, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the localhost-localhost controller and the k8s model therein. (See above at the "## Set up Cross-Model Referenced "offer" .. " heading.)
 
-But which <application-name> to use as requiring connection to provided db?
+But which <application-name> to use as requiring connection to the provided db?
 
 To be continued.
 
