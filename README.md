@@ -43,9 +43,128 @@ TensorFlow by Google.
 
 The predominant language used to code for this project is Python (here, mainly version 3.8).
 
+We start by installing kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
+________________________________________________________________
+
+## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
+
+Unfortunately the charmed system is mainly oriented for Public Clouds when it comes to the Kubeflow charm bundle. However in combination with microk8s, much can still be achieved ..
+
+From the outermost directory in your working system (on a second HDD if available), check out these repositories locally:
+
+`git clone https://gitlab.com/john_olsenjohn-itcsolutions/cheirrs.git`
+
+`git clone https://github.com/juju-solutions/bundle-kubeflow.git`
+
+`cd bundle-kubeflow`
+
+The below commands will assume you are running them from the bundle-kubeflow directory, which you will mount within your kubeflow vm (see below).
+
+Then, follow the instructions from the subsection below to deploy Kubeflow to microk8s.
+
+Microk8s is the only way to easily obtain a working Kubeflow/tensorflow installation on your localhost without paying cloud fees ..
+
+Setup microk8s with multipass on the Ubuntu Host:
+
+`sudo snap install multipass`
+
+`multipass launch -c 6 -d 100G -m 28G -n smart-general`
+
+(you'll also need to install the microk8s snap on your new vm:)
+
+Enter smart-general vm:
+
+`multipass shell smart-general`
+
+inside smart-general on /home/ubuntu:
+
+`mkdir shared`
+
+On this Ubuntu vm, you'll need to install these snaps to get started:
+
+`sudo snap install juju --classic`
+
+`sudo snap install juju-wait --classic`
+
+`sudo snap install juju-helpers --classic`
+
+Install microk8s on kubeflow vm:
+
+`sudo snap install microk8s --classic`
+
+Next, you will need to add yourself to the microk8s group:
+
+`sudo usermod -aG microk8s $USER && newgrp microk8s`
+
+`sudo su - $USER`   (quick reset of terminal)
+
+Then, mount your outer working directory to kubeflow's shared directory -
+
+`exit`
+
+You are now at a Host terminal:
+
+`multipass mount /path/to/your/working/directory kubeflow:/home/ubuntu/shared`
+
+`multipass shell kubeflow`
+
+Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, mounted and available from /home/ubuntu/shared:
+
+`cd shared/../path/to/bundle-kubeflow`
+
+`python3 scripts/cli.py microk8s setup --controller uk8s`
+
+The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. However in some deployment scenarios (such as local development), you may need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
+
+`microk8s.kubectl edit configmap -n kube-system coredns`
+
+Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You will need to use the arrow keys and the 'insert' and 'delete' keys carefully! Save and exit as for vim.
+
+If you make mistakes during editing, it is safest to:
+
+`juju destroy-controller uk8s --release-storage --force`
+
+and restart from 
+
+`python3 scripts/cli.py microk8s setup --controller uk8s`
+
+followed by editing the coredns configmap again.
+
+Only when the coredns configmap is correct for your LAN:
+
+`python3 scripts/cli.py deploy-to uk8s`
+
+(Passthrough should already be natively enabled to your Accelerator GPU.)
+
+On the Host, you can switch between controllers by noting the current controllers known to juju:
+
+`juju controllers`
+
+and then selecting the target for switching, and:
+
+`juju switch <target-controller-name>`
+
+Within controllers you may substitute <target-model-name> and use:
+
+`juju switch <target-model-name>`
+
+to move between models on the same controller.
+
+______________________________________________________________
+
+# There is commented-out text below (hidden), refering to setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have with Kubeflow above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
+
+As noted above, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the localhost-localhost controller and the k8s model therein. (See above at the "## Set up Cross-Model Referenced "offer" .. " heading.)
+
+But which <application-name> to use as requiring connection to provided db?
+
+To be continued.
+
+
+
 _________________________________________________________________
 
-## SET UP NODES:
+## A Second Model:
 
 (The database schema for ITCSA's project are private and available only under certain conditions.)
 
@@ -55,25 +174,9 @@ Nevertheless, if you wish to go on to build a full set of nodes enabled on Kuber
 
 On host terminal, preferably in a directory within the 2nd HDD if available, to save working files in case of a crash:
 
-Install lxd
+Add a model named "smart-web"
 
-`sudo snap install lxd`
-
-`sudo lxd init`
-
-Note: Currently, Charmed Kubernetes only supports dir as a storage option and does not support ipv6, which should be set to none from the init script. Additional profiles will be added automatically to LXD to support the requirements of Charmed Kubernetes.
-
-Install juju
-
-`sudo snap install juju --classic`
-
-Create a Juju Controller for this Cloud
-
-`juju bootstrap localhost`
-
-Add a model named "k8s"
-
-`juju add-model k8s`
+`juju add-model smart-web`
 
 Deploy the Kubernetes Charm
 
@@ -83,7 +186,7 @@ Deploy the Kubernetes Charm
 
 `juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
 
-At this stage your lxd/juju assemblage is converging towards stability. You can observe the status of the assemblage with
+At this stage your microk8s/juju assemblage is converging towards stability. You can observe the status of the assemblage with
 
 `watch -c juju status --color` or, `juju status` for short.
 
@@ -97,7 +200,7 @@ The earlier in the deployment cycle that you remove these machines the better.
 
 When you see everything 'green' except possibly the master in a permamnent "wait" state ("Waiting for 3 kube-system pods to start"), you may continue.
 
-Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically). Note; when lxd was set up, storage space was also set up on the local SSD.
+Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,50G postgresql`
 
@@ -112,38 +215,13 @@ Deploy Redis, and make it contactable:
 Note; you are user 'ubuntu' here, so if you need a new password, just
 
 `sudo passwd ubuntu`
-
- <!-- ## DATABASE & REDIS:- Set Up:
-
-NOTE: As yet Redis is not programmed to act as a Query Cache Server. This requires investment of time and effort in analysis of your DApp's requirements.
-
-As a separate matter, ITCSA is experimenting with the "discourse" charm to link the redis and postgres machines. See https://charmhub.io/discourse/docs/database-relations
-
-`juju deploy cs:~discourse-charmers/discourse-k8s` or even `juju deploy cs:~discourse-charmers/discourse`
-
-The charm will not function without a connection to a PostgreSQL database and Redis, so they do need to be running and ready first.
-_
-`juju config discourse redis_host=${REDIS_IP}`
-
-(where you need to replace ${REDIS_IP} with the IP of the redis machine - see:
-
-`juju status`
-)
-
-`juju relate discourse postgresql:db-admin`
-
-Au fin du jour, nous avons été déçus ..  -->
 ________________________________________________________________
  
 ## DATABASE
 
-Now, clone the project code to a working directory:
-
-`git clone https://gitlab.com/john_olsenjohn-itcsolutions/cheirrs.git`
-
 ## Copy sql scripts; Build Database Schema:
 
-From Host, in cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder:
+From smart-general, in shared/cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder:
 
 `juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
@@ -292,9 +370,9 @@ get ubuntugis repo:
 
 _________________________________________________________________
 
-## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'localhost-localhost', within this cmr-model called 'k8s'.
+## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'uk8s', within this cmr-model called 'smart-web'.
 
-`juju switch k8s`
+`juju switch smart-web`
 
 `juju offer postgresql:db`
 
@@ -302,28 +380,24 @@ then, if you `juju status` in the k8s model you will see, at the foot of the out
 
 An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with (this needs to be run while in kubeflow model):
 
-`juju grant admin consume localhost-localhost:admin/k8s.postgresql`
+`juju grant admin consume uk8s:admin/smart-web.postgresql`
 
-`juju grant ubuntu consume localhost-localhost:ubuntu/k8s.postgresql`
+`juju grant ubuntu consume uk8s:ubuntu/smart-web.postgresql`
 
 .. then the authorised user (in the kubeflow model - see below) may use:
 
-`juju add-relation <application>:db localhost-localhost:admin/k8s.postgresql:db`
+`juju add-relation <application>:db uk8s:admin/smart-web.postgresql:db`
 
-`juju add-relation <application>:db localhost-localhost:ubuntu/k8s.postgresql:db`
+`juju add-relation <application>:db uk8s:ubuntu/smart-web.postgresql:db`
 
-to connect "application" to the database under 'localhost-localhost' controller, from the 'uk8s' controller in the kubeflow model (in this case).
+to connect "application" to the database (in smart-web model)under 'uk8s' controller, from the kubeflow model (in this case).
 __________________________________________________________________
 
 ## Blockchains-Database Server (Smart-web) 
 
 Now we turn to setting up the Blockchain/Database gRPC Server Deployment,
 
-In a Host terminal,
-
-`git clone https://gitlab.com/john_olsenjohn-itcsolutions/cheirrs`
-
-NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included a version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However we need to re-insert the root-directory-version at /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
+NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However we need to re-insert the root-directory-version at /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
 
 `cd path/to/cheirrs`
 
@@ -380,269 +454,6 @@ _____________________________________________________________
 To be continued ..
 _____________________________________________________________
 
-## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
-
-Unfortunately the charmed system is mainly oriented for Public Clouds when it comes to the Kubeflow charm bundle. However in combination with microk8s, much can still be achieved ..
-
-From the outermost directory in your working system, check out this repository locally:
-
-`git clone https://github.com/juju-solutions/bundle-kubeflow.git`
-
-`cd bundle-kubeflow`
-
-The below commands will assume you are running them from the bundle-kubeflow directory, which you will mount within your kubeflow vm (see below).
-
-Then, follow the instructions from the subsection below to deploy Kubeflow to microk8s.
-
-Microk8s is the only way to easily obtain a working Kubeflow/tensorflow installation on your localhost without paying cloud fees ..
-
-Setup microk8s with multipass on the Ubuntu Host:
-
-`sudo snap install multipass`
-
-`multipass launch -c 4 -d 50G -m 20G -n kubeflow`
-
-(`-m 16G` minimum recommended)
-
-(you'll also need to install the microk8s snap on your new vm:)
-
-Enter kubeflow vm:
-
-`multipass shell kubeflow`
-
-inside kubeflow on /home/ubuntu:
-
-`mkdir shared`
-
-On this Ubuntu vm, you'll need to install these snaps to get started:
-
-`sudo snap install juju --classic`
-
-`sudo snap install juju-wait --classic`
-
-`sudo snap install juju-helpers --classic`
-
-Install microk8s on kubeflow vm:
-
-`sudo snap install microk8s --classic`
-
-Next, you will need to add yourself to the microk8s group:
-
-`sudo usermod -aG microk8s $USER && newgrp microk8s`
-
-`sudo su - $USER`   (quick reset of terminal)
-
-Then, mount your outer working directory to kubeflow's shared directory -
-
-`exit`
-
-You are now at a Host terminal:
-
-`multipass mount /path/to/your/working/directory kubeflow:/home/ubuntu/shared`
-
-`multipass shell kubeflow`
-
-Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, mounted and available from /home/ubuntu/shared:
-
-`cd shared/../path/to/bundle-kubeflow`
-
-`python3 scripts/cli.py microk8s setup --controller uk8s`
-
-The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. However in some deployment scenarios (such as local development), you may need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
-
-`microk8s.kubectl edit configmap -n kube-system coredns`
-
-Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You will need to use the arrow keys and the 'insert' and 'delete' keys carefully! Save and exit as for vim.
-
-If you make mistakes during editing, it is safest to:
-
-`juju destroy-controller uk8s --release-storage --force`
-
-and restart from 
-
-`python3 scripts/cli.py microk8s setup --controller uk8s`
-
-followed by editing the coredns configmap again.
-
-Only when the coredns configmap is correct for your LAN:
-
-`python3 scripts/cli.py deploy-to uk8s`
-
-(Passthrough should already be natively enabled to your Accelerator GPU.)
-
-On the Host, you can switch between controllers by noting the current controllers known to juju:
-
-`juju controllers`
-
-and then selecting the target for switching, and:
-
-`juju switch <target-controller-name>`
-
-Within controllers you may substitute <target-model-name> and use:
-
-`juju switch <target-model-name>`
-
-to move between models on the same controller.
-
-______________________________________________________________
-
-# There is commented-out text below (hidden), refering to setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have with Kubeflow above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
-
-As noted above, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the localhost-localhost controller and the k8s model therein. (See above at the "## Set up Cross-Model Referenced "offer" .. " heading.)
-
-But which <application-name> to use as requiring connection to provided db?
-
-To be continued.
-
-______________________________________________________________
-
-<!-- FROM HOST TERMINAL: clone the following repo to your outermost working directory
-
-`cd ../[[../]../], etc`
-
-`git clone https://github.com/john-itcsolutions/smart-web-postgresql-grpc`
-
-`cd smart-web-postgresql-grpc`
-
-## Database Preliminaries:
-
-IN HOST TERMINAL:
- 
- We pull the images we need:
- 
- `docker pull redis:5.0.4`
-
- `docker pull postgres:10.15`
- 
- `sudo nano /etc/docker/daemon.json`
-
- You need to have something like:
- 
-`{`
-
-`  insecure-registries : [localhost:32000,`
-
-`                     ]`
-`}`
-
-Then:
-
-`sudo systemctl daemon-reload`
-
-`sudo systemctl restart docker`
-
-`docker tag redis:5.0.4 localhost:32000/redis:5.0.4`
-
-`docker tag postgres:10.15 localhost:32000/postgres:10.15`
-
-Now push the images to the microk8s registry:
-
-`docker push localhost:32000/redis:5.0.4`
-
-`docker push localhost:32000/postgres/10:15`
-
-_____________________________________________________________
-
-## DATABASE & REDIS:- Set Up secrets:
-
-In the absence of a database (in the charmed-kubernetes installation) within scope of tensorflow, we will provide a second postgresql replicated set on microk8s.
-
-Note: "You can edit secret.yml, and you would have to edit kustomization.yaml, but then you need to alter the redis.yml as the hash for the keys will change. So you would have to find the hashes in that yml file and alter to match newly created keys - from running `microk8s kubectl apply -k .`"
-
-Run `microk8s kubectl apply -f config/secret.yml` and then `cd config && ./create_configmap.sh`    
-
-`cd ../../`
-
-Generate further secrets from kustomization file (in smart-web-postgresql-grpc dir):
-
-`microk8s kubectl apply -k .`
-
-________________________________________________________________
-
- ## Set Up Redis
- 
- In smart-web-postgresql-grpc directory:
- 
- `sudo ./volumes-redis.sh`
- 
- `sudo ./copyredisconf.sh`
- 
- which copies redis.conf (unedited as yet) to the config directory.
- 
- You then need to edit redis.conf in place (ie in /mnt/disk/config-redis) and insert the name of the data backup folder which the dump.rdb file will be placed in. You must search redis.conf for the correct line to edit.
- 
- First see what folders you have:
- 
- `ls /mnt/disk`
- 
- Then:
- 
- `sudo nano /mnt/disk/config-redis/redis.conf`
- 
- The name of the data backup foldder is /mnt/disk/data-redis, however, relative to the location of redis.conf you need to insert 
- 
- `../data-redis`, inside redis.conf, at the approriate position.
-
-`cd /path/to/smart-web-postgresql-grpc`
-
-`microk8s kubectl apply -f redis.yml`
-
-check pods .. `watch microk8s kubectl get pods`
-
-NOTE: As yet Redis is not programmed to act as a Query Cache Server. This requires investment of time and effort in analysis of your DApp's requirements.
-________________________________________________________________
-
-## DATABASE
-## Create places for Persistent Volumes on database node and allow access:
-
-From postgres-statefulset directory:
-
-`sudo ./volumes-postgres.sh`
-
-________________________________________________________________
-
-## Start master and replica:
-
-In primary node, in "shared" directory and inside "smart-web-postgresql-grpc/app/postgres-statefulset" folder, as above, start master postgres server:
-
-`microk8s kubectl apply -f statefulset-master.yml`
-
-`watch microk8s kubectl get pods`
-
-If errors or excessive delay get messages with:
-
-`microk8s kubectl describe pods`
-
- .. fix errors!
- 
- After master is successfully running and ready, start replica server:
-
-`microk8s kubectl apply -f statefulset-replica.yml`
- 
- Check pods.
-
-## Getting PostGIS and Open Street Map for 'Kubeflow'-PostgreSQL
-
-It's worth noting that PostGIS is capable of storing representations of Neural Networks. The original Design Case for TensorFlow was as a Deep Learning Neural Network Simulator.
-
-Inside your postgresql Master ie with
-
-`microk8s exec -it postgresql-0 -- sh` 
-
-get ubuntugis repo
-
-`sudo add-apt-repository ppa:ubuntugis/ppa`
-
-`sudo apt update`
-
-`sudo apt-get install postgis`
-
-`sudo apt update`
-
-`sudo apt-get install osm2pgrouting`
-
-(Make sure you are running a debian or ubuntu-based version of postgres, not the alpine version)
- -->
 
 ________________________________________________________________
 
@@ -671,7 +482,7 @@ III.
 It appears to us that since it is possible to serialise all data on a sequential computer, it should be possible to store multi-dimensional graphs in a hyper-spatial database. Or is the use of MongoDB indicating that data for these already multi-dimensional Tensors is better stored in a non-relational, non-SQL structure?
 
 IV.
-Even if desirable, does PostGIS allow hyperspatiality? How would we connect PostgreSQL + PostGIS in the above k8s sub-installation, with TensorFlow on the uk8s controller in the kubeflow model, if only to obtain the benefits possible from a strictly GEO-spatial databse system?
+Even if desirable, does PostGIS allow hyperspatiality? How would we connect PostgreSQL + PostGIS in the above uk8s sub-installation, with TensorFlow on the uk8s controller in the kubeflow model, if only to obtain the benefits possible from a strictly GEO-spatial databse system?
 
 V.
 At the least, PostGIS is commonly used to ADD the informational capacities introduced by a geo-spatial database to Machine Learning Models.
