@@ -101,7 +101,7 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,50G postgresql`
 
-# The second IP address in the above command should be your own  Host's IP Adress.
+# The second IP address in the above command should be your own  Host's IP Address.
 
 Deploy Redis, and make it contactable:
 
