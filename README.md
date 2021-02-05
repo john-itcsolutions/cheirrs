@@ -417,7 +417,9 @@ inside kubeflow on /home/ubuntu:
 On this Ubuntu vm, you'll need to install these snaps to get started:
 
 `sudo snap install juju --classic`
+
 `sudo snap install juju-wait --classic`
+
 `sudo snap install juju-helpers --classic`
 
 Install microk8s on kubeflow vm:
