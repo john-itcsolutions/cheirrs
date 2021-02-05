@@ -439,6 +439,10 @@ In cheirrs dir:
 
 `git push -u origin --tags`
 
+Continued below ..
+
+_________________________________________________________________
+
 ## Second way:
 
 using:
@@ -463,7 +467,12 @@ From cheirrs/elastos-smartweb-service:
 
 `sudo docker build -t <ip-addr_smart-general>:32000/smart:<your-tag> .`
 
+`sudo docker push <ip-addr_smart-general>:32000/smart:<your-tag>`
+
 `cd ../`
+
+_______________________________________________________________
+
 
 From cheirrs dir:
 
