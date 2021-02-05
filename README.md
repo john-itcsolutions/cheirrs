@@ -137,9 +137,13 @@ ________________________________________________________________
  
 ## DATABASE
 
+Now, clone the project code to a working directory:
+
+`git clone https://gitlab.com/john_olsenjohn-itcsolutions/cheirrs.git`
+
 ## Copy sql scripts; Build Database Schema:
 
-From Host, in /elastos-smartweb-service/grpc_adenine/database/scripts folder:
+From Host, in cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder:
 
 `juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
@@ -215,7 +219,7 @@ Exit psql shell:
 
 `\q`
 
-Still inside postgres master machine:
+Still inside postgres master machine at /home/ubuntu:
 
 Run Elastos scripts to prepare database public schema for Blockchains interaction;
 
@@ -263,7 +267,7 @@ get ubuntugis repo:
 -- Enable PostGIS
 `CREATE EXTENSION postgis;`
 
--- enable raster support (for 3+)
+-- enable raster support (only for 3+ - may lead to an error - ignorable)
 `CREATE EXTENSION postgis_raster;`
 
 -- Enable Topology
@@ -282,7 +286,7 @@ get ubuntugis repo:
 
 _________________________________________________________________
 
-## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this cmr-model called 'k8s'.
+## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'localhost-localhost', within this cmr-model called 'k8s'.
 
 `juju switch k8s`
 
@@ -351,7 +355,7 @@ In cheirrs/elastos-smartweb-service dir:
 
 From cheirrs dir:
 
-Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along the image tags in both the tag given (at the command line - sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:<your-tag>) when you build from the Dockerfile to its target, and the kubernetes smart-web.yml file that references that image (ie: "smart:<your-tag>"). 
+Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along (if you make alterations to the code) the image tags in both the tag given (at the command line - sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:<your-tag>) when you build from the Dockerfile to its target, and the kubernetes smart-web.yml file that references that image (ie: "smart:<your-tag>"). 
 
 (smart-web.yml is in the root directory of "cheirrs")
 
@@ -380,7 +384,7 @@ From the outermost directory in your working system, check out this repository l
 
 `cd bundle-kubeflow`
 
-The below commands will assume you are running them from the bundle-kubeflow directory within your kubeflow vm.
+The below commands will assume you are running them from the bundle-kubeflow directory within your kubeflow vm (see below).
 
 Then, follow the instructions from the subsection below to deploy Kubeflow to microk8s.
 
@@ -442,11 +446,25 @@ Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You
 
 (Passthrough should be natively enabled to your Accelerator GPU.)
 
+On the Host, you can switch between controllers by noting the current controllers known to juju:
+
+`juju controllers`
+
+and then selecting the target for switching, and:
+
+`juju switch <target-controller-name>`
+
+Within controllers you may substitute <target-model-name> and use:
+
+`juju switch <target-model-name>`
+
+to move between models on the same controller.
+
 ______________________________________________________________
 
 # There is commented-out text below (hidden), refering to setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure (kubeflow) above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
 
-As noted above, it is possible, using cross-model referencing, and "offers", to enable an application in a separate controller and model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the localhost-localhost controller and the k8s model therein. (See above at the "## Set up Cross-Model Referenced "offer" .. " heading.)
+As noted above, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the localhost-localhost controller and the k8s model therein. (See above at the "## Set up Cross-Model Referenced "offer" .. " heading.)
 
 To be continued.
 
@@ -624,22 +642,22 @@ A Brain and a 3 dimensional spatial database are both correspondent in meta-stru
 Is it possible, however to model a more-than-3-dimensional Graph and represent it on a PostGIS database?
 
 3.
-It appears to us that since it is possible to serialise all data on a sequential computer, it should be possible to store multi-dimensional graphs in a hyper-spatial database.
+It appears to us that since it is possible to serialise all data on a sequential computer, it should be possible to store multi-dimensional graphs in a hyper-spatial database. Or is the use of MongoDB indicating that data for these multi-dimensional Tensors is better stored in a non-relational, non-SQL structure?
 
 4.
-Does PostGIS allow this? How to connect PostgreSQL with PostGIS in the above microk8s sub-installation, with TensorFlow?
+Even if desirable, does PostGIS allow this? How would we connect PostgreSQL + PostGIS in the above k8s sub-installation, with TensorFlow on the uk8s controller in the kubeflow model?
 
 5.
 At the least, PostGIS is commonly used to ADD the informational capacities introduced by a geo-spatial database to Machine Learning Models.
 
 6.
-Therefore one question is: Is there anything to be gained by Hyper-Dimensional Spatialities? Can Machines be taught and learn within a hyper-spatial cosmos? Is that not what they are doing already, mathematically? Can a hyper-spatial database benefit anyone?
+Therefore one question is: Is there anything to be gained by Hyper-Dimensional Spatialities? Can Machines be taught and learn within a hyper-spatial cosmos? Is that not what they are doing already, mathematically, in RAM? Can a hyper-spatial database benefit anyone?
 
 7.
 By adding a capacity for a quasi-synchronous (fourth), "Time" dimension, some capabilities could be achieved, compared to "chronostatic" geospatial databases. What could these capacities be?
 
 8.
-But could there be other uses for further dimensionality? Or is that already obvious to the cognescenti?
+But could there be other uses for further dimensionality? Or is that already obvious to the cognoscenti?
 
 9.
 In the same way as rules have been established to fix financial modeling used by Banks to ensure fairness to customers (over the centuries), why not apply a similar approach to the global financial models used by Pharmaceutical Companies to determine world pricing. Some of us believe profits are killing and disabling people who would otherwise have a chance in this world. Just ask about Type 1 Diabetes in the so-called third world.
