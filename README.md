@@ -39,7 +39,7 @@ https://jaas.ai/u/stub/postgresql (PostgreSQL without PostGIS initially)
 
 https://jaas.ai/u/juju/redis-charmers (Redis memory-cached, and backed-up, query server for common and predictable transactions)
 
-TensorFlow by Google. `juju deploy cs:~johnsca/tensorflow-0`
+TensorFlow by Google. 
 
 The predominant language used to code for this project is Python (here, mainly version 3.8).
 
@@ -246,7 +246,7 @@ Inside your postgresql Master (
 
 )
 
-get ubuntugis repo
+get ubuntugis repo:
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
@@ -302,7 +302,7 @@ An application (and users - here admin and ubuntu) set to `consume` the postgres
 
 `juju add-relation <application>:db localhost-localhost:ubuntu/k8s.postgresql:db`
 
-to connect "application" to the database under "localhost-localhost" controller, from the 'uk8s' controller in the kubeflow model (in this case).
+to connect "application" to the database under 'localhost-localhost' controller, from the 'uk8s' controller in the kubeflow model (in this case).
 __________________________________________________________________
 
 ## Blockchains-Database Server (Smart-web) 
@@ -436,7 +436,7 @@ The upcoming deploy-to command allows manually setting a public address that is 
 
 `microk8s.kubectl edit configmap -n kube-system coredns`
 
-Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You will need to use the 'insert' and 'delete' keys carefully! Save and exit as for vim.
+Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You will need to use the left and right arrows and the 'insert' and 'delete' keys carefully! Save and exit as for vim.
 
 `python3 scripts/cli.py deploy-to uk8s`
 
