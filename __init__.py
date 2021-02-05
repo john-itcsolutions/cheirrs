@@ -3,8 +3,6 @@ from decouple import config
 from sqlalchemy import create_engine, MetaData, Table, Column, ForeignKey
 from sqlalchemy.ext.automap import automap_base
 
-import contextlib
-import time
 import sys
 
 import logging
@@ -39,7 +37,6 @@ Base = automap_base(metadata=metadata)
 
 Base.prepare()
 
-import sys
 from charmhelpers.core.hookenv import (
     Hooks, config, relation_set, relation_get,
     local_unit, related_units, remote_unit)
