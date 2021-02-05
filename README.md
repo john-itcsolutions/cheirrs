@@ -172,13 +172,17 @@ In a smart-general terminal, in a mounted directory (on shared) from the 2nd HDD
 
 Bootstrap a new controller:
 
-`juju boostrap localhoost`
+`juju bootstrap --bootstrap-constraints "cores=2 mem=4G" localhost`
 
 Add a model named "smart-web"
 
 `juju add-model smart-web`
 
+`juju set-model-constraints "cores=2 mem=4G"`
+
 Deploy the Kubernetes Charm
+
+`juju set-model-constraints "cores=2 mem=4G"`
 
 `juju deploy cs:bundle/charmed-kubernetes-559`
 
