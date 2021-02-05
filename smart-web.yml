@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: smart-web
-        image: registry.gitlab.com/john_olsenjohn-itcsolutions/smart:3
+        image: registry.gitlab.com/john_olsenjohn-itcsolutions/smart:4
         ports:
         - containerPort: 8001
 
