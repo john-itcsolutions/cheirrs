@@ -154,9 +154,9 @@ ______________________________________________________________
 
 # There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with TensorFlow above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
 
-As noted above, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the localhost-localhost controller and the k8s model therein. (See above at the "## Set up Cross-Model Referenced "offer" .. " heading.)
+As noted below, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and/or model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the uk8s controller and the smart-web model (see following) therein. (See below at the "## Set up Cross-Model Referenced "offer" .. " heading.)
 
-But which <application-name> to use as requiring connection to the provided db?
+But which <application-name> (in kubeflow model) to use as requiring connection to the provided db?
 
 To be continued.
 
@@ -168,11 +168,7 @@ _________________________________________________________________
 
 (The database schema for ITCSA's project are private and available only under certain conditions.)
 
-Development is easiest in Docker as opposed to Kubernetes.
-
-Nevertheless, if you wish to go on to build a full set of nodes enabled on Kubernetes, we use lxd, juju and microk8s as follows.
-
-On host terminal, preferably in a directory within the 2nd HDD if available, to save working files in case of a crash:
+In a smart-general terminal, in a mounted directory (on shared) from the 2nd HDD if available, to save working files in case of a crash:
 
 Add a model named "smart-web"
 
