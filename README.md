@@ -156,7 +156,7 @@ ______________________________________________________________
 
 As noted below, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and/or model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the uk8s controller and the smart-web model (see following) therein. (See below at the "## Set up Cross-Model Referenced "offer" .. " heading.)
 
-But which <application-name> (in kubeflow model) to use as requiring connection to the provided db?
+But which `<application-name>` (in kubeflow model) to use as requiring connection to the provided db?
 
 To be continued.
 
