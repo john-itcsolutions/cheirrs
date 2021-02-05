@@ -416,6 +416,8 @@ Then, mount your outer working directory to kubeflow's shared directory -
 
 `exit`
 
+You are now at a Host terminal:
+
 `multipass mount /path/to/your/working/directory kubeflow:/home/ubuntu/shared`
 
 `multipass shell kubeflow`
@@ -430,17 +432,29 @@ Next, you will need to add yourself to the microk8s group:
 
 `sudo su - $USER`   (quick reset of terminal)
 
-Finally, you can run these commands to set up microk8s, but you have to have the cloned "bundle-kubeflow", from the above section, available from /home/ubuntu/shared:
+Finally, you can run these commands to set up microk8s, but you have to have the cloned "bundle-kubeflow", from the above section, mounted and available from /home/ubuntu/shared:
 
 `cd shared/../path/to/bundle-kubeflow`
 
 `python3 scripts/cli.py microk8s setup --controller uk8s`
 
-The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. In some deployment scenarios, you may need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
+The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. In some deployment scenarios (such as local development), you may need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
 
 `microk8s.kubectl edit configmap -n kube-system coredns`
 
-Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You will need to use the left and right arrows and the 'insert' and 'delete' keys carefully! Save and exit as for vim.
+Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You will need to use the arrow keys and the 'insert' and 'delete' keys carefully! Save and exit as for vim.
+
+If you make mistakes during editing, it is safest to:
+
+`juju destroy-controller uk8s --release-storage --force`
+
+and starting from 
+
+`python3 scripts/cli.py microk8s setup --controller uk8s`
+
+followed by editing the coredns configmap again.
+
+When configmap is correct for your LAN:
 
 `python3 scripts/cli.py deploy-to uk8s`
 
@@ -635,34 +649,34 @@ _________________________________________________________________
 
 ## NOW: How to use a spatial database in connection with TensorFlow?
 
-1.
+I.
 A Brain and a 3 dimensional spatial database are both correspondent in meta-structure. It is possible to map 3-D neuronal graphs to a spatial database.
 
-2.
+II.
 Is it possible, however to model a more-than-3-dimensional Graph and represent it on a PostGIS database?
 
-3.
-It appears to us that since it is possible to serialise all data on a sequential computer, it should be possible to store multi-dimensional graphs in a hyper-spatial database. Or is the use of MongoDB indicating that data for these multi-dimensional Tensors is better stored in a non-relational, non-SQL structure?
+III.
+It appears to us that since it is possible to serialise all data on a sequential computer, it should be possible to store multi-dimensional graphs in a hyper-spatial database. Or is the use of MongoDB indicating that data for these already multi-dimensional Tensors is better stored in a non-relational, non-SQL structure?
 
-4.
-Even if desirable, does PostGIS allow this? How would we connect PostgreSQL + PostGIS in the above k8s sub-installation, with TensorFlow on the uk8s controller in the kubeflow model?
+IV.
+Even if desirable, does PostGIS allow hyperspatiality? How would we connect PostgreSQL + PostGIS in the above k8s sub-installation, with TensorFlow on the uk8s controller in the kubeflow model, if only to obtain the benefits possible from a strictly GEO-spatial databse system?
 
-5.
+V.
 At the least, PostGIS is commonly used to ADD the informational capacities introduced by a geo-spatial database to Machine Learning Models.
 
-6.
+VI.
 Therefore one question is: Is there anything to be gained by Hyper-Dimensional Spatialities? Can Machines be taught and learn within a hyper-spatial cosmos? Is that not what they are doing already, mathematically, in RAM? Can a hyper-spatial database benefit anyone?
 
-7.
+VII.
 By adding a capacity for a quasi-synchronous (fourth), "Time" dimension, some capabilities could be achieved, compared to "chronostatic" geospatial databases. What could these capacities be?
 
-8.
+VIII.
 But could there be other uses for further dimensionality? Or is that already obvious to the cognoscenti?
 
-9.
+IX.
 In the same way as rules have been established to fix financial modeling used by Banks to ensure fairness to customers (over the centuries), why not apply a similar approach to the global financial models used by Pharmaceutical Companies to determine world pricing. Some of us believe profits are killing and disabling people who would otherwise have a chance in this world. Just ask about Type 1 Diabetes in the so-called third world.
 
-__________________________________________________________________
+_________________________________________________________________
 
 _________________________________________________________________
 
