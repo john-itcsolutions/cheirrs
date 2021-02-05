@@ -265,23 +265,29 @@ get ubuntugis repo:
 `psql general`
 
 -- Enable PostGIS
+
 `CREATE EXTENSION postgis;`
 
 -- enable raster support (only for 3+ - may lead to an error - ignorable)
+
 `CREATE EXTENSION postgis_raster;`
 
 -- Enable Topology
+
 `CREATE EXTENSION postgis_topology;`
 
 -- Enable PostGIS Advanced 3D
 -- and other geoprocessing algorithms
 -- sfcgal not available with all distributions
+
 `CREATE EXTENSION postgis_sfcgal;`
 
 -- fuzzy matching needed for Tiger
+
 `CREATE EXTENSION fuzzystrmatch;`
 
 -- rule based standardizer
+
 `CREATE EXTENSION address_standardizer;`
 
 _________________________________________________________________
@@ -331,21 +337,23 @@ NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/
 
 `sudo apt-get install -y postfix`
 
-Gitlab offers a container registry, along with a code repository. Sign up for your own.
+Gitlab offers a free container registry, along with a free code repository. Sign up for your own.
 
-Once set up in gitlab, create a blank repo, and find "Personal Access Tokens" in your personal settings. Obtain and record your token, which you use as a password to login to your Gitlab-hosted Docker container repo.
+Once set up in gitlab, create a blank repo, and find "Personal Access Tokens" in your Personal Settings. Obtain and record your token, which you use as a password to login to your Gitlab-hosted Docker container repo.
 
 `docker login -u "<your-gitlab-name>" -p "<your-20-char-token>" registry.gitlab.com`
 
-From elastos-smartweb-service directory (where a Dockerfile is located):
+Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along (if you make alterations to the code) the image tags in both the tag given (at the command line - sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:<your-tag>) when you build from the Dockerfile to its target, and the kubernetes smart-web.yml file that references that image (ie: "smart:<your-tag>" in smart-web.yml - which is found in cheirrs directory). 
 
-`sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:1 .`
+From cheirrs/elastos-smartweb-service directory (where a Dockerfile is located):
+
+`sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:<your-tag> .`
 
 `cd ../`
 
-In cheirrs/elastos-smartweb-service dir:
+In cheirrs dir:
 
-`docker push registry.gitlab.com/<your_gitlab_name>/smart:1`
+`docker push registry.gitlab.com/<your_gitlab_name>/smart:<your-tag>`
 
 `git remote add origin git@gitlab.com:<your_gitlab_name>/cheirrs.git`
 
@@ -354,8 +362,6 @@ In cheirrs/elastos-smartweb-service dir:
 `git push -u origin --tags`
 
 From cheirrs dir:
-
-Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along (if you make alterations to the code) the image tags in both the tag given (at the command line - sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:<your-tag>) when you build from the Dockerfile to its target, and the kubernetes smart-web.yml file that references that image (ie: "smart:<your-tag>"). 
 
 (smart-web.yml is in the root directory of "cheirrs")
 
@@ -376,7 +382,7 @@ _____________________________________________________________
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
 
-Unfortunately the charmed system is oriented for Public Clouds when it comes to the Kubeflow charm bundle. However in combination with microk8s, much can still be achieved ..
+Unfortunately the charmed system is mainly oriented for Public Clouds when it comes to the Kubeflow charm bundle. However in combination with microk8s, much can still be achieved ..
 
 From the outermost directory in your working system, check out this repository locally:
 
@@ -384,7 +390,7 @@ From the outermost directory in your working system, check out this repository l
 
 `cd bundle-kubeflow`
 
-The below commands will assume you are running them from the bundle-kubeflow directory within your kubeflow vm (see below).
+The below commands will assume you are running them from the bundle-kubeflow directory, which you will mount within your kubeflow vm (see below).
 
 Then, follow the instructions from the subsection below to deploy Kubeflow to microk8s.
 
@@ -395,6 +401,8 @@ Setup microk8s with multipass on the Ubuntu Host:
 `sudo snap install multipass`
 
 `multipass launch -c 4 -d 50G -m 20G -n kubeflow`
+
+(`-m 16G` minimum recommended)
 
 (you'll also need to install the microk8s snap on your new vm:)
 
@@ -412,16 +420,6 @@ On this Ubuntu vm, you'll need to install these snaps to get started:
 `sudo snap install juju-wait --classic`
 `sudo snap install juju-helpers --classic`
 
-Then, mount your outer working directory to kubeflow's shared directory -
-
-`exit`
-
-You are now at a Host terminal:
-
-`multipass mount /path/to/your/working/directory kubeflow:/home/ubuntu/shared`
-
-`multipass shell kubeflow`
-
 Install microk8s on kubeflow vm:
 
 `sudo snap install microk8s --classic`
@@ -432,13 +430,23 @@ Next, you will need to add yourself to the microk8s group:
 
 `sudo su - $USER`   (quick reset of terminal)
 
-Finally, you can run these commands to set up microk8s, but you have to have the cloned "bundle-kubeflow", from the above section, mounted and available from /home/ubuntu/shared:
+Then, mount your outer working directory to kubeflow's shared directory -
+
+`exit`
+
+You are now at a Host terminal:
+
+`multipass mount /path/to/your/working/directory kubeflow:/home/ubuntu/shared`
+
+`multipass shell kubeflow`
+
+Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, mounted and available from /home/ubuntu/shared:
 
 `cd shared/../path/to/bundle-kubeflow`
 
 `python3 scripts/cli.py microk8s setup --controller uk8s`
 
-The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. In some deployment scenarios (such as local development), you may need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
+The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. However in some deployment scenarios (such as local development), you may need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
 
 `microk8s.kubectl edit configmap -n kube-system coredns`
 
@@ -448,17 +456,17 @@ If you make mistakes during editing, it is safest to:
 
 `juju destroy-controller uk8s --release-storage --force`
 
-and starting from 
+and restart from 
 
 `python3 scripts/cli.py microk8s setup --controller uk8s`
 
 followed by editing the coredns configmap again.
 
-When configmap is correct for your LAN:
+Only when the coredns configmap is correct for your LAN:
 
 `python3 scripts/cli.py deploy-to uk8s`
 
-(Passthrough should be natively enabled to your Accelerator GPU.)
+(Passthrough should already be natively enabled to your Accelerator GPU.)
 
 On the Host, you can switch between controllers by noting the current controllers known to juju:
 
@@ -476,9 +484,11 @@ to move between models on the same controller.
 
 ______________________________________________________________
 
-# There is commented-out text below (hidden), refering to setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure (kubeflow) above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
+# There is commented-out text below (hidden), refering to setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have with Kubeflow above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
 
 As noted above, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the localhost-localhost controller and the k8s model therein. (See above at the "## Set up Cross-Model Referenced "offer" .. " heading.)
+
+But which <application-name> to use as requiring connection to provided db?
 
 To be continued.
 
