@@ -43,6 +43,18 @@ TensorFlow by Google.
 
 The predominant language used to code for this project is Python (here, mainly version 3.8).
 
+______________________________________________________________
+
+## Preliminaries
+
+Check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
+
+Download and Install CUDA Driver:
+
+`wget https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda_11.2.0_460.27.04_linux.run`
+
+`sudo sh ./cuda_11.2.0_460.27.04_linux.run`
+
 We start by installing kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
 ________________________________________________________________
 
@@ -64,31 +76,7 @@ Then, follow the instructions from the subsection below to deploy Kubeflow to mi
 
 Microk8s is the only way to easily obtain a working Kubeflow/tensorflow installation on your localhost without paying cloud fees ..
 
-Setup microk8s with multipass on the Ubuntu Host:
-
-`sudo snap install multipass`
-
-`multipass launch -c 6 -d 100G -m 28G -n smart-general`
-
-(you'll also need to install the microk8s snap on your new vm:)
-
-Enter smart-general vm:
-
-`multipass shell smart-general`
-
-inside smart-general on /home/ubuntu:
-
-`mkdir shared`
-
-On this Ubuntu vm, you'll need to install these snaps to get started:
-
-`sudo snap install juju --classic`
-
-`sudo snap install juju-wait --classic`
-
-`sudo snap install juju-helpers --classic`
-
-Install microk8s on kubeflow vm:
+Setup microk8s on the Ubuntu Host:
 
 `sudo snap install microk8s --classic`
 
@@ -98,19 +86,17 @@ Next, you will need to add yourself to the microk8s group:
 
 `sudo su - $USER`   (quick reset of terminal)
 
-Then, mount your outer working directory to smart-general's shared directory -
+On the Host, you'll need to install these snaps to get started:
 
-`exit`
+`sudo snap install juju --classic`
 
-You are now at a Host terminal:
+`sudo snap install juju-wait --classic`
 
-`multipass mount /path/to/your/working/directory smart-general:/home/ubuntu/shared`
+`sudo snap install juju-helpers --classic`
 
-`multipass shell smart-general`
+Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, available:
 
-Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, mounted and available from /home/ubuntu/shared:
-
-`cd shared/../path/to/bundle-kubeflow`
+`cd /path/to/bundle-kubeflow`
 
 `python3 scripts/cli.py microk8s setup --controller uk8s`
 
@@ -122,13 +108,15 @@ Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You
 
 If you make mistakes during editing, it is safest to:
 
-`juju destroy-controller uk8s --release-storage --force`
+`juju destroy-controller uk8s --destroy-all-models --destroy-storage `
 
 and restart from 
 
 `python3 scripts/cli.py microk8s setup --controller uk8s`
 
 followed by editing the coredns configmap again.
+
+     _____________________________________________
 
 Only when the coredns configmap is correct for your LAN:
 
@@ -168,21 +156,17 @@ _________________________________________________________________
 
 (The database schema for ITCSA's project are private and available only under certain conditions.)
 
-In a smart-general terminal, in a mounted directory (on shared) from the 2nd HDD if available, to save working files in case of a crash:
+In a host terminal, from a second HDD if available, to save working files in case of a crash:
 
-Bootstrap a new controller:
+Bootstrap a new controller (when you installed juju, it recognised that microk8s was already installed, and juju created a 'microk8s' cloud for you to use. Verify this with `juju clouds`):
 
-`juju bootstrap --bootstrap-constraints "cores=2 mem=4G" localhost`
+`juju bootstrap microk8s house`
 
 Add a model named "smart-web"
 
-`juju add-model smart-web`
-
-`juju set-model-constraints "cores=2 mem=4G"`
+`juju add-model dbase-bchains`
 
 Deploy the Kubernetes Charm
-
-`juju set-model-constraints "cores=2 mem=4G"`
 
 `juju deploy cs:bundle/charmed-kubernetes-559`
 
@@ -206,9 +190,7 @@ When you see everything 'green' except possibly the master in a permamnent "wait
 
 Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
-`juju deploy --config admin_addresses='127.0.0.1','192.168.1.7' -n 2 postgresql --storage pgdata=lxd,50G postgresql`
-
-# The second IP address in the above command should be your own  Host's IP Address.
+`juju deploy -n 2 postgresql --storage pgdata=lxd,100G postgresql`
 
 Deploy Redis, and make it contactable:
 
@@ -219,6 +201,12 @@ Deploy Redis, and make it contactable:
 Note; you are user 'ubuntu' here, so if you need a new password, just
 
 `sudo passwd ubuntu`
+
+Later, within the master postgresql database container, you will need to give postgres user a password:
+
+`sudo passwd postgres`
+
+does this.
 ________________________________________________________________
  
 ## DATABASE
@@ -233,6 +221,8 @@ From smart-general, in shared/cheirrs/elastos-smartweb-service/grpc_adenine/data
 
 `cd ../../../../../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
+where the relevant .sql backup files are outside the 'cheirrs' repository, and generally unavailable publically.
+
 exec into master db container:
 
 `juju ssh <machine number of postgresql master>`
@@ -245,17 +235,29 @@ Enter your new postgres user's password twice.
 
 `su postgres`
 
-`createdb general`
+`createdb house`
 
-`psql general < cheirrs_backup.sql`
+`psql house < cheirrs_backup.sql`
 
-`psql general < cheirrs_oseer_backup.sql`
+`psql house < cheirrs_oseer_backup.sql`
 
-`psql general < a_horse_backup.sql`
+`psql house < a_horse_backup.sql`
+
+`psql house < chubba_morris_backup.sql`
+
+`psql house < chubba_morris_oseer_backup.sql`
+
+`psql house < convey_it_backup.sql`
+
+`psql house < convey_it_oseer_backup.sql`
+
+`psql house < the_general_backup.sql`
+
+`psql house < the_general_oseer_backup.sql`
 
 Create users in postgres:
 
-`psql general`
+`psql house`
 
 `create role cheirrs_user with login password 'passwd';`
 
@@ -265,11 +267,29 @@ Create users in postgres:
 
 `create role a_horse_admin with superuser login password 'passwd';`
 
+`create role chubba_morris_user with login password 'passwd';`
+
+`create role chubba_morris_admin with superuser login password 'passwd';`
+
+`create role chubba_morris_oseer_admin with superuser login password 'passwd';`
+
+`create role convey_it_user with login password 'passwd';`
+
+`create role convey_it_admin with superuser login password 'passwd';`
+
+`create role convey_it_oseer_admin with superuser login password 'passwd';`
+
+`create role the_general_user with login password 'passwd';`
+
+`create role the_general_admin with superuser login password 'passwd';`
+
+`create role the_general_oseer_admin with superuser login password 'passwd';`
+
 `create role gmu with login password 'gmu';`
 
 Note for smart-web to work, gmu must exist as a user with password gmu.
 
-Check Schemas: there should be 'public, 'a_horse'; 'cheirrs'; 'cheirrs_oseer'.
+Check Schemas: there should be 'public, 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer' and 'public'.
 
 `\dn`
 
@@ -305,13 +325,13 @@ Still inside postgres master machine at /home/ubuntu:
 
 Run Elastos scripts to prepare database public schema for Blockchains interaction;
 
-`psql -h localhost -d general -U gmu -a -q -f create_table_scripts.sql`
+`psql -h localhost -d house -U gmu -a -q -f create_table_scripts.sql`
 
-`psql -h localhost -d general -U gmu -a -q -f insert_rows_scripts.sql`
+`psql -h localhost -d house -U gmu -a -q -f insert_rows_scripts.sql`
 
 Now if you
 
-`psql general`
+`psql house`
 
 then
 
@@ -374,9 +394,9 @@ get ubuntugis repo:
 
 _________________________________________________________________
 
-## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'uk8s', within this cmr-model called 'smart-web'.
+## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'localhost-localhost', within this cmr-model called 'smart-web'.
 
-`juju switch smart-web`
+`juju switch house`
 
 `juju offer postgresql:db`
 
@@ -388,7 +408,7 @@ An application (and users - here admin and ubuntu) set to `consume` the postgres
 
 `juju grant ubuntu consume uk8s:ubuntu/smart-web.postgresql`
 
-.. then the authorised user (in the kubeflow model - see below) may use:
+.. then the authorised user (in the kubeflow model - see above) may use:
 
 `juju add-relation <application>:db uk8s:admin/smart-web.postgresql:db`
 
@@ -401,7 +421,7 @@ __________________________________________________________________
 
 Now we turn to setting up the Blockchain/Database gRPC Server Deployment,
 
-NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However we need to re-insert the root-directory-version at /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
+NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
 
 `cd path/to/cheirrs`
 
@@ -415,7 +435,7 @@ NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/
 
 `sudo apt-get install -y postfix`
 
-From this point there are 2 avenues of progress. The first requires a gitlab account and involves uploading and downloading. The second requires you to set up a local docker registry on the smart-general vm.
+From this point there are 3 avenues of progress. The first requires a gitlab account and involves uploading and downloading. The second requires you to set up a local docker registry on the Host.
 
 ## First way:
 
@@ -449,17 +469,13 @@ _________________________________________________________________
 
 ## Second way:
 
-using:
-
-`multipass list`
-
-find the IP Address of your smart-general machine, and copy it to the clipboard:
+find the LAN IP Address of your Host, and copy it to the clipboard:
 
 Create/edit the file:
 
 `sudo nano /etc/docker/daemon.json`
 
-You need to follow the section of the following link that refers to how to set up an insecure local registry on a virtual machine; see https://microk8s.io/docs/registry-built-in
+You need to follow the section of the following link that refers to how to set up an insecure local registry; see https://microk8s.io/docs/registry-built-in
 
 `sudo systemctl daemon-reload`
 
@@ -469,13 +485,11 @@ Having set up the correct address in your daemon.json,
 
 From cheirrs/elastos-smartweb-service:
 
-`sudo docker build -t <ip-addr_smart-general>:32000/smart:<your-tag> .`
+`sudo docker build -t localhost:32000/smart:<your-tag> .`
 
-`sudo docker push <ip-addr_smart-general>:32000/smart:<your-tag>`
+`sudo docker push localhost:32000/smart:<your-tag>`
 
 `cd ../`
-
-_______________________________________________________________
 
 
 From cheirrs dir:
@@ -486,9 +500,13 @@ From cheirrs dir:
 
 `watch kubectl get pods`
 
+_________________________________________________________________
+
+## Third way:
+
 And actually having done all that, we suspect that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software. Otherwise we may have no simple mechanisms for smart-web to find and connect to its environment.
 
-# TO BE CONTINUED .. we're learning to build charms now ..
+# TO BE CONTINUED .. we're learning to use Docker to build charms now ..
 
 _____________________________________________________________
 
@@ -540,7 +558,7 @@ VIII.
 But could there be other uses for further dimensionality? Or is that already obvious to the cognoscenti?
 
 IX.
-In the same way as rules have been established to fix financial modeling used by Banks to ensure fairness to customers (over the centuries), why not apply a similar approach to the global financial models used by Pharmaceutical Companies to determine world pricing. Some of us believe profits are killing and disabling people who would otherwise have a chance in this world. Just ask about Type 1 Diabetes in the so-called third world.
+In the same way as rules have been established to fix financial modeling used by Banks to ensure fairness to customers (over the centuries), why not apply a similar approach to the global financial models used by Pharmaceutical Companies to determine world pricing. Extra constraints are rquired to save lives and relieve suffering. Some of us believe profits are killing and disabling people who would otherwise have a chance in this world. Just ask your doctor about Type 1 Diabetes in the so-called third world.
 
 _________________________________________________________________
 
