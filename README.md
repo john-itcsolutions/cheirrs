@@ -435,7 +435,7 @@ NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/
 
 `sudo apt-get install -y postfix`
 
-From this point there are 3 avenues of progress. The first requires a gitlab account and involves uploading and downloading. The second requires you to set up a local docker registry on the Host.
+From this point there are 3 avenues of progress. The first requires a gitlab account and involves uploading and downloading. The second requires you to set up a local docker registry on the Host. The third appears to be the safest way forward.
 
 ## First way:
 
