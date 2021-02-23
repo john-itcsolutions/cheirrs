@@ -124,7 +124,7 @@ Only when the coredns configmap is correct for your LAN:
 
 (Passthrough should already be natively enabled to your Accelerator GPU.)
 
-On smart-general, you could switch between other possible controllers by noting the current controllers known to juju:
+On Host, you could switch between other possible controllers by noting the current controllers known to juju:
 
 `juju controllers`
 
@@ -142,7 +142,7 @@ ______________________________________________________________
 
 # There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with TensorFlow above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
 
-As noted below, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and/or model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('general') on the localhost-localhost controller and the smart-web model (see following) therein.
+As noted below, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and/or model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('house') on the 'house' controller and the 'dbase-bchains' model (see following) therein.
 
 See below at the "## Set up Cross-Model Referenced "offer" .. " heading.
 
