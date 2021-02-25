@@ -53,9 +53,9 @@ Firstly check the availability of kernel source code for the version of the ubun
 
 `uname -r`
 
-To downgrade from kernel 5.4.0 to 5.3.0 you `sudo reboot` and as the boot/BIOS is coming up, tap "esc" repeatedly until you can select "advanced options" (ENTER) at the next menu, then, using the arrow keys, select kernel version 5.3.0, and press ENTER.
+To downgrade from kernel 5.4.0 to 5.3.0 you `sudo reboot` and as the boot/BIOS is coming up, tap "esc" repeatedly until you can select "advanced options" (ENTER) at the next (grub) menu, then, using the arrow keys, select kernel version 5.3.0, and press ENTER.
 
-Also, the gcc compiler version you have as default may not match the version used to actually compile the 5.3.0 sources. You require gcc version 7.4.0 (for ubuntu-5.3.0-hwe (signed) kernel).
+Also, the gcc compiler version you have as default may not match the version used to actually compile the 5.3.0 sources to a runable kernel image in object code. You require gcc version 7.4.0 (for ubuntu-5.3.0-hwe (signed) kernel).
 
 This is not trivial. It involves compiling the compiler from souces, as 7.4.0 is also unavailable as a binary distribution. You need to follow https://linuxhostsupport.com/blog/how-to-install-gcc-on-ubuntu-18-04/.
 
@@ -66,6 +66,8 @@ export LD_LIBRARY_PATH=/usr/local/gcc-7.4/lib64:$LD_LIBRARY_PATH
 export PATH=$PATH:/usr/local/cuda-11.2/bin
 export LD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64:$LD_LIBRARY_PATH
 export LOAD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64:$LOAD_LIBRARY_PATH`
+
+(then `su - $USER`)
 
 and by:
 
@@ -87,7 +89,7 @@ Download and Install CUDA Toolkit & Driver:
 
 `sudo sh ./cuda_11.2.0_460.27.04_linux.run`
 
-We start by installing kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
+We continue by installing kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
 ________________________________________________________________
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
@@ -102,7 +104,7 @@ From the outermost directory in your working system (on a second HDD if availabl
 
 `cd bundle-kubeflow`
 
-The below commands will assume you are running them from the bundle-kubeflow directory, which you will mount within your kubeflow vm (see below).
+The below commands will assume you are running them from the bundle-kubeflow directory.
 
 Then, follow the instructions from the subsection below to deploy Kubeflow to microk8s.
 
@@ -240,7 +242,7 @@ You can destroy the controller itself with this command:
 
 ## Tests
 
-To run the test suite included in this repository, start by installing the Python dependencies:
+To run the test suite included in this repository (bundle-kubeflow), start by installing the Python dependencies:
 
     pip install --user -r requirements.txt -r test-requirements.txt
 
@@ -254,8 +256,7 @@ Then, run the tests with this command:
 where `<bundle>` is whichever bundle you have deployed, one of `full`, `lite`, or `edge`.
 
 If you have Charmed Kubeflow deployed to a remote machine with an SSH proxy available
-(for example, if you have MicroK8s running on an AWS VM), you can run the tests like this
-to run them against the remote machine:
+(for example, if you have MicroK8s running on an AWS VM), you can run the tests like this to run them against the remote machine:
 
     pytest tests/ -m <bundle> --proxy=localhost:9999 --url=http://10.64.140.43.xip.io/ --password=password
 
@@ -265,7 +266,7 @@ pass in the `--headful` option like this:
     pytest tests/ -m <bundle> --headful
 ______________________________________________________________
 
-# There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with TensorFlow above utilises MongoDB, a no-SQL, non-relational database system, as one of the the persistence stores as well as mariadb (a resurrection of the opensource version of mysql) ..
+# There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with TensorFlow above utilises MongoDB, a no-SQL, non-relational database system, as one of the persistence stores as well as mariadb (a resurrection of the opensource version of mysql) ..
 
 As noted below, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and/or model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('house') on the 'house' controller and the 'dbase-bchains' model (see following) therein.
 
