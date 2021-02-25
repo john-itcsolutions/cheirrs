@@ -213,7 +213,7 @@ ________________________________________________________________
 
 ## Copy sql scripts; Build Database Schema:
 
-From smart-general, in shared/cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder:
+From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder:
 
 `juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
@@ -287,9 +287,9 @@ Create users in postgres:
 
 `create role gmu with login password 'gmu';`
 
-Note for smart-web to work, gmu must exist as a user with password gmu.
+Note for the smart-web blockchains to work, gmu must exist as a user with password gmu.
 
-Check Schemas: there should be 'public, 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer' and 'public'.
+Check Schemas: there should be 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer' and 'public'.
 
 `\dn`
 
@@ -307,7 +307,7 @@ Identical results will appear for:
 
 `set search_path to cheirrs_oseer;`
 
-and,
+and, for example;
 
 `set search_path to a_horse;`
 
