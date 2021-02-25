@@ -194,7 +194,7 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 To allow access for administrative purposes from anywhere on your LAN:
 
-`juju config postgresql extra_pg_auth=“host all all 0.0.0.0/0 md5”`
+`juju config postgresql admin_addresses=0.0.0.0`
 
 Deploy Redis, and make it contactable:
 
@@ -321,11 +321,23 @@ when you run
 
 In postgres master machine:
 
-Exit psql shell:
+Exit psql shell and machine:
 
 `\q`
 
-Still inside postgres master machine at /home/ubuntu:
+`exit`
+
+`exit`
+
+On Host:
+
+`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0`
+
+Re-enter postgresql master:
+
+`juju ssh <postgresql-master-machine-number>`
+
+Now, back inside postgres master machine at /home/ubuntu:
 
 Run Elastos scripts to prepare database public schema for Blockchains interaction;
 
@@ -368,7 +380,7 @@ get ubuntugis repo:
 
 `sudo apt-get install osm2pgrouting`
 
-`psql general`
+`psql house`
 
 -- Enable PostGIS
 
