@@ -49,11 +49,11 @@ ______________________________________________________________
 
 Check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
 
-Firstly check the availability of kernel souce code for the version of the ubuntu linux kernel you are running (yes, ubuntu's kernel is an enhanced not vanilla linux kernel - you may need to enter the grub menu at boot time, to boot into kernel version 5.3.0 as the sources for the ubuntu-5.4.0-hwe version are not available). You can determine your running version with 
+Firstly check the availability of kernel source code for the version of the ubuntu linux kernel you are running (yes, ubuntu's kernel is an enhanced not vanilla linux kernel - you may need to enter the grub menu at boot time, to boot into kernel version 5.3.0 as the sources for the ubuntu-5.4.0-hwe version are not available). You can determine your running version with 
 
 `uname -r`
 
-To downgrade from kernel 5.4.0 to 5.3.0 you `sudo reboot` and as the boot/BIOS is coming up, tap "esc" repeatedly until you can select "advanced options" at the next menu, then, using the arrow keys, select kernel version 5.3.0., and press ENTER.
+To downgrade from kernel 5.4.0 to 5.3.0 you `sudo reboot` and as the boot/BIOS is coming up, tap "esc" repeatedly until you can select "advanced options" (ENTER) at the next menu, then, using the arrow keys, select kernel version 5.3.0, and press ENTER.
 
 Also, the gcc compiler version you have as default may not match the version used to actually compile the 5.3.0 sources. You require gcc version 7.4.0 (for ubuntu-5.3.0-hwe (signed) kernel).
 
@@ -79,9 +79,9 @@ then:
 
 `sudo ln -s /usr/localgcc-7.4/bin/gcc /usr/bin/gcc `
 
+At the point of installing the CUDA toolkit
 
-
-Download and Install CUDA Driver:
+Download and Install CUDA Toolkit & Driver:
 
 `wget https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda_11.2.0_460.27.04_linux.run`
 
@@ -170,6 +170,99 @@ Within controllers you may substitute <target-model-name> and use:
 
 to move between models on the same controller.
 
+______________________________________________________________
+
+## USING KUBEFLOW
+
+### Main Dashboard
+
+Most interactions will go through the central dashboard, which is available via
+Ambassador at `/`. The deploy scripts will print out the address you can point your browser to when they are done deploying.
+
+### Pipelines
+
+Pipelines are available either by the main dashboard, or from within notebooks
+via the [fairing](https://github.com/kubeflow/fairing) library.
+
+Note that until https://github.com/kubeflow/pipelines/issues/1654 is resolved,
+you will have to attach volumes to any locations that output artifacts are
+written to, see the `attach_output_volume` function in
+`pipline-samples/sequential.py` for an example.
+
+### Argo UI
+
+You can view pipelines from the Pipeline Dashboard available on the central
+dashboard, or by going to `/argo/`.
+
+### TensorFlow Jobs
+
+To submit a TensorFlow job to the dashboard, you can run this `kubectl`
+command:
+
+    kubectl create -n <NAMESPACE> -f path/to/job/definition.yaml
+
+Where `<NAMESPACE>` matches the name of the Juju model that you're using,
+and `path/to/job/definition.yaml` should point to a `TFJob` definition
+similar to the `mnist.yaml` example [found here][mnist-example].
+
+[mnist-example]: charms/tf-job-operator/files/mnist.yaml
+
+### TensorFlow Serving
+
+See https://github.com/juju-solutions/charm-tf-serving
+
+
+## Removing
+
+### Kubeflow model
+
+To remove Kubeflow from your Kubernetes cluster, first run this command to
+remove Kubeflow itself:
+
+    juju destroy-model kubeflow --destroy-storage
+
+If you encounter errors while destroying the model, you can run this command
+to force deletion:
+
+    juju destroy-model kubeflow --yes --destroy-storage --force
+
+Alternatively, to simply release storage instead of deleting it, run with this
+flag:
+
+    juju destroy-model kubeflow --release-storage
+
+### Kubeflow controller
+
+You can destroy the controller itself with this command:
+
+    # For microk8s
+    juju destroy-controller $(juju show-controller | head -n1 | sed 's/://g') --destroy-storage
+
+## Tests
+
+To run the test suite included in this repository, start by installing the Python dependencies:
+
+    pip install --user -r requirements.txt -r test-requirements.txt
+
+Next, ensure that you either have the `juju-helpers` snap package installed, or you have
+the `kubectl` binary available with `~/.kube/config` set up correctly.
+
+Then, run the tests with this command:
+
+    pytest tests/ -m <bundle>
+
+where `<bundle>` is whichever bundle you have deployed, one of `full`, `lite`, or `edge`.
+
+If you have Charmed Kubeflow deployed to a remote machine with an SSH proxy available
+(for example, if you have MicroK8s running on an AWS VM), you can run the tests like this
+to run them against the remote machine:
+
+    pytest tests/ -m <bundle> --proxy=localhost:9999 --url=http://10.64.140.43.xip.io/ --password=password
+
+Additionally, if you'd like to view the Selenium tests as they're in progress, you can
+pass in the `--headful` option like this:
+
+    pytest tests/ -m <bundle> --headful
 ______________________________________________________________
 
 # There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with TensorFlow above utilises MongoDB, a no-SQL, non-relational database system, as one of the the persistence stores as well as mariadb (a resurrection of the opensource version of mysql) ..
