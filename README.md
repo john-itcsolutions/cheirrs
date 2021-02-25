@@ -49,6 +49,38 @@ ______________________________________________________________
 
 Check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
 
+Firstly check the availability of kernel souce code for the version of the ubuntu linux kernel you are running (yes, ubuntu's kernel is an enhanced not vanilla linux kernel - you may need to enter the grub menu at boot time, to boot into kernel version 5.3.0 as the sources for the ubuntu-5.4.0-hwe version are not available). You can determine your running version with 
+
+`uname -r`
+
+To downgrade from kernel 5.4.0 to 5.3.0 you `sudo reboot` and as the boot/BIOS is coming up, tap "esc" repeatedly until you can select "advanced options" at the next menu, then, using the arrow keys, select kernel version 5.3.0., and press ENTER.
+
+Also, the gcc compiler version you have as default may not match the version used to actually compile the 5.3.0 sources. You require gcc version 7.4.0 (for ubuntu-5.3.0-hwe (signed) kernel).
+
+This is not trivial. It involves compiling the compiler from souces, as 7.4.0 is also unavailable as a binary distribution. You need to follow https://linuxhostsupport.com/blog/how-to-install-gcc-on-ubuntu-18-04/.
+
+Then you must set up symbolic links and PATH and LD_LIBRARY_PATH environment variables as follows, by editing /root/.bashrc as root, and appending this:
+
+`export PATH=/usr/local/gcc-7.4/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/gcc-7.4/lib64:$LD_LIBRARY_PATH
+export PATH=$PATH:/usr/local/cuda-11.2/bin
+export LD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64:$LD_LIBRARY_PATH
+export LOAD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64:$LOAD_LIBRARY_PATH`
+
+and by:
+
+`sudo rm -f /usr/bin/cc`
+
+`sudo rm -f /usr/bin/gcc`
+
+then:
+
+`sudo ln -s /usr/localgcc-7.4/bin/gcc /usr/bin/cc `
+
+`sudo ln -s /usr/localgcc-7.4/bin/gcc /usr/bin/gcc `
+
+
+
 Download and Install CUDA Driver:
 
 `wget https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda_11.2.0_460.27.04_linux.run`
@@ -104,7 +136,7 @@ The upcoming deploy-to command allows manually setting a public address that is 
 
 `microk8s.kubectl edit configmap -n kube-system coredns`
 
-Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.2. You will need to use the arrow keys and the 'insert' and 'delete' keys carefully! Save and exit as for vim.
+Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1. You will need to use the arrow keys and the 'insert' and 'delete' keys carefully! Save and exit as for vim.
 
 If you make mistakes during editing, it is safest to:
 
@@ -140,7 +172,7 @@ to move between models on the same controller.
 
 ______________________________________________________________
 
-# There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with TensorFlow above utilises MongoDB, a no-SQL, non-relational database system, as the persistence store ..
+# There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with TensorFlow above utilises MongoDB, a no-SQL, non-relational database system, as one of the the persistence stores as well as mariadb (a resurrection of the opensource version of mysql) ..
 
 As noted below, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and/or model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('house') on the 'house' controller and the 'dbase-bchains' model (see following) therein.
 
@@ -162,7 +194,7 @@ Bootstrap a new controller (when you installed juju, it recognised that microk8s
 
 `juju bootstrap microk8s house`
 
-Add a model named "smart-web"
+Add a model named "dbase-bchains"
 
 `juju add-model dbase-bchains`
 
@@ -186,15 +218,13 @@ It may take a few hours if your network is slow. Be patient. Nevertheless we do 
 
 The earlier in the deployment cycle that you remove these machines the better.
 
-When you see everything 'green' except possibly the master in a permamnent "wait" state ("Waiting for 3 kube-system pods to start"), you may continue.
+When you see everything 'green', you may continue.
 
 Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju deploy -n 2 postgresql --storage pgdata=lxd,100G postgresql`
 
 To allow access for administrative purposes from anywhere on your LAN:
-
-`juju config postgresql admin_addresses=0.0.0.0`
 
 Deploy Redis, and make it contactable:
 
@@ -386,6 +416,8 @@ As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) get
 
 `psql house`
 
+Now you are interfaced to the house database.
+
 -- Enable PostGIS
 
 `CREATE EXTENSION postgis;`
@@ -536,6 +568,7 @@ And actually having done all that, we suspect that we must build a "smart-web" c
 
 # TO BE CONTINUED .. we're learning to use Docker to build charms now ..
 
+(Refer to https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135)
 _____________________________________________________________
 
 ## TESTING the smartweb-service/Blockchains/Postgresql System
