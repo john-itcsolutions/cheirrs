@@ -192,6 +192,10 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju deploy -n 2 postgresql --storage pgdata=lxd,100G postgresql`
 
+To allow access for administrative purposes from anywhere on your LAN:
+
+`juju config postgresql extra_pg_auth=“host all all 0.0.0.0/0 md5”`
+
 Deploy Redis, and make it contactable:
 
 `juju deploy cs:~redis-charmers/redis`
