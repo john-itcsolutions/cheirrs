@@ -341,6 +341,8 @@ Now, back inside postgres master machine at /home/ubuntu:
 
 Run Elastos scripts to prepare database public schema for Blockchains interaction;
 
+`su postgres`
+
 `psql -h localhost -d house -U gmu -a -q -f create_table_scripts.sql`
 
 `psql -h localhost -d house -U gmu -a -q -f insert_rows_scripts.sql`
@@ -368,7 +370,7 @@ Inside your postgresql Master (
 
 )
 
-get ubuntugis repo:
+As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) get ubuntugis repo:
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
@@ -379,6 +381,8 @@ get ubuntugis repo:
 `sudo apt update`
 
 `sudo apt-get install osm2pgrouting`
+
+`su postgres`
 
 `psql house`
 
@@ -408,15 +412,23 @@ get ubuntugis repo:
 
 `CREATE EXTENSION address_standardizer;`
 
+`exit`
+
+`exit`
+
+You're back on Host.
+
 _________________________________________________________________
 
 ## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'localhost-localhost', within this cmr-model called 'smart-web'.
+
+(If not on "house" controller)
 
 `juju switch house`
 
 `juju offer postgresql:db`
 
-then, if you `juju status` in the k8s model you will see, at the foot of the output, a reference to the Offer.
+then, if you `juju status` in the dbase-bchains model you will see, at the foot of the output, a reference to the Offer.
 
 An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with (this needs to be run while in kubeflow model):
 
@@ -437,13 +449,13 @@ __________________________________________________________________
 
 Now we turn to setting up the Blockchain/Database gRPC Server Deployment,
 
-NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
+NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your cheirrs/elastos-smartweb-service                                                                                              /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
 
 `cd path/to/cheirrs`
 
-`sudo rm -f grpc_adenine/__init__.py`
+`sudo rm -f elastos-smartweb-service/grpc_adenine/__init__.py`
 
-`cp __init__.py grpc_adenine/`
+`cp __init__.py elastos-smartweb-service/grpc_adenine/`
 
 `sudo apt-get update`
 
