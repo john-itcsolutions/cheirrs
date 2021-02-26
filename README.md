@@ -87,6 +87,14 @@ Check gcc version:
 
 `gcc -v`
 
+The system's nouveau drivers need to be blacklisted in /etc/modprobe.d as they block NVIDIA Driver installation, and you need to find a basic xorg.conf template to save in /etc/X11/xorg.conf.
+
+(After installation, NVIDIA can configure the X server with:
+
+`nvidia-xconf`
+
+)
+
 At the point of installing the CUDA toolkit
 
 Download and Install CUDA Toolkit & Driver:
@@ -100,6 +108,14 @@ This involves `sudo reboot` foloweed by tapping "esc" as the system reboots and 
 `sudo sh ./cuda_11.2.0_460.27.04_linux.run`
 
 Follow your own nose.
+
+After completion,
+
+`nvidia-xconf`
+
+`sudo reboot`
+
+Ensure you always boot into the appropriate kernel version for CUDA, by tapping "esc" etc at boot.
 
 We continue by installing Kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
 ________________________________________________________________
