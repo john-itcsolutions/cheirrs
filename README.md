@@ -123,6 +123,10 @@ After completion,
 
 Ensure you always boot into the appropriate kernel version for CUDA, by tapping "esc" etc at boot.
 
+Check the state of success/failure of the above operation with;
+
+`nvidia-smi`
+
 We continue by installing Kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
 ________________________________________________________________
 
