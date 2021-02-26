@@ -136,7 +136,7 @@ Unfortunately the charmed system is mainly oriented for Public Clouds when it co
 
 From the outermost directory in your working system (on a second HDD if available), check out these repositories locally:
 
-`git clone https://gitlab.com/john_olsenjohn-itcsolutions/cheirrs.git`
+`git clone https://github.com/john-itcsolutions/cheirrs.git`
 
 `git clone https://github.com/juju-solutions/bundle-kubeflow.git`
 
@@ -176,7 +176,7 @@ The upcoming deploy-to command allows manually setting a public address that is 
 
 `microk8s.kubectl edit configmap -n kube-system coredns`
 
-Edit the lines with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1. You will need to use the arrow keys and the 'insert' and 'delete' keys carefully! Save and exit as for vim.
+Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1. You will need to use the arrow keys and the 'insert' and 'delete' keys carefully! Save and exit as for vim.
 
 If you make mistakes during editing, it is safest to:
 
@@ -304,7 +304,7 @@ pass in the `--headful` option like this:
     pytest tests/ -m <bundle> --headful
 ______________________________________________________________
 
-# There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with TensorFlow above utilises MongoDB, a no-SQL, non-relational database system, as one of the persistence stores as well as mariadb (a resurrection of the opensource version of mysql) ..
+# There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with Kubeflow above utilises MongoDB, a no-SQL, non-relational database system, as one of the persistence stores as well as Mariadb (a resurrection of the opensource version of mysql) ..
 
 As noted below, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and/or model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('house') on the 'house' controller and the 'dbase-bchains' model (see following) therein.
 
