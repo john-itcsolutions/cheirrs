@@ -59,6 +59,12 @@ To downgrade from kernel 5.4.0 to 5.3.0 you `sudo reboot` and as the boot/BIOS i
 
 Also, the gcc compiler version you have as default may not match the version used to actually compile the 5.3.0 sources to a runable kernel image in object code. You require gcc version 7.4.0 (for ubuntu-5.3.0-hwe (signed) kernel on 18.04).
 
+(Check your default gcc version:
+
+`gcc -v`
+
+)
+
 This is not trivial. It involves compiling the compiler from souces, as 7.4.0 is also unavailable as a binary distribution. You need to follow https://linuxhostsupport.com/blog/how-to-install-gcc-on-ubuntu-18-04/.
 
 Then you must set up symbolic links and PATH and LD_LIBRARY_PATH environment variables as follows, by editing /root/.bashrc as root, and appending this:
@@ -93,7 +99,7 @@ The system's nouveau drivers need to be blacklisted in /etc/modprobe.d as they b
 
 `nvidia-xconf`
 
-)
+but it requires a basic one-device/screen initial file to work on)
 
 At the point of installing the CUDA toolkit
 
@@ -103,7 +109,7 @@ Download and Install CUDA Toolkit & Driver:
 
 Now, noting the placement of the run file, you should reboot so that you are in run level 3 (no gui - no X server operating).
 
-This involves `sudo reboot` foloweed by tapping "esc" as the system reboots and BIOS appears. Enter using arrows at 'Advanced Options' and select kernel 5.3.0 but press 'e' to edit the grub menu for that kernel. Arrow down to line beginning with 'linux', press 'end' key and type `<space>3` to boot into runlevel 3. Then press F10 to continue boot process. You will be at a command line. Login with username and password as usual. In the Downloads folder (or wherever you placed the run file:)
+This involves `sudo reboot` foloweed by tapping "esc" as the system reboots and BIOS appears. Enter using arrows at 'Advanced Options' and select kernel 5.3.0 . Once the correct kernel is highlighted/selected, press 'e' to edit the grub menu for that kernel. Arrow down to line beginning with 'linux', press 'end' key and type `<space>3` to boot into runlevel 3. Then press F10 to continue boot process. You will be at a command line. Login with username and password as usual. In the Downloads folder (or wherever you placed the run file:)
 
 `sudo sh ./cuda_11.2.0_460.27.04_linux.run`
 
