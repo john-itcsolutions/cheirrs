@@ -7,7 +7,7 @@ To tackle a full Kubernetes installation, ideally you would need a 32 GB RAM; 25
 
 We base initial development such as this locally. It's cheaper!
 
-You need to develop initially on docker. ITCSA uses Ubuntu 20.04 as host platform.
+You need to develop initially on docker. ITCSA uses Ubuntu 18.04 as host platform, for full compatibility with NVIDIA Cuda Cards, drivers and toolkits.
 
 You will not need an Extreme Gaming level of computer for Docker-based (initial - eg. database) work without Kubernetes.
 
@@ -33,7 +33,7 @@ https://github.com/cyber-republic/python-grpc-adenine  (smartweb-client, databas
 
 and
 
-lxd, juju and kubernetes. Also:
+lxd, juju, kubernetes and Kubeflow. Also:
 
 https://jaas.ai/u/stub/postgresql (PostgreSQL without PostGIS initially)
 
@@ -49,13 +49,15 @@ ______________________________________________________________
 
 Check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
 
-Firstly check the availability of kernel source code for the version of the ubuntu linux kernel you are running (yes, ubuntu's kernel is an enhanced not vanilla linux kernel - you may need to enter the grub menu at boot time, to boot into kernel version 5.3.0 as the sources for the ubuntu-5.4.0-hwe version are not available). You can determine your running version with 
+Install kernel headers as per documentation for kernel matching your running version. The versions must match exactly. See above docs.
+
+Secondly, check the availability of kernel source code for the version of the ubuntu linux kernel you are running (yes, ubuntu's kernel is an enhanced not vanilla linux kernel - you may need to enter the grub menu at boot time, to boot into kernel version 5.3.0 (on ubuntu 18.04) as the sources for the ubuntu-5.4.0-hwe version are not available). You can determine your running version with 
 
 `uname -r`
 
-To downgrade from kernel 5.4.0 to 5.3.0 you `sudo reboot` and as the boot/BIOS is coming up, tap "esc" repeatedly until you can select "advanced options" (ENTER) at the next (grub) menu, then, using the arrow keys, select kernel version 5.3.0, and press ENTER.
+To downgrade from kernel 5.4.0 to 5.3.0 you `sudo reboot` and as the boot/BIOS is coming up, tap "esc" repeatedly until you can select "advanced options" (ENTER) at the next (grub) menu, then, using the arrow keys, select kernel version 5.3.0, and press ENTER. You must find and install (in /usr/src) the correct kernel sources for your running kernel version.
 
-Also, the gcc compiler version you have as default may not match the version used to actually compile the 5.3.0 sources to a runable kernel image in object code. You require gcc version 7.4.0 (for ubuntu-5.3.0-hwe (signed) kernel).
+Also, the gcc compiler version you have as default may not match the version used to actually compile the 5.3.0 sources to a runable kernel image in object code. You require gcc version 7.4.0 (for ubuntu-5.3.0-hwe (signed) kernel on 18.04).
 
 This is not trivial. It involves compiling the compiler from souces, as 7.4.0 is also unavailable as a binary distribution. You need to follow https://linuxhostsupport.com/blog/how-to-install-gcc-on-ubuntu-18-04/.
 
@@ -81,15 +83,25 @@ then:
 
 `sudo ln -s /usr/localgcc-7.4/bin/gcc /usr/bin/gcc `
 
+Check gcc version:
+
+`gcc -v`
+
 At the point of installing the CUDA toolkit
 
 Download and Install CUDA Toolkit & Driver:
 
 `wget https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda_11.2.0_460.27.04_linux.run`
 
+Now, noting the placement of the run file, you should reboot so that you are in run level 3 (no gui - no X server operating).
+
+This involves `sudo reboot` foloweed by tapping "esc" as the system reboots and BIOS appears. Enter using arrows at 'Advanced Options' and select kernel 5.3.0 but press 'e' to edit the grub menu for that kernel. Arrow down to line beginning with 'linux', press 'end' key and type ` 3` to boot into runlevel 3. Then press F10 to continue boot process. You will be at a command line. Login with username and password as usual. In the Downloads folder (or wherever you placed the run file:)
+
 `sudo sh ./cuda_11.2.0_460.27.04_linux.run`
 
-We continue by installing kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
+Follow your own nose.
+
+We continue by installing Kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
 ________________________________________________________________
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
