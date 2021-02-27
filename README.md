@@ -358,9 +358,32 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 To allow access for administrative purposes from anywhere on your LAN:
 
+we first need to set up pgadmin4 for database development purposes.
+
+The pgadmin4 docker container is available from Docker hub with:
+
+`docker pull dpage/pgadmin4`
+
+followed by,
+
+`docker run -p 80:80 -e 'PGADMIN_DEFAULT_EMAIL=user@domain.com' -e 'PGADMIN_DEFAULT_PASSWORD=SuperSecret' -d dpage/pgadmin4`
+
+You will need to:
+
+`docker inspect network bridge`
+
+and copy the IPv4Addr from that screen for the pgadmin4 container to the following command:
+
+`juju config postgresql admin_addresses=0.0.0.0,<ipaddr of pgadmin4 docker container>`
+
+              ____________________________
+              
+
 Deploy Redis, and make it contactable:
 
 `juju deploy cs:~redis-charmers/redis`
+
+followed by,
 
 `juju expose redis`
 
