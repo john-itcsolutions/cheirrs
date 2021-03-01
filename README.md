@@ -322,9 +322,9 @@ _________________________________________________________________
 
 In a host terminal, from a second HDD if available, to save working files in case of a crash:
 
-Bootstrap a new controller (when you installed juju, it recognised that microk8s was already installed, and juju created a 'microk8s' cloud for you to use. Verify this with `juju clouds`):
+Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, it recognised that localhost was already installed, and juju created a 'localhost' cloud for you to use. Verify this with `juju clouds`):
 
-`juju bootstrap microk8s house`
+`juju bootstrap localhost house`
 
 Add a model named "dbase-bchains"
 
