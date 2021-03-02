@@ -768,7 +768,7 @@ VIII.
 But could there be other uses for further dimensionality? Or is that already obvious to the cognoscenti?
 
 IX.
-In the same way as rules have been established to fix financial modeling used by Banks to ensure fairness to customers (over the centuries), why not apply a similar approach to the global financial models used by Pharmaceutical Companies to determine world pricing. Extra constraints are rquired to save lives and relieve suffering. Some of us believe profits are killing and disabling people who would otherwise have a chance in this world. Just ask your doctor about Type 1 Diabetes in the so-called third world.
+In the same way as rules have been established to fix financial modeling used by Banks to ensure fairness to customers (over the centuries), why not apply a similar approach to the global financial models used by Pharmaceutical Companies to determine world pricing. Extra constraints are required to save lives and relieve suffering. Some of us believe profits are killing and disabling people who would otherwise have a chance in this world. Just ask your doctor about Type 1 Diabetes in the so-called third world.
 
 _________________________________________________________________
 
