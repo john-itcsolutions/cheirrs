@@ -611,20 +611,20 @@ then, if you `juju status` in the dbase-bchains model you will see, at the foot 
 
 An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with (this needs to be run while in kubeflow model):
 
-`juju grant admin consume uk8s:admin/smart-web.postgresql`
+`juju grant admin consume uk8s:admin/dbase-bchains.postgresql`
 
-`juju grant ubuntu consume uk8s:ubuntu/smart-web.postgresql`
+`juju grant ubuntu consume uk8s:ubuntu/dbase-bchains.postgresql`
 
 .. then the authorised user (in the kubeflow model - see above) may use:
 
-`juju add-relation <application>:db uk8s:admin/smart-web.postgresql:db`
+`juju add-relation <application>:db uk8s:admin/dbase-bchains.postgresql:db`
 
-`juju add-relation <application>:db uk8s:ubuntu/smart-web.postgresql:db`
+`juju add-relation <application>:db uk8s:ubuntu/dbase-bchains.postgresql:db`
 
-to connect "application" to the database (in smart-web model)under 'uk8s' controller, from the kubeflow model (in this case).
+to connect "application" to the database (in dbase-bchains model)from 'uk8s' controller, ie from the kubeflow model (in this case).
 __________________________________________________________________
 
-## Blockchains-Database Server (Smart-web) 
+## Blockchains-Database Server (dbase-bchains) 
 
 Now we turn to setting up the Blockchain/Database gRPC Server Deployment,
 
@@ -735,6 +735,8 @@ Also refer to any official docs on TensorFlow and its history, background and us
 ## (In particular, visit either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  & download "An Introduction to Statistical Learning"; Gareth James et al.). 
 
 Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
+
+## (For a more mathematical treatment you can obtain a copy of the Mother of Statistical Learning Texts at https://web.stanford.edu/~hastie/Papers/ESLII.pdf Elements of Statistical Learning 2nd Ed. Hastie, Tibshirani, Friedman)
 
 AI (Artificial Intelligence) includes further technical solutions to involve the results of the deployment of models in industrial and commercial production applications, to achieve economic and strategic benefits.
 _________________________________________________________________
