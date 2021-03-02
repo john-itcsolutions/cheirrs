@@ -589,6 +589,8 @@ Now you are interfaced to the house database.
 
 `CREATE EXTENSION address_standardizer;`
 
+`\q`
+
 `exit`
 
 `exit`
