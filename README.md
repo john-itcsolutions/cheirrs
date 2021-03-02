@@ -444,7 +444,7 @@ Enter your new postgres user's password twice.
 
 `psql house < the_general_oseer_backup.sql` -->
 
-./dbase_setup.sh
+`./dbase_setup.sh`
 
 (.. wait a minute or 2)
 
