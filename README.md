@@ -510,23 +510,9 @@ Exit psql shell and machine:
 
 `\q`
 
-`exit`
-
-`exit`
-
-On Host:
-
-`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0`
-
-Re-enter postgresql master:
-
-`juju ssh <postgresql-master-machine-number>`
-
-Now, back inside postgres master machine at /home/ubuntu:
+Now, at /home/ubuntu:
 
 Run Elastos scripts to prepare database public schema for Blockchains interaction;
-
-`su postgres`
 
 `psql -h localhost -d house -U gmu -a -q -f create_table_scripts.sql`
 
