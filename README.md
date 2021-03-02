@@ -424,7 +424,7 @@ Enter your new postgres user's password twice.
 
 `su postgres`
 
-`createdb house`
+<!-- `createdb house`
 
 `psql house < cheirrs_backup.sql`
 
@@ -442,7 +442,11 @@ Enter your new postgres user's password twice.
 
 `psql house < the_general_backup.sql`
 
-`psql house < the_general_oseer_backup.sql`
+`psql house < the_general_oseer_backup.sql` -->
+
+./dbase_setup.sh
+
+(.. wait a minute or 2)
 
 Create users in postgres:
 
