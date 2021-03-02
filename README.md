@@ -374,7 +374,7 @@ You will need to:
 
 and copy the IPv4Addr from that screen for the pgadmin4 container to the following command:
 
-`juju config postgresql admin_addresses=0.0.0.0,<ipaddr of pgadmin4 docker container>`
+`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ipaddr of pgadmin4 docker container>`
 
               ____________________________
               
