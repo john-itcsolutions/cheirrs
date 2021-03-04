@@ -117,7 +117,7 @@ Alternatively you may have the ubuntu linux 5.4.0 kernel with gcc version 7.5.0.
 
  You may obtain the sources from https://packages.ubuntu.com/focal/linux-source-5.4.0
 
- The download shold be copied to /usr/src and then from /usr/src:
+ The download should be copied to /usr/src and then from /usr/src:
 
  `sudo tar -zxvf linux_5.4.0.orig*`
 
@@ -163,11 +163,25 @@ After completion,
 
  -->
 
-`sudo apt-get install nvidia-cuda-toolkit`
+ The system's nouveau drivers need to be blacklisted in /etc/modprobe.d as they block NVIDIA Driver installation.
+
+`sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"`
+
+`sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"`
+
+Confirm:
+
+`cat /etc/modprobe.d/blacklist-nvidia-nouveau.conf`
+
+Update kernel initramfs:
+
+`sudo update-initramfs -u`
 
 `sudo reboot`
 
-(Ensure you always boot into the appropriate kernel version, if you need to, for CUDA, by tapping "esc" etc at boot.)
+`sudo apt-get install nvidia-cuda-toolkit`
+
+`sudo reboot`
 
 Check the state of success/failure of the above operation with;
 
