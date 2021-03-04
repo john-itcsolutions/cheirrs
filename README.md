@@ -139,7 +139,7 @@ Update kernel initramfs:
 
 (After installation, NVIDIA can configure the X server with:
 
-`nvidia-xconf`
+`nvidia-xconfig`
 
 but it requires a basic one-device/screen initial file to work on)
 
@@ -159,7 +159,7 @@ Follow your own nose.
 
 After completion,
 
-`nvidia-xconf`
+`nvidia-xconfig`
 
 `sudo reboot`
 
