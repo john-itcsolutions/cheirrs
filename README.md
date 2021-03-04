@@ -509,7 +509,7 @@ Enter your new postgres user's password twice.
 
 `./dbase_setup.sh`
 
-(.. wait a minute or 2)
+(.. wait a minute or 2. Don't worry about the syntax errors visible when the scripts have run)
 
 Create users in postgres:
 
