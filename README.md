@@ -713,7 +713,33 @@ Add another model on the 'house' controller to take care of all our 'Docker' req
 
 `juju deploy cs:~containers/docker-91`
 
-This is a subordinate application which provides a docker container runtime for charms that need one.
+This ("docker") is a subordinate application which provides a docker container runtime for charms that need one.
+
+Now, we need to begin to construct the smart-web charm, layer by layer. There are fundamentally 3 stages in the layers: first is the base layer with any of the provided base charms for this layer. We choose not code this layer. But before this we require the charm tools:
+
+`sudo snap install charm --classic`
+
+From your outer working directory:
+
+`charm create -t docker smart-web`
+
+Refer to -  https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135
+
+and: https://discourse.charmhub.io/t/layers-for-charm-authoring/1122
+
+and: https://discourse.charmhub.io/t/interface-layers/1121
+
+and for the base layer: https://charmsreactive.readthedocs.io/en/latest/layer-basic.html
+
+The first base layer needs:
+
+
+
+`git clone https://github.com/juju-solutions/layer-docker`
+
+`git clone https://github.com/juju-solutions/layer-docker-nginx`
+
+Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of charm commands.
 
 
 
