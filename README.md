@@ -47,7 +47,7 @@ ______________________________________________________________
 
 ## Preliminaries
 
-Check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
+<!-- Check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
 
 Install kernel headers as per documentation for kernel matching your running version. The versions must match exactly. See above docs.
 
@@ -161,15 +161,32 @@ After completion,
 
 `nvidia-xconfig`
 
+ -->
+
+`sudo apt-get install nvidia-cuda-toolkit`
+
 `sudo reboot`
 
-Ensure you always boot into the appropriate kernel version for CUDA, by tapping "esc" etc at boot.
+(Ensure you always boot into the appropriate kernel version, if you need to, for CUDA, by tapping "esc" etc at boot.)
 
 Check the state of success/failure of the above operation with;
 
 `nvidia-smi`
 
+also:
+
+`nvcc`
+
+provides some information, as does:
+
+`ubuntu-drivers devices`
+
 We continue by installing Kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
+________________________________________________________________
+
+
+On Ubuntu 20.04 you have to go through a similar process.
+
 ________________________________________________________________
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
@@ -392,7 +409,7 @@ At this stage your microk8s/juju assemblage is converging towards stability. You
 
 It may take a few hours if your network is slow. Be patient. Nevertheless we do not really require 3 workers, 2 masters and 3 etcd's so you may remove the majority of these machines.
 
-`juju remove-machine <etcd/1_machine-number> --force`
+`juju remove-machine <etcd/1-machine-number> --force`
 
 .. and similarly for etcd/2, kubernetes-master/1, kubernetes-worker/1 and kubernetes-worker/2 ..
 
@@ -429,7 +446,7 @@ and copy the IPv4Addr from that screen for the pgadmin4 container to the followi
 
 Deploy Redis, and make it contactable:
 
-`juju deploy cs:~redis-charmers/redis`
+`juju deploy cs:~omnivector/redis -n2 --config cluster-enabled=true`
 
 followed by,
 
@@ -456,9 +473,9 @@ From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scrip
 
 ## The following command would be possible only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
 
-`cd ../../../../ && juju scp dbase_setup.sh <machine number of postgresql master>:/home/ubuntu/ &&  cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
+`cd ../../../../ && juju scp dbase_setup.sh <machine number of postgresql master>:/home/ubuntu/ && juju scp create_users_script.sql <machine number of postgresql master>:/home/ubuntu/ &&  cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
-where the relevant .sql backup files are outside the 'cheirrs' repository, and generally unavailable publically.
+where some of the relevant .sql backup files are outside the 'cheirrs' repository, and generally unavailable publically.
 
 exec into master db container:
 
@@ -472,63 +489,15 @@ Enter your new postgres user's password twice.
 
 `su postgres`
 
-<!-- `createdb house`
-
-`psql house < cheirrs_backup.sql`
-
-`psql house < cheirrs_oseer_backup.sql`
-
-`psql house < a_horse_backup.sql`
-
-`psql house < chubba_morris_backup.sql`
-
-`psql house < chubba_morris_oseer_backup.sql`
-
-`psql house < convey_it_backup.sql`
-
-`psql house < convey_it_oseer_backup.sql`
-
-`psql house < the_general_backup.sql`
-
-`psql house < the_general_oseer_backup.sql` -->
-
 `./dbase_setup.sh`
 
 (.. wait a minute or 2)
 
 Create users in postgres:
 
-`psql house`
+`psql -h localhost -d house -U postgres -a -q -f create_users_script.sql`
 
-`create role cheirrs_user with login password 'passwd';`
-
-`create role cheirrs_admin with superuser login password 'passwd';`
-
-`create role cheirrs_oseer_admin with superuser login password 'passwd';`
-
-`create role a_horse_admin with superuser login password 'passwd';`
-
-`create role chubba_morris_user with login password 'passwd';`
-
-`create role chubba_morris_admin with superuser login password 'passwd';`
-
-`create role chubba_morris_oseer_admin with superuser login password 'passwd';`
-
-`create role convey_it_user with login password 'passwd';`
-
-`create role convey_it_admin with superuser login password 'passwd';`
-
-`create role convey_it_oseer_admin with superuser login password 'passwd';`
-
-`create role the_general_user with login password 'passwd';`
-
-`create role the_general_admin with superuser login password 'passwd';`
-
-`create role the_general_oseer_admin with superuser login password 'passwd';`
-
-`create role gmu with login password 'gmu';`
-
-Note for the smart-web blockchains to work, gmu must exist as a user with password gmu.
+(Note for the smart-web blockchains to work, gmu must exist as a user with password gmu.)
 
 Check Schemas: there should be 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer' and 'public'.
 
@@ -761,6 +730,8 @@ _________________________________________________________________
 
 And actually having done all that, we suspect that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software. Otherwise we may have no simple mechanisms for smart-web to find and connect to its environment.
 
+For juju charms, their 'relations' and 'hooks' enable synchronous operation with the other charms in their environment. The relations and hooks operate by boolean logic and are programmed 'reactively', meaning the hooks react to changes in the environment to signal to other hooks. A change might be a machine going offline, or one coming online, or a machine moving from "available" to "ready", or some other change in state of the model containing the charms.
+
 # TO BE CONTINUED .. we're learning to use Docker to build charms now ..
 
 (Refer to https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135)
@@ -776,7 +747,7 @@ ________________________________________________________________
 
 Good luck! For refs see:
 
-https://jaas.ai/kubeflow#setup-microk8s and find microk8s section, and following ('Using')
+See Using Kubeflow above.
 
 Also refer to any official docs on TensorFlow and its history, background and usage.
 
