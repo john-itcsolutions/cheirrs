@@ -208,6 +208,12 @@ On the Host, you'll need to install these snaps to get started:
 
 `sudo snap install juju-helpers --classic`
 
+If you
+
+`juju clouds`
+
+you will aleady find that there exists a 'microk8s/localhost' cloud. Later we will set up another 'localhost/localhost' cloud with different properties, for the main blockchains and database servers in a kubernetes installation.
+
 Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, available:
 
 `cd /path/to/bundle-kubeflow`
