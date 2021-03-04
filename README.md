@@ -147,7 +147,7 @@ At the point of installing the CUDA toolkit
 
 Download and Install CUDA Toolkit & Driver:
 
-`wget https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda_11.2.1_460.32.03_linux.run`
+`wget https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda_11.2.1_460.32.03_linux.run`
 
 Now, noting the placement of the run file, you should reboot so that you are in run level 3 (no gui - no X server operating).
 
