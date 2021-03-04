@@ -51,9 +51,15 @@ Check your system following here: https://docs.nvidia.com/cuda/cuda-installation
 
 Install kernel headers as per documentation for kernel matching your running version. The versions must match exactly. See above docs.
 
+_____________________________________________________________
+
 Secondly, check the availability of kernel source code for the version of the ubuntu linux kernel you are running (yes, ubuntu's kernel is an enhanced not vanilla linux kernel - you may need to enter the grub menu at boot time, to boot into kernel version 5.3.0 (on ubuntu 18.04) as the sources for the ubuntu-5.4.0-hwe version are not available). You can determine your running version with 
 
 `uname -r`
+
+You may also determine the version of gcc used to compile your running kernel with:
+
+`cat /proc/version`
 
 To downgrade from kernel 5.4.0 to 5.3.0 you `sudo reboot` and as the boot/BIOS is coming up, tap "esc" repeatedly until you can select "advanced options" (ENTER) at the next (grub) menu, then, using the arrow keys, select kernel version 5.3.0, and press ENTER. You must find and install (in /usr/src) the correct kernel sources for your running kernel version.
 
@@ -93,7 +99,43 @@ Check gcc version:
 
 `gcc -v`
 
+________________________________________________________________
+
+Alternatively you may have the ubuntu linux 5.4.0 kernel with gcc version 7.5.0. In this case you can leave your gcc as is (or if not present:
+
+`sudo apt-get install build-essential`
+
+ - check version
+ 
+ `gcc -v`
+ 
+ if this matches gcc version from 
+ 
+ `cat /proc/version`
+ 
+ you're fine!)
+
+ You may obtain the sources from https://packages.ubuntu.com/focal/linux-source-5.4.0
+
+ The download shold be copied to /usr/src and then from /usr/src:
+
+ `sudo tar -zxvf linux_5.4.0.orig*`
+
 The system's nouveau drivers need to be blacklisted in /etc/modprobe.d as they block NVIDIA Driver installation, and you need to find a basic xorg.conf template to save in /etc/X11/xorg.conf.
+
+`sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"`
+
+`sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"`
+
+Confirm:
+
+`cat /etc/modprobe.d/blacklist-nvidia-nouveau.conf`
+
+Update kernel initramfs:
+
+`sudo update-initramfs -u`
+
+`sudo reboot`
 
 (After installation, NVIDIA can configure the X server with:
 
@@ -105,13 +147,13 @@ At the point of installing the CUDA toolkit
 
 Download and Install CUDA Toolkit & Driver:
 
-`wget https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda_11.2.0_460.27.04_linux.run`
+`wget https://developer.download.nvidia.com/compute/cuda/11.2.0/local_installers/cuda_11.2.1_460.32.03_linux.run`
 
 Now, noting the placement of the run file, you should reboot so that you are in run level 3 (no gui - no X server operating).
 
-This involves `sudo reboot` foloweed by tapping "esc" as the system reboots and BIOS appears. Enter using arrows at 'Advanced Options' and select kernel 5.3.0 . Once the correct kernel is highlighted/selected, press 'e' to edit the grub menu for that kernel. Arrow down to line beginning with 'linux', press 'end' key and type `<space>3` to boot into runlevel 3. Then press F10 to continue boot process. You will be at a command line. Login with username and password as usual. In the Downloads folder (or wherever you placed the run file:)
+This involves `sudo reboot` followed by tapping "esc" as the system reboots and BIOS appears. Enter using arrows at 'Advanced Options' and select kernel 5.3.0 . Once the correct kernel is highlighted/selected, press 'e' to edit the grub menu for that kernel. Arrow down to line beginning with 'linux', press 'end' key and type `<space>3` to boot into runlevel 3. Then press F10 to continue boot process. You will be at a command line. Login with username and password as usual. In the Downloads folder (or wherever you placed the run file:)
 
-`sudo sh ./cuda_11.2.0_460.27.04_linux.run`
+`sudo sh ./cuda_11.2.1_460.32.03_linux.run`
 
 Follow your own nose.
 
