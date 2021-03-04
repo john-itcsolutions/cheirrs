@@ -458,9 +458,9 @@ and copy the IPv4Addr from that screen for the pgadmin4 container to the followi
               ____________________________
               
 
-Deploy Redis, and make it contactable:
+Deploy Redis, and make it contactable (you require at least 3 for a cluster ie "n3"):
 
-`juju deploy cs:~omnivector/redis -n2 --config cluster-enabled=true`
+`juju deploy cs:~omnivector/redis -n3 --config cluster-enabled=true`
 
 followed by,
 
@@ -475,6 +475,10 @@ Later, within the master postgresql database container, you will need to give po
 `sudo passwd postgres`
 
 does this.
+
+To add, for example, a redis unit, simply
+
+`juju add-unit redis`
 ________________________________________________________________
  
 ## DATABASE
@@ -541,7 +545,7 @@ when you run
 
 In postgres master machine:
 
-Exit psql shell and machine:
+Exit psql shell:
 
 `\q`
 
