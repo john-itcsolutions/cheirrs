@@ -691,90 +691,31 @@ Now we turn to setting up the Blockchain/Database gRPC Server Deployment,
 
 NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your cheirrs/elastos-smartweb-service                                                                                              /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
 
-`cd path/to/cheirrs`
+## Possible way:
 
-`sudo rm -f elastos-smartweb-service/grpc_adenine/__init__.py`
-
-`cp __init__.py elastos-smartweb-service/grpc_adenine/`
-
-`sudo apt-get update`
-
-`sudo apt-get install -y curl openssh-server ca-certificates tzdata perl`
-
-`sudo apt-get install -y postfix`
-
-From this point there are 3 avenues of progress. The first requires a gitlab account and involves uploading and downloading. The second requires you to set up a local docker registry on the Host. The third appears to be the safest way forward.
-
-## First way:
-
-Gitlab offers a free container registry, along with a free code repository. Sign up for your own.
-
-Once set up in gitlab, create a blank repo, and find "Personal Access Tokens" in your Personal Settings. Obtain and record your token, which you use as a password to login to your Gitlab-hosted Docker container repo.
-
-`docker login -u "<your-gitlab-name>" -p "<your-20-char-token>" registry.gitlab.com`
-
-Now, you need to ensure the image tags in the .yml files you are about to build from are in sync with the actual last image tag you built (+1). This comment always applies to smart-web  Docker-built images, as you progress. This means you have to "bump" along (if you make alterations to the code) the image tags in both the tag given (at the command line - sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:<your-tag>) when you build from the Dockerfile to its target, and the kubernetes smart-web.yml file that references that image (ie: "smart:<your-tag>" in smart-web.yml - which is found in cheirrs directory). 
-
-From cheirrs/elastos-smartweb-service directory (where a Dockerfile is located):
-
-`sudo docker build -t registry.gitlab.com/<your_gitlab_name>/smart:<your-tag> .`
-
-`cd ../`
-
-In cheirrs dir:
-
-`docker push registry.gitlab.com/<your_gitlab_name>/smart:<your-tag>`
-
-`git remote add origin git@gitlab.com:<your_gitlab_name>/cheirrs.git`
-
-`git push -u origin --all`
-
-`git push -u origin --tags`
-
-Continued below ..
-
-_________________________________________________________________
-
-## Second way:
-
-find the LAN IP Address of your Host, and copy it to the clipboard:
-
-Create/edit the file:
-
-`sudo nano /etc/docker/daemon.json`
-
-You need to follow the section of the following link that refers to how to set up an insecure local registry; see https://microk8s.io/docs/registry-built-in
-
-`sudo systemctl daemon-reload`
-
-`sudo systemctl restart docker`
-
-Having set up the correct address in your daemon.json,
-
-From cheirrs/elastos-smartweb-service:
-
-`sudo docker build -t localhost:32000/smart:<your-tag> .`
-
-`sudo docker push localhost:32000/smart:<your-tag>`
-
-`cd ../`
-
-
-From cheirrs dir:
-
-(smart-web.yml is in the root directory of "cheirrs")
-
-`kubectl apply -f smart-web.yml`
-
-`watch kubectl get pods`
-
-_________________________________________________________________
-
-## Third way:
-
-And actually having done all that, we suspect that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software. Otherwise we may have no simple mechanisms for smart-web to find and connect to its environment.
+We suspect that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software, as was done in smart-web-postgresql-grpc repo. Otherwise we may have no simple mechanisms for smart-web to find and connect to its environment.
 
 For juju charms, their 'relations' and 'hooks' enable synchronous operation with the other charms in their environment. The relations and hooks operate by boolean logic and are programmed 'reactively', meaning the hooks react to changes in the environment to signal to other hooks. A change might be a machine going offline, or one coming online, or a machine moving from "available" to "ready", or some other change in state of the model containing the charms.
+
+Add another model on the 'house' controller to take care of all our 'Docker' requirements on juju.
+
+`juju switch house`
+
+`juju add-model docks`
+
+`juju deploy cs:~cynerva/easyrsa-8`
+
+`juju deploy cs:~yellow/cert-manager-3`
+
+`juju add-relation easyrsa cert-manager`
+
+`juju deploy cs:etcd-553`
+
+`juju deploy cs:~containers/docker-91`
+
+This is a subordinate application which provides a docker container runtime for charms that need one.
+
+
 
 # TO BE CONTINUED .. we're learning to use Docker to build charms now ..
 
