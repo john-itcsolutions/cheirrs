@@ -711,7 +711,11 @@ Add another model on the 'house' controller to take care of all our 'Docker' req
 
 `juju deploy cs:etcd-553`
 
+`juju add-relation easyrsa etcd`
+
 `juju deploy cs:~containers/docker-91`
+
+`juju add-relation easyrsa docker`
 
 This ("docker") is a subordinate application which provides a docker container runtime for charms that need one.
 
@@ -721,9 +725,9 @@ Now, we need to begin to construct the smart-web charm, layer by layer. There ar
 
 From your outer working directory:
 
-`charm create -t docker smart-web`
+`charm create smart-web`
 
-Refer to -  https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135
+Refer to - https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135
 
 and: https://discourse.charmhub.io/t/layers-for-charm-authoring/1122
 
@@ -731,15 +735,43 @@ and: https://discourse.charmhub.io/t/interface-layers/1121
 
 and for the base layer: https://charmsreactive.readthedocs.io/en/latest/layer-basic.html
 
-The first base layer needs:
+`cd smart-web`
 
+`mkdir layers && cd layers`
 
+Starting from the first (base) layer we need:
 
-`git clone https://github.com/juju-solutions/layer-docker`
+`git clone https://github.com/juju-solutions/layer-basic.git`
 
-`git clone https://github.com/juju-solutions/layer-docker-nginx`
+`git clone https://github.com/juju-solutions/layer-docker.git`
 
-Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of charm commands.
+`git clone https://github.com/juju-solutions/layer-docker-nginx.git`
+
+`git clone https://github.com/juju-solutions/layer-docker-resource.git`
+
+`git clone https://github.com/juju-solutions/layer-tls.git`
+
+`git clone https://github.com/juju-solutions/layer-tls-client.git`
+
+`git clone https://github.com/juju-solutions/interface-dockerhost.git`
+
+`git clone https://github.com/juju-solutions/interface-docker-image-host.git`
+
+`git clone https://github.com/juju-solutions/interface-docker-registry.git`
+
+`git clone https://github.com/juju-solutions/interface-etcd.git`
+
+`git clone https://github.com/juju-solutions/interface-http.git`
+
+`git clone https://github.com/juju-solutions/interface-pgsql.git`
+
+`git clone https://github.com/juju-solutions/interface-redis.git`
+
+`git clone https://github.com/juju-solutions/interface-tls.git`
+
+`git clone https://github.com/juju-solutions/interface-tls-certificates.git`
+
+Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm tools" commands. Note also that each interface or layer is documented on its own repo site.
 
 
 
