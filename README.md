@@ -689,15 +689,15 @@ __________________________________________________________________
 
 Now we turn to setting up the Blockchain/Database gRPC Server Deployment,
 
-NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your cheirrs/elastos-smartweb-service                                                                                              /grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file, to be run by the system before running the server in /grpc_adenine/server.py. You would have to keep these 2 versions in sync with each other if you need to edit __init__.py, and want to use your own gitlab account for repo and container registry storage.
+NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of __init__.py in sync with each other if you need to edit __init__.py, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and .../python-grpc-adenine.
 
-## Possible way:
+## The way forward:
 
-We suspect that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software, as was done in smart-web-postgresql-grpc repo. Otherwise we may have no simple mechanisms for smart-web to find and connect to its environment.
+We know that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software, as was done in our smart-web-postgresql-grpc repo. Otherwise we would have no simple mechanisms for smart-web to find, connect and synchronise with its environment.
 
-For juju charms, their 'relations' and 'hooks' enable synchronous operation with the other charms in their environment. The relations and hooks operate by boolean logic and are programmed 'reactively', meaning the hooks react to changes in the environment to signal to other hooks. A change might be a machine going offline, or one coming online, or a machine moving from "available" to "ready", or some other change in state of the model containing the charms.
+For juju charms, their 'relations' and 'hooks' enable synchronous operation with the other charms in their environment. The relations and hooks operate by boolean logic and are programmed 'reactively', meaning the hooks react to changes in the environment to signal to other hooks. A change might be a machine going offline, or one coming online, or a machine moving from "available" to "ready", or some other change-in-state of the model containing the charms.
 
-Add another model on the 'house' controller to take care of all our 'Docker' requirements on juju.
+We may have to add another model on the 'house' controller to take care of all our 'Docker' requirements (which are rumoured incompatible with non-docker models - yet to be confirmed) on juju.
 
 `juju switch house`
 
@@ -713,13 +713,9 @@ Add another model on the 'house' controller to take care of all our 'Docker' req
 
 `juju add-relation easyrsa etcd`
 
-`juju deploy cs:~containers/docker-91`
+There is no 'docker' charm as yet. This will be started from the process of running the smart-web charm itself. The etcd charm will remain blocked until the smart-web charm has brought in the various components of TLS authentication, certification and PKI services, between servers and clients (ie between publishers and subscribers, or "providers" and "requirers" in Juju).
 
-`juju add-relation easyrsa docker`
-
-This ("docker") is a subordinate application which provides a docker container runtime for charms that need one.
-
-Now, we need to begin to construct the smart-web charm, layer by layer. There are fundamentally 3 stages in the layers: first is the base layer with any of the provided base charms for this layer. We choose not code this layer. But before this we require the charm tools:
+Now, we need to begin to construct the smart-web charm, layer by layer, before we can build it. There are fundamentally 3 stages in assembling the layers: first is the base layer with any of the provided base charms for this layer. We choose, not code, this layer. The second stage consists of "interfaces", which we likewise choose, to satisfy our requirements, such that the coding revolves around the relations and hooks to be brought to life in response to planned changes in the model environment as a charm is started and begins relating to its providers and requirers. The third stage is the building and packaging of the actual charm (a docker-based charm, in our case) But before this we require the charm tools:
 
 `sudo snap install charm --classic`
 
@@ -778,6 +774,12 @@ Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm 
 # TO BE CONTINUED .. we're learning to use Docker to build charms now ..
 
 (Refer to https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135)
+
+
+
+## In the case that the charm will run equally on the original dbase-bchains model (which should be attempted), we could dispense with the entire "docks" model, and simply deploy our built smart-web docker charm onto the dbase-bchains model.
+
+
 _____________________________________________________________
 
 ## TESTING the smartweb-service/Blockchains/Postgresql System
