@@ -741,8 +741,6 @@ Starting from the first (base) layer we need:
 
 `git clone https://github.com/juju-solutions/layer-docker.git`
 
-`git clone https://github.com/juju-solutions/layer-docker-nginx.git`
-
 `git clone https://github.com/juju-solutions/layer-docker-resource.git`
 
 `git clone https://github.com/juju-solutions/layer-tls.git`
