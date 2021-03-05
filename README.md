@@ -691,6 +691,15 @@ Now we turn to setting up the Blockchain/Database gRPC Server Deployment,
 
 NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of __init__.py in sync with each other if you need to edit __init__.py, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and .../python-grpc-adenine.
 
+
+__________________________________________________________________
+
+## SMART-WEB - a Docker charm for the elastos-smartweb-service:
+
+## There is a Repository for this smart-web charm at:
+
+https://github.com/john-itcsolutions/smart-web
+
 ## The way forward:
 
 We know that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software, as was done in our smart-web-postgresql-grpc repo. Otherwise we would have no simple mechanisms for smart-web to find, connect and synchronise with its environment.
@@ -698,6 +707,9 @@ We know that we must build a "smart-web" charm, rather than simply using kubectl
 For juju charms, their 'relations' and 'hooks' enable synchronous operation with the other charms in their environment. The relations and hooks operate by boolean logic and are programmed 'reactively', meaning the hooks react to changes in the environment to signal to other hooks. A change might be a machine going offline, or one coming online, or a machine moving from "available" to "ready", or some other change-in-state of the model containing the charms.
 
 We may have to add another model on the 'house' controller to take care of all our 'Docker' requirements (which are rumoured incompatible with non-docker models - yet to be confirmed) on juju.
+
+
+In this case we would begin by:
 
 `juju switch house`
 
@@ -713,9 +725,19 @@ We may have to add another model on the 'house' controller to take care of all o
 
 `juju add-relation easyrsa etcd`
 
-There is no 'docker' charm as yet. This will be started from the process of running the smart-web charm itself. The etcd charm will remain blocked until the smart-web charm has brought in the various components of TLS authentication, certification and PKI services, between servers and clients (ie between publishers and subscribers, or "providers" and "requirers" in Juju).
+However at this stage we are trying to go ahead and set up the docker based infrastructure on the dbase-bchains model itself (where the smart-web-service will be connecting anyway, even if ultimately via cross-model referencing.)
 
-Now, we need to begin to construct the smart-web charm, layer by layer, before we can build it. There are fundamentally 3 stages in assembling the layers: first is the base layer with any of the provided base charms for this layer. We choose, not code, this layer. The second stage consists of "interfaces", which we likewise choose, to satisfy our requirements, such that the coding revolves around the relations and hooks to be brought to life in response to planned changes in the model environment as a charm is started and begins relating to its providers and requirers. The third stage is the building and packaging of the actual charm (a docker-based charm, in our case) But before this we require the charm tools:
+So we `juju switch dbase-bchains` or `juju switch house`, if you were on Kubeflow.
+
+There is no 'docker' charm as yet. This will be started from the process of running the docker subordinate charm itself. 
+
+Now, we need to begin to assemble the smart-web charm, layer by layer, before we can build it. There are fundamentally 3 stages in assembling the layers: first is the base layer with any of the provided base charms for this layer. We choose, not code, this layer. There is a minor amount of 'boilerplate' with some charms, layers and interfaces. This is found on the juju repo sites on github.
+
+Please refer to  https://github.com/juju/layer-index. We choose the docker base layer; the method is simply:
+
+`juju deploy cs:~containers/docker-91`
+
+The second stage consists of "interfaces" and "charm-layers", which we likewise choose, to satisfy our requirements, such that the coding revolves around the relations and hooks to be brought to life in response to planned changes in the model environment as a charm is started and begins relating to its providers and requirers. The third stage is the building and packaging of the actual charm (a docker-based charm, in our case) But before this we require the charm tools:
 
 `sudo snap install charm --classic`
 
@@ -733,19 +755,19 @@ and for the base layer: https://charmsreactive.readthedocs.io/en/latest/layer-ba
 
 `cd smart-web`
 
+`mkdir interfaces`
+
 `mkdir layers && cd layers`
 
 Starting from the first (base) layer we need:
-
-`git clone https://github.com/juju-solutions/layer-basic.git`
-
-`git clone https://github.com/juju-solutions/layer-docker.git`
 
 `git clone https://github.com/juju-solutions/layer-docker-resource.git`
 
 `git clone https://github.com/juju-solutions/layer-tls.git`
 
 `git clone https://github.com/juju-solutions/layer-tls-client.git`
+
+`cd ../interfaces`
 
 `git clone https://github.com/juju-solutions/interface-dockerhost.git`
 
@@ -755,19 +777,19 @@ Starting from the first (base) layer we need:
 
 `git clone https://github.com/juju-solutions/interface-etcd.git`
 
-`git clone https://github.com/juju-solutions/interface-http.git`
-
 `git clone https://github.com/juju-solutions/interface-pgsql.git`
 
 `git clone https://github.com/juju-solutions/interface-redis.git`
 
 `git clone https://github.com/juju-solutions/interface-tls.git`
 
+`git clone https://github.com/juju-solutions/interface-http.git`
+
 `git clone https://github.com/juju-solutions/interface-tls-certificates.git`
 
 Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm tools" commands. Note also that each interface or layer is documented on its own repo site.
 
-
+We have begun to assemble the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). Aside from cloning this repo (`git clone https://github.com/john-itcsolutions/smart-web.git`), one also needs to git clone the repo's above (12 in all) in the list of layers above. These must be cloned into the "layers" and "interfaces" directories under "smart-web/".
 
 # TO BE CONTINUED .. we're learning to use Docker to build charms now ..
 
@@ -775,10 +797,11 @@ Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm 
 
 
 
-## In the case that the charm will run equally on the original dbase-bchains model (which should be attempted), we could dispense with the entire "docks" model, and simply deploy our built smart-web docker charm onto the dbase-bchains model.
+## In the case that the charm will run equally on the original dbase-bchains model (which we are attempting), we could dispense with the entire "docks" model, and simply deploy our built smart-web docker charm onto the dbase-bchains model.
 
 
 _____________________________________________________________
+
 
 ## TESTING the smartweb-service/Blockchains/Postgresql System
 
