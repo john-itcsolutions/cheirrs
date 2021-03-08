@@ -50,13 +50,7 @@
     },
     {
       "branch": "refs/heads/master",
-      "fetched_url": "https://github.com/juju-solutions/layer-nvidia-cuda",
-      "rev": "e11e2ed9180404ca0bb6f4686414feeb0ec64b84",
-      "url": "layer:nvidia-cuda"
-    },
-    {
-      "branch": "refs/heads/master",
-      "rev": "22167b70d3e1c312b547ea712347f5942f80df0f",
+      "rev": "de54271eff2b4a5a2870c37f45a1956979d32fb3",
       "url": "smart-web"
     },
     {
@@ -127,9 +121,9 @@
       "unchecked"
     ],
     ".gitignore": [
-      "layer:nvidia-cuda",
+      "layer:status",
       "static",
-      "d19a03ad9d293f38e25ff8f0b03b5dd94bf0efd92131f0b4e6b6ffec7344d704"
+      "315971ad9cc5d6ada2391f0940e1800149b211a18be3c7a8f396735d7978702b"
     ],
     ".travis.yml": [
       "layer:docker",
@@ -199,7 +193,7 @@
     "config.yaml": [
       "smart-web",
       "dynamic",
-      "f81bcdff10227e95454e95e0906f631b462f30f448abbff5477e20608e50d8c2"
+      "404ddef0383073fd136f6aab2813f6634d40be701c246e8598910f39a2795913"
     ],
     "copyright": [
       "layer:docker-resource",
@@ -976,16 +970,6 @@
       "dynamic",
       "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
     ],
-    "host.crt": [
-      "smart-web",
-      "static",
-      "e4061ecf4ac535dc0ca8b2ad19af3cb6fae8085e8cb1e63eba4a8dd6e3deaa55"
-    ],
-    "host.key": [
-      "smart-web",
-      "static",
-      "c235dd523976619816b4573f5482272dcc3f16c1044d6080eb681d3b6628fc1c"
-    ],
     "icon.svg": [
       "smart-web",
       "static",
@@ -1229,7 +1213,7 @@
     "layer.yaml": [
       "smart-web",
       "dynamic",
-      "5020d2a131a298a7dc923dab40776a54eabb8c1429bc4600e631a6612a99ab2d"
+      "c253e1d5b15a2037ab53111f01bf8b8a505608b90de9fa5de5f68d596c3e6ac4"
     ],
     "layers/layer-docker-resource/LICENSE": [
       "smart-web",
@@ -1386,31 +1370,6 @@
       "static",
       "08554a1f4e167fb0633d61633e64c57a35c943325c4d35f072f9290895279dbc"
     ],
-    "layers/layer-nvidia-cuda/.gitignore": [
-      "smart-web",
-      "static",
-      "d19a03ad9d293f38e25ff8f0b03b5dd94bf0efd92131f0b4e6b6ffec7344d704"
-    ],
-    "layers/layer-nvidia-cuda/README.md": [
-      "smart-web",
-      "static",
-      "ff933f74eece7acd6b8451b380e1be21ce3cc529da14fc40afc3ad9c07f2e540"
-    ],
-    "layers/layer-nvidia-cuda/config.yaml": [
-      "smart-web",
-      "static",
-      "da9f1b7ee93d219bde08fc2bf77ab23581a25ab2d4cfdc25eac31040d18af4cd"
-    ],
-    "layers/layer-nvidia-cuda/layer.yaml": [
-      "smart-web",
-      "static",
-      "7c03734883c05d4035bdb144353d57c11cef6303ff02474099a4f820c8a988a2"
-    ],
-    "layers/layer-nvidia-cuda/reactive/cuda.sh": [
-      "smart-web",
-      "static",
-      "3704a5a6bee9d47eb016c2839629a0b8902acaac18fcda95563d5dea4b1288f7"
-    ],
     "layers/layer-tls-client/README.md": [
       "smart-web",
       "static",
@@ -1511,11 +1470,6 @@
       "static",
       "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     ],
-    "reactive/cuda.sh": [
-      "layer:nvidia-cuda",
-      "static",
-      "3704a5a6bee9d47eb016c2839629a0b8902acaac18fcda95563d5dea4b1288f7"
-    ],
     "reactive/docker.py": [
       "layer:docker",
       "static",
@@ -1594,7 +1548,7 @@
     "version": [
       "smart-web",
       "dynamic",
-      "653ace247dfbaa6db0cc75df796eba371f538dd749163190c3f68d924fcf1c56"
+      "3c049b053f28a8e06d20d7dfbe1e8f2467356c3e298f331512f0dd2fa416c054"
     ],
     "wheelhouse.txt": [
       "layer:docker",

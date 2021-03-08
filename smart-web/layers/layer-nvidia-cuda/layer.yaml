@@ -1,8 +1,0 @@
-repo: git@github.com:juju-solutions/layer-nvidia-cuda
-includes: ['layer:basic']  # if you use any interfaces, add them here
-options:
-  basic:
-    packages:
-      - build-essential
-      - git
-      - wget

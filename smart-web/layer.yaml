@@ -11,7 +11,6 @@
 - "layer:docker"
 - "layer:docker-resource"
 - "layer:tls-client"
-- "layer:nvidia-cuda"
 - "interface:http"
 - "interface:etcd"
 - "interface:pgsql"
@@ -22,10 +21,7 @@
   "LAYER_README.md", "tests/10-deploy.py", "tests/tests.yaml"]
 "options":
   "basic":
-    "packages":
-    - "build-essential"
-    - "git"
-    - "wget"
+    "packages": []
     "python_packages": []
     "use_venv": !!bool "true"
     "include_system_packages": !!bool "false"
@@ -43,7 +39,6 @@
     "server_key_path": ""
     "client_certificate_path": ""
     "client_key_path": ""
-  "nvidia-cuda": {}
   "smart-web": {}
 "repo": "https://github.com/john-itcsolutions/smart-web.git"
 "proof":

@@ -470,15 +470,15 @@ The pgadmin4 docker container is available from Docker hub with:
 
 followed by,
 
-`docker run -p 80:80 -e 'PGADMIN_DEFAULT_EMAIL=user@domain.com' -e 'PGADMIN_DEFAULT_PASSWORD=SuperSecret' -d dpage/pgadmin4`
+<!-- `docker run -p 80:80 -e 'PGADMIN_DEFAULT_EMAIL=user@domain.com' -e 'PGADMIN_DEFAULT_PASSWORD=SuperSecret' -d dpage/pgadmin4`
 
 You will need to:
 
 `docker inspect network bridge`
 
-and copy the IPv4Addr from that screen for the pgadmin4 container to the following command:
+and copy the IPv4Addr from that screen for the pgadmin4 container to the following command: -->
 
-`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ipaddr of pgadmin4 docker container>`
+`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0`
 
               ____________________________
               
@@ -537,6 +537,8 @@ Enter your new postgres user's password twice.
 (.. wait a minute or 2. Don't worry about the syntax errors visible when the scripts have run)
 
 Create users in postgres:
+
+`psql house`
 
 `create role cheirrs_user with login password 'passwd';`
 
@@ -631,7 +633,7 @@ Inside your postgresql Master (
 
 )
 
-As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) get ubuntugis repo:
+As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & get ubuntugis repo:
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
@@ -826,9 +828,7 @@ The charm appears to be ready to work, however we are having trouble getting our
 
 `charm build -o ../docker-registry`
 
-`cd ../docker-registry`
-
-`juju deploy ./docker-registry`
+`cd ../docker-registry && juju deploy ./docker-registry`
 
 `juju add-relation docker-registry easyrsa:client`
 
@@ -860,15 +860,13 @@ Now within smart-web charm directory, we build then deploy smart-web:
 
 `charm build -o ..path/to/cheirrs`
 
-`cd ..path/to/cheirrs`
-
-`juju deploy ./smart-web`
+`cd ../cheirrs && juju deploy ./smart-web`
 
 <!-- `juju config smart-web cuda-version=9.2.148-1`
 
 `juju config smart-web install-cuda=True` -->
 
-We would also like to be able to develop the postgresql database structure and details ('house' database') using pgadmin4. To this end we construct a 'pgadmin4' charm as follows.
+We would also like to be able to develop the postgresql database structure and details ('house' database) using pgadmin4. To this end we construct a 'pgadmin4' charm as follows (with inspiration from 'smart-web').
 
 From your outer working directory:
 
@@ -882,7 +880,7 @@ From your outer working directory:
 
 `mkdir layers && cd layers`
 
-Starting from the first (base) layer we need:
+Starting from the first (base) layer we need :
 
 `git clone https://github.com/juju-solutions/layer-docker-resource.git`
 
@@ -904,6 +902,12 @@ Starting from the first (base) layer we need:
 
 `git clone https://github.com/juju-solutions/interface-http.git`
 
+
+
+The layer.yaml, metadata.yaml and pgadmin4.py files are obtainable from 
+
+`git clone https://github.com/john-itcsolutions/pgadmin4.git`
+
 As above, so when completed, if docker registry were working, we could push our image to the registry:
 
 `juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest  --wait`
@@ -914,9 +918,7 @@ Now within pgadmin4 charm directory, we build then deploy pgadmin4:
 
 `charm build -o ..path/to/cheirrs`
 
-`cd ..path/to/cheirrs`
-
-`juju deploy ./pgadmin4`
+`cd ..path/to/cheirrs && juju deploy ./pgadmin4`
 
 .. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log.
 
