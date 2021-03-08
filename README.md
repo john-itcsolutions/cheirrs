@@ -758,15 +758,21 @@ Now, we need to begin to assemble the smart-web charm, layer by layer, before we
 
 Please refer to  https://github.com/juju/layer-index. 
 
+`git clone https://github.com/john-itcsolutions/smart-web`
+
+`cd smart-web`
+
 The layer.yaml file shows the base layers in the smart-web charm.
 
 You will also find the interfaces:
 
-The second stage consists of "interfaces" and "charm-layers", which we likewise choose, to satisfy our requirements, such that the coding revolves around the relations and hooks to be brought to life in response to planned changes in the model environment as a charm is started and begins relating to its providers and requirers. The third stage is the building and packaging of the actual charm (a docker-based charm, in our case) But before this we require the charm tools:
+The second stage consists of "interfaces" and "charm-layers", which we likewise choose, to satisfy our requirements, such that the coding revolves around the relations and hooks to be brought to life in response to planned changes in the model environment as a charm, with its layers, is started and begins relating to its providers and requirers. The third stage is the building and packaging of the actual charm (a docker-based charm, in our case) But before this we require the charm tools:
 
 `sudo snap install charm --classic`
 
-From your outer working directory:
+This is how we proceeded to construct the charm:
+
+From the outer working directory:
 
 `charm create smart-web`
 
@@ -812,7 +818,7 @@ Starting from the first (base) layer we need:
 
 Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm tools" commands. Note also that each interface or layer is documented on its own repo site.
 
-We have assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). Aside from cloning this repo (`git clone https://github.com/john-itcsolutions/smart-web.git`), one also needs to git clone the repo's above (12 in all) in the list of layers and interfaces above. These must be cloned into the "layers" and "interfaces" directories under "smart-web/".
+We have gone further, and assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). Aside from cloning this repo (`git clone https://github.com/john-itcsolutions/smart-web.git`), one also needs to git clone the repo's above (11 in all) in the list of layers and interfaces above. These must be cloned into the "layers" and "interfaces" directories under "smart-web/".
 
 The charm appears to be ready to work, however we are having trouble getting our NVIDIA driver to load, and this seems to be preventing the docker-registry charm itself from working (a separate Canonical Ltd charm, which needs to be installed in the dbase-bchains model by cloning https://github.com/CanonicalLtd/docker-registry-charm.git to your outer working directory, and building and deploying  the charm with:
 
@@ -846,7 +852,7 @@ Next we build the 'smart' docker image:
 
 `docker image build -t smart .`
 
-When completed, if docker registry were working:
+When completed, if docker registry were working, we could push our image to the registry:
 
 `juju run-action docker-registry/0 \
   push \
@@ -872,7 +878,7 @@ Now within smart-web charm directory, we build then deploy smart-web:
 
 
 
-## So far it seems that the charm will run on the original dbase-bchains model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to absence of NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry.
+## So far it seems that the charm will run to completion of setup on the original dbase-bchains model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to absence of NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry.
 
 _____________________________________________________________
 
