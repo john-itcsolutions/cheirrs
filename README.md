@@ -798,7 +798,7 @@ Starting from the first (base) layer we need:
 
 `git clone https://github.com/juju-solutions/layer-tls-client.git`
 
-`git clone https://github.com/juju-solutions/layer-nvidia-cuda.git`
+<!-- `git clone https://github.com/juju-solutions/layer-nvidia-cuda.git` -->
 
 `cd ../interfaces`
 
@@ -818,7 +818,7 @@ Starting from the first (base) layer we need:
 
 Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm tools" commands. Note also that each interface or layer is documented on its own repo site.
 
-We have gone further, and assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). Aside from cloning this repo (`git clone https://github.com/john-itcsolutions/smart-web.git`), one also needs to git clone the repo's above (11 in all) in the list of layers and interfaces above. These must be cloned into the "layers" and "interfaces" directories under "smart-web/".
+We have gone further, and assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). Aside from cloning this repo (`git clone https://github.com/john-itcsolutions/smart-web.git`), one also needs to git clone the repo's above (10 in all) in the list of layers and interfaces above. These must be cloned into the "layers" and "interfaces" directories under "smart-web/".
 
 The charm appears to be ready to work, however we are having trouble getting our NVIDIA driver to load, and this seems to be preventing the docker-registry charm itself from working (a separate Canonical Ltd charm, which needs to be installed in the dbase-bchains model by cloning https://github.com/CanonicalLtd/docker-registry-charm.git to your outer working directory, and building and deploying  the charm with:
 
@@ -832,13 +832,11 @@ The charm appears to be ready to work, however we are having trouble getting our
 
 `juju add-relation docker-registry easyrsa:client`
 
-`juju config docker-registry \
-  auth-basic-user='admin' \
-  auth-basic-password='password'`
+`juju config docker-registry auth-basic-user='admin'  auth-basic-password='password'`
 
-`export IP=`juju run --unit docker-registry/0 'network-get website --ingress-address'``
+`export IP=```juju run --unit docker-registry/0 'network-get website --ingress-address'``
 
-`export PORT=`juju config docker-registry registry-port``
+`export PORT=```juju config docker-registry registry-port``
 
 `export REGISTRY=$IP:$PORT`
 
@@ -866,9 +864,9 @@ Now within smart-web charm directory, we build then deploy smart-web:
 
 `juju deploy ./smart-web`
 
-`juju config smart-web cuda-version=9.2.148-1`
+<!-- `juju config smart-web cuda-version=9.2.148-1`
 
-`juju config smart-web install-cuda=True`
+`juju config smart-web install-cuda=True` -->
 
 .. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log.
 
