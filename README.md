@@ -854,11 +854,7 @@ Next we build the 'smart' docker image:
 
 When completed, if docker registry were working, we could push our image to the registry:
 
-`juju run-action docker-registry/0 \
-  push \
-  image=smart \
-  tag=latest \
-  --wait`
+`juju run-action docker-registry/0 push image=smart tag=latest  --wait`
 
 `cd path/to/smart-web`
 
@@ -869,6 +865,10 @@ Now within smart-web charm directory, we build then deploy smart-web:
 `cd ..path/to/cheirrs`
 
 `juju deploy ./smart-web`
+
+`juju config smart-web cuda-version=9.2.148-1`
+
+`juju config smart-web install-cuda=True`
 
 .. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log.
 
