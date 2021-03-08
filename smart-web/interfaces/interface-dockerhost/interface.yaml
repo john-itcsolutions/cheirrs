@@ -1,0 +1,4 @@
+name: dockerhost
+summary: Connection details for docker on a local unit
+version: 1
+repo: https://github.com/juju-solutions/interface-dockerhost.git

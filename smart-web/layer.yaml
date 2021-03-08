@@ -1,0 +1,64 @@
+"includes":
+- "layer:options"
+- "layer:basic"
+- "interface:nrpe-external-master"
+- "layer:debug"
+- "layer:nagios"
+- "interface:dockerhost"
+- "interface:sdn-plugin"
+- "layer:status"
+- "interface:tls-certificates"
+- "layer:docker"
+- "layer:docker-resource"
+- "layer:tls-client"
+- "layer:nvidia-cuda"
+- "interface:http"
+- "interface:etcd"
+- "interface:pgsql"
+- "interface:docker-image-host"
+- "interface:docker-registry"
+- "interface:redis"
+"exclude": [".travis.yml", "tests", "tox.ini", "test-requirements.txt", "unit_tests",
+  "LAYER_README.md", "tests/10-deploy.py", "tests/tests.yaml"]
+"options":
+  "basic":
+    "packages":
+    - "build-essential"
+    - "git"
+    - "wget"
+    "python_packages": []
+    "use_venv": !!bool "true"
+    "include_system_packages": !!bool "false"
+  "debug": {}
+  "nagios": {}
+  "docker":
+    "skip-install": !!bool "false"
+  "status":
+    "patch-hookenv": !!bool "true"
+  "docker-resource":
+    "set-status": !!bool "true"
+  "tls-client":
+    "ca_certificate_path": ""
+    "server_certificate_path": ""
+    "server_key_path": ""
+    "client_certificate_path": ""
+    "client_key_path": ""
+  "nvidia-cuda": {}
+  "smart-web": {}
+"repo": "https://github.com/john-itcsolutions/smart-web.git"
+"proof":
+  "resources":
+  - "name": "upstream-source"
+    "type": "String"
+    "missing": ""
+    "description": "Hint for the built charm, or charm build systems, on where this\
+      \ resource originates."
+  - "name": "auto-fetch"
+    "type": "Boolean"
+    "missing": !!bool "false"
+    "description": "Whether or not to automatically fetch this resource."
+  - "name": "validator"
+    "type": "String"
+    "missing": ""
+    "description": "Held for future use; not currently used."
+"is": "smart-web"
