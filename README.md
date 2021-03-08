@@ -834,9 +834,9 @@ The charm appears to be ready to work, however we are having trouble getting our
 
 `juju config docker-registry auth-basic-user='admin'  auth-basic-password='password'`
 
-`export IP=```juju run --unit docker-registry/0 'network-get website --ingress-address'``
+export IP=`juju run --unit docker-registry/0 'network-get website --ingress-address'`
 
-`export PORT=```juju config docker-registry registry-port``
+export PORT=`juju config docker-registry registry-port`
 
 `export REGISTRY=$IP:$PORT`
 
