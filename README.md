@@ -804,13 +804,13 @@ Starting from the first (base) layer we need:
 
 `git clone https://github.com/juju-solutions/interface-dockerhost.git`
 
-`git clone https://github.com/juju-solutions/interface-docker-image-host.git`
+`git clone https://github.com/tengu-team/interface-docker-image-host.git`
 
 `git clone https://github.com/juju-solutions/interface-docker-registry.git`
 
 `git clone https://github.com/juju-solutions/interface-etcd.git`
 
-`git clone https://github.com/juju-solutions/interface-pgsql.git`
+`git clone https://git.launchpad.net/interface-pgsql`
 
 `git clone https://github.com/juju-solutions/interface-redis.git`
 
@@ -867,6 +867,56 @@ Now within smart-web charm directory, we build then deploy smart-web:
 <!-- `juju config smart-web cuda-version=9.2.148-1`
 
 `juju config smart-web install-cuda=True` -->
+
+We would also like to be able to develop the postgresql database structure and details ('house' database') using pgadmin4. To this end we construct a 'pgadmin4' charm as follows.
+
+From your outer working directory:
+
+`charm create pgadmin4`
+
+`cd pgadmin4`
+
+`cd smart-web`
+
+`mkdir interfaces`
+
+`mkdir layers && cd layers`
+
+Starting from the first (base) layer we need:
+
+`git clone https://github.com/juju-solutions/layer-docker-resource.git`
+
+`git clone https://github.com/juju-solutions/layer-docker.git`
+
+`git clone https://github.com/juju-solutions/layer-tls-client.git`
+
+`cd ../interfaces`
+
+`git clone https://github.com/juju-solutions/interface-dockerhost.git`
+
+`git clone https://github.com/tengu-team/interface-docker-image-host.git`
+
+`git clone https://github.com/juju-solutions/interface-docker-registry.git`
+
+`git clone https://github.com/juju-solutions/interface-etcd.git`
+
+`git clone https://git.launchpad.net/interface-pgsql`
+
+`git clone https://github.com/juju-solutions/interface-http.git`
+
+As above, so when completed, if docker registry were working, we could push our image to the registry:
+
+`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest  --wait`
+
+`cd path/to/pgadmin4`
+
+Now within pgadmin4 charm directory, we build then deploy pgadmin4:
+
+`charm build -o ..path/to/cheirrs`
+
+`cd ..path/to/cheirrs`
+
+`juju deploy ./pgadmin4`
 
 .. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log.
 
