@@ -418,6 +418,16 @@ In a host terminal, from a second HDD if available, to save working files in cas
 
 Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, it recognised that localhost was already installed, and juju created a 'localhost' cloud for you to use. Verify this with `juju clouds`):
 
+(You may have to change ownership of files on your system to your own username. Do this with 
+
+`sudo chown -R <your-username-on-linux> path/to/<directory-tree>`
+
+). Then:
+
+`juju bootstrap localhost house`
+
+If this command fails:
+
 `sudo juju bootstrap localhost house`
 
 Add a model named "dbase-bchains"
