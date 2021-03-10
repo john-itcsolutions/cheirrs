@@ -463,17 +463,241 @@ The pgadmin4 docker container is available from Docker hub with:
 
 `docker pull dpage/pgadmin4`
 
-followed by,
+followed by:
 
-<!-- `docker run -p 80:80 -e 'PGADMIN_DEFAULT_EMAIL=user@domain.com' -e 'PGADMIN_DEFAULT_PASSWORD=SuperSecret' -d dpage/pgadmin4`
+NOTE: MUCH OF THE FOLLOWING CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGAMIN4 AND SMART-WEB DIRECTLY FROM CHEIRRS REPO. ie, from "cheirrs" directory:
 
-You will need to:
+1. `juju deploy ./pgadmin4`
 
-`docker inspect network bridge`
+2. `juju deploy ./smart-web`
 
-and copy the IPv4Addr from that screen for the pgadmin4 container to the following command: -->
+________________________________________________________________
 
-`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0`
+
+The charms appear to be ready to work, however we are having trouble getting our NVIDIA driver to load, and this seems to be preventing the docker-registry charm itself from working (a separate Canonical Ltd charm, which needs to be installed in the dbase-bchains model by 
+
+`git clone https://github.com/CanonicalLtd/docker-registry-charm.git`
+
+ to your outer working directory, and building and deploying  the charm with:
+
+`sudo snap install charm --classic`
+
+`cd docker-registry-charm`
+
+`charm build -o ../docker-registry`
+
+`cd ../docker-registry && juju deploy ./docker-registry`
+
+`juju add-relation docker-registry easyrsa:client`
+
+`juju config docker-registry auth-basic-user='admin'  auth-basic-password='password'`
+
+You need to copy any CA.cert in your /etc/ssl/certs folder to <machine-number-docker-registry>:/home/ubuntu/, ie:
+
+`juju scp /etc/ssl/certs/xyz.pem <machine-number-docker-registry>:/home/ubuntu/`
+
+You also need to make your own host.crt and host.key from a self signed certificate, and then:
+
+`juju scp path/to/host.key <machine-number-docker-registry>:/home/ubuntu`
+
+`juju scp path/to/host.crt <machine-number-docker-registry>:/home/ubuntu`
+
+`juju config kubernetes-master image-registry=$REGISTRY`
+
+You may need to wait until the registry installation has stabilised, then:
+
+export IP=`juju run --unit docker-registry/0 'network-get website --ingress-address'`
+
+export PORT=`juju config docker-registry registry-port`
+
+`export REGISTRY=$IP:$PORT`
+
+`juju add-relation docker-registry containerd`
+
+Next we build the 'smart' docker image:
+
+`cd path/to/cheirrs/elastos-smartweb-service`
+
+`docker image build -t smart .`
+
+When completed, if docker registry were working, we could push our image to the registry:
+
+`juju run-action docker-registry/0 push image=smart tag=latest  --wait`
+
+
+BUT ALSO:
+
+## Blockchains-Database Server (dbase-bchains) 
+
+We turn to setting up the Blockchain/Database gRPC Server Deployment,
+
+NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of __init__.py in sync with each other if you need to edit __init__.py, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine.
+
+
+__________________________________________________________________
+
+## SMART-WEB - a Docker charm for the elastos-smartweb-service:
+
+## There is a Repository for this smart-web charm at:
+
+https://github.com/john-itcsolutions/smart-web
+
+## The way forward:
+
+THE FOLLOWING CAN BE AVOIDED UNLESS YOU ARE INTERESTED IN HOW TO BUILD A CHARM .. { .. }
+
+{  We know that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software, as was done in our smart-web-postgresql-grpc repo. Otherwise we would have no simple mechanisms for smart-web to find, connect and synchronise with its environment.
+
+For juju charms, their 'relations' and 'hooks' enable synchronous operation with the other charms in their environment. The relations and hooks operate by boolean logic and are programmed 'reactively', meaning the hooks react to changes in the environment to signal to other hooks. A change might be a machine going offline, or one coming online, or a machine moving from "available" to "ready", or some other change-in-state of the model containing the charms.
+
+
+Now, we need to begin to assemble the smart-web charm, layer by layer, before we can build it. There are fundamentally 3 stages in assembling the layers: first is the base layer with any of the provided base charms for this layer. We choose, not code, this layer. There is a minor amount of 'boilerplate' with some charms, layers and interfaces. This is found on the juju repo sites on github.
+
+Please refer to  https://github.com/juju/layer-index. 
+
+`git clone https://github.com/john-itcsolutions/smart-web`
+
+`cd smart-web`
+
+The layer.yaml file shows the base layers in the smart-web charm.
+
+You will also find the interfaces:
+
+The second stage consists of "interfaces" and "charm-layers", which we likewise choose, to satisfy our requirements, such that the coding revolves around the relations and hooks to be brought to life in response to planned changes in the model environment as a charm, with its layers, is started and begins relating to its providers and requirers. The third stage is the building and packaging of the actual charm (a docker-based charm, in our case) But before this we require the charm tools:
+
+`sudo snap install charm --classic`
+
+This is how we proceeded to construct the charm:
+
+From the outer working directory:
+
+`charm create smart-web`
+
+Refer to - https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135
+
+and: https://discourse.charmhub.io/t/layers-for-charm-authoring/1122
+
+and: https://discourse.charmhub.io/t/interface-layers/1121
+
+and for the base layer: https://charmsreactive.readthedocs.io/en/latest/layer-basic.html
+
+`cd smart-web`
+
+`mkdir interfaces`
+
+`mkdir layers && cd layers`
+
+Starting from the first (base) layer we need:
+
+`git clone https://github.com/juju-solutions/layer-docker-resource.git`
+
+`git clone https://github.com/juju-solutions/layer-docker.git`
+
+`git clone https://github.com/juju-solutions/layer-tls-client.git`
+
+`cd ../interfaces`
+
+`git clone https://github.com/juju-solutions/interface-dockerhost.git`
+
+`git clone https://github.com/tengu-team/interface-docker-image-host.git`
+
+`git clone https://github.com/juju-solutions/interface-docker-registry.git`
+
+`git clone https://github.com/juju-solutions/interface-etcd.git`
+
+`git clone https://git.launchpad.net/interface-pgsql`
+
+`git clone https://github.com/juju-solutions/interface-redis.git`
+
+`git clone https://github.com/juju-solutions/interface-http.git`
+
+Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm tools" commands. Note also that each interface or layer is documented on its own repo site.}
+
+We have gone further, and assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). Aside from cloning this repo (`git clone https://github.com/john-itcsolutions/smart-web.git`), one also needs to git clone the repo's above (10 in all) in the list of layers and interfaces above. These must be cloned into the "layers" and "interfaces" directories under "smart-web/".
+
+
+`cd path/to/smart-web`
+
+Now within smart-web charm directory, we build then deploy smart-web:
+
+`charm build -o ..path/to/cheirrs`
+
+`cd ../cheirrs && juju deploy ./smart-web`
+
+`juju add-relation smart-web easyrsa:client`
+
+`juju add-relation docker-registry containerd`
+
+We would also like to be able to develop the postgresql database structure and details ('house' database) using pgadmin4. To this end we construct a 'pgadmin4' charm as follows (with inspiration from 'smart-web').
+
+From your outer working directory:
+
+`charm create pgadmin4`
+
+`cd pgadmin4`
+
+`mkdir interfaces`
+
+`mkdir layers && cd layers`
+
+Starting from the first (base) layer we need :
+
+`git clone https://github.com/juju-solutions/layer-docker-resource.git`
+
+`git clone https://github.com/juju-solutions/layer-docker.git`
+
+`git clone https://github.com/juju-solutions/layer-tls-client.git`
+
+`cd ../interfaces`
+
+`git clone https://github.com/juju-solutions/interface-dockerhost.git`
+
+`git clone https://github.com/tengu-team/interface-docker-image-host.git`
+
+`git clone https://github.com/juju-solutions/interface-docker-registry.git`
+
+`git clone https://github.com/juju-solutions/interface-etcd.git`
+
+`git clone https://git.launchpad.net/interface-pgsql`
+
+`git clone https://github.com/juju-solutions/interface-http.git`
+
+
+
+The layer.yaml, metadata.yaml and pgadmin4.py files are obtainable from 
+
+`git clone https://github.com/john-itcsolutions/pgadmin4.git`
+
+As above, so when completed, if docker registry were working, we could push our image to the registry: 
+
+`cd path/to/pgadmin4`
+
+Now within pgadmin4 charm directory, we build then deploy pgadmin4:
+
+`charm build -o ..path/to/cheirrs`
+
+`cd ..path/to/cheirrs && juju deploy ./pgadmin4`  }
+
+______________________________________________________________
+______________________________________________________________
+
+`juju add-relation pgadmin4 easyrsa:client`
+
+`juju add-relation pgadmin4 containerd`
+
+
+.. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log.
+
+# TO BE CONTINUED .. 
+
+(Refer to https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135)
+
+
+
+## So far it seems that the charm will run to completion of setup on the original dbase-bchains model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to absence of NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry.
+
+
+`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
 
               ____________________________
               
@@ -705,232 +929,6 @@ An application (and users - here admin and ubuntu) set to `consume` the postgres
 `juju add-relation <application>:db uk8s:ubuntu/dbase-bchains.postgresql:db`
 
 to connect "application" to the database (in dbase-bchains model)from 'uk8s' controller, ie from the kubeflow model (in this case).
-__________________________________________________________________
-
-## Blockchains-Database Server (dbase-bchains) 
-
-Now we turn to setting up the Blockchain/Database gRPC Server Deployment,
-
-NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of __init__.py in sync with each other if you need to edit __init__.py, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine.
-
-
-__________________________________________________________________
-
-## SMART-WEB - a Docker charm for the elastos-smartweb-service:
-
-## There is a Repository for this smart-web charm at:
-
-https://github.com/john-itcsolutions/smart-web
-
-## The way forward:
-
-We know that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software, as was done in our smart-web-postgresql-grpc repo. Otherwise we would have no simple mechanisms for smart-web to find, connect and synchronise with its environment.
-
-For juju charms, their 'relations' and 'hooks' enable synchronous operation with the other charms in their environment. The relations and hooks operate by boolean logic and are programmed 'reactively', meaning the hooks react to changes in the environment to signal to other hooks. A change might be a machine going offline, or one coming online, or a machine moving from "available" to "ready", or some other change-in-state of the model containing the charms.
-
-We may have to add another model on the 'house' controller to take care of all our 'Docker' requirements (which are rumoured incompatible with non-docker models - yet to be confirmed) on juju.
-
-
-In this case we could begin by:
-
-`juju switch house`
-
-`juju add-model docks`
-
-`juju deploy cs:~cynerva/easyrsa-8`
-
-`juju deploy cs:~yellow/cert-manager-3`
-
-`juju add-relation easyrsa cert-manager`
-
-`juju deploy cs:etcd-553`
-
-`juju add-relation easyrsa etcd`
-
-However at this stage we are trying to go ahead and set up the docker based infrastructure on the dbase-bchains model itself (where the smart-web-service will be connecting anyway, even if ultimately via cross-model referencing.)
-
-So we `juju switch dbase-bchains` or `juju switch house`, if you were on Kubeflow.
-
-Now, we need to begin to assemble the smart-web charm, layer by layer, before we can build it. There are fundamentally 3 stages in assembling the layers: first is the base layer with any of the provided base charms for this layer. We choose, not code, this layer. There is a minor amount of 'boilerplate' with some charms, layers and interfaces. This is found on the juju repo sites on github.
-
-Please refer to  https://github.com/juju/layer-index. 
-
-`git clone https://github.com/john-itcsolutions/smart-web`
-
-`cd smart-web`
-
-The layer.yaml file shows the base layers in the smart-web charm.
-
-You will also find the interfaces:
-
-The second stage consists of "interfaces" and "charm-layers", which we likewise choose, to satisfy our requirements, such that the coding revolves around the relations and hooks to be brought to life in response to planned changes in the model environment as a charm, with its layers, is started and begins relating to its providers and requirers. The third stage is the building and packaging of the actual charm (a docker-based charm, in our case) But before this we require the charm tools:
-
-`sudo snap install charm --classic`
-
-This is how we proceeded to construct the charm:
-
-From the outer working directory:
-
-`charm create smart-web`
-
-Refer to - https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135
-
-and: https://discourse.charmhub.io/t/layers-for-charm-authoring/1122
-
-and: https://discourse.charmhub.io/t/interface-layers/1121
-
-and for the base layer: https://charmsreactive.readthedocs.io/en/latest/layer-basic.html
-
-`cd smart-web`
-
-`mkdir interfaces`
-
-`mkdir layers && cd layers`
-
-Starting from the first (base) layer we need:
-
-`git clone https://github.com/juju-solutions/layer-docker-resource.git`
-
-`git clone https://github.com/juju-solutions/layer-docker.git`
-
-`git clone https://github.com/juju-solutions/layer-tls-client.git`
-
-<!-- `git clone https://github.com/juju-solutions/layer-nvidia-cuda.git` -->
-
-`cd ../interfaces`
-
-`git clone https://github.com/juju-solutions/interface-dockerhost.git`
-
-`git clone https://github.com/tengu-team/interface-docker-image-host.git`
-
-`git clone https://github.com/juju-solutions/interface-docker-registry.git`
-
-`git clone https://github.com/juju-solutions/interface-etcd.git`
-
-`git clone https://git.launchpad.net/interface-pgsql`
-
-`git clone https://github.com/juju-solutions/interface-redis.git`
-
-`git clone https://github.com/juju-solutions/interface-http.git`
-
-Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm tools" commands. Note also that each interface or layer is documented on its own repo site.
-
-We have gone further, and assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). Aside from cloning this repo (`git clone https://github.com/john-itcsolutions/smart-web.git`), one also needs to git clone the repo's above (10 in all) in the list of layers and interfaces above. These must be cloned into the "layers" and "interfaces" directories under "smart-web/".
-
-The charm appears to be ready to work, however we are having trouble getting our NVIDIA driver to load, and this seems to be preventing the docker-registry charm itself from working (a separate Canonical Ltd charm, which needs to be installed in the dbase-bchains model by cloning https://github.com/CanonicalLtd/docker-registry-charm.git to your outer working directory, and building and deploying  the charm with:
-
-`cd docker-registry-charm`
-
-`charm build -o ../docker-registry`
-
-`cd ../docker-registry && juju deploy ./docker-registry`
-
-`juju add-relation docker-registry easyrsa:client`
-
-`juju config docker-registry auth-basic-user='admin'  auth-basic-password='password'`
-
-export IP=`juju run --unit docker-registry/0 'network-get website --ingress-address'`
-
-export PORT=`juju config docker-registry registry-port`
-
-`export REGISTRY=$IP:$PORT`
-
-`juju add-relation docker-registry containerd`
-
-)
-
-Next we build the 'smart' docker image:
-
-`cd path/to/cheirrs/elastos-smartweb-service`
-
-`docker image build -t smart .`
-
-When completed, if docker registry were working, we could push our image to the registry:
-
-`juju run-action docker-registry/0 push image=smart tag=latest  --wait`
-
-`cd path/to/smart-web`
-
-Now within smart-web charm directory, we build then deploy smart-web:
-
-`charm build -o ..path/to/cheirrs`
-
-`cd ../cheirrs && juju deploy ./smart-web`
-
-`juju add-relation smart-web easyrsa:client`
-
-`juju add-relation docker-registry containerd`
-
-<!-- `juju config smart-web cuda-version=9.2.148-1`
-
-`juju config smart-web install-cuda=True` -->
-
-We would also like to be able to develop the postgresql database structure and details ('house' database) using pgadmin4. To this end we construct a 'pgadmin4' charm as follows (with inspiration from 'smart-web').
-
-From your outer working directory:
-
-`charm create pgadmin4`
-
-`cd pgadmin4`
-
-`mkdir interfaces`
-
-`mkdir layers && cd layers`
-
-Starting from the first (base) layer we need :
-
-`git clone https://github.com/juju-solutions/layer-docker-resource.git`
-
-`git clone https://github.com/juju-solutions/layer-docker.git`
-
-`git clone https://github.com/juju-solutions/layer-tls-client.git`
-
-`cd ../interfaces`
-
-`git clone https://github.com/juju-solutions/interface-dockerhost.git`
-
-`git clone https://github.com/tengu-team/interface-docker-image-host.git`
-
-`git clone https://github.com/juju-solutions/interface-docker-registry.git`
-
-`git clone https://github.com/juju-solutions/interface-etcd.git`
-
-`git clone https://git.launchpad.net/interface-pgsql`
-
-`git clone https://github.com/juju-solutions/interface-http.git`
-
-
-
-The layer.yaml, metadata.yaml and pgadmin4.py files are obtainable from 
-
-`git clone https://github.com/john-itcsolutions/pgadmin4.git`
-
-As above, so when completed, if docker registry were working, we could push our image to the registry:
-
-`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest  --wait`
-
-`cd path/to/pgadmin4`
-
-Now within pgadmin4 charm directory, we build then deploy pgadmin4:
-
-`charm build -o ..path/to/cheirrs`
-
-`cd ..path/to/cheirrs && juju deploy ./pgadmin4`
-
-`juju add-relation pgadmin4 easyrsa:client`
-
-`juju add-relation pgadmin4 containerd`
-
-
-.. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log.
-
-# TO BE CONTINUED .. 
-
-(Refer to https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135)
-
-
-
-## So far it seems that the charm will run to completion of setup on the original dbase-bchains model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to absence of NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry.
 
 _____________________________________________________________
 
