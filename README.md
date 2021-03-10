@@ -862,6 +862,10 @@ Now within smart-web charm directory, we build then deploy smart-web:
 
 `cd ../cheirrs && juju deploy ./smart-web`
 
+`juju add-relation smart-web easyrsa:client`
+
+`juju add-relation docker-registry containerd`
+
 <!-- `juju config smart-web cuda-version=9.2.148-1`
 
 `juju config smart-web install-cuda=True` -->
@@ -873,8 +877,6 @@ From your outer working directory:
 `charm create pgadmin4`
 
 `cd pgadmin4`
-
-`cd smart-web`
 
 `mkdir interfaces`
 
@@ -919,6 +921,11 @@ Now within pgadmin4 charm directory, we build then deploy pgadmin4:
 `charm build -o ..path/to/cheirrs`
 
 `cd ..path/to/cheirrs && juju deploy ./pgadmin4`
+
+`juju add-relation pgadmin4 easyrsa:client`
+
+`juju add-relation pgadmin4 containerd`
+
 
 .. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log.
 

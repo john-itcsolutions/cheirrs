@@ -19,44 +19,44 @@ from charms.reactive.helpers import data_changed
 
 
 class ProvidesDockerHost(RelationBase):
-scope = scopes.GLOBAL
+    scope = scopes.GLOBAL
 
-@hook('{provides:dockerhost}-relation-{joined,changed}')
-def changed(self):
-    self.set_state('{relation_name}.connected')
+    @hook('{provides:dockerhost}-relation-{joined,changed}')
+    def changed(self):
+        self.set_state('{relation_name}.connected')
 
-@hook('{provides:dockerhost}-relation-{broken,departed}')
-def broken(self):
-    self.remove_state('{relation_name}.connected')
+    @hook('{provides:dockerhost}-relation-{broken,departed}')
+    def broken(self):
+        self.remove_state('{relation_name}.connected')
 
-def configure(self, url):
-    relation_info = {
-        'url': url,
-    }
+    def configure(self, url):
+        relation_info = {
+            'url': url,
+        }
 
-    self.set_remote(**relation_info)
-    self.set_state('{relation_name}.configured')
+        self.set_remote(**relation_info)
+        self.set_state('{relation_name}.configured')
 
 
 class RequiresDockerHost(RelationBase):
-scope = scopes.GLOBAL
+    scope = scopes.GLOBAL
 
-auto_accessors = ['url']
+    auto_accessors = ['url']
 
-@hook('{requires:dockerhost}-relation-{joined,changed}')
-def changed(self):
-    conv = self.conversation()
-    if conv.get_remote('url'):
-        conv.set_state('{relation_name}.available')
+    @hook('{requires:dockerhost}-relation-{joined,changed}')
+    def changed(self):
+        conv = self.conversation()
+        if conv.get_remote('url'):
+            conv.set_state('{relation_name}.available')
 
-@hook('{requires:dockerhost}-relation-{departed,broken}')
-def broken(self):
-    conv = self.conversation()
-    conv.remove_state('{relation_name}.available')
+    @hook('{requires:dockerhost}-relation-{departed,broken}')
+    def broken(self):
+        conv = self.conversation()
+        conv.remove_state('{relation_name}.available')
 
-def configuration(self):
-    conv = self.conversation()
-    return {k: conv.get_remote(k) for k in self.auto_accessors}
+    def configuration(self):
+        conv = self.conversation()
+        return {k: conv.get_remote(k) for k in self.auto_accessors}
 
 
 @when_not('pgadmin4.installed')
