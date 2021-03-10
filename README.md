@@ -206,11 +206,12 @@ ________________________________________________________________
 
 You first install lxd:
 
-`sudo snap install ldx`
+`sudo snap install lxd`
 
 `sudo lxd init`
 
-Accept the defaults except storage backend must be 'dir' and ipv6 should be set to 'none'.
+storage type must be "dir" and ipv6 should be "none", otherwise all default answers are fine.
+
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
 
@@ -241,12 +242,6 @@ Next, you will need to add yourself to the microk8s group:
 `sudo su - $USER`   (quick reset of terminal)
 
 On the Host, you'll need to install these snaps to get started:
-
-`sudo snap install lxd`
-
-`lxd init`
-
-storage type must be "dir" and ipv6 should be "none", otherwise all default answers are fine.
 
 `sudo snap install juju --classic`
 
