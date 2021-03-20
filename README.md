@@ -529,10 +529,11 @@ You also need to make your own host.crt and host.key from a self signed certific
 You may need to wait until the registry installation has stabilised, then:
 
 (PLEASE NOTE: )
-
+```
 export IP=\`juju run --unit docker-registry/0 'network-get website --ingress-address'\`
 
 export PORT=\`juju config docker-registry registry-port\`
+```
 
 `export REGISTRY=$IP:$PORT`
 
