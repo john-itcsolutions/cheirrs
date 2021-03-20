@@ -437,17 +437,13 @@ Deploy the Kubernetes Charm
 
 `juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
 
+`juju add-unit -n 2 kubeapi-load-balancer`
+
 At this stage your microk8s/juju assemblage is converging towards stability. You can observe the status of the assemblage with
 
 `watch -c juju status --color` or, `juju status` for short.
 
-It may take a few hours if your network is slow. Be patient. Nevertheless we do not really require 3 workers, 2 masters and 3 etcd's so you may remove the majority of these machines.
-
-`juju remove-machine <etcd/1-machine-number> --force`
-
-.. and similarly for etcd/2, kubernetes-master/1, kubernetes-worker/1 and kubernetes-worker/2 ..
-
-The earlier in the deployment cycle that you remove these machines the better.
+It may take a few hours if your network is slow. Be patient.
 
 When you see everything 'green', you may continue.
 
@@ -554,6 +550,8 @@ This takes some time. When completed, if docker registry were working, we could 
 dpage/pgadmin4 already present:
 
 `juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest  --wait`
+
+_______________________________________________________________
 
 ALSO:
 
@@ -732,13 +730,7 @@ ______________________________________________________________
               ____________________________
               
 
-Deploy Redis, and make it contactable (you require at least 3 for a cluster ie "n3"):
-
-`juju deploy cs:~omnivector/redis -n3 --config cluster-enabled=true`
-
-followed by,
-
-`juju expose redis`
+There is no need to deploy Redis, as etcd takes care of caching duties with its key:value database.
 
 (Note; you are user 'ubuntu' here, so if you need a new password, just
 
@@ -750,9 +742,9 @@ Later, within the master postgresql database container, you will need to give po
 
 does this.
 
-To add, for example, a redis unit, simply
+To add, for example, a load-balancer unit, simply
 
-`juju add-unit redis`
+`juju add-unit -n 2 kubeapi-load-balancer`
 
 )
 ________________________________________________________________
