@@ -510,9 +510,11 @@ You also need to make your own host.crt and host.key from a self signed certific
 
 You may need to wait until the registry installation has stabilised, then:
 
-export IP=`juju run --unit docker-registry/0 'network-get website --ingress-address'`
+(PLEASE NOTE: )
 
-export PORT=`juju config docker-registry registry-port`
+export IP=\`juju run --unit docker-registry/0 'network-get website --ingress-address'\`
+
+export PORT=\`juju config docker-registry registry-port\`
 
 `export REGISTRY=$IP:$PORT`
 
@@ -697,19 +699,12 @@ ______________________________________________________________
 
 `juju add-relation pgadmin4 containerd`
 
+`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
 
 .. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log.
 
-# TO BE CONTINUED .. 
-
-(Refer to https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135)
-
-
-
 ## So far it seems that the charm will run to completion of setup on the original dbase-bchains model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to absence of NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry.
 
-
-`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
 
               ____________________________
               
@@ -722,7 +717,7 @@ followed by,
 
 `juju expose redis`
 
-Note; you are user 'ubuntu' here, so if you need a new password, just
+(Note; you are user 'ubuntu' here, so if you need a new password, just
 
 `sudo passwd ubuntu`
 
@@ -735,9 +730,11 @@ does this.
 To add, for example, a redis unit, simply
 
 `juju add-unit redis`
+
+)
 ________________________________________________________________
  
-## DATABASE
+## DATABASE: Internals
 
 ## Copy sql scripts; Build Database Schema:
 
@@ -747,7 +744,7 @@ From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scrip
 
 ## The following command would be possible only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
 
-`cd ../../../../ && juju scp dbase_setup.sh <machine number of postgresql master>:/home/ubuntu/ && juju scp create_users_script.sql <machine number of postgresql master>:/home/ubuntu/ &&  cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
+`cd ../../../../ && juju scp dbase_setup.sh <machine number of postgresql master>:/home/ubuntu/ && cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
 where some of the relevant .sql backup files are outside the 'cheirrs' repository, and generally unavailable publically.
 
