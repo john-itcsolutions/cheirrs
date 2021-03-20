@@ -544,11 +544,15 @@ Next we build the 'smart' docker image:
 
 `docker image build -t smart .`
 
-This takes some time. When completed, if docker registry were working, we could push our image to the registry:
+This takes some time. When completed, if docker registry were working, we could push our images to the registry:
 
 `juju run-action docker-registry/0 push image=smart tag=latest  --wait`
 
-BUT ALSO:
+dpage/pgadmin4 already present:
+
+`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest  --wait`
+
+ALSO:
 
 ## Blockchains-Database Server (dbase-bchains model) 
 
