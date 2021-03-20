@@ -439,6 +439,12 @@ Deploy the Kubernetes Charm
 
 `juju add-unit -n 2 kubeapi-load-balancer`
 
+`juju deploy hacluster`
+
+`juju config kubeapi-load-balancer ha-cluster-vip="192.168.0.1 192.168.0.2"`
+
+`juju relate kubeapi-load-balancer hacluster`
+
 At this stage your microk8s/juju assemblage is converging towards stability. You can observe the status of the assemblage with
 
 `watch -c juju status --color` or, `juju status` for short.
