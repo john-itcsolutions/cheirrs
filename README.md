@@ -467,11 +467,11 @@ The pgadmin4 docker container is available from Docker hub with:
 
 followed by:
 
-NOTE: MUCH OF THE FOLLOWING CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory:
+NOTE: MUCH OF THE FOLLOWING CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-workers/0 and /1):
 
-1. `juju deploy ./pgadmin4`
+1. `juju deploy ./pgadmin4 --to 7 --series  focal --force`
 
-2. `juju deploy ./smart-web`
+2. `juju deploy ./smart-web --to 8 --series  focal --force`
 
 and:
 
@@ -508,7 +508,9 @@ The above charms appear to be ready to work, however we are having trouble getti
 
 `charm build -o ../docker-registry`
 
-`cd ../docker-registry && juju deploy ./docker-registry`
+`cd ../docker-registry` 
+
+`juju deploy ./docker-registry --to 9 --series  focal --force`
 
 `juju add-relation docker-registry:cert-provider easyrsa:client`
 
