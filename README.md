@@ -508,9 +508,11 @@ The above charms appear to be ready to work, however we are having trouble getti
 
 `cd ../docker-registry && juju deploy ./docker-registry`
 
-`juju add-relation docker-registry easyrsa:client`
+`juju add-relation docker-registry:cert-provider easyrsa:client`
 
-`juju config docker-registry auth-basic-user='admin'  auth-basic-password='password'`
+`juju add-relation docker-registry:certificates easyrsa:client`
+
+`juju config docker-registry auth-basic-user='admin'  auth-basic-password='localhost'`
 
 You need to copy any CA.cert in your /etc/ssl/certs folder to <machine-number-docker-registry>:/home/ubuntu/, ie:
 
