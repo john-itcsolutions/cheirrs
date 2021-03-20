@@ -471,6 +471,22 @@ NOTE: MUCH OF THE FOLLOWING CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMI
 
 2. `juju deploy ./smart-web`
 
+and:
+
+`juju expose smart-web`
+
+`juju expose pgadmin4`
+
+`juju add-relation smart-web easyrsa:client`
+
+`juju add-relation smart-web containerd`
+
+`juju add-relation pgadmin4 easyrsa:client`
+
+`juju add-relation pgadmin4 containerd`
+
+`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
+
 as well as installing docker-registry.
 
 see following:
@@ -542,7 +558,7 @@ NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/
 
 ______________________________________________________________
 
-THE FOLLOWING CAN BE AVOIDED UNLESS YOU ARE INTERESTED IN HOW TO BUILD A CHARM .. { .. }
+THE FOLLOWING (in curly braces) CAN BE AVOIDED UNLESS YOU ARE INTERESTED IN HOW TO BUILD A CHARM .. { .. }
 _______________________________________________________________
 _______________________________________________________________
 
