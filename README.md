@@ -450,6 +450,11 @@ juju add-relation keepalived:website kubernetes-worker:kube-api-endpoint
 
 `export VIP_HOSTNAME=<your-hostname>`
 
+```
+juju config keepalived virtual_ip=$VIP
+juju config keepalived vip_hostname=$VIP_HOSTNAME
+```
+
 `juju config kubeapi-load-balancer extra_sans="$VIP $VIP_HOSTNAME"`
 
 `juju config kubernetes-master extra_sans="$VIP $VIP_HOSTNAME"`
