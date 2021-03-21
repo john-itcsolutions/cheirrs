@@ -437,13 +437,29 @@ Deploy the Kubernetes Charm
 
 `juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
 
-`juju add-unit -n 2 kubeapi-load-balancer`
+`juju deploy cs:~containers/keepalived`
 
-`juju deploy hacluster smart-web-hacluster`
+```
+juju add-relation keepalived:juju-info kubeapi-load-balancer:juju-info
+juju add-relation keepalived:lb-sink kubeapi-load-balancer:website
+juju add-relation keepalived:loadbalancer kubernetes-master:loadbalancer
+juju add-relation keepalived:website kubernetes-worker:kube-api-endpoint
+```
 
-`juju config kubeapi-load-balancer ha-cluster-vip="192.168.0.1 192.168.0.2"`
+`export VIP=<ipaddr of load balancer machine>`
 
-`juju relate kubeapi-load-balancer smart-web-hacluster`
+`export VIP_HOSTNAME=<your-hostname>`
+
+`juju config kubeapi-load-balancer extra_sans="$VIP $VIP_HOSTNAME"`
+
+`juju config kubernetes-master extra_sans="$VIP $VIP_HOSTNAME"`
+
+Once the new service shows "Ready" in juju status;
+
+```
+juju remove-relation kubernetes-worker:kube-api-endpoint kubeapi-load-balancer:website
+ juju remove-relation kubernetes-master:loadbalancer kubeapi-load-balancer:loadbalancer
+ ```
 
 At this stage your microk8s/juju assemblage is converging towards stability. You can observe the status of the assemblage with
 
