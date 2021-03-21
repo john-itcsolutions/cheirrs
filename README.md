@@ -439,11 +439,11 @@ Deploy the Kubernetes Charm
 
 `juju add-unit -n 2 kubeapi-load-balancer`
 
-`juju deploy hacluster`
+`juju deploy hacluster smart-web-hacluster`
 
 `juju config kubeapi-load-balancer ha-cluster-vip="192.168.0.1 192.168.0.2"`
 
-`juju relate kubeapi-load-balancer hacluster`
+`juju relate kubeapi-load-balancer smart-web-hacluster`
 
 At this stage your microk8s/juju assemblage is converging towards stability. You can observe the status of the assemblage with
 
@@ -457,46 +457,11 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju deploy -n 2 postgresql --storage pgdata=lxd,100G postgresql`
 
-To allow access for administrative purposes from anywhere on your LAN:
-
-we first need to set up pgadmin4 for database development purposes.
-
-The pgadmin4 docker container is available from Docker hub with:
-
-`docker pull dpage/pgadmin4`
-
-followed by:
-
-NOTE: MUCH OF THE FOLLOWING CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-workers/0 and /1):
-
-1. `juju deploy ./pgadmin4 --to 7 --series  focal --force`
-
-2. `juju deploy ./smart-web --to 8 --series  focal --force`
-
-and:
-
-`juju expose smart-web`
-
-`juju expose pgadmin4`
-
-`juju add-relation smart-web easyrsa:client`
-
-`juju add-relation smart-web containerd`
-
-`juju add-relation pgadmin4 easyrsa:client`
-
-`juju add-relation pgadmin4 containerd`
-
-`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
-
-as well as installing docker-registry.
-
-see following:
 ________________________________________________________________
 
-## Build and deploy docker-registry from CanonicalLTD's repo:
+## Build and deploy docker-registry from Canonical LTD's repo:
 
-The above charms appear to be ready to work, however we are having trouble getting our NVIDIA driver to load, and this seems to be preventing the docker-registry charm itself from working (a separate Canonical Ltd charm, which needs to be installed in the dbase-bchains model by 
+(a separate Canonical Ltd charm, which needs to be installed in the dbase-bchains model by:) 
 
 `git clone https://github.com/CanonicalLtd/docker-registry-charm.git`
 
@@ -508,9 +473,13 @@ The above charms appear to be ready to work, however we are having trouble getti
 
 `charm build -o ../docker-registry`
 
+*******************************************************
+
 `cd ../docker-registry` 
 
 `juju deploy ./docker-registry --to 9 --series  focal --force`
+
+(we deploy to kubernetes-worker/2)
 
 `juju add-relation docker-registry:cert-provider easyrsa:client`
 
@@ -545,6 +514,9 @@ export PORT=`juju config docker-registry registry-port`
 
 ).
 
+________________________________________________________________
+
+
 Next we build the 'smart' docker image:
 
 `cd path/to/cheirrs/elastos-smartweb-service`
@@ -555,9 +527,31 @@ This takes some time. When completed, if docker registry were working, we could 
 
 `juju run-action docker-registry/0 push image=smart tag=latest  --wait`
 
-dpage/pgadmin4 already present:
+NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-workers/0 and /1), as follows:
 
-`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest  --wait`
+1. `juju deploy ./smart-web --to 7 --series  focal --force`
+
+2. `juju deploy ./pgadmin4 --to 8 --series  focal --force`
+
+and:
+
+`juju expose smart-web`
+
+`juju expose pgadmin4`
+
+`juju add-relation smart-web easyrsa:client`
+
+`juju add-relation smart-web containerd`
+
+`juju add-relation pgadmin4 easyrsa:client`
+
+`juju add-relation pgadmin4 containerd`
+
+To allow access for administrative purposes from anywhere on your LAN:
+
+`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
+
+The above charms appear to be ready to work, however we are having trouble getting our NVIDIA driver to load correctly, and this seems to be preventing the docker-registry charm itself from working installing fully, ending in an error state.
 
 _______________________________________________________________
 
@@ -565,7 +559,7 @@ ALSO:
 
 ## Blockchains-Database Server (dbase-bchains model) 
 
-We turn to setting up the Blockchain/Database gRPC Server Deployment,
+We turn to finish setting up the Blockchain/Database gRPC Server Deployment,
 
 NOTE: As we don't own or control the elastos sub-modules, and since the cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py file is empty in the elastos-smartweb-service module, we have included ITCSA's version of __init__.py in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of __init__.py in sync with each other if you need to edit __init__.py, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine.
 
@@ -667,6 +661,14 @@ Now within smart-web charm directory, we build then deploy smart-web:
 
 We would also like to be able to develop the postgresql database structure and details ('house' database) using pgadmin4. To this end we construct a 'pgadmin4' charm as follows (with inspiration from 'smart-web').
 
+The pgadmin4 docker container is available from Docker hub with:
+
+`docker pull dpage/pgadmin4`
+
+This image would need to be tagged and pushed to the docker-registry as in this document above (for smart-web), if the docker-registry works for you.
+
+The following builds and deploys the pgadmin4 charm which will seek the requested image (dpage/pgadmin4) from the docker-registry, as specified in metadata.yaml.
+
 From your outer working directory:
 
 `charm create pgadmin4`
@@ -711,10 +713,7 @@ Now within pgadmin4 charm directory, we build then deploy pgadmin4:
 
 `charm build -o ..path/to/cheirrs`
 
-`cd ..path/to/cheirrs && juju deploy ./pgadmin4`  }
-
-______________________________________________________________
-______________________________________________________________
+`cd ..path/to/cheirrs && juju deploy ./pgadmin4`
 
 `juju expose smart-web`
 
@@ -722,23 +721,27 @@ ______________________________________________________________
 
 `juju add-relation smart-web easyrsa:client`
 
-`juju add-relation smart-web containerd`
+# `juju add-relation smart-web containerd`
 
 `juju add-relation pgadmin4 easyrsa:client`
 
-`juju add-relation pgadmin4 containerd`
+# `juju add-relation pgadmin4 containerd`
 
-`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
+`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`  }
 
-.. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log.
+______________________________________________________________
+______________________________________________________________
 
-## So far it seems that the charm will run to completion of setup on the original dbase-bchains model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to absence of NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry.
+
+.. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. The logs of units housed by other machines are available on those machines. eg you can find smart-web logs on machine 7/kubernetes-worker/0.
+
+## So far it seems that the charm would run to completion of setup on the original dbase-bchains model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to failure of loading process of kernel modules for the NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry. dpage/pgadmin4 is in the same situation, with image unable to be uploaded to the registry.
 
 
               ____________________________
               
 
-There is no need to deploy Redis, as etcd takes care of caching duties with its key:value database.
+There is no need to deploy Redis, as etcd takes care of caching duties with its clustered key:value database.
 
 (Note; you are user 'ubuntu' here, so if you need a new password, just
 
