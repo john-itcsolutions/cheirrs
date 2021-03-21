@@ -446,7 +446,7 @@ juju add-relation keepalived:loadbalancer kubernetes-master:loadbalancer
 juju add-relation keepalived:website kubernetes-worker:kube-api-endpoint
 ```
 
-`export VIP=<ipaddr of load balancer machine>`
+`export VIP=<virt_ipaddr of load balancer machine>`
 
 `export VIP_HOSTNAME=<your-hostname>`
 
