@@ -257,6 +257,8 @@ you will aleady find that there exists a 'microk8s/localhost' cloud. Later we wi
 
 Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, available:
 
+Note: After this installation of the 'kubeflow' model on the 'uk8s' controller, we will be installing a 'house' controller with 'dbase-bchains' model. The order of installation of these packages is important (why? because it doersn't ever work the other way!). So follow it.
+
 `cd /path/to/bundle-kubeflow`
 
 `python3 scripts/cli.py microk8s setup --controller uk8s`
