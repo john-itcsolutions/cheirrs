@@ -421,17 +421,13 @@ In a host terminal, from a second HDD if available, to save working files in cas
 
 Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, it recognised that localhost was already installed, and juju created a 'localhost' cloud for you to use. Verify this with `juju clouds`):
 
-(You may have to change ownership of files on your system to your own username. Do this with 
+(You should change ownership of files on your system to your own username. Do this with 
 
-`sudo chown -R <your-username-on-linux> path/to/<directory-tree>`
+`sudo chown -R <your-username-on-linux> ~ && sudo chown -R <your-username-on-linux> /tmp`
 
 ). Then:
 
 `juju bootstrap localhost house`
-
-If this command fails:
-
-`sudo juju bootstrap localhost house`
 
 Add a model named "dbase-bchains"
 
@@ -750,11 +746,11 @@ Now within pgadmin4 charm directory, we build then deploy pgadmin4:
 
 `juju add-relation smart-web easyrsa:client`
 
-# `juju add-relation smart-web containerd`
+`juju add-relation smart-web containerd`
 
 `juju add-relation pgadmin4 easyrsa:client`
 
-# `juju add-relation pgadmin4 containerd`
+`juju add-relation pgadmin4 containerd`
 
 `juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`  }
 
