@@ -173,6 +173,12 @@ Confirm:
 
 `cat /etc/modprobe.d/blacklist-nvidia-nouveau.conf`
 
+You also need to delete the blacklisting entry for nvidia in /etc/modprobe.d. First find and note where tyhe entry exists:
+
+`grep nvidia /etc/modprobe.d/* /lib/modprobe.d/*`
+
+Delete all occurrences of nvidia entries found.
+
 Update kernel initramfs:
 
 `sudo update-initramfs -u`
