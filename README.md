@@ -924,7 +924,7 @@ __________________________________________________________________
 
 Inside your postgresql Master (
 
-`juju ssh <postgresql_Master_machine_number>` 
+`juju ssh <postgresql_Master_machine_number>`, or if you are already acting as user 'postgres' on postgresql-master, simply `exit` 
 
 )
 
