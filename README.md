@@ -585,6 +585,10 @@ and:
 
 `juju add-relation pgadmin4 containerd`
 
+`juju add-relation postgresql:db smart-web`
+
+`juju add-relation postgresql:db pgadmin4`
+
 To allow access for administrative purposes from anywhere on your LAN:
 
 `juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
@@ -593,7 +597,6 @@ The above charms appear to be ready to work, however we are having trouble getti
 
 _______________________________________________________________
 
-<<<<<<< HEAD
 ALSO:
 
 ## Blockchains-Database Server (dbase-bchains model) 
@@ -603,8 +606,6 @@ We turn to finish setting up the Blockchain/Database gRPC Server Deployment,
 NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` file is empty in the elastos-smartweb-service module, we have included ITCSA's version of `__init__.py` in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine.
 
 ______________________________________________________________
-=======
->>>>>>> 498249eaf152776b307825d9ab642c8594296a07
 
 THE FOLLOWING (in curly braces) CAN BE AVOIDED UNLESS YOU ARE INTERESTED IN HOW TO BUILD A CHARM .. { .. }
 _______________________________________________________________
@@ -771,7 +772,13 @@ Now within the cheirrs directory deploy pgadmin4:
 
 `juju add-relation pgadmin4 containerd`
 
-`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`  }
+`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>` 
+
+`juju add-relation postgresql:db smart-web`
+
+`juju add-relation postgresql:db pgadmin4`
+
+ }
 
 ______________________________________________________________
 ______________________________________________________________
