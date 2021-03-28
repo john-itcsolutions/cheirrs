@@ -627,9 +627,11 @@ Now, we need to begin to assemble the smart-web charm, layer by layer, before we
 
 Please refer to  https://github.com/juju/layer-index. 
 
-`git clone https://github.com/john-itcsolutions/smart-web`
+`git clone https://github.com/john-itcsolutions/cheirrs`
 
-`cd smart-web`
+Within this repo, the smart-web charm has been built as below, however only here in the repo can we share the other files necessary to build the charm from scratch.
+
+`cd cheirrs/smart-web`
 
 The layer.yaml file shows the base layers in the smart-web charm.
 
@@ -642,6 +644,8 @@ The second stage consists of "interfaces" and "charm-layers", which we likewise 
 This is how we proceeded to construct the charm:
 
 From the outer working directory:
+
+`cd ../../`
 
 `charm create smart-web`
 
@@ -685,16 +689,17 @@ Starting from the first (base) layer we need:
 
 Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm tools" commands. Note also that each interface or layer is documented on its own repo site.}
 
-We have gone further, and assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). Aside from cloning this repo (`git clone https://github.com/john-itcsolutions/smart-web.git`), one also needs to git clone the repo's above (10 in all) in the list of layers and interfaces above. These must be cloned into the "layers" and "interfaces" directories under "smart-web/".
+We have gone further, and assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). Aside from cloning this repo (inside the repo from `git clone https://github.com/john-itcsolutions/cheirrs.git`), one also needs to git clone the repo's above (10 in all) in the list of layers and interfaces above. These must be cloned into the "layers" and "interfaces" directories under "smart-web/".
 
-
-`cd path/to/smart-web`
+`cd path/to/smart-web` (not the smart-web in cheirrs)
 
 Now within smart-web charm directory, we build then deploy smart-web:
 
-`charm build -o ..path/to/cheirrs`
+`mkdir ../smart`
 
-`cd ../cheirrs && juju deploy ./smart-web`
+`charm build -o ../smart`
+
+`cd ../smart && juju deploy ./smart-web`
 
 `juju add-relation smart-web easyrsa:client`
 
@@ -744,17 +749,15 @@ Starting from the first (base) layer we need :
 
 The layer.yaml, metadata.yaml and pgadmin4.py files are obtainable from 
 
-`git clone https://github.com/john-itcsolutions/pgadmin4.git`
+`git clone https://github.com/john-itcsolutions/cheirrs.git`
 
-As above, so when completed, if docker registry were working, we could push our image to the registry: 
+As above, when completed, if docker registry were working, we could push our image to the registry. We will simply deploy pgadmin4 from the cheirrs repo.
 
-`cd path/to/pgadmin4`
+`cd cheirrs`
 
-Now within pgadmin4 charm directory, we build then deploy pgadmin4:
+Now within the cheirrs directory deploy pgadmin4:
 
-`charm build -o ..path/to/cheirrs`
-
-`cd ..path/to/cheirrs && juju deploy ./pgadmin4`
+`juju deploy ./pgadmin4`
 
 `juju expose smart-web`
 
