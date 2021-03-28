@@ -942,7 +942,7 @@ As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & g
 
 `su postgres`
 
-`psql house`
+`psql haus`
 
 Now you are interfaced to the house database.
 
