@@ -37,7 +37,8 @@ lxd, juju, kubernetes and Kubeflow. Also:
 
 https://jaas.ai/u/stub/postgresql (PostgreSQL without PostGIS initially)
 
-https://jaas.ai/u/juju/redis-charmers (Redis memory-cached, and backed-up, query server for common and predictable transactions)
+We rely on the "etcd" component of the kubernetes charm-bundle to provide the in-memory, "key-value" query cache servers for the database transactions,
+replacing Redis with this.
 
 TensorFlow by Google. 
 
