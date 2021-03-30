@@ -7,8 +7,7 @@ To tackle a full Kubernetes installation, ideally you would need a 32 GB RAM; 25
 
 We base initial development such as this locally. It's cheaper!
 
-You need to develop initially on docker. ITCSA uses Ubuntu 18.04 as host platform, for full compatibility with NVIDIA Cuda Cards, drivers and toolkits.
-
+You need to develop initially on docker. ITCSA uses Ubuntu 20.04 as host platform.
 You will not need an Extreme Gaming level of computer for Docker-based (initial - eg. database) work without Kubernetes.
 
 See our website at https://www.itcsolutions.com.au/kubernetes-yaml-file-example/ for an older but more visual idea of this project and others.
@@ -48,79 +47,38 @@ ______________________________________________________________
 
 ## Preliminaries
 
-<!-- Check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
+Check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
 
 Install kernel headers as per documentation for kernel matching your running version. The versions must match exactly. See above docs.
 
 _____________________________________________________________
 
-Secondly, check the availability of kernel source code for the version of the ubuntu linux kernel you are running (yes, ubuntu's kernel is an enhanced not vanilla linux kernel - you may need to enter the grub menu at boot time, to boot into kernel version 5.3.0 (on ubuntu 18.04) as the sources for the ubuntu-5.4.0-hwe version are not available). You can determine your running version with 
+Alternatively you may use the system based package manager and installer 'synaptic' with:
 
-`uname -r`
+`sudo apt install synaptic`
 
-You may also determine the version of gcc used to compile your running kernel with:
+Run synaptic from Applications tile.
+
+But first:
+
+`sudo apt install build-essential`
 
 `cat /proc/version`
 
-To downgrade from kernel 5.4.0 to 5.3.0 you `sudo reboot` and as the boot/BIOS is coming up, tap "esc" repeatedly until you can select "advanced options" (ENTER) at the next (grub) menu, then, using the arrow keys, select kernel version 5.3.0, and press ENTER. You must find and install (in /usr/src) the correct kernel sources for your running kernel version.
-
-Also, the gcc compiler version you have as default may not match the version used to actually compile the 5.3.0 sources to a runable kernel image in object code. You require gcc version 7.4.0 (for ubuntu-5.3.0-hwe (signed) kernel on 18.04).
-
-(Check your default gcc version:
+The previous command gives the running kernel version and gcc version it was compiled under. The gcc version mentioned there must match exactly with the result of:
 
 `gcc -v`
 
-)
+(the version of gcc running currently)
 
-This is not trivial. It involves compiling the compiler from souces, as 7.4.0 is also unavailable as a binary distribution. You need to follow https://linuxhostsupport.com/blog/how-to-install-gcc-on-ubuntu-18-04/.
+Make sure you also have the linux-source files for your kernel:
 
-Then you must set up symbolic links and PATH and LD_LIBRARY_PATH environment variables as follows, by editing /root/.bashrc as root, and appending this:
+`sup apt install linux-source`
 
-`export PATH=/usr/local/gcc-7.4/bin:$PATH
-export LD_LIBRARY_PATH=/usr/local/gcc-7.4/lib64:$LD_LIBRARY_PATH
-export PATH=$PATH:/usr/local/cuda-11.2/bin
-export LD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64:$LD_LIBRARY_PATH
-export LOAD_LIBRARY_PATH=/usr/local/cuda-11.2/lib64:$LOAD_LIBRARY_PATH`
+and check /usr/src for existence of correct kernel header files.
 
-(then `su - $USER`)
-
-and by:
-
-`sudo rm -f /usr/bin/cc`
-
-`sudo rm -f /usr/bin/gcc`
-
-then:
-
-`sudo ln -s /usr/localgcc-7.4/bin/gcc /usr/bin/cc `
-
-`sudo ln -s /usr/localgcc-7.4/bin/gcc /usr/bin/gcc `
-
-Check gcc version:
-
-`gcc -v`
-
+Then launch 'synaptic' and carefully mark all nvidia and cuda packages, and relevant kernel modules for your version as well as relevant nvidia/cuda libraries for installation. Then 'apply' to install.
 ________________________________________________________________
-
-Alternatively you may have the ubuntu linux 5.4.0 kernel with gcc version 7.5.0. In this case you can leave your gcc as is (or if not present:
-
-`sudo apt-get install build-essential`
-
- - check version
- 
- `gcc -v`
- 
- if this matches gcc version from 
- 
- `cat /proc/version`
- 
- you're fine!)
-
- You may obtain the sources from https://packages.ubuntu.com/focal/linux-source-5.4.0
-
- The download should be copied to /usr/src and then from /usr/src:
-
- `sudo tar -zxvf linux_5.4.0.orig*`
 
 The system's nouveau drivers need to be blacklisted in /etc/modprobe.d as they block NVIDIA Driver installation, and you need to find a basic xorg.conf template to save in /etc/X11/xorg.conf.
 
@@ -131,6 +89,12 @@ The system's nouveau drivers need to be blacklisted in /etc/modprobe.d as they b
 Confirm:
 
 `cat /etc/modprobe.d/blacklist-nvidia-nouveau.conf`
+
+Also, we need to remove blacklisting nvidia entries
+
+`sudo grep nvidia /etc/modprobe.d/* /lib/modprobe.d/*`
+
+And remove all entries for nvidia.
 
 Update kernel initramfs:
 
@@ -143,64 +107,6 @@ Update kernel initramfs:
 `nvidia-xconfig`
 
 but it requires a basic one-device/screen initial file to work on)
-
-At the point of installing the CUDA toolkit
-
-Download and Install CUDA Toolkit & Driver:
-
-`wget https://developer.download.nvidia.com/compute/cuda/11.2.1/local_installers/cuda_11.2.1_460.32.03_linux.run`
-
-Now, noting the placement of the run file, you should reboot so that you are in run level 3 (no gui - no X server operating).
-
-This involves `sudo reboot` followed by tapping "esc" as the system reboots and BIOS appears. Enter using arrows at 'Advanced Options' and select kernel 5.3.0 . Once the correct kernel is highlighted/selected, press 'e' to edit the grub menu for that kernel. Arrow down to line beginning with 'linux', press 'end' key and type `<space>3` to boot into runlevel 3. Then press F10 to continue boot process. You will be at a command line. Login with username and password as usual. In the Downloads folder (or wherever you placed the run file:)
-
-`sudo sh ./cuda_11.2.1_460.32.03_linux.run`
-
-Follow your own nose.
-
-After completion,
-
-`nvidia-xconfig`
-
- -->
-
- The system's nouveau drivers need to be blacklisted in /etc/modprobe.d as they block NVIDIA Driver installation.
-
-`sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"`
-
-`sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"`
-
-Confirm:
-
-`cat /etc/modprobe.d/blacklist-nvidia-nouveau.conf`
-
-You also need to delete any blacklisting entries for nvidia in /etc/modprobe.d. First find and note where the entries exist:
-
-`grep nvidia /etc/modprobe.d/* /lib/modprobe.d/*`
-
-Delete all occurrences of nvidia entries found.
-
-Update kernel initramfs:
-
-`sudo update-initramfs -u`
-
-`sudo reboot`
-
-`sudo apt-get install nvidia-cuda-toolkit`
-
-`sudo reboot`
-
-Check the state of success/failure of the above operation with;
-
-`nvidia-smi`
-
-also:
-
-`nvcc`
-
-provides some information, as does:
-
-`ubuntu-drivers devices`
 
 We continue by installing Kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
 ________________________________________________________________
