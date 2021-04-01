@@ -71,39 +71,6 @@ ______________________________________________________________
 
 ## Preliminaries
 
-Check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
-
-Install kernel headers as per documentation for kernel matching your running version. The versions must match exactly. See above docs.
-
-_____________________________________________________________
-
-Alternatively you may use the system based package manager and installer 'synaptic' with:
-
-`sudo apt install synaptic`
-
-Run synaptic from Applications tile.
-
-But first:
-
-`sudo apt install build-essential`
-
-`cat /proc/version`
-
-The previous command gives the running kernel version and gcc version it was compiled under. The gcc version mentioned there must match exactly with the result of:
-
-`gcc -v`
-
-(the version of gcc running currently)
-
-Make sure you also have the linux-source files for your kernel:
-
-`sup apt install linux-source`
-
-and check /usr/src for existence of correct kernel header files.
-
-Then launch 'synaptic' and carefully mark all nvidia and cuda packages, and relevant kernel modules for your version as well as relevant nvidia/cuda libraries for installation. Then 'apply' to install.
-________________________________________________________________
-
 The system's nouveau drivers need to be blacklisted in /etc/modprobe.d as they block NVIDIA Driver installation, and you need to find a basic xorg.conf template to save in /etc/X11/xorg.conf.
 
 `sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"`
@@ -130,14 +97,45 @@ Update kernel initramfs:
 
 `nvidia-xconfig`
 
-but it requires a basic one-device/screen initial file to work on)
+but it requires a basic one-device/screen initial file to work on) first.
 
-We continue by installing Kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
+Now,
+
+check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
+
+Install kernel headers as per documentation for kernel matching your running version. The versions must match exactly. See above docs.
+
+_____________________________________________________________
+
+
+Alternatively you may use the system based package manager and installer 'synaptic' (recommended by NVIDIA themselves) with:
+
+`sudo apt install synaptic`
+
+`sudo apt install build-essential`
+
+`cat /proc/version`
+
+The previous command gives the running kernel version and gcc version it was compiled under. The gcc version mentioned there must match exactly with the result of:
+
+`gcc -v`
+
+(the version of gcc running currently)
+
+Make sure you also have the linux-source files for your kernel:
+
+`sudo apt install linux-source`
+
+and check /usr/src for existence of correct kernel header and kernel source files.
+
+Run synaptic from Applications tile.
+
+Carefully mark all nvidia and cuda packages, and relevant kernel modules for your version as well as relevant nvidia/cuda libraries for installation. Then 'apply' to install. This is quite a laborious process. Try to be patient and careful. Pay attention to kernel versions, as the installer errors out with non-matching versions amongst software.
+
 ________________________________________________________________
 
 
-On Ubuntu 20.04 you have to go through a similar process.
-
+We continue by installing Kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
 ________________________________________________________________
 
 
