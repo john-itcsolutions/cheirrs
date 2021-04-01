@@ -12,6 +12,30 @@ You will not need an Extreme Gaming level of computer for Docker-based (initial 
 
 See our website at https://www.itcsolutions.com.au/kubernetes-yaml-file-example/ for an older but more visual idea of this project and others.
 
+The Front End dApp corresponding to this project is contained in a private repository but it uses the Ionic Platform for web app development. However the Ionic system must be used in conjunction with the newly developing 'Elastos Essentials' package. This package will include all necessary interfaces for the Elastos Ecosystem from the points of view of both developers and users. You can follow this development process (expected to introduce the first stable distribution around July, 2021) at:
+
+https://github.com/elastos/Elastos.Essentials
+
+You would also require some dev tools and the openjdk for Java:
+
+```
+# Base requirements 
+sudo apt -y install openjdk-8-jdk build-essential curl dirmngr apt-transport-https lsb-release ca-certificates
+# Install NodeJS 12 instead of 8 or 10
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt -y install nodejs
+```
+
+As well as installing Ionic:
+
+`sudo npm i -g @ionic-cli`
+
+The Ionic docs are at:
+
+https://ionicframework.com/docs
+
+Currently (April 2021) the Elastos Developer Documentation does not address development with the new Elastos Essentials.
+
 ## Get:
 
 Docker for Ubuntu: https://docs.docker.com/engine/install/ubuntu/  - SAFEST WAY!
