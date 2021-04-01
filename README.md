@@ -93,13 +93,19 @@ Update kernel initramfs:
 
 `sudo update-initramfs -u`
 
-`sudo reboot`
-
 (After installation, NVIDIA can configure the X server with:
 
-`nvidia-xconfig`
+`sudo nvidia-xconfig`
+
+)
 
 but it requires a basic one-device/screen initial file to work on) first.
+
+It is recommended to disable the X11 Server (the normal Window System and Manager) as you perform the following reboot. This involves the normal 'sudo reboot' but as the computer comes back up, you need to tap the <Esc> key continually until you open the bootloader (Grub) menu. You need to select the 'Advanced options' item with arrow key down one and <enter>, then <e> (to edit) at the top kernel entry in the menu. Then at the file revealed, you arrow down to the line beginning with "linux", hit the <end> key, and enter <nomodprobe> without the brackets after a space from the end of the existing line. Then hit F10 and the system will reboot into a non-X-server (vesa-driven) mode such that the NVIDIA driver will not be blocked by the X11 server, as you install the NIVIDIA/CUDA software. The quality of screen experience obtainable on the vesa system is definitely inferior to that available using the normal X server, however the performance is restored after the next reboot, until you repeat the above "nomodeset" kernel parameter setting procedure.
+
+`sudo reboot`
+
+In "vesa" mode:
 
 Now,
 
@@ -107,8 +113,7 @@ check your system following here: https://docs.nvidia.com/cuda/cuda-installation
 
 Install kernel headers as per documentation for kernel matching your running version. The versions must match exactly. See above docs.
 
-_____________________________________________________________
-
+OR:
 
 Alternatively you may use the system based package manager and installer 'synaptic' (recommended by NVIDIA themselves) with:
 
@@ -132,7 +137,19 @@ and check /usr/src for existence of correct kernel header and kernel source file
 
 Run synaptic from Applications tile.
 
-Carefully mark all nvidia and cuda packages, and relevant kernel modules for your version as well as relevant nvidia/cuda libraries for installation. Then 'apply' to install. This is quite a laborious process. Try to be patient and careful. Pay attention to kernel versions, as the installer errors out with non-matching versions amongst software.
+Carefully mark all nvidia and cuda packages, and relevant kernel modules for your version as well as relevant nvidia/cuda libraries for installation. Then 'apply' to install. This is quite a laborious process. Try to be patient and careful. Pay attention to kernel versions, as the installer errors out with non-matching versions amongst software. Now, ensure you have a basic single-device-and-screen /etc/X11/xorg.conf file for NVIDIA to work with, and:
+
+`sudo nvidia-xconfig`
+
+IF YOU HAVE BEEN SUCCESSFUL, UPON REBOOT YOU WILL FIND THE FOLLOWING WORKS:
+
+`sudo reboot`
+
+(No need to use vesa again)
+
+`nvidia-smi`
+
+should produce a positive message.
 
 ________________________________________________________________
 
