@@ -16,7 +16,7 @@ The Front End dApp corresponding to this project is contained in a private repos
 
 https://github.com/elastos/Elastos.Essentials
 
-You would also require some dev tools and the openjdk for Java:
+You would also require some dev tools and the openjdk for Java, as well as nodejs@12.x:
 
 ```
 # Base requirements 
