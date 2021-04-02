@@ -71,7 +71,7 @@ The predominant language used to code for this project is Python (here, mainly v
 
 ______________________________________________________________
 
-## Preliminaries
+## Preliminaries: NOTE The following remarks on installing the Nvidia and Cuda systems constitute a work in progress only:
 
 The system's nouveau drivers need to be blacklisted in /etc/modprobe.d as they block NVIDIA Driver installation, and you need to find a basic xorg.conf template to save in /etc/X11/xorg.conf.
 
@@ -205,7 +205,7 @@ If you
 
 `juju clouds`
 
-you will aleady find that there exists a 'microk8s/localhost' cloud. Later we will set up another 'localhost/localhost' cloud with different properties, for the main blockchains and database servers in a kubernetes installation.
+you will aleady find that there exists a 'microk8s/localhost' cloud. Later we will set up another 'localhost/localhost' cloud with different properties, for the main blockchains, database schema and database servers in a kubernetes installation.
 
 Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, available:
 
