@@ -900,7 +900,7 @@ As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & g
 
 `psql haus`
 
-Now you are interfaced to the house database.
+Now you are interfaced to the haus database.
 
 -- Enable PostGIS
 
