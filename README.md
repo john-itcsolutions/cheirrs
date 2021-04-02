@@ -28,7 +28,7 @@ sudo apt -y install nodejs
 
 As well as installing Ionic:
 
-`sudo npm i -g @ionic-cli`
+`sudo npm i -g @ionic/cli`
 
 The Ionic docs are at:
 
