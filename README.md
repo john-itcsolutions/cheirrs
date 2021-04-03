@@ -357,7 +357,7 @@ ______________________________________________________________
 
 # There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with Kubeflow above utilises MongoDB, a no-SQL, non-relational database system, as one of the persistence stores as well as Mariadb (a resurrection of the opensource version of mysql) ..
 
-As noted below, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and/or model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('house') on the 'house' controller and the 'dbase-bchains' model (see following) therein.
+As noted below, it is possible, using cross-model referencing, and "offers", to enable an application on a separate controller and/or model, eg the kubeflow model in the uk8s controller, (or just a separate model on the same controller) to access the PostgreSQL/PostGIS database ('haus') on the 'house' controller and the 'dbase-bchains' model (see following) therein.
 
 See below at the "## Set up Cross-Model Referenced "offer" .. " heading.
 
@@ -438,27 +438,27 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 ________________________________________________________________
 
-## Build and deploy docker-registry from Canonical LTD's repo:
+## Deploy docker-registry from cheirrs repo:
 
-(a separate Canonical Ltd charm, which needs to be installed in the dbase-bchains model by:) 
+(a separate Canonical Ltd charm, which was installed in the cheirrs repository and built by: 
 
 `git clone https://github.com/CanonicalLtd/docker-registry-charm.git`
-
- to your outer working directory, and building and deploying  the charm with:
 
 `sudo snap install charm --classic`
 
 `cd docker-registry-charm`
 
-`charm build -o ../docker-registry`
+`charm build -o ../cheirrs`
+
+)
 
 *******************************************************
 
-`cd ../docker-registry` 
+`cd ../cheirrs` 
 
 `juju deploy ./docker-registry --to 9 --series  focal --force`
 
-(we deploy to kubernetes-worker/2)
+(We are deploying to kubernetes-worker/2)
 
 `juju add-relation docker-registry:cert-provider easyrsa:client`
 
@@ -513,7 +513,7 @@ This takes some time. When completed, if docker registry were working, we could 
 
 `juju run-action docker-registry/0 push image=smart tag=latest  --wait`
 
-NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-workers/0 and /1), as follows:
+NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-masters/0 and /1), as follows:
 
 1. `juju deploy ./smart-web --to 5 --series  focal --force`
 
@@ -524,6 +524,8 @@ NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADM
 (This is kubernetes-master/1)
 
 3. `juju deploy ./pgadmin4 --to 8 --series  focal --force`
+
+(This is kubernetes-worker/1)
 
 and:
 

@@ -1,0 +1,3 @@
+name: peer-discovery
+summary: Minimalist implementation of a peer relation. Only usfefull for implicit access to private-address of peers.
+version: 1

@@ -1,0 +1,37 @@
+"name": "docker-registry"
+"summary": "Registry for docker images"
+"maintainer": "Kevin Monroe <kevin.monroe@canonical.com>"
+"description": |-
+  Service for hosting docker images
+"tags":
+- "misc"
+- "containers"
+- "layer"
+- "storage"
+"series":
+- "focal"
+- "bionic"
+- "xenial"
+"requires":
+  "certificates":
+    "interface": "tls-certificates"
+  "cert-provider":
+    "interface": "tls-certificates"
+"provides":
+  "nrpe-external-master":
+    "interface": "nrpe-external-master"
+    "scope": "container"
+  "dockerhost":
+    "interface": "dockerhost"
+    "scope": "container"
+  "sdn-plugin":
+    "interface": "sdn-plugin"
+    "scope": "container"
+  "docker-registry":
+    "interface": "docker-registry"
+  "website":
+    "interface": "http"
+"peers":
+  "peer":
+    "interface": "peer-discovery"
+"subordinate": !!bool "false"

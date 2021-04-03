@@ -1,0 +1,99 @@
+"debug":
+  "description": "Collect debug data"
+"upgrade-docker":
+  "description": "Force upgrades Docker to latest repository version"
+"clean-containers":
+  "description": "Garbage collect non-running containers"
+"clean-images":
+  "description": "Garbage collect non-running images"
+  "options":
+    "untagged":
+      "type": "boolean"
+      "description": "Only remove untagged"
+      "default": !!bool "true"
+"images":
+  "description": |
+    List images known by this registry.
+  "params":
+    "options":
+      "type": "string"
+      "default": ""
+      "description": |
+        Space separated options to pass to the underlying 'docker images'
+        command. For example, to list all images (including intermediates)
+        along with digests, run this action with 'options="--all --digests"'.
+    "repository":
+      "type": "string"
+      "default": ""
+      "description": |
+        Optional [REPOSITORY[:TAG]] to list images in a given repository. If
+        unspecified, all images known to the registry are listed.
+  "additionalProperties": !!bool "false"
+"push":
+  "description": |
+    Tag and push an image to this registry.
+  "params":
+    "image":
+      "type": "string"
+      "default": ""
+      "description": |
+        Image name, which may include an optional :version string. If the
+        version is omitted, docker will assume ':latest'. This may be an
+        unqualified local image (e.g. ubuntu:18.04) or a fully qualified
+        remote registry (e.g. myregistry.example.com:5000/myimage:latest).
+    "pull":
+      "type": "boolean"
+      "default": !!bool "true"
+      "description": "Pull the given image before tag/push."
+    "tag":
+      "type": "string"
+      "default": ""
+      "description": |
+        Tag name to use. By default, images are tagged with
+        'net_location/name:version'.
+  "required": ["image"]
+  "additionalProperties": !!bool "false"
+"rmi":
+  "description": |
+    Remove image(s) from this registry.
+  "params":
+    "options":
+      "type": "string"
+      "default": ""
+      "description": |
+        Space separated options to pass to the underlying 'docker rmi'
+        command. For example, to force image removal, run this action with
+        'options="--force"'.
+    "image":
+      "type": "string"
+      "default": ""
+      "description": |
+        Image (or space separated images) to remove. This can be be an image
+        id, tag, or digest.
+  "required": ["image"]
+  "additionalProperties": !!bool "false"
+"start":
+  "description": |
+    Start a named registry container. With no arguments, this action starts
+    the registry container configured by the charm 'registry-name' option.
+  "params":
+    "name":
+      "type": "string"
+      "default": ""
+      "description": "Optional name of the registry container to start."
+  "additionalProperties": !!bool "false"
+"stop":
+  "description": |
+    Stop a named registry container. With no arguments, this action stops
+    the registry container configured by the charm 'registry-name' option.
+  "params":
+    "name":
+      "type": "string"
+      "default": ""
+      "description": "Optional name of the registry container to stop."
+    "remove":
+      "type": "boolean"
+      "default": !!bool "true"
+      "description": |
+        Remove the registry container after stopping.
+  "additionalProperties": !!bool "false"

@@ -1,0 +1,48 @@
+"includes":
+- "layer:options"
+- "layer:basic"
+- "layer:status"
+- "interface:nrpe-external-master"
+- "layer:debug"
+- "layer:nagios"
+- "interface:dockerhost"
+- "interface:sdn-plugin"
+- "interface:tls-certificates"
+- "layer:leadership"
+- "layer:apt"
+- "layer:docker"
+- "layer:tls-client"
+- "interface:docker-registry"
+- "interface:http"
+- "interface:peer-discovery"
+"exclude": [".travis.yml", "tests", "tox.ini", "test-requirements.txt", "unit_tests",
+  "LAYER_README.md", "tests/10-deploy.py", "tests/tests.yaml", ".tox", "__pycache__"]
+"options":
+  "apt":
+    "packages":
+    - "apache2-utils"
+    - "python3-yaml"
+    "version_package": ""
+    "full_version": !!bool "false"
+    "keys": []
+  "basic":
+    "packages": []
+    "python_packages": []
+    "use_venv": !!bool "true"
+    "include_system_packages": !!bool "false"
+  "leadership": {}
+  "status":
+    "patch-hookenv": !!bool "true"
+  "nagios": {}
+  "debug": {}
+  "docker":
+    "skip-install": !!bool "false"
+  "tls-client":
+    "ca_certificate_path": ""
+    "server_certificate_path": ""
+    "server_key_path": ""
+    "client_certificate_path": ""
+    "client_key_path": ""
+  "docker-registry": {}
+"repo": "https://github.com/CanonicalLtd/docker-registry-charm"
+"is": "docker-registry"
