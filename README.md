@@ -531,6 +531,8 @@ and:
 
 `juju expose pgadmin4`
 
+`juju relate smart-web kubernetes-master`
+
 `juju add-relation smart-web easyrsa:client`
 
 `juju add-relation smart-web containerd`
