@@ -515,9 +515,15 @@ This takes some time. When completed, if docker registry were working, we could 
 
 NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-workers/0 and /1), as follows:
 
-1. `juju deploy ./smart-web --to 7 --series  focal --force`
+1. `juju deploy ./smart-web --to 5 --series  focal --force`
 
-2. `juju deploy ./pgadmin4 --to 8 --series  focal --force`
+(This is kubernetes-master/0)
+
+2. `juju deploy ./smart-web --to 6 --series  focal --force`
+
+(This is kubernetes-master/1)
+
+3. `juju deploy ./pgadmin4 --to 8 --series  focal --force`
 
 and:
 
