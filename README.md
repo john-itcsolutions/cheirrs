@@ -3,6 +3,8 @@
 # CHEIRRS
 Project based on  Lxd, Juju, Charms and Kubernetes merged with Cyber Republic's Elastos Smartweb gRPC-based Blockchain and Database Server. Database ORM, reflection (at initialisation) and querying uses SQLAlchemy. The blockchain end of a transaction occurs first, followed by writing of data to Postgres via the "etcd" cluster on the Kubernetes installation. Etcd replaces a Redis or similar cluster of query-caching servers, for improvement of throughput to and from the 'haus' database.
 
+The gRPC protocols replace the older style REST APIs, for communicating requests and data inputs from the client and responses from the blockchain or database, all via the smart-web server. Here the gRPC protocols are implemented in Python.
+
 To tackle a full Kubernetes installation, ideally you would need a 32 GB RAM; 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, your Kubeflow installation will go much more easily with an 8 core Host rather than a 4 core one. You really need an Accelerator NVIDIA GPU of at least 10GB vRAM. ITCSA is using a 24GB NVIDIA Tesla K80.
 
 We base initial development such as this locally. It's cheaper!
