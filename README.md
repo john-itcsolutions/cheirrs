@@ -5,7 +5,7 @@ Project based on  Lxd, Juju, Charms and Kubernetes merged with Cyber Republic's 
 
 gRPC protocols replace the older style REST APIs, for communicating requests, and data inputs, from the client, and responses from the blockchain &/or database back to the client; all this occurs through the smart-web server. Here the gRPC protocols are implemented in Python.
 
-To tackle a full Kubernetes installation, ideally you would need a 32 GB RAM (minimum); 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, your Kubeflow installation will go much more easily with an 8 core Host processor rather than a 4 core one. You really need an Accelerator NVIDIA GPU of at least 10GB vRAM. ITCSA is using a 24GB NVIDIA Tesla K80.
+To tackle a full Kubernetes installation locally, ideally you would need a 32 GB RAM (minimum); 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, your Kubeflow installation will go much more easily with an 8 core Host processor rather than a 4 core one. You really need an Accelerator NVIDIA GPU of at least 10GB vRAM. ITCSA is using a 24GB NVIDIA Tesla K80.
 
 We base initial development such as this locally. It's cheaper!
 
@@ -419,7 +419,9 @@ juju config keepalived vip_hostname=$VIP_HOSTNAME
 
 `juju config kubernetes-master extra_sans="$VIP $VIP_HOSTNAME"`
 
-Once the new service shows "Ready" in juju status;
+Once the new service shows "Ready" in juju status.
+
+NOTE: Do not do this if your keepalived installation fails!
 
 ```
 juju remove-relation kubernetes-worker:kube-api-endpoint kubeapi-load-balancer:website
