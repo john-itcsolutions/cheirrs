@@ -7,6 +7,13 @@ To tackle a full Kubernetes installation, ideally you would need a 32 GB RAM; 25
 
 We base initial development such as this locally. It's cheaper!
 
+<img
+src=“kubernetesinstallation-everything-03-04-2021-2.png”
+raw=true
+alt=“Everything Kubernetes”
+style=“margin-right: 10px;”
+/>
+
 You need to develop initially on docker. ITCSA uses Ubuntu 20.04 as host platform.
 You will not need an Extreme Gaming level of computer for Docker-based (initial - eg. database) work without Kubernetes.
 
