@@ -40,6 +40,16 @@ The Ionic docs are at:
 
 https://ionicframework.com/docs
 
+In an Ionic dApp (either React or Angular-based) you will find `manifest.json`.
+
+This file is where you can whitelist websites (including the cloud database ans server site, even if local).
+
+All websites are blacklisted by default, until you whitelist the sites required by your dApp.
+
+This enables the Elastos Carrier system to do its magic and connect in a private and ultra-secure way to websites, with no websockets used.
+
+(see the Elastos Whitepaper at https://www.elastos.org/downloads/elastos_whitepaper_en.pdf)
+
 Currently (April 2021) the Elastos Developer Documentation does not address development with the new Elastos Essentials.
 
 ## ________________________________________________________________________________________________________________________
