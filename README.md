@@ -13,7 +13,9 @@ We base initial development such as this locally. It's cheaper!
 
 The schema above are laeled G(n,m) for the internetworked, multiple member class dApps. In reality there are only n schema with the member classes (m) being a data field in every table within the nth schema. In this way we can keep all transactions internal to a network on the same schema. The nth network is on the nth schema. The single member class, non-internetworked dApps (F(i)) are likewise constituted of all members of a network or dApp subscribers' group, on their own schema. Although this is the case with the set F(i), within a single network ie schema ie dApp, we will be able to use the field for a member's id ("j" in the diagram) to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. The same is ideally the case for the G(n,m) set, such individual member Tables and dApps are theoretically possible, though expensive.
 
-You need to develop initially on docker. ITCSA uses Ubuntu 20.04 as host platform.
+We utilise one "oseer" schema per network, so there is one schema for each of the G(n) networks/schema, and one for each of the F(i) future dApps, as well as one for each of the A, B and C dApps (Community Housing, RealEstate and convey-IT, respectively). Our schema called a_horse is the Head Overseeing Schema, for top level customer on-boarding, usage tracking and payments, as well as to "oversee the overseers".
+
+You need to develop initially on docker. ITCSA uses Ubuntu 20.04 as the host platform.
 You will not need an Extreme Gaming level of computer for Docker-based (initial - eg. database) work without Kubernetes.
 
 See our website at https://www.itcsolutions.com.au/kubernetes-yaml-file-example/ for an older but more visual idea of this project and others.
