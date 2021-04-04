@@ -600,7 +600,7 @@ https://github.com/john-itcsolutions/smart-web
 For juju charms, their 'relations' and 'hooks' enable synchronous operation with the other charms in their environment. The relations and hooks operate by boolean logic and are programmed 'reactively', meaning the hooks react to changes in the environment to signal to other hooks. A change might be a machine going offline, or one coming online, or a machine moving from "available" to "ready", or some other change-in-state of the model containing the charms.
 
 
-Now, we need to begin to assemble the smart-web charm, layer by layer, before we can build it. There are fundamentally 3 stages in assembling the layers: first is the base layer with any of the provided base charms for this layer. We choose, not code, this layer. There is a minor amount of 'boilerplate' with some charms, layers and interfaces. This is found on the juju repo sites on github.
+Now, we need to begin to assemble the smart-web charm, layer by layer, before we can build it. There are fundamentally 3 stages in assembling the layers: first is the base layer with any of the provided base charms for this layer. We choose, not code, this layer. There is a minor amount of 'boilerplate' with some charms, layers and interfaces. This is found on their juju repo sites on github.
 
 Please refer to  https://github.com/juju/layer-index. 
 
@@ -683,7 +683,7 @@ Now within smart-web charm directory, we build then deploy smart-web:
 `juju add-relation docker-registry containerd`
 
 We would also like to be able to develop the postgresql database structure and details ('house' database) using pgadmin4. To this end we construct a 'pgadmin4' charm as follows (with inspiration from 'smart-web').
-
+/
 The pgadmin4 docker container is available from Docker hub with:
 
 `docker pull dpage/pgadmin4`
@@ -768,7 +768,7 @@ ______________________________________________________________
               ____________________________
               
 
-There is no need to deploy Redis, as etcd takes care of caching duties with its clustered key:value database.
+## There is no need to deploy Redis, as etcd takes care of caching duties with its clustered key:value database.
 
 (Note; you are user 'ubuntu' here, so if you need a new password, just
 
