@@ -44,7 +44,7 @@ https://ionicframework.com/docs
 
 In an Ionic dApp (either React or Angular-based) you will find `manifest.json`.
 
-This file is where you can whitelist websites (including the cloud database ans server site, even if local).
+This file is where you can whitelist websites (including the cloud database/blockchains and server site, even if local).
 
 All websites are blacklisted by default, until you whitelist the sites required by your dApp.
 
