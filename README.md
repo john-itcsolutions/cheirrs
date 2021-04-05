@@ -176,7 +176,7 @@ ________________________________________________________________
 ________________________________________________________________
 
 
-You first install lxd:
+In case lxd is not already installed, this is how, however it is most likely to be present initially:
 
 `sudo snap install lxd`
 
