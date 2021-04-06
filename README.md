@@ -539,7 +539,7 @@ NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADM
 
 (This is kubernetes-master/0)
 
-2. `juju deploy ./smart-web --to 6 --series  focal --force`
+2. `juju deploy ./smart-web-alt --to 6 --series  focal --force`
 
 (This is kubernetes-master/1)
 
