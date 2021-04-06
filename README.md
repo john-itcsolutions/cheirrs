@@ -476,7 +476,7 @@ ________________________________________________________________
 
 `cd ../cheirrs` 
 
-`juju deploy ./docker-registry --to 9 --series  focal --force`
+`juju deploy ./docker-registry --to 7 --series  focal --force`
 
 (We are deploying to kubernetes-worker/2)
 
