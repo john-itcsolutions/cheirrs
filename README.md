@@ -478,7 +478,7 @@ ________________________________________________________________
 
 `juju deploy ./docker-registry --to 7 --series  focal --force`
 
-(We are deploying to kubernetes-worker/2)
+(We are deploying to kubernetes-worker/0)
 
 `juju add-relation docker-registry:cert-provider easyrsa:client`
 
