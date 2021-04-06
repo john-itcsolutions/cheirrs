@@ -7,6 +7,8 @@ gRPC protocols replace the older style REST APIs, for communicating requests, an
 
 To tackle a full Kubernetes installation locally, ideally you would need a 32 GB RAM (minimum); 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, your Kubeflow installation will go much more easily with an 8 core Host processor rather than a 4 core one. You really need an Accelerator NVIDIA GPU of at least 10GB vRAM. ITCSA is using a 24GB NVIDIA Tesla K80.
 
+The following figure represents the 'house' controller with its 'dbase-bchains' model, as opposed to the 'kubeflow' model on 'uk8s' controller. We install the Kubeflow model first.
+
 We base initial development such as this locally. It's cheaper!
 
 <img src="./kubernetesinstallation-03-04-2021-7.png">
