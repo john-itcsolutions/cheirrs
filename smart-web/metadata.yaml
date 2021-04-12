@@ -17,8 +17,8 @@
     "interface": "tls-certificates"
   "docker-host":
     "interface": "dockerhost"
-  "redis":
-    "interface": "redis"
+  "etcd":
+    "interface": "etcd"
   "postgres": # Endpoint name
     "interface": "pgsql" # Interface name
   "docker-registry":

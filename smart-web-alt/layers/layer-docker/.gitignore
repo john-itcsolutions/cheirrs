@@ -1,0 +1,7 @@
+builds/
+deps/
+.tox
+.cache
+*.pyc
+.coverage
+.unit-state.db

@@ -1,0 +1,53 @@
+"name": "smart-web-alt"
+"summary": "Server to access blockchains and database"
+"maintainer": "John Olsen <john@itcsolutions.com.au>"
+"description": |
+  Multi-line description here
+"tags":
+- "misc"
+- "containers"
+- "layer"
+- "web_server"
+"series":
+- "bionic"
+- "focal"
+- "xenial"
+"requires":
+  "certificates":
+    "interface": "tls-certificates"
+  "docker-host":
+    "interface": "dockerhost"
+  "etcd":
+    "interface": "etcd"
+  "postgres": # Endpoint name
+    "interface": "pgsql" # Interface name
+  "docker-registry":
+    "interface": "docker-registry"
+"provides":
+  "nrpe-external-master":
+    "interface": "nrpe-external-master"
+    "scope": "container"
+  "dockerhost":
+    "interface": "dockerhost"
+    "scope": "container"
+  "sdn-plugin":
+    "interface": "sdn-plugin"
+    "scope": "container"
+  "website": # Endpoint name
+    "interface": "http" # Interface name
+  "docker-image-host":
+    "interface": "docker-image-host"
+  "db":
+    "interface": "etcd"
+"peers":
+  "peer-relations":
+    "interface": "docker"
+
+
+"display-name": "smart-web-alt"
+"resources":
+  "smart-alt":
+    "type": "oci-image"
+    "auto-fetch": !!bool "true"
+    "description": "The image for this charm"
+"subordinate": !!bool "false"

@@ -106,12 +106,6 @@
       "fetched_url": "https://github.com/juju-solutions/interface-docker-registry.git",
       "rev": "365ec9f348ccd561a9ec3e084c826f134676439e",
       "url": "interface:docker-registry"
-    },
-    {
-      "branch": "refs/heads/master",
-      "fetched_url": "https://github.com/omnivector-solutions/interface-redis",
-      "rev": "19ad97be1d03e91ba033f415ebeeed59b9d25b30",
-      "url": "interface:redis"
     }
   ],
   "signatures": {
@@ -410,6 +404,26 @@
       "dynamic",
       "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
     ],
+    "hooks/etcd-relation-broken": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
+    "hooks/etcd-relation-changed": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
+    "hooks/etcd-relation-departed": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
+    "hooks/etcd-relation-joined": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
     "hooks/hook.template": [
       "layer:basic",
       "static",
@@ -496,26 +510,6 @@
       "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
     ],
     "hooks/pre-series-upgrade": [
-      "layer:basic",
-      "dynamic",
-      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
-    ],
-    "hooks/redis-relation-broken": [
-      "layer:basic",
-      "dynamic",
-      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
-    ],
-    "hooks/redis-relation-changed": [
-      "layer:basic",
-      "dynamic",
-      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
-    ],
-    "hooks/redis-relation-departed": [
-      "layer:basic",
-      "dynamic",
-      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
-    ],
-    "hooks/redis-relation-joined": [
       "layer:basic",
       "dynamic",
       "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
@@ -779,41 +773,6 @@
       "interface:pgsql",
       "static",
       "c280c093ab5d2418051d1d864e6ffc19bea670bd72b0ed2935fee4206c8ae6eb"
-    ],
-    "hooks/relations/redis/LICENSE": [
-      "interface:redis",
-      "static",
-      "76a97c878c9c7a8321bb395c2b44d3fe2f8d81314d219b20138ed0e2dddd5182"
-    ],
-    "hooks/relations/redis/README.md": [
-      "interface:redis",
-      "static",
-      "f9cdb0630207f6bead576f8b72857db779088de55c11424a6a9330f7ea5ffad4"
-    ],
-    "hooks/relations/redis/__init__.py": [
-      "interface:redis",
-      "static",
-      "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-    ],
-    "hooks/relations/redis/interface.yaml": [
-      "interface:redis",
-      "static",
-      "cab110c373ed5a84aabe778a7812254beba4129a0ce8cbc081d118b4951560d2"
-    ],
-    "hooks/relations/redis/peers.py": [
-      "interface:redis",
-      "static",
-      "028758dd65395d49cd42b6f50ee12e4e9313c5060c87099b0c487386acf34ca6"
-    ],
-    "hooks/relations/redis/provides.py": [
-      "interface:redis",
-      "static",
-      "1d3d2063bcafc774931de77982c1b871ac4a18ec10263ade0975645823d9c0cc"
-    ],
-    "hooks/relations/redis/requires.py": [
-      "interface:redis",
-      "static",
-      "6f45c1989dfe05015256732e05df6f3a109884d4782fb6042cbc5b8f87f112b7"
     ],
     "hooks/relations/sdn-plugin/.gitignore": [
       "interface:sdn-plugin",
@@ -1180,40 +1139,10 @@
       "static",
       "c280c093ab5d2418051d1d864e6ffc19bea670bd72b0ed2935fee4206c8ae6eb"
     ],
-    "interfaces/interface-redis/LICENSE": [
-      "smart-web",
-      "static",
-      "76a97c878c9c7a8321bb395c2b44d3fe2f8d81314d219b20138ed0e2dddd5182"
-    ],
-    "interfaces/interface-redis/README.md": [
-      "smart-web",
-      "static",
-      "f9cdb0630207f6bead576f8b72857db779088de55c11424a6a9330f7ea5ffad4"
-    ],
-    "interfaces/interface-redis/interface.yaml": [
-      "smart-web",
-      "static",
-      "cab110c373ed5a84aabe778a7812254beba4129a0ce8cbc081d118b4951560d2"
-    ],
-    "interfaces/interface-redis/peers.py": [
-      "smart-web",
-      "static",
-      "028758dd65395d49cd42b6f50ee12e4e9313c5060c87099b0c487386acf34ca6"
-    ],
-    "interfaces/interface-redis/provides.py": [
-      "smart-web",
-      "static",
-      "1d3d2063bcafc774931de77982c1b871ac4a18ec10263ade0975645823d9c0cc"
-    ],
-    "interfaces/interface-redis/requires.py": [
-      "smart-web",
-      "static",
-      "6f45c1989dfe05015256732e05df6f3a109884d4782fb6042cbc5b8f87f112b7"
-    ],
     "layer.yaml": [
       "smart-web",
       "dynamic",
-      "c253e1d5b15a2037ab53111f01bf8b8a505608b90de9fa5de5f68d596c3e6ac4"
+      "ec12c0299a822eb53e85bd922a73cb152072a061d66a71834e6db6eec9c42a40"
     ],
     "layers/layer-docker-resource/LICENSE": [
       "smart-web",
@@ -1458,7 +1387,7 @@
     "metadata.yaml": [
       "smart-web",
       "dynamic",
-      "a87cbfec37bd5c41b1683b707ea1ad48333a7d380e25038323edfa11c613be22"
+      "296da82581632fd2326255bac38e9c0a0ba0a22a4b3433aa98f3c2c2ddcbf3c3"
     ],
     "pydocmd.yml": [
       "layer:status",
@@ -1548,7 +1477,7 @@
     "version": [
       "smart-web",
       "dynamic",
-      "3c049b053f28a8e06d20d7dfbe1e8f2467356c3e298f331512f0dd2fa416c054"
+      "2a97d2e9fa9a4639851fecff827812e904535b79f42187365f5044e3e582183e"
     ],
     "wheelhouse.txt": [
       "layer:docker",
@@ -1585,10 +1514,10 @@
       "dynamic",
       "0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa"
     ],
-    "wheelhouse/charmhelpers-0.20.20.tar.gz": [
+    "wheelhouse/charmhelpers-0.20.21.tar.gz": [
       "layer:basic",
       "dynamic",
-      "a4ea8f61299d6e48e0deb99d122e8fd570f18916aba51611ac65fe00f91d935e"
+      "37dd06f9548724d38352d1eaf91216df9167066745774118481d40974599715c"
     ],
     "wheelhouse/charms.docker-0.1.19.tar.gz": [
       "layer:docker",
@@ -1650,10 +1579,10 @@
       "dynamic",
       "30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"
     ],
-    "wheelhouse/urllib3-1.26.3.tar.gz": [
+    "wheelhouse/urllib3-1.26.4.tar.gz": [
       "__pip__",
       "dynamic",
-      "de3eedaad74a2683334e282005cd8d7f22f4d55fa690a2a1020a416cb0a47e73"
+      "e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937"
     ],
     "wheelhouse/vcversioner-2.16.0.0.tar.gz": [
       "layer:docker",
