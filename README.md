@@ -525,13 +525,25 @@ ________________________________________________________________
 but first there is an issue with the `__init__.py` file contained in the elastos-smartweb-service repo, where the existing file is blank (intentionally),
 however we need to be able to connect to the database upon initialisation and this should occur with code in the `__init__.py` file (in cheirrs/elastos-smartweb-service/grpc_adenine/):
 
+An identical situation exists for the second version of the smartweb-service, "elastos-smartweb-service-alt". You must likewise keep `__init__.py` in synch here.
+
 NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` file is empty in the elastos-smartweb-service module, we have included ITCSA's version of `__init__.py` in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine. The latter repo (python-grpc-adenine) is meant to be run from the client's (user's) device, and provides the protocol buffers which the smart-web service communicates to the client with; ie gRPC protocols.
 
 It is important to have the `__init__.py` file set up before building the 'smart' and 'smart-alt' docker images.
 
+In the repo "cheirrs" there is a placemarker sub-module called "elastos-smartweb-service-alt. This needs to be deleted from the cheirrs root directory, with:
+
+`rm -rf el*alt`
+
+followed by a copy and rename of the original "elastos-smartweb-service" directory:
+
+`cp -R el* elastos-smartweb-service-alt`
+
 `cd path/to/cheirrs/elastos-smartweb-service`
 
-The env.example file needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web and smart-web-alt containers (in turn) ie the blockchain addresses and ports for both smart-web and smart-web-alt (separately, in turn). Begin with the 'smart' docker container, after deploying the containers for each of smart-web, smart-web-alt and pgadmin4, so you know the relevant addresses to use (consult `juju status`):
+The .env.example file needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web container ie the blockchain addresses and ports for smart-web. Build the 'smart' docker container, after deploying the kubernetes containers for each of smart-web, smart-web-alt and pgadmin4, so you know the relevant addresses to use (check on `juju status`) - see below:
+
+Then complete the same process with the .env.example file in "elastos-smartweb-service-alt". The blockchain server ip-addresses need to match the address of kubernetes-master/1, here.
 
 NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-masters/0 and /1), as follows:
 
@@ -539,7 +551,7 @@ NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADM
 
 (This is kubernetes-master/0)
 
-2. `juju deploy ./smart-web smart-web-alt --to 6 --series  focal --force`
+2. `juju deploy ./smart-web-alt --to 6 --series  focal --force`
 
 (This is kubernetes-master/1)
 
@@ -579,17 +591,19 @@ To allow access for administrative purposes from anywhere on your LAN:
 
 Ensure you are in cheirrs/elastos-smartweb-service directory.
 
-At this point you can get and edit the addresses for the various blockchain connections in env.example from the addresses of kubernetes-master/0 and kubernetes-master/1 in turn. By editing env.example initially for docker container 'smart', using addresses for kubernetes-master/0, you simply:
+At this point you can get and edit the addresses for the various blockchain connections in .env.example from the addresses of kubernetes-master/0 and kubernetes-master/1 in turn. By editing env.example initially for docker container 'smart', using addresses for kubernetes-master/0, you simply:
 
 `docker image build -t smart .`
 
 `docker tag smart:latest <ip-addr-docker-registry/0>:5000/smart:latest`
 
-Now edit env-example again to insert the correct addresses etc for the kubernetes-master/1 to cater for smart-alt, and build with:
+Now `cd ../elastos-smartweb-service-alt` and check that the addresses in .env-example match those for kubernetes-master/1 to cater for smart-alt, and build with:
 
 `docker image build -t smart-alt .`
 
 `docker tag smart-alt:latest <ip-addr-docker-registry/0>:5000/smart-alt:latest`
+
+`cd ../`
 
 `docker tag dpage/pgadmin4:latest <ip-addr-docker-registry/0>:5000/dpage/pgadmin4:latest`
 
