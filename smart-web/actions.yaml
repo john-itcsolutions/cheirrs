@@ -10,4 +10,4 @@
     "untagged":
       "type": "boolean"
       "description": "Only remove untagged"
-      "default": !!bool "true"
+      "default": "true"

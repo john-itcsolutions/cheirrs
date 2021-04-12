@@ -47,6 +47,6 @@
 "resources":
   "dpage/pgadmin4":
     "type": "oci-image"
-    "auto-fetch": !!bool "true"
+    "auto-fetch": "true"
     "description": "The image for this charm"
-"subordinate": !!bool "false"
+"subordinate": "false"

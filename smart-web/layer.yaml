@@ -22,16 +22,16 @@
   "basic":
     "packages": []
     "python_packages": []
-    "use_venv": !!bool "true"
-    "include_system_packages": !!bool "false"
+    "use_venv": "true"
+    "include_system_packages": "false"
   "debug": {}
   "nagios": {}
   "docker":
-    "skip-install": !!bool "false"
+    "skip-install": "false"
   "status":
-    "patch-hookenv": !!bool "true"
+    "patch-hookenv": "true"
   "docker-resource":
-    "set-status": !!bool "true"
+    "set-status": "true"
   "tls-client":
     "ca_certificate_path": ""
     "server_certificate_path": ""
@@ -49,7 +49,7 @@
       \ resource originates."
   - "name": "auto-fetch"
     "type": "Boolean"
-    "missing": !!bool "false"
+    "missing": "false"
     "description": "Whether or not to automatically fetch this resource."
   - "name": "validator"
     "type": "String"

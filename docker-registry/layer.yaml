@@ -23,20 +23,20 @@
     - "apache2-utils"
     - "python3-yaml"
     "version_package": ""
-    "full_version": !!bool "false"
+    "full_version": "false"
     "keys": []
   "basic":
     "packages": []
     "python_packages": []
-    "use_venv": !!bool "true"
-    "include_system_packages": !!bool "false"
+    "use_venv": "true"
+    "include_system_packages": "false"
   "leadership": {}
   "status":
-    "patch-hookenv": !!bool "true"
+    "patch-hookenv": "true"
   "nagios": {}
   "debug": {}
   "docker":
-    "skip-install": !!bool "false"
+    "skip-install": "false"
   "tls-client":
     "ca_certificate_path": ""
     "server_certificate_path": ""

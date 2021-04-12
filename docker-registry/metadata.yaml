@@ -34,4 +34,4 @@
 "peers":
   "peer":
     "interface": "peer-discovery"
-"subordinate": !!bool "false"
+"subordinate": "false"

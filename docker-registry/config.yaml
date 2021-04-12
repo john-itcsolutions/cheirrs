@@ -84,14 +84,14 @@
       https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
   "enable-cgroups":
     "type": "boolean"
-    "default": !!bool "false"
+    "default": "false"
     "description": |
       Enable GRUB cgroup overrides cgroup_enable=memory swapaccount=1. WARNING
       changing this option will reboot the host - use with caution on production
       services.
   "install_from_upstream":
     "type": "boolean"
-    "default": !!bool "false"
+    "default": "false"
     "description": |
       Toggle installation from Ubuntu archive vs the Docker PPA (DEPRECATED; please use docker_runtime instead).
   "docker_runtime":
@@ -218,13 +218,13 @@
     "description": "The external port on which the docker registry listens."
   "storage-delete":
     "type": "boolean"
-    "default": !!bool "false"
+    "default": "false"
     "description": |
       Enable/disable the "delete" storage option. False, the default, disables
       this option in the registry config file.
   "storage-read-only":
     "type": "boolean"
-    "default": !!bool "false"
+    "default": "false"
     "description": |
       Enable/disable the "readonly" storage maintenance option. False, the
       default, disables this option in the registry config file.
