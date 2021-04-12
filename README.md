@@ -413,6 +413,8 @@ Deploy the Kubernetes Charm
 
 `juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
 
+The following is an experimental deployment of a health-status-reporting-enabled subordinate application (keepalived). As such, it may need to be avoided in your installation:  {
+
 `juju deploy cs:~containers/keepalived`
 
 ```
@@ -443,6 +445,8 @@ NOTE: Do not do this if your keepalived installation fails!
 juju remove-relation kubernetes-worker:kube-api-endpoint kubeapi-load-balancer:website
  juju remove-relation kubernetes-master:loadbalancer kubeapi-load-balancer:loadbalancer
  ```
+
+}
 
 At this stage your microk8s/juju assemblage is converging towards stability. You can observe the status of the assemblage with
 
@@ -516,22 +520,18 @@ export PORT=`juju config docker-registry registry-port`
 ________________________________________________________________
 
 
-## Next we build the 'smart' docker image:
+## Next we build the 'smart' and 'smart-alt' docker images:
 
 but first there is an issue with the `__init__.py` file contained in the elastos-smartweb-service repo, where the existing file is blank (intentionally),
 however we need to be able to connect to the database upon initialisation and this should occur with code in the `__init__.py` file (in cheirrs/elastos-smartweb-service/grpc_adenine/):
 
 NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` file is empty in the elastos-smartweb-service module, we have included ITCSA's version of `__init__.py` in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine. The latter repo (python-grpc-adenine) is meant to be run from the client's (user's) device, and provides the protocol buffers which the smart-web service communicates to the client with; ie gRPC protocols.
 
-It is important to have the `__init__.py` file set up before building the 'smart' docker image.
+It is important to have the `__init__.py` file set up before building the 'smart' and 'smart-alt' docker images.
 
 `cd path/to/cheirrs/elastos-smartweb-service`
 
-`docker image build -t smart .`
-
-This takes some time. When completed, if docker registry were working, we could push our images to the registry:
-
-`juju run-action docker-registry/0 push image=smart tag=latest  --wait`
+The env.example file needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web and smart-web-alt containers (in turn) ie the blockchain addresses and ports for both smart-web and smart-web-alt (separately, in turn). Begin with the 'smart' docker container, after deploying the containers for each of smart-web, smart-web-alt and pgadmin4, so you know the relevant addresses to use (consult `juju status`):
 
 NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-masters/0 and /1), as follows:
 
@@ -551,25 +551,68 @@ and:
 
 `juju expose smart-web`
 
+`juju expose smart-web-alt`
+
 `juju expose pgadmin4`
 
 `juju relate smart-web kubernetes-master`
 
+`juju relate smart-web-alt kubernetes-master`
+
 `juju add-relation smart-web easyrsa:client`
 
-`juju add-relation smart-web containerd`
+`juju add-relation smart-web-alt easyrsa:client`
 
 `juju add-relation pgadmin4 easyrsa:client`
 
-`juju add-relation pgadmin4 containerd`
-
 `juju add-relation postgresql:db smart-web`
+
+`juju add-relation postgresql:db smart-web-alt`
 
 `juju add-relation postgresql:db pgadmin4`
 
 To allow access for administrative purposes from anywhere on your LAN:
 
 `juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
+
+Ensure you are in cheirrs/elastos-smartweb-service directory.
+
+At this point you can get and edit the addresses for the various blockchain connections in env.example from the addresses of kubernetes-master/0 and kubernetes-master/1 in turn. By editing env.example initially for docker container 'smart', using addresses for kubernetes-master/0, you simply:
+
+`docker image build -t smart .`
+
+`docker tag smart:latest <ip-addr-docker-registry/0>:5000/smart:latest`
+
+Now edit env-example again to insert the correct addresses etc for the kubernetes-master/1 to cater for smart-alt, and build with:
+
+`docker image build -t smart-alt .`
+
+`docker tag smart-alt:latest <ip-addr-docker-registry/0>:5000/smart-alt:latest`
+
+The build process may take some time. When completed, we could push our images to the registry. However first we must edit the file /etc/docker/daemon.json to allow an insecure docker-registry at the address of kubernetes-worker/0, so that we may access the registry locally. See https://microk8s.io/docs/registry-private: but use port value of 5000 rather than 32000. Please remember to run;
+
+`sudo systemctl daemon-reload`
+
+and,
+
+`sudo systemctl restart docker`
+
+in order to apply the edits to daemon.json.
+
+We are required to generate a secret for accessing the docker-registry with:
+
+```
+kubectl create secret docker-registry regcred --docker-server=REGISTRY-IPADDR (kubernetes-worker/0-ip-addr)
+--docker-username=UNAME
+--docker-password=PWORD
+--docker-email=EMAIL
+```
+
+`juju run-action docker-registry/0 push image=<ip-addr-docker-registry/0>:5000/smart tag=latest --wait`
+
+and;
+
+`juju run-action docker-registry/0 push image=<ip-addr-docker-registry/0>:5000/smart-alt tag=latest --wait`
 
 The above charms appear to be ready to work, however we are having trouble getting our NVIDIA driver to load correctly, and this seems to be preventing the docker-registry charm itself from working installing fully, ending in an error state.
 
