@@ -537,7 +537,15 @@ In the repo "cheirrs" there is a second sub-module called "elastos-smartweb-serv
 
 The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web container ie the blockchain addresses and ports for smart-web. Build the 'smart' docker container, after deploying the kubernetes containers for each of smart-web, smart-web-alt and pgadmin4, so you know the relevant addresses to use (check on `juju status`) - see below:
 
-Then complete the same process with the .env.example file in "cheirrs/elastos-smart-web-alt/elastos-smartweb-service/". The blockchain server ip-addresses need to match the address of kubernetes-master/1, here.
+Then complete the same process with the .env.example file in "cheirrs/elastos-smart-web-alt/elastos-smartweb-service/". You will have to delete the 'placeholder' repo in "elastos-smart-web-alt" with
+
+`rm -rf elastos-smartweb-service`
+
+Followed by:
+
+`git clone https://github.com/cyber-republic/elastos-smartweb-service.git`
+
+The blockchain server ip-addresses in the .env.example file need to match the address of kubernetes-master/1, here. Also the database details will require alteration.
 
 NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-masters/0 and /1), as follows (note that these kubernetes containers are separate from the docker containers soon to be built):
 
