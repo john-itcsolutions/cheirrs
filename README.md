@@ -531,21 +531,15 @@ NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs
 
 It is important to have the `__init__.py` file set up before building the 'smart' and 'smart-alt' docker images.
 
-In the repo "cheirrs" there is a placemarker sub-module called "elastos-smartweb-service-alt. This needs to be deleted from the cheirrs root directory, with:
-
-`rm -rf el*alt`
-
-followed by a copy and rename of the original "elastos-smartweb-service" directory:
-
-`cp -R el* elastos-smartweb-service-alt`
+In the repo "cheirrs" there is a second sub-module called "elastos-smartweb-service" within cheirrs/elastos-smart-web-alt/. This needs to have the corresponding `__init__.py` kept in synchrony also.
 
 `cd path/to/cheirrs/elastos-smartweb-service`
 
-The .env.example file needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web container ie the blockchain addresses and ports for smart-web. Build the 'smart' docker container, after deploying the kubernetes containers for each of smart-web, smart-web-alt and pgadmin4, so you know the relevant addresses to use (check on `juju status`) - see below:
+The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web container ie the blockchain addresses and ports for smart-web. Build the 'smart' docker container, after deploying the kubernetes containers for each of smart-web, smart-web-alt and pgadmin4, so you know the relevant addresses to use (check on `juju status`) - see below:
 
-Then complete the same process with the .env.example file in "elastos-smartweb-service-alt". The blockchain server ip-addresses need to match the address of kubernetes-master/1, here.
+Then complete the same process with the .env.example file in "cheirrs/elastos-smart-web-alt/elastos-smartweb-service/". The blockchain server ip-addresses need to match the address of kubernetes-master/1, here.
 
-NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-masters/0 and /1), as follows:
+NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-masters/0 and /1), as follows (note that these kubernetes containers are separate from the docker containers soon to be built):
 
 1. `juju deploy ./smart-web --to 5 --series  focal --force`
 
@@ -591,19 +585,23 @@ To allow access for administrative purposes from anywhere on your LAN:
 
 Ensure you are in cheirrs/elastos-smartweb-service directory.
 
-At this point you can get and edit the addresses for the various blockchain connections in .env.example from the addresses of kubernetes-master/0 and kubernetes-master/1 in turn. By editing env.example initially for docker container 'smart', using addresses for kubernetes-master/0, you simply:
+At this point you can get and edit the addresses for the various blockchain connections in .env.example from the addresses of kubernetes-master/0 and kubernetes-master/1 in turn. The docker container intended for kubernetes-master/1 (kubernetes container) must be built in cheirrs/elastos-smart-web-alt/elastos-smartweb-service/, by editing env.example for docker container 'smart-alt' using addresses for kubernetes-master/1, (as for docker container 'smart', using addresses for kubernetes-master/0). In cheirrs/elastos-smartweb-service/ you simply:
 
 `docker image build -t smart .`
 
 `docker tag smart:latest <ip-addr-docker-registry/0>:5000/smart:latest`
 
-Now `cd ../elastos-smartweb-service-alt` and check that the addresses in .env-example match those for kubernetes-master/1 to cater for smart-alt, and build with:
+Now:
+
+ `cd ../elastos-smart-web-alt/elastos-smartweb-service`
+ 
+ and check that the addresses in .env-example match those for kubernetes-master/1 to cater for smart-alt, and build with:
 
 `docker image build -t smart-alt .`
 
 `docker tag smart-alt:latest <ip-addr-docker-registry/0>:5000/smart-alt:latest`
 
-`cd ../`
+`cd ../../`
 
 `docker tag dpage/pgadmin4:latest <ip-addr-docker-registry/0>:5000/dpage/pgadmin4:latest`
 

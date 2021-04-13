@@ -4,3 +4,6 @@
 [submodule "python-grpc-adenine"]
 	path = python-grpc-adenine
 	url = https://github.com/cyber-republic/python-grpc-adenine.git
+[submodule "elastos-smart-web-alt/elastos-smartweb-service"]
+	path = elastos-smart-web-alt/elastos-smartweb-service
+	url = https://github.com/cyber-republic/elastos-smartweb-service.git
