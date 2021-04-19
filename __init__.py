@@ -46,7 +46,7 @@ hook = hooks.hook
 
 @hook
 def db_relation_joined():
-    relation_set('database', config('general'))  # Explicit database name
+    relation_set('database', config('haus'))  # Explicit database name
     relation_set('roles', 'reporting,standard')  # DB roles required
     relation_set('extensions', 'postgis,osm2pgrouting') # Get PostGIS
 @hook('db-relation-changed', 'db-relation-departed')
