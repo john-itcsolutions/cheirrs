@@ -627,7 +627,7 @@ and;
 
 However the Registry enforces TLS security, so we need to establish an http Proxy system. Charmed Kubernetes uses Apache2 with HAProxy. We are currently investigating the requirements of this installation ..
 
-The above charms appear to be ready to work, however we are having trouble getting our NVIDIA driver to load correctly, and this seems to be preventing the docker-registry charm itself from working & installing fully, ending in an error state.
+The above charms appear to be ready to work, however we are having trouble getting our NVIDIA driver to load correctly, and this seems to be preventing the docker-registry charm itself from working & installing fully, ending in an error state. Presently development is continuing without the Tesla K80 and Kubeflow/TensorFlow/PyTorch, etc. This way, the docker-registry installs successfully.
 
 _______________________________________________________________
 
