@@ -613,24 +613,7 @@ Now:
 
 `docker tag dpage/pgadmin4:latest <ip-addr-docker-registry/0>:5000/dpage/pgadmin4:latest`
 
-The build processes may take some time. When completed, we could push our images to the registry. However first we must edit the file /etc/docker/daemon.json to allow an insecure docker-registry at the address of kubernetes-worker/0, so that we may access the registry locally. See https://microk8s.io/docs/registry-private: but use port value of 5000 rather than 32000. Please remember to run;
-
-`sudo systemctl daemon-reload`
-
-and,
-
-`sudo systemctl restart docker`
-
-after editing daemon.json, in order to apply the edits to daemon.json in Docker.
-
-We are required to generate a secret for accessing the docker-registry with:
-
-```
-kubectl create secret docker-registry regcred --docker-server=REGISTRY-IPADDR (kubernetes-worker/0-ip-addr)
---docker-username=UNAME
---docker-password=PWORD
---docker-email=EMAIL
-```
+The build processes may take some time. When completed, we could push our images to the registry. 
 
 `juju run-action docker-registry/0 push image=<ip-addr-docker-registry/0>:5000/smart tag=latest --wait`
 
@@ -642,7 +625,9 @@ and;
 
 `juju run-action docker-registry/0 push image=<ip-addr-docker-registry/0>:5000/dpage/pgadmin4 tag=latest --wait`
 
-The above charms appear to be ready to work, however we are having trouble getting our NVIDIA driver to load correctly, and this seems to be preventing the docker-registry charm itself from working installing fully, ending in an error state.
+However the Registry enforces TLS security, so we need to establish an http Proxy system. Charmed Kubernetes uses Apache2 with HAProxy. We are currently investigating the requirements of this installation ..
+
+The above charms appear to be ready to work, however we are having trouble getting our NVIDIA driver to load correctly, and this seems to be preventing the docker-registry charm itself from working & installing fully, ending in an error state.
 
 _______________________________________________________________
 
