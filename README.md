@@ -412,7 +412,7 @@ Deploy the Kubernetes Charm
 `juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
 
 `juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
-
+<!-- 
 The following is an experimental deployment of a health-status-reporting-enabled subordinate application (keepalived). As such, it may need to be avoided in your installation:  {
 
 `juju deploy cs:~containers/keepalived`
@@ -446,9 +446,9 @@ juju remove-relation kubernetes-worker:kube-api-endpoint kubeapi-load-balancer:w
  juju remove-relation kubernetes-master:loadbalancer kubeapi-load-balancer:loadbalancer
  ```
 
-}
+} -->
 
-At this stage your microk8s/juju assemblage is converging towards stability. You can observe the status of the assemblage with
+At this stage your juju assemblage is converging towards stability. You can observe the status of the assemblage with
 
 `watch -c juju status --color` or, `juju status` for short.
 

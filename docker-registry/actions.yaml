@@ -10,7 +10,7 @@
     "untagged":
       "type": "boolean"
       "description": "Only remove untagged"
-      "default": "true"
+      "default": !!bool "true"
 "images":
   "description": |
     List images known by this registry.
@@ -28,7 +28,7 @@
       "description": |
         Optional [REPOSITORY[:TAG]] to list images in a given repository. If
         unspecified, all images known to the registry are listed.
-  "additionalProperties": "false"
+  "additionalProperties": !!bool "false"
 "push":
   "description": |
     Tag and push an image to this registry.
@@ -43,7 +43,7 @@
         remote registry (e.g. myregistry.example.com:5000/myimage:latest).
     "pull":
       "type": "boolean"
-      "default": "true"
+      "default": !!bool "true"
       "description": "Pull the given image before tag/push."
     "tag":
       "type": "string"
@@ -52,7 +52,7 @@
         Tag name to use. By default, images are tagged with
         'net_location/name:version'.
   "required": ["image"]
-  "additionalProperties": "false"
+  "additionalProperties": !!bool "false"
 "rmi":
   "description": |
     Remove image(s) from this registry.
@@ -71,7 +71,7 @@
         Image (or space separated images) to remove. This can be be an image
         id, tag, or digest.
   "required": ["image"]
-  "additionalProperties": "false"
+  "additionalProperties": !!bool "false"
 "start":
   "description": |
     Start a named registry container. With no arguments, this action starts
@@ -81,7 +81,7 @@
       "type": "string"
       "default": ""
       "description": "Optional name of the registry container to start."
-  "additionalProperties": "false"
+  "additionalProperties": !!bool "false"
 "stop":
   "description": |
     Stop a named registry container. With no arguments, this action stops
@@ -93,7 +93,7 @@
       "description": "Optional name of the registry container to stop."
     "remove":
       "type": "boolean"
-      "default": "true"
+      "default": !!bool "true"
       "description": |
         Remove the registry container after stopping.
-  "additionalProperties": "false"
+  "additionalProperties": !!bool "false"

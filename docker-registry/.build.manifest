@@ -50,12 +50,6 @@
     },
     {
       "branch": "refs/heads/master",
-      "fetched_url": "https://github.com/juju-solutions/layer-tls-client.git",
-      "rev": "fb46dec78d390571753d21876bbba689bbbca9e4",
-      "url": "layer:tls-client"
-    },
-    {
-      "branch": "refs/heads/master",
       "rev": "cc1b705618270a9e2ba9bc334c3b9dab8a2129e2",
       "url": "docker-registry"
     },
@@ -79,12 +73,6 @@
     },
     {
       "branch": "refs/heads/master",
-      "fetched_url": "https://github.com/juju-solutions/interface-tls-certificates",
-      "rev": "d9850016d930a6d507b9fd45e2598d327922b140",
-      "url": "interface:tls-certificates"
-    },
-    {
-      "branch": "refs/heads/master",
       "fetched_url": "https://github.com/juju-solutions/interface-docker-registry.git",
       "rev": "365ec9f348ccd561a9ec3e084c826f134676439e",
       "url": "interface:docker-registry"
@@ -100,6 +88,12 @@
       "fetched_url": "https://github.com/tbaumann/charm-interface-peer-discovery",
       "rev": "a0ff0ae9ff64b1ff33a1fa5e7f660493ee0d93f8",
       "url": "interface:peer-discovery"
+    },
+    {
+      "branch": "refs/heads/master",
+      "fetched_url": "https://github.com/juju-solutions/interface-tls-certificates",
+      "rev": "d9850016d930a6d507b9fd45e2598d327922b140",
+      "url": "interface:tls-certificates"
     }
   ],
   "signatures": {
@@ -293,11 +287,6 @@
       "static",
       "23ddf533198bf5b1ce723acde31ada806aab8539292b514c721d8ec08af74106"
     ],
-    "debug-scripts/tls-certs": [
-      "layer:tls-client",
-      "static",
-      "ebf7f23ef6e39fb8e664bac2e9429e32aaeb673b4a51751724b835c007e85d3b"
-    ],
     "docs/status.md": [
       "layer:status",
       "static",
@@ -324,26 +313,6 @@
       "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
     ],
     "hooks/cert-provider-relation-joined": [
-      "layer:basic",
-      "dynamic",
-      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
-    ],
-    "hooks/certificates-relation-broken": [
-      "layer:basic",
-      "dynamic",
-      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
-    ],
-    "hooks/certificates-relation-changed": [
-      "layer:basic",
-      "dynamic",
-      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
-    ],
-    "hooks/certificates-relation-departed": [
-      "layer:basic",
-      "dynamic",
-      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
-    ],
-    "hooks/certificates-relation-joined": [
       "layer:basic",
       "dynamic",
       "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
@@ -756,7 +725,7 @@
     "layer.yaml": [
       "docker-registry",
       "dynamic",
-      "fe58c821b3cb208862d6690d9964ac871443fe4bb235f409c4e0465d7218b156"
+      "711b4383b3288a835a51a749ae97c6c4461e48af89993eb936a84264e74840e9"
     ],
     "lib/charms/apt.py": [
       "layer:apt",
@@ -803,11 +772,6 @@
       "static",
       "d560a5e07b2e5f2b0f25f30e1f0278b06f3f90c01e4dbad5c83d71efc79018c6"
     ],
-    "lib/charms/layer/tls_client.py": [
-      "layer:tls-client",
-      "static",
-      "34531c3980777b661b913d77c432fc371ed10425473c2eb365b1dd5540c2ec6e"
-    ],
     "lib/charms/leadership.py": [
       "layer:leadership",
       "static",
@@ -826,7 +790,7 @@
     "metadata.yaml": [
       "docker-registry",
       "dynamic",
-      "b3a1c55b05561634236f7b969ea9d845e9963de075a617c923457f28beff7d32"
+      "f45c1b5b4b1b7f4e0de4a01b8765ff655807601ed322d36a406582d53c94d347"
     ],
     "pydocmd.yml": [
       "layer:status",
@@ -856,7 +820,7 @@
     "reactive/docker_registry.py": [
       "docker-registry",
       "static",
-      "389e691b4db7f0cc1e485c65d6ecc066e5b707c9e27074f826cb4718ed971fed"
+      "156d47a35a5c1559e5acfe74c41760812b8b5b633d4056c48c6ee9d415da8dd9"
     ],
     "reactive/leadership.py": [
       "layer:leadership",
@@ -867,16 +831,6 @@
       "layer:status",
       "static",
       "30207fc206f24e91def5252f1c7f7c8e23c0aed0e93076babf5e03c05296d207"
-    ],
-    "reactive/tls_client.py": [
-      "layer:tls-client",
-      "static",
-      "08e850e401d2004523dca6b5e6bc47c33d558bf575dd55969491e11cd3ed98c8"
-    ],
-    "reactive/tlslib.py": [
-      "docker-registry",
-      "static",
-      "feeade623cbd6968389f6cfc64399c166685063e7711c7dcea9f7ad2c2fdf6ce"
     ],
     "requirements.txt": [
       "layer:basic",
@@ -926,7 +880,7 @@
     "version": [
       "docker-registry",
       "dynamic",
-      "c38024fcb615a8f8370e16c887552de0783e35d90896c5dc497859bc2b776367"
+      "a1bbdcb290faa6774ee929b81146509e4091c60c23efaef1936a3628c1f23f04"
     ],
     "wheelhouse.txt": [
       "layer:docker",
@@ -963,10 +917,10 @@
       "dynamic",
       "0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa"
     ],
-    "wheelhouse/charmhelpers-0.20.20.tar.gz": [
+    "wheelhouse/charmhelpers-0.20.21.tar.gz": [
       "layer:basic",
       "dynamic",
-      "a4ea8f61299d6e48e0deb99d122e8fd570f18916aba51611ac65fe00f91d935e"
+      "37dd06f9548724d38352d1eaf91216df9167066745774118481d40974599715c"
     ],
     "wheelhouse/charms.docker-0.1.19.tar.gz": [
       "layer:docker",
@@ -1028,10 +982,10 @@
       "dynamic",
       "30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"
     ],
-    "wheelhouse/urllib3-1.26.3.tar.gz": [
+    "wheelhouse/urllib3-1.26.4.tar.gz": [
       "__pip__",
       "dynamic",
-      "de3eedaad74a2683334e282005cd8d7f22f4d55fa690a2a1020a416cb0a47e73"
+      "e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937"
     ],
     "wheelhouse/vcversioner-2.16.0.0.tar.gz": [
       "layer:docker",

@@ -13,8 +13,6 @@
 - "bionic"
 - "xenial"
 "requires":
-  "certificates":
-    "interface": "tls-certificates"
   "cert-provider":
     "interface": "tls-certificates"
 "provides":
@@ -34,4 +32,4 @@
 "peers":
   "peer":
     "interface": "peer-discovery"
-"subordinate": "false"
+"subordinate": !!bool "false"

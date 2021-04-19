@@ -65,72 +65,11 @@ def config_changed():
     name = charm_config.get('registry-name')
 
     # If a provider gave us certs and http-host changed, make sure SANs are accurate
-    # if (
-    #     is_flag_set('cert-provider.certs.available') and
-    #     charm_config.changed('http-host')
-    # ):
-    #     request_certificates()
-
-
-    @when('cert-provider.ca.changed')
-    def install_root_ca_cert():
-        cert_provider = endpoint_from_flag('cert-provider.ca.available')
-        host.install_ca_cert(cert_provider.root_ca_cert)
-        clear_flag('cert-provider.ca.changed')
-
-
-    @when('cert-provider.available')
-    def request_certificates():
-        cert_provider = endpoint_from_flag('cert-provider.available')
-
-        # get ingress info
-        ingress_for_clients = hookenv.network_get('clients')['ingress-addresses']
-        ingress_for_db = hookenv.network_get('db')['ingress-addresses']
-
-        # use first ingress address as primary and any additional as SANs
-        server_cn, server_sans = ingress_for_clients[0], ingress_for_clients[:1]
-        client_cn, client_sans = ingress_for_db[0], ingress_for_db[:1]
-
-        # request a single server and single client cert; note that multiple certs
-        # of either type can be requested as long as they have unique common names
-        cert_provider.request_server_cert(server_cn, server_sans)
-        cert_provider.request_client_cert(client_cn, client_sans)
-
-
-    @when('cert-provider.certs.changed')
-    def update_certs():
-        cert_provider = endpoint_from_flag('cert-provider.available')
-        server_cert = cert_provider.server_certs[0]  # only requested one
-        smart-web.update_server_cert(server_cert.cert, server_cert.key)
-
-        client_cert = cert_provider.client_certs[0]  # only requested one
-        smart-web.update_client_cert(client_cert.cert, client_cert.key)
-        clear_flag('cert-provider.certs.changed')
-
-    @when('certificates.available')
-    def send_data(tls):
-        '''Send the data that is required to create a server certificate for
-        this server.'''
-        # Use the public ip of this unit as the Common Name for the certificate.
-        common_name = hookenv.unit_public_ip()
-        # Get a list of Subject Alt Names for the certificate.
-        sans = []
-        sans.append(hookenv.unit_public_ip())
-        sans.append(hookenv.unit_private_ip())
-        sans.append(socket.gethostname())
-        layer.tls_client.request_server_cert(common_name, sans,
-                                            crt_path='/etc/certs/server.crt',
-                                            key_path='/etc/certs/server.key')
-
-    @when('certificates.server.cert.available')
-    def store_server(tls):
-        '''Read the server certificate from the relation object and install it on
-        this system.'''
-        server_cert, server_key = tls.get_server_cert()
-        write_file('/home/ubuntu/server.cert', server_cert)
-        write_file('/home/ubuntu/server.key', server_key)
-
-
+    if (
+        is_flag_set('cert-provider.certs.available') and
+        charm_config.changed('http-host')
+    ):
+        request_certificates()
 
     # If our name changed, make sure we stop the old one
     if (
