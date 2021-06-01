@@ -516,7 +516,7 @@ juju config apache2 "vhost_http_template=$(base64 < http_vhost.tmpl)"
 .. where http_vhost.tmpl is of the form:
 
 "For example a vhost that will pass all traffic on to an haproxy instance:
-
+```
 <VirtualHost *:80>
     ServerName radiotiptop.org.uk
 
@@ -543,7 +543,7 @@ juju config apache2 "vhost_http_template=$(base64 < http_vhost.tmpl)"
     RewriteRule ^/$ /index.html [L]
     RewriteRule ^/(.*)$ http://{{ haproxy_gunicorn }}/$1 [P,L]
 </VirtualHost>
-"
+```
 
  Next deploy an haproxy instance:
 
