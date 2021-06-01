@@ -1,23 +1,30 @@
 import pwd
+import socket
 import os
 from . import tlslib
-from charms import layer
+from charmhelpers.core import layer
 from charmhelpers.core import unitdata
 from charmhelpers.core import host, hookenv, templating
-from charms.reactive import hook
-from charms.reactive import when
-from charms.reactive import when_file_changed
-from charms.reactive import set_state
-from charms.reactive import remove_state
+from charmhelpers.core import hook
+from charmhelpers.core import when
+from charmhelpers.core import when_file_changed
+from charmhelpers.core import set_state
+from charmhelpers.core import remove_state
 from charmhelpers.core.hookenv import status_set
 from charmhelpers.core.templating import render
-from charms.reactive import when_not, set_flag
-from charms.reactive import endpoint_from_flag
-from charms.reactive import RelationBase
-from charms.reactive import scopes
-from charms.reactive.helpers import data_changed
-
-
+from charmhelpers.core import when_not, set_flag, clear_flag
+from charmhelpers.core import endpoint_from_flag
+from charmhelpers.core import RelationBase
+from charmhelpers.core import scopes
+from charmhelpers.core import data_changed
+from charmhelpers.core import render_template
+from charmhelpers.core import pgadmin4
+from charmhelpers.core import write_file
+from charmhelpers.core import configure_registry, configure_auth
+from charmhelpers.core import start_downloading_image, run_image
+from charmhelpers.core import layer
+from charmhelpers.core import data_changed
+render_template
 class ProvidesDockerHost(RelationBase):
     scope = scopes.GLOBAL
 
@@ -115,10 +122,10 @@ def install_pgadmin4():
     def update_certs():
         cert_provider = endpoint_from_flag('cert-provider.available')
         server_cert = cert_provider.server_certs[0]  # only requested one
-        smart-web.update_server_cert(server_cert.cert, server_cert.key)
+        pgadmin4.update_server_cert(server_cert.cert, server_cert.key)
 
         client_cert = cert_provider.client_certs[0]  # only requested one
-        smart-web.update_client_cert(client_cert.cert, client_cert.key)
+        pgadmin4.update_client_cert(client_cert.cert, client_cert.key)
         clear_flag('cert-provider.certs.changed')
 
     @when('certificates.available')
@@ -169,7 +176,7 @@ def install_pgadmin4():
     @when_not('charm.pgadmin4.started')
     def start_container():
         layer.status.maintenance('configuring container')
-        image_info = layer.docker-resource.get_info('dpage/pgadmin4')
+        image_info = layer.docker_resource.get_info('dpage/pgadmin4')
         layer.caas_base.pod_spec_set({
             'containers': [
                 {

@@ -22,16 +22,16 @@
   "basic":
     "packages": []
     "python_packages": []
-    "use_venv": "true"
-    "include_system_packages": "false"
+    "use_venv": True
+    "include_system_packages": False
   "debug": {}
   "nagios": {}
   "docker":
-    "skip-install": "false"
+    "skip-install": True
   "status":
-    "patch-hookenv": "true"
+    "patch-hookenv": True
   "docker-resource":
-    "set-status": "true"
+    "set-status": True
   "tls-client":
     "ca_certificate_path": ""
     "server_certificate_path": ""
@@ -49,10 +49,10 @@
       \ resource originates."
   - "name": "auto-fetch"
     "type": "Boolean"
-    "missing": "false"
+    "missing": False
     "description": "Whether or not to automatically fetch this resource."
   - "name": "validator"
     "type": "String"
     "missing": ""
     "description": "Held for future use; not currently used."
-"is": "pgadmin4"
+"is": "dpage/pgadmin4"

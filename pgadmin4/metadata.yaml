@@ -13,6 +13,9 @@
 - "focal"
 - "xenial"
 "requires":
+  "logging":
+      "interface": "logging-directory"
+      "scope": "container"
   "certificates":
     "interface": "tls-certificates"
   "docker-host":
@@ -49,4 +52,4 @@
     "type": "oci-image"
     "auto-fetch": "true"
     "description": "The image for this charm"
-"subordinate": "false"
+"subordinate": True

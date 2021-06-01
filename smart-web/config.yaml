@@ -51,14 +51,14 @@
       https://docs.docker.com/engine/reference/commandline/dockerd/#daemon-configuration-file
   "enable-cgroups":
     "type": "boolean"
-    "default": "false"
+    "default": !!bool "false"
     "description": |
       Enable GRUB cgroup overrides cgroup_enable=memory swapaccount=1. WARNING
       changing this option will reboot the host - use with caution on production
       services.
   "install_from_upstream":
     "type": "boolean"
-    "default": "false"
+    "default": !!bool "false"
     "description": |
       Toggle installation from Ubuntu archive vs the Docker PPA (DEPRECATED; please use docker_runtime instead).
   "docker_runtime":
@@ -108,21 +108,21 @@
       The pinned version of docker-ce package installed with nvidia-docker.
   "http_proxy":
     "type": "string"
-    "default": "10.80.202.79:5000"
+    "default": ""
     "description": |
       URL to use for HTTP_PROXY to be used by Docker. Useful in
       egress-filtered environments where a proxy is the only option for
       accessing the registry to pull images.
   "https_proxy":
     "type": "string"
-    "default": "10.80.202.79:5000"
+    "default": ""
     "description": |
       URL to use for HTTPS_PROXY to be used by Docker. Useful in
       egress-filtered environments where a proxy is the only option for
       accessing the registry to pull images.
   "no_proxy":
     "type": "string"
-    "default": "10.80.202.136:5432"
+    "default": ""
     "description": |
       Comma-separated list of destinations (either domain names or IP
       addresses) which should be accessed directly, rather than through
@@ -134,10 +134,10 @@
     "description": "A short description of the configuration option"
   "boolean-option":
     "type": "boolean"
-    "default": "false"
+    "default": !!bool "false"
     "description": "A short description of the configuration option"
-  "int-option":
+  "port":
     "type": "int"
-    "default": "9001"
+    "default": !!int "8001"
     "description": "A short description of the configuration option"
 

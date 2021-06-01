@@ -1,21 +1,28 @@
 import pwd
+import socket
 import os
 from . import tlslib
-from charms import layer
+from charmhelpers.core import layer
 from charmhelpers.core import unitdata
-from charmhelpers.core import host, hookenv, templating
-from charms.reactive import hook
-from charms.reactive import when
-from charms.reactive import when_file_changed
-from charms.reactive import set_state
-from charms.reactive import remove_state
+from charmhelpers.core import host, hookenv
+from charmhelpers.core import hook
+from charmhelpers.core import when, when_not, set_flag, clear_flag
+from charmhelpers.core import when_file_changed
+from charmhelpers.core import when
+from charmhelpers.core import set_state
+from charmhelpers.core import remove_state
 from charmhelpers.core.hookenv import status_set
 from charmhelpers.core.templating import render
-from charms.reactive import when_not, set_flag
-from charms.reactive import endpoint_from_flag
-from charms.reactive import RelationBase
-from charms.reactive import scopes
-from charms.reactive.helpers import data_changed
+from charmhelpers.core import endpoint_from_flag
+from charmhelpers.core import RelationBase
+from charmhelpers.core import scopes
+from charmhelpers.core import data_changed
+from charmhelpers.core import render_template
+from charmhelpers.core import write_file
+from charmhelpers.core import smart_web
+from charmhelpers.core import configure_registry
+from charmhelpers.core import configure_auth
+from charmhelpers.core import start_downloading_image, run_image
 
 class ProvidesDockerHost(RelationBase):
     scope = scopes.GLOBAL
@@ -114,10 +121,10 @@ def install_smart_web():
     def update_certs():
         cert_provider = endpoint_from_flag('cert-provider.available')
         server_cert = cert_provider.server_certs[0]  # only requested one
-        smart-web.update_server_cert(server_cert.cert, server_cert.key)
+        smart_web.update_server_cert(server_cert.cert, server_cert.key)
 
         client_cert = cert_provider.client_certs[0]  # only requested one
-        smart-web.update_client_cert(client_cert.cert, client_cert.key)
+        smart_web.update_client_cert(client_cert.cert, client_cert.key)
         clear_flag('cert-provider.certs.changed')
 
     @when('certificates.available')
@@ -155,7 +162,7 @@ def install_smart_web():
     @when('image.joined')
     def download_image(relation):
         image = start_downloading_image()
-        relation.send_configuration(image, 'smart')
+        relation.send_configuration(image, 'johnitcsolutionscomau/smart')
 
     @when('image.available')
     def run_images(relation):
@@ -168,7 +175,7 @@ def install_smart_web():
     @when_not('charm.smart-web.started')
     def start_container():
         layer.status.maintenance('configuring container')
-        image_info = layer.docker-resource.get_info('smart')
+        image_info = layer.docker_resource.get_info('smart')
         layer.caas_base.pod_spec_set({
             'containers': [
                 {
@@ -223,5 +230,5 @@ def install_smart_web():
         #
         #  * https://jujucharms.com/docs/devel/developer-getting-started
         #  * https://github.com/juju-solutions/layer-basic#overview
-    
+
     set_flag('smart-web.installed')

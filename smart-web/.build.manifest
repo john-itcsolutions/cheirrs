@@ -9,7 +9,7 @@
     {
       "branch": "refs/heads/master",
       "fetched_url": "https://github.com/juju-solutions/layer-basic.git",
-      "rev": "623e69c7b432456fd4364f6e1835424fd6b5425e",
+      "rev": "813f8b60ff8500434326cfd887104eb6de6f901f",
       "url": "layer:basic"
     },
     {
@@ -26,15 +26,15 @@
     },
     {
       "branch": "refs/heads/master",
-      "fetched_url": "https://github.com/juju-solutions/layer-docker.git",
-      "rev": "f47ea965f598f25aaf1d02e457b54660afa8303a",
-      "url": "layer:docker"
-    },
-    {
-      "branch": "refs/heads/master",
       "fetched_url": "https://github.com/juju-solutions/layer-status",
       "rev": "a7d7b6423db37a47611310039e6ed1929c0a2eab",
       "url": "layer:status"
+    },
+    {
+      "branch": "refs/heads/master",
+      "fetched_url": "https://github.com/juju-solutions/layer-docker.git",
+      "rev": "f47ea965f598f25aaf1d02e457b54660afa8303a",
+      "url": "layer:docker"
     },
     {
       "branch": "refs/heads/master",
@@ -49,8 +49,7 @@
       "url": "layer:tls-client"
     },
     {
-      "branch": "refs/heads/master",
-      "rev": "de54271eff2b4a5a2870c37f45a1956979d32fb3",
+      "rev": "",
       "url": "smart-web"
     },
     {
@@ -114,20 +113,20 @@
       "dynamic",
       "unchecked"
     ],
-    ".gitignore": [
-      "layer:status",
+    ".github/workflows/main.yml": [
+      "layer:basic",
       "static",
-      "315971ad9cc5d6ada2391f0940e1800149b211a18be3c7a8f396735d7978702b"
+      "4424d3a5e3c97421bddf2371ae1c483aac9c76c8985a1751bb11b495e3325267"
+    ],
+    ".gitignore": [
+      "layer:docker",
+      "static",
+      "ee56e2e0ee5fd639ede55a25c9d619d08ec69f3287b36d542046d97a4d908a56"
     ],
     ".travis.yml": [
       "layer:docker",
       "static",
       "3f925b1a0a2be0b425581f12c3f74593a28c5f0ecc0180821d25f190289bdf03"
-    ],
-    ".travis/profile-update.yaml": [
-      "layer:basic",
-      "static",
-      "731e20aa59bf61c024d317ad630e478301a9386ccc0afe56e6c1c09db07ac83b"
     ],
     "LICENSE": [
       "layer:docker-resource",
@@ -135,7 +134,7 @@
       "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
     ],
     "Makefile": [
-      "layer:docker",
+      "smart-web",
       "static",
       "21a6b3422c5d114830857841394a511da187e277b9b1299c05deb9f5f1d0741b"
     ],
@@ -150,7 +149,7 @@
       "bf1481b3f24a76040695eb3a849accc9ebb2e3dac54cb62eb2315143e0cf6056"
     ],
     "actions.yaml": [
-      "layer:docker",
+      "smart-web",
       "dynamic",
       "8eceb0d540d3d25814e12710419c6ac32970075a6f3a6c42d0eb3e68415ca82d"
     ],
@@ -187,7 +186,7 @@
     "config.yaml": [
       "smart-web",
       "dynamic",
-      "404ddef0383073fd136f6aab2813f6634d40be701c246e8598910f39a2795913"
+      "2340ec272f9724a4fe8a5f6d38f106defa1d2518f5b46f42442d9d72d014a011"
     ],
     "copyright": [
       "layer:docker-resource",
@@ -434,12 +433,52 @@
       "dynamic",
       "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
     ],
+    "hooks/juju-info-relation-broken": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
+    "hooks/juju-info-relation-changed": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
+    "hooks/juju-info-relation-departed": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
+    "hooks/juju-info-relation-joined": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
     "hooks/leader-elected": [
       "layer:basic",
       "dynamic",
       "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
     ],
     "hooks/leader-settings-changed": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
+    "hooks/logging-relation-broken": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
+    "hooks/logging-relation-changed": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
+    "hooks/logging-relation-departed": [
+      "layer:basic",
+      "dynamic",
+      "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
+    ],
+    "hooks/logging-relation-joined": [
       "layer:basic",
       "dynamic",
       "2b693cb2a11594a80cc91235c2dc219a0a6303ae62bee8aa87eb35781f7158f7"
@@ -754,26 +793,6 @@
       "static",
       "a19de27b977f4e098f8135dcf39b1cdcf4673635bd4bbf4a1636f0d27e705251"
     ],
-    "hooks/relations/pgsql/tox.ini": [
-      "interface:pgsql",
-      "static",
-      "47da636bee8c417533ecf15dee4240933e3d04ffe2f6c7e32996a36d9d2530ad"
-    ],
-    "hooks/relations/pgsql/unit_tests/main.pth": [
-      "interface:pgsql",
-      "static",
-      "e8e2bfb9088b7dec0ac16ade695749de33d1d6c2cd492ca888ee688f5b9399d4"
-    ],
-    "hooks/relations/pgsql/unit_tests/test_connectionstring.py": [
-      "interface:pgsql",
-      "static",
-      "4bb584e4183ed21a6d5c2fa3239cc706554b107776a88082c28609e29b7b128b"
-    ],
-    "hooks/relations/pgsql/unit_tests/test_requires.py": [
-      "interface:pgsql",
-      "static",
-      "c280c093ab5d2418051d1d864e6ffc19bea670bd72b0ed2935fee4206c8ae6eb"
-    ],
     "hooks/relations/sdn-plugin/.gitignore": [
       "interface:sdn-plugin",
       "static",
@@ -864,11 +883,6 @@
       "static",
       "068bd32ba69bfa514e1da386919d18b348ee678b40c372f275c9110f2cc4677c"
     ],
-    "hooks/relations/tls-certificates/tox.ini": [
-      "interface:tls-certificates",
-      "static",
-      "7ab8ab53e5ed98cfa7fb5c1d5009f84077a4bb76640ba64f561ef7ea3a702eab"
-    ],
     "hooks/sdn-plugin-relation-broken": [
       "layer:basic",
       "dynamic",
@@ -934,400 +948,10 @@
       "static",
       "d20624e9389af6506a8d8a69ac9bba4d41709601b624c0875fd7d6717b395088"
     ],
-    "interfaces/interface-docker-image-host/README.md": [
-      "smart-web",
-      "static",
-      "fcc7826727f283e04b64deb44d0b3eef100f2df7068773656549c716ae657293"
-    ],
-    "interfaces/interface-docker-image-host/interface.yaml": [
-      "smart-web",
-      "static",
-      "4fca7d774c4072c7edc870525080d4e3839ca07aa6c7637208c74452a2370307"
-    ],
-    "interfaces/interface-docker-image-host/provides.py": [
-      "smart-web",
-      "static",
-      "7c2467be05a8e9ee7fdfe29af413c112d272bff933631bfa85669809b1cf021d"
-    ],
-    "interfaces/interface-docker-image-host/requires.py": [
-      "smart-web",
-      "static",
-      "f91f2dc57f93c6b0ba3310e573f94b9245490ff7c2f7e80af4256bb7ccffbe3b"
-    ],
-    "interfaces/interface-docker-registry/.gitignore": [
-      "smart-web",
-      "static",
-      "83b4ca18cc39800b1d260b5633cd0252e21501b21e7c33e718db44f1a68a09b8"
-    ],
-    "interfaces/interface-docker-registry/LICENSE": [
-      "smart-web",
-      "static",
-      "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
-    ],
-    "interfaces/interface-docker-registry/README.md": [
-      "smart-web",
-      "static",
-      "a42f9e72af9a6fad058e8f156e79aeaadccf3e2b03b5b7dc750704b168f4347c"
-    ],
-    "interfaces/interface-docker-registry/interface.yaml": [
-      "smart-web",
-      "static",
-      "29816ed0d72772b26108012481b64db1385ff42d3349fa175bb05331ca0f933c"
-    ],
-    "interfaces/interface-docker-registry/provides.py": [
-      "smart-web",
-      "static",
-      "618cc1b19c2e77106363938931a342918306d731be61665167bad4615a30d9c7"
-    ],
-    "interfaces/interface-docker-registry/requires.py": [
-      "smart-web",
-      "static",
-      "9db322b76a6bbdc15b36fba077bddbff7dfc6dbfe9c245fed548c00e6c354578"
-    ],
-    "interfaces/interface-dockerhost/interface.yaml": [
-      "smart-web",
-      "static",
-      "efedb513f1b7e88d340b11d1e72cf77c24cb00fd4b1f6ea4ff6221e2bdaa2f63"
-    ],
-    "interfaces/interface-dockerhost/provides.py": [
-      "smart-web",
-      "static",
-      "5481bc4e005aa6b77028a1f5c6bd23faf6ce8c537f054c31cdeddf1f68d8eb1d"
-    ],
-    "interfaces/interface-dockerhost/requires.py": [
-      "smart-web",
-      "static",
-      "34b6fbafcade2bbc3726d84bbf9b26ea9e086ed6418ce06536b5dd3317d1acff"
-    ],
-    "interfaces/interface-etcd/.gitignore": [
-      "smart-web",
-      "static",
-      "cf237c7aff44efbe6e502e645c3e06da03a69d7bdeb43392108ef3348143417e"
-    ],
-    "interfaces/interface-etcd/README.md": [
-      "smart-web",
-      "static",
-      "93873d073f5f5302d352e09321aaf87458556e9730f89e1c682699c1d0db2386"
-    ],
-    "interfaces/interface-etcd/interface.yaml": [
-      "smart-web",
-      "static",
-      "ba9f723b57a434f7efb2c06abec4167cd412c16da5f496a477dd7691e9a715be"
-    ],
-    "interfaces/interface-etcd/peers.py": [
-      "smart-web",
-      "static",
-      "99419c3d139fb5bb90021e0482f9e7ac2cfb776fb7af79b46209c6a75b36e834"
-    ],
-    "interfaces/interface-etcd/provides.py": [
-      "smart-web",
-      "static",
-      "3db1f644ab669e2dec59d59b61de63b721bc05b38fe646e525fff8f0d60982f9"
-    ],
-    "interfaces/interface-etcd/requires.py": [
-      "smart-web",
-      "static",
-      "8ffc1a094807fd36a1d1428b0a07b2428074134d46086066ecd6c0acd9fcd13e"
-    ],
-    "interfaces/interface-http/.gitignore": [
-      "smart-web",
-      "static",
-      "83b4ca18cc39800b1d260b5633cd0252e21501b21e7c33e718db44f1a68a09b8"
-    ],
-    "interfaces/interface-http/README.md": [
-      "smart-web",
-      "static",
-      "9c95320ad040745374fc03e972077f52c27e07eb0386ec93ae19bd50dca24c0d"
-    ],
-    "interfaces/interface-http/interface.yaml": [
-      "smart-web",
-      "static",
-      "d0b64038b85b7791ee4f3a42d73ffc8c208f206f73f899cbf33a519d12f9ad13"
-    ],
-    "interfaces/interface-http/provides.py": [
-      "smart-web",
-      "static",
-      "8c72cd8a5a6ea24f53b6dba11f4353c75265bfa7d3ecc2dd096c8963eab8c877"
-    ],
-    "interfaces/interface-http/requires.py": [
-      "smart-web",
-      "static",
-      "76cc886368eaf9c2403a6dc46b40531c3f4eaf67b08829f890c57cb645430abd"
-    ],
-    "interfaces/interface-pgsql/.gitignore": [
-      "smart-web",
-      "static",
-      "ac2b014e426da13ceb24a4854c3f5de636cd357c3e5edbb21019e7596175977a"
-    ],
-    "interfaces/interface-pgsql/Makefile": [
-      "smart-web",
-      "static",
-      "134c9d87ac9911dc9bf4c5d723da644e02518b7e66f734a7dfe42b584c125821"
-    ],
-    "interfaces/interface-pgsql/README.md": [
-      "smart-web",
-      "static",
-      "c18bc9c64085645e67e8275877a58842733f50354f996bf54e4115a04d6d30c5"
-    ],
-    "interfaces/interface-pgsql/copyright": [
-      "smart-web",
-      "static",
-      "60418020fdb24346ea19d977d18e7064dee06de227731ae4c16cb3edd3df2bc9"
-    ],
-    "interfaces/interface-pgsql/docs/Makefile": [
-      "smart-web",
-      "static",
-      "3a809dc407c194c4669d5ac731fd45135ce62b5cdc8609563826b5b31999b69d"
-    ],
-    "interfaces/interface-pgsql/docs/source/conf.py": [
-      "smart-web",
-      "static",
-      "bf0b2b1b2eab5e80f3e907b0d411d98740f2aaee5d68a3c9b04a7ed15b1023a2"
-    ],
-    "interfaces/interface-pgsql/docs/source/index.rst": [
-      "smart-web",
-      "static",
-      "a9d4dab8284dab71f2dcf9c4c3cae9ce7d52873d076484a5eb6b9987799933ae"
-    ],
-    "interfaces/interface-pgsql/docs/source/requires.rst": [
-      "smart-web",
-      "static",
-      "bc974dd0eec56a5b9008e42f2b84656c780b7846c556df28b0a2d1544d9d1f69"
-    ],
-    "interfaces/interface-pgsql/interface.yaml": [
-      "smart-web",
-      "static",
-      "8b9fb032d748a2dd4cc715a6a4069a3838f8912e8ef3ed0747920800168c2940"
-    ],
-    "interfaces/interface-pgsql/provides.py": [
-      "smart-web",
-      "static",
-      "e63c8892030310a4e76a87a0690febb923ea59b2a244939bcbbcd179f9579d12"
-    ],
-    "interfaces/interface-pgsql/requires.py": [
-      "smart-web",
-      "static",
-      "04c478a9e974abfa99c7fd1458b6a91dfd11749a72605f10e7b3de6b555ae46d"
-    ],
-    "interfaces/interface-pgsql/setup.py": [
-      "smart-web",
-      "static",
-      "d10ecf6275aa8d1d8557e1cd305d3c18d9e8f48b59490f4feb9f171d1763e1c2"
-    ],
-    "interfaces/interface-pgsql/test_requirements.txt": [
-      "smart-web",
-      "static",
-      "a19de27b977f4e098f8135dcf39b1cdcf4673635bd4bbf4a1636f0d27e705251"
-    ],
-    "interfaces/interface-pgsql/tox.ini": [
-      "smart-web",
-      "static",
-      "47da636bee8c417533ecf15dee4240933e3d04ffe2f6c7e32996a36d9d2530ad"
-    ],
-    "interfaces/interface-pgsql/unit_tests/main.pth": [
-      "smart-web",
-      "static",
-      "e8e2bfb9088b7dec0ac16ade695749de33d1d6c2cd492ca888ee688f5b9399d4"
-    ],
-    "interfaces/interface-pgsql/unit_tests/test_connectionstring.py": [
-      "smart-web",
-      "static",
-      "4bb584e4183ed21a6d5c2fa3239cc706554b107776a88082c28609e29b7b128b"
-    ],
-    "interfaces/interface-pgsql/unit_tests/test_requires.py": [
-      "smart-web",
-      "static",
-      "c280c093ab5d2418051d1d864e6ffc19bea670bd72b0ed2935fee4206c8ae6eb"
-    ],
     "layer.yaml": [
       "smart-web",
       "dynamic",
-      "ec12c0299a822eb53e85bd922a73cb152072a061d66a71834e6db6eec9c42a40"
-    ],
-    "layers/layer-docker-resource/LICENSE": [
-      "smart-web",
-      "static",
-      "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
-    ],
-    "layers/layer-docker-resource/README.md": [
-      "smart-web",
-      "static",
-      "a12645ede907c66695c202aa1fa3ecd696cec3b3fe248c9d56f5bd62e7176d90"
-    ],
-    "layers/layer-docker-resource/copyright": [
-      "smart-web",
-      "static",
-      "7c0e36e618a8544faaaa3f8e0533c2f1f4a18bcacbdd8b99b537742e6b587d58"
-    ],
-    "layers/layer-docker-resource/layer.yaml": [
-      "smart-web",
-      "static",
-      "81f05dd353b2b6047b5558556e9228363d5d5264ff6fae5beafe2d6982919f79"
-    ],
-    "layers/layer-docker-resource/lib/charms/layer/docker_resource.py": [
-      "smart-web",
-      "static",
-      "a8d14a392341a026e8a32b4826fcf1f010ea94ff81bf910edc4ede7abac3847d"
-    ],
-    "layers/layer-docker-resource/reactive/docker_resource.py": [
-      "smart-web",
-      "static",
-      "afc4074c204941ce2b76632df852439195a23041c8bb4dfc9a9ff3c0d90e0946"
-    ],
-    "layers/layer-docker/.gitignore": [
-      "smart-web",
-      "static",
-      "ee56e2e0ee5fd639ede55a25c9d619d08ec69f3287b36d542046d97a4d908a56"
-    ],
-    "layers/layer-docker/.travis.yml": [
-      "smart-web",
-      "static",
-      "3f925b1a0a2be0b425581f12c3f74593a28c5f0ecc0180821d25f190289bdf03"
-    ],
-    "layers/layer-docker/LAYER_README.md": [
-      "smart-web",
-      "static",
-      "5c5b50f8240c746d55052adedc86b04ce867d3716433247f60a513d4a42be1df"
-    ],
-    "layers/layer-docker/Makefile": [
-      "smart-web",
-      "static",
-      "21a6b3422c5d114830857841394a511da187e277b9b1299c05deb9f5f1d0741b"
-    ],
-    "layers/layer-docker/README.md": [
-      "smart-web",
-      "static",
-      "fa85a276f5289474c33940083f87bd46621ab268c8688c2ee5dfad2a27b1015e"
-    ],
-    "layers/layer-docker/actions.yaml": [
-      "smart-web",
-      "static",
-      "c5391ee4d559f2d2898bb719b81785c8fc8faf01cf56298f62c595c5f1ea3c09"
-    ],
-    "layers/layer-docker/actions/clean-containers": [
-      "smart-web",
-      "static",
-      "bb65a39fa8310c215754e9d867be0062943ab33ecc1c058b5d234eb136725b58"
-    ],
-    "layers/layer-docker/actions/clean-images": [
-      "smart-web",
-      "static",
-      "1f1466a04d11b2c6dfe3c46a7f6f6a24bacfcc44220c79480c9d94871127e0a3"
-    ],
-    "layers/layer-docker/actions/upgrade-docker": [
-      "smart-web",
-      "static",
-      "87d9114c2dfd62a27604af3e3595b5713d1f8d76fe96d388f7e923d35350bd91"
-    ],
-    "layers/layer-docker/config.yaml": [
-      "smart-web",
-      "static",
-      "f8fdb99fec455200ef90a4d08ab2e6f5df1b8071cba707119e58b3d00046ebe6"
-    ],
-    "layers/layer-docker/copyright": [
-      "smart-web",
-      "static",
-      "9df2e45ab462058f6afef45b26c5c2a4a40e55c71e36dd3dd184e39d8e4e5413"
-    ],
-    "layers/layer-docker/debug-scripts/docker": [
-      "smart-web",
-      "static",
-      "81af41323abee1d29e04c0ed3222b02ef99e868e98a7491f74541666e471e803"
-    ],
-    "layers/layer-docker/exec.d/docker-compose/charm-pre-install": [
-      "smart-web",
-      "static",
-      "aa6608fea1a87e2de3365271dd807f8fc52ed97916e35ae6cd9ab392315f71d8"
-    ],
-    "layers/layer-docker/icon.svg": [
-      "smart-web",
-      "static",
-      "fb0b2e6eb416cac369d2d7f1a56db005f732f9080a801702869f6ac6c6f0ba37"
-    ],
-    "layers/layer-docker/layer.yaml": [
-      "smart-web",
-      "static",
-      "99f313adfcff3b82078aaadeff82531539271f493992e01488db2afee02dda73"
-    ],
-    "layers/layer-docker/lib/charms/layer/docker.py": [
-      "smart-web",
-      "static",
-      "27e391c9b44ab4792af53aab9e34b2bd04ad87b608186667679deedd72afe8e8"
-    ],
-    "layers/layer-docker/metadata.yaml": [
-      "smart-web",
-      "static",
-      "d3b672b5e8c596dd402d43461b9c94af234422e46492fdfcf3bbeb8771bfbe0c"
-    ],
-    "layers/layer-docker/reactive/docker.py": [
-      "smart-web",
-      "static",
-      "17f72192ee6f71af41334d1a5e723d5cfe82376b18f9c7784b578bfcb55da7d7"
-    ],
-    "layers/layer-docker/scripts/enable_grub_cgroups.sh": [
-      "smart-web",
-      "static",
-      "08f39868716900be03e2612a63d5fbbd661599484f05f5164c5d794415cfa260"
-    ],
-    "layers/layer-docker/templates/docker.defaults": [
-      "smart-web",
-      "static",
-      "f8bd601c9c79b482665b2d9fd195fecd5ea962812d7017111fb5614d1a58a023"
-    ],
-    "layers/layer-docker/templates/docker.systemd": [
-      "smart-web",
-      "static",
-      "7a89328c7d18d542d1dcd3a5c43ad6d7e5e4bb5fe1a73c08ff53046bdf39c5dd"
-    ],
-    "layers/layer-docker/tests/conftest.py": [
-      "smart-web",
-      "static",
-      "8c089f90569f513e0b5581ae921e7867d59e58b97a50a3fbc38db2f2588358a0"
-    ],
-    "layers/layer-docker/tests/test_lib_docker.py": [
-      "smart-web",
-      "static",
-      "c62bf2b2da033b85ab0ccadd21462b1e828dc6416da444a345a0bde784a06720"
-    ],
-    "layers/layer-docker/tox.ini": [
-      "smart-web",
-      "static",
-      "9dbf567c554686f3e92b7a61453b6fc569ef3ccc80d0dc47988d2f9ed1ed7226"
-    ],
-    "layers/layer-docker/wheelhouse.txt": [
-      "smart-web",
-      "static",
-      "08554a1f4e167fb0633d61633e64c57a35c943325c4d35f072f9290895279dbc"
-    ],
-    "layers/layer-tls-client/README.md": [
-      "smart-web",
-      "static",
-      "74f13f39f8c41a2002e71c595d7055cb00efbaab00850d1f62301ab027c6f4c6"
-    ],
-    "layers/layer-tls-client/debug-scripts/tls-certs": [
-      "smart-web",
-      "static",
-      "ebf7f23ef6e39fb8e664bac2e9429e32aaeb673b4a51751724b835c007e85d3b"
-    ],
-    "layers/layer-tls-client/layer.yaml": [
-      "smart-web",
-      "static",
-      "c447951c671bcf5e33ef9eb9d6435b751ec6faf5ba57e939375ff3b27c73d20b"
-    ],
-    "layers/layer-tls-client/lib/charms/layer/tls_client.py": [
-      "smart-web",
-      "static",
-      "34531c3980777b661b913d77c432fc371ed10425473c2eb365b1dd5540c2ec6e"
-    ],
-    "layers/layer-tls-client/metadata.yaml": [
-      "smart-web",
-      "static",
-      "71ac4be36aa9b215d5250e3fa84880f510a932fc78616b362cb31a2f9705487d"
-    ],
-    "layers/layer-tls-client/reactive/tls_client.py": [
-      "smart-web",
-      "static",
-      "08e850e401d2004523dca6b5e6bc47c33d558bf575dd55969491e11cd3ed98c8"
+      "31744ef15d3fec58734da7124546a79213d1e62deff35a554a083c4723913a74"
     ],
     "lib/charms/layer/__init__.py": [
       "layer:basic",
@@ -1337,7 +961,7 @@
     "lib/charms/layer/basic.py": [
       "layer:basic",
       "static",
-      "3126b5754ad39402ee27e64527044ddd231ed1cd137fcedaffb51e63a635f108"
+      "98b47134770ed6e4c0b2d4aad73cd5bc200bec84aa9c1c4e075fd70c3222a0c9"
     ],
     "lib/charms/layer/docker.py": [
       "layer:docker",
@@ -1387,10 +1011,10 @@
     "metadata.yaml": [
       "smart-web",
       "dynamic",
-      "296da82581632fd2326255bac38e9c0a0ba0a22a4b3433aa98f3c2c2ddcbf3c3"
+      "cf7aa1faad92b38ea4957cdb5e2aeb7fdbc1be6f69d94d9d16f3731ce9f9caaf"
     ],
     "pydocmd.yml": [
-      "layer:status",
+      "smart-web",
       "static",
       "11d9293901f32f75f4256ae4ac2073b92ce1d7ef7b6c892ba9fbb98690a0b330"
     ],
@@ -1412,7 +1036,7 @@
     "reactive/smart_web.py": [
       "smart-web",
       "static",
-      "51dfcf721292158f298c6d9816e1f92982f173d9df4a28f2833cdf7faab7aab3"
+      "e38c68e93d4211ab6d68e9f047e0da3347987d5b536972ece57fba1d430a327b"
     ],
     "reactive/status.py": [
       "layer:status",
@@ -1424,13 +1048,8 @@
       "static",
       "08e850e401d2004523dca6b5e6bc47c33d558bf575dd55969491e11cd3ed98c8"
     ],
-    "reactive/tlslib.py": [
-      "smart-web",
-      "static",
-      "feeade623cbd6968389f6cfc64399c166685063e7711c7dcea9f7ad2c2fdf6ce"
-    ],
     "requirements.txt": [
-      "layer:basic",
+      "smart-web",
       "static",
       "a00f75d80849e5b4fc5ad2e7536f947c25b1a4044b341caa8ee87a92d3a4c804"
     ],
@@ -1449,16 +1068,6 @@
       "static",
       "7a89328c7d18d542d1dcd3a5c43ad6d7e5e4bb5fe1a73c08ff53046bdf39c5dd"
     ],
-    "tests/00-setup": [
-      "smart-web",
-      "static",
-      "111c079b81d260bbcd716dcf41672372a4cf4aaa14154b6c3055deeedae37a06"
-    ],
-    "tests/10-deploy": [
-      "smart-web",
-      "static",
-      "9243466f89f3712490bfa987cc3fc89a136c11454b10401be71854f5063977c5"
-    ],
     "tests/conftest.py": [
       "layer:docker",
       "static",
@@ -1470,32 +1079,27 @@
       "c62bf2b2da033b85ab0ccadd21462b1e828dc6416da444a345a0bde784a06720"
     ],
     "tox.ini": [
-      "layer:status",
+      "layer:docker",
       "static",
-      "2669a78e8e51c1606874e1cc97ca99e660ff547a79592572a38a268d99b25b67"
-    ],
-    "version": [
-      "smart-web",
-      "dynamic",
-      "2a97d2e9fa9a4639851fecff827812e904535b79f42187365f5044e3e582183e"
+      "9dbf567c554686f3e92b7a61453b6fc569ef3ccc80d0dc47988d2f9ed1ed7226"
     ],
     "wheelhouse.txt": [
-      "layer:docker",
+      "smart-web",
       "dynamic",
-      "bd7e8f17e98525fe0fda2c13ab9338755bfb7479a6cb5acc364936f0343bfc1b"
+      "fe01124cdc746b49da1a820d9c92708e1d6f533c6085437335fe1cee0d73a5bb"
     ],
     "wheelhouse/Jinja2-2.10.1.tar.gz": [
-      "layer:basic",
+      "smart-web",
       "dynamic",
       "065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013"
     ],
-    "wheelhouse/MarkupSafe-1.1.1.tar.gz": [
+    "wheelhouse/MarkupSafe-2.0.1.tar.gz": [
       "__pip__",
       "dynamic",
-      "29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b"
+      "594c67807fb16238b30c44bdf74f36c02cdf22d1c8cda91ef8a0ed8dabf5620a"
     ],
     "wheelhouse/PyYAML-5.2.tar.gz": [
-      "layer:basic",
+      "smart-web",
       "dynamic",
       "c0ee8eca2c582d29c3c2ec6e2c4f703d1b7f1fb10bc72317355a746057e7346c"
     ],
@@ -1504,10 +1108,10 @@
       "dynamic",
       "cacecf0baa674d356641f1d406b8bff1d756d739c46b869a54de515d08e6fc9c"
     ],
-    "wheelhouse/certifi-2020.12.5.tar.gz": [
+    "wheelhouse/certifi-2021.5.30.tar.gz": [
       "__pip__",
       "dynamic",
-      "1a4995114262bffbc2413b159f2a1a480c969de6e6eb13ee966d470af86af59c"
+      "2bbf76fd432960138b3ef6dda3dde0544f27cbf8546c458e60baf371917ba9ee"
     ],
     "wheelhouse/chardet-4.0.0.tar.gz": [
       "__pip__",
@@ -1515,22 +1119,22 @@
       "0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa"
     ],
     "wheelhouse/charmhelpers-0.20.21.tar.gz": [
-      "layer:basic",
+      "smart-web",
       "dynamic",
       "37dd06f9548724d38352d1eaf91216df9167066745774118481d40974599715c"
     ],
     "wheelhouse/charms.docker-0.1.19.tar.gz": [
-      "layer:docker",
+      "smart-web",
       "dynamic",
       "735160e795894e6a007f333a5b755003db1825f4c67b0aaab8f16269656564eb"
     ],
     "wheelhouse/charms.reactive-1.4.1.tar.gz": [
-      "layer:basic",
+      "smart-web",
       "dynamic",
       "bba21b4fd40b26c240c9ef2aa10c6fdf73592031c68591da4e7ccc46ca9cb616"
     ],
     "wheelhouse/charms.templating.jinja2-1.0.2.tar.gz": [
-      "layer:docker",
+      "smart-web",
       "dynamic",
       "8193c6a1d40bdb66fe272c359b4e4780501c658acfaf2b1118c4230927815fe2"
     ],
@@ -1540,17 +1144,17 @@
       "b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"
     ],
     "wheelhouse/netaddr-0.7.19.tar.gz": [
-      "layer:basic",
+      "smart-web",
       "dynamic",
       "38aeec7cdd035081d3a4c306394b19d677623bf76fa0913f6695127c7753aefd"
     ],
-    "wheelhouse/pbr-5.5.1.tar.gz": [
+    "wheelhouse/pbr-5.6.0.tar.gz": [
       "__pip__",
       "dynamic",
-      "5fad80b613c402d5b7df7bd84812548b2a61e9977387a80a5fc5c396492b13c9"
+      "42df03e7797b796625b1029c0400279c7c34fd7df24a7d7818a1abb5b38710dd"
     ],
     "wheelhouse/pip-18.1.tar.gz": [
-      "layer:basic",
+      "smart-web",
       "dynamic",
       "c0a292bd977ef590379a3f05d7b7f65135487b67470f6281289a94e015650ea1"
     ],
@@ -1560,37 +1164,37 @@
       "29a5c2a68660a799103d6949167bd6c7953d031449d08802386372de1db6ad71"
     ],
     "wheelhouse/requests-2.25.1.tar.gz": [
-      "layer:docker",
+      "smart-web",
       "dynamic",
       "27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804"
     ],
     "wheelhouse/setuptools-41.6.0.zip": [
-      "layer:basic",
+      "smart-web",
       "dynamic",
       "6afa61b391dcd16cb8890ec9f66cc4015a8a31a6e1c2b4e0c464514be1a3d722"
     ],
     "wheelhouse/setuptools_scm-1.17.0.tar.gz": [
-      "layer:basic",
+      "smart-web",
       "dynamic",
       "70a4cf5584e966ae92f54a764e6437af992ba42ac4bca7eb37cc5d02b98ec40a"
     ],
-    "wheelhouse/six-1.15.0.tar.gz": [
+    "wheelhouse/six-1.16.0.tar.gz": [
       "__pip__",
       "dynamic",
-      "30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259"
+      "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"
     ],
-    "wheelhouse/urllib3-1.26.4.tar.gz": [
+    "wheelhouse/urllib3-1.26.5.tar.gz": [
       "__pip__",
       "dynamic",
-      "e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937"
+      "a7acd0977125325f516bda9735fa7142b909a8d01e8b2e4c8108d0984e6e0098"
     ],
     "wheelhouse/vcversioner-2.16.0.0.tar.gz": [
-      "layer:docker",
+      "smart-web",
       "dynamic",
       "dae60c17a479781f44a4010701833f1829140b1eeccd258762a74974aa06e19b"
     ],
     "wheelhouse/wheel-0.33.6.tar.gz": [
-      "layer:basic",
+      "smart-web",
       "dynamic",
       "10c9da68765315ed98850f8e048347c3eb06dd81822dc2ab1d4fde9dc9702646"
     ]
