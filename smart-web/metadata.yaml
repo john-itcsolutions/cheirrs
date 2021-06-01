@@ -46,7 +46,7 @@
 
 "display-name": "smart-web"
 "resources":
-  "smart":
+  "johnitcsolutionscomau/smart":
     "type": "oci-image"
     "auto-fetch": "true"
     "description": "The image for this charm"

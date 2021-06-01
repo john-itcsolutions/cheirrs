@@ -67,7 +67,7 @@ def install_smart_web():
 
     @when('db.connected')
     def request_db(pgsql):
-        pgsql.set_database('house')
+        pgsql.set_database('haus')
 
     @when('config.changed')
     def check_admin_pass():
@@ -181,7 +181,7 @@ def install_smart_web():
                     'ports': [
                         {
                             'name': 'service',
-                            'containerPort': 80,
+                            'containerPort': 8001,
                         },
                     ],
                 },
@@ -205,7 +205,7 @@ def install_smart_web():
                 hookenv.log('{} has a unit {}:{}'.format(
                     services['smart-web-service'],
                     host['smart-web'],
-                    host['80']))
+                    host['8001']))
 
     @when('etcd.available', 'docker.available')
     def swarm_etcd_cluster_setup(etcd):

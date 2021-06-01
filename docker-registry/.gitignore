@@ -1,7 +1,0 @@
-.tox/
-__pycache__/
-*.pyc
-.*.swp
-dist/
-builds/
-deps/

@@ -14,11 +14,11 @@ logging.basicConfig(
 )
 
 # Connect to the database
-db_name = config('DB_NAME')
-db_user = config('DB_USER')
-db_password = config('DB_PASSWORD')
-db_host = config('DB_HOST')
-db_port = config('DB_PORT')
+db_name = config('haus')
+db_user = config('postgres')
+db_password = config('Buddha10')
+db_host = config('postgresql')
+db_port = config('5432')
 
 database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
@@ -66,14 +66,14 @@ def db_relation_changed():
         if local_unit() not in allowed_units.split():
             continue  # Not yet authorized.
 
-        conn_str = conn_str_tmpl.format(**relation_get(unit=db_unit)
+        conn_str = conn_str_tmpl.format(**relation_get(unit=db_unit))
         remote_state = relation_get('state', db_unit)
 
-        if remote_state == 'standalone' and len(active_db_units) == 1:
+        if remote_state == 'standalone' and len(db_unit) == 1:
             master_conn_str = conn_str
-        elif relation_state == 'master':
+        elif remote_state == 'master':
             master_conn_str = conn_str
-        elif relation_state == 'hot standby':
+        elif remote_state == 'hot standby':
             slave_conn_strs.append(conn_str)
 
     update_my_db_config(master=master_conn_str, slaves=slave_conn_strs)
