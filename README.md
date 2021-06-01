@@ -434,15 +434,6 @@ Deploy redis cluster for in memory caching:
      
 `juju deploy cs:~omnivector/bundle/redis-cluster-1`
 
-________________________________________________________________
-
-## Deploy docker-registry from juju website (https://jaas.ai/u/canonical-sysadmins/docker-registry/0?series=bionic) repo:
-
-(a separate Canonical Ltd charm, which was installed in the cheirrs repository and built by: 
-
-juju deploy cs:~containers/docker-registry
-
-)
 
 *******************************************************
 
@@ -604,17 +595,13 @@ and;
 
 `juju run-action docker-registry/0 push image=dpage/pgadmin4 pull=True --wait`
 
-NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0), as follows (note that these kubernetes containers are separate from the docker containers just built):
+NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0), as follows (note that these kubernetes containers are separate from the docker container just built):
 
-1. `docker tag smart <your-docker-repo-name>/smart:v0.01`
-     
-2. 
-
-3. `juju deploy ./smart-web --to 7 --series  focal --force`
+1. `juju deploy ./smart-web --to 7 --series  focal --force`
 
         (This is kubernetes-worker/0)
      
-4. `juju deploy ./pgadmin4 --to 8 --series  focal --force`
+2. `juju deploy ./pgadmin4 --to 8 --series  focal --force`
 
         (This is kubernetes-worker/1)
 
