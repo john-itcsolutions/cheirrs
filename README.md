@@ -932,7 +932,7 @@ You're back on Host.
 
 _________________________________________________________________
 
-## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'house', within this cmr-model called 'werk'.
+## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'betrieb', within this cmr-model called 'werk'.
 
 (If not on "betrieb" controller)
 
