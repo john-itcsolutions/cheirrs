@@ -228,7 +228,7 @@ you will aleady find that there exists a 'microk8s/localhost' cloud. Later we wi
 
 Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, available:
 
-Note: After this installation of the 'kubeflow' model on the 'uk8s' controller, we will be installing a 'house' controller with 'dbase-bchains' model. The order of installation of these packages is important (why? because it doesn't ever work the other way!). So follow it.
+Note: After this installation of the 'kubeflow' model on the 'uk8s' controller, we will be installing a 'house' controller with 'werk' model. The order of installation of these packages is important (why? because it doesn't ever work the other way!). So follow it.
 
 Initially:
 
@@ -413,10 +413,6 @@ Deploy the Kubernetes Charm
 `juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
 
 `juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
-<!-- 
-The following is an experimental deployment of a health-status-reporting-enabled subordinate application (keepalived). As such, it may need to be avoided in your installation:  {
-
-} -->
 
 At this stage your juju assemblage is converging towards stability. You can observe the status of the assemblage with
 
@@ -430,6 +426,10 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju deploy -n 2 postgresql --storage pgdata=lxd,100G postgresql`
 
+Deploy a Redis cluster for in-memory caching:
+
+`juju deploy cs:~omnivector/bundle/redis-cluster-1`
+
 
 *******************************************************
 
@@ -441,7 +441,7 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju add-relation docker-registry easyrsa:client`
 
-`juju config docker-registry auth-basic-user='your-docker-registry-username'  auth-basic-password='your-docker-registry-password'`
+`juju config docker-registry auth-basic-user='your-docker-repo-username'  auth-basic-password='your-docker-repo-password'`
 
 Next we require an apache2 proxied server:
 
@@ -555,10 +555,6 @@ and "radiotiptop.org.uk" is your server's FQDN.
 
 `juju scp ./ca.cert haproxy/0:/etc/docker/registry`
 
-After building 'smart' image as below:
-
-`juju run-action --wait docker-registry/0 push image=<your-docker-username>/smart pull=True`
-
 _______________________________________________________________
 
 
@@ -569,7 +565,7 @@ however we need to be able to connect to the database upon initialisation and th
 
 NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` file is empty in the elastos-smartweb-service module, we have included ITCSA's version of `__init__.py` in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine. The latter repo (python-grpc-adenine) is meant to be run from the client's (user's) device, and provides the protocol buffers which the smart-web service communicates to the client with; ie gRPC protocols.
 
-It is important to have the `__init__.py` file set up before building the 'smart' docker image.
+It is important to have both `__init__.py` files set up before building the 'smart' docker image.
 
 `cd path/to/cheirrs/elastos-smartweb-service`
 
@@ -577,25 +573,34 @@ The .env.example file here needs to be filled-in with the correct database name,
 
 The blockchain server ip-addresses in the .env.example file need to match the address of kubernetes-worker/0, here. Also the database details will require alteration.
 
-NOTE: MUCH OF THE LATER TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY PGADMIN4 AND SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0), as follows (note that these kubernetes containers are separate from the docker containers soon to be built):
+Ensure you are in cheirrs/elastos-smartweb-service directory.
 
-<<<<<<< HEAD
-1. `juju deploy ./smart-web --to 7 --series  focal --force`
+At this point you can get and edit the addresses for the various blockchain connections in .env.example from the address of kubernetes-worker/0. In cheirrs/elastos-smartweb-service/ you simply:
 
-        (This is kubernetes-worker/0)
+`docker image build -t smart .`
 
-2. `docker pull dpage/pgadmin4:latest`
+You then push the resulting file to a Docker registry that is recognised as "secure" by Docker,preceeded by:
 
-3. `juju deploy ./pgadmin4 --to 8 --series  focal --force`
-=======
-NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0), as follows (note that these kubernetes containers are separate from the docker container just built):
+`docker tag smart:latest <your-docker-repo-name>/smart:v0.01`
+
+`docker push <your-docker-repo-name>/smart`  (to your own secure offsite registry)
+
+The build processes may take some time (initially). When completed, we can push our images to the local onsite registry. 
+
+`juju run-action docker-registry/0 push image=<your-docker-repo-name>/smart tag=latest --wait`
+
+and;
+
+`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest --wait`
+
+
+NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0 and /1), as follows (note that these kubernetes containers are separate from the docker container just built), and all still under development:
 
 1. `juju deploy ./smart-web --to 7 --series  focal --force`
 
         (This is kubernetes-worker/0)
      
 2. `juju deploy ./pgadmin4 --to 8 --series  focal --force`
->>>>>>> 977429e9c2635ef62612ff9d0df9f0e3692438fc
 
         (This is kubernetes-worker/1)
 
@@ -627,25 +632,6 @@ To allow access for administrative purposes from anywhere on your LAN:
 
 `juju add-relation pgadmin4 containerd`
 
-Ensure you are in cheirrs/elastos-smartweb-service directory.
-
-At this point you can get and edit the addresses for the various blockchain connections in .env.example from the address of kubernetes-worker/0. In cheirrs/elastos-smartweb-service/ you simply:
-
-`docker image build -t smart .`
-
-You then push the resulting file to a Docker registry that is recognised as "secure" by Docker,preceeded by:
-
-`docker tag smart:latest <your-docker-repo-name>/smart:latest`
-
-The build processes may take some time (initially). When completed, we could push our images to the registry. 
-
-`juju run-action docker-registry/0 push image=<your-docker-repo-name>/smart tag=latest --wait`
-
-and;
-
-`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest --wait`
-
-
 _______________________________________________________________
 
 ALSO:
@@ -663,10 +649,6 @@ _______________________________________________________________
 _______________________________________________________________
 
 ## SMART-WEB - a Docker charm for the elastos-smartweb-service:
-
-## There is a Repository for this smart-web charm at:
-
-https://github.com/john-itcsolutions/smart-web
 
 ## The way forward:
 
@@ -689,13 +671,13 @@ The layer.yaml file shows the base layers in the smart-web charm.
 
 You will also find the interfaces:
 
-The second stage consists of "interfaces" and "charm-layers", which we likewise choose, to satisfy our requirements, such that the coding revolves around the relations and hooks to be brought to life in response to planned changes in the model environment as a charm, with its layers, is started and begins relating to its providers and requirers. The third stage is the building and packaging of the actual charm (a docker-based charm, in our case) But before this we require the charm tools:
+The second stage consists of "interfaces" and "charm-layers", which we likewise choose, to satisfy our requirements, such that the coding revolves around the relations and hooks to be brought to life in response to planned (and less predictable) changes in the model environment as a charm, with its layers, is started and begins relating to its providers and requirers. The third stage is the building and packaging of the actual charm (a docker-based charm, in our case) But before this we require the charm tools:
 
 `sudo snap install charm --classic`
 
 This is how we proceeded to construct the charm:
 
-From the outer working directory:
+To the outer working directory:
 
 `cd ../../`
 
@@ -709,59 +691,21 @@ and: https://discourse.charmhub.io/t/interface-layers/1121
 
 and for the base layer: https://charmsreactive.readthedocs.io/en/latest/layer-basic.html
 
-`cd smart-web`
-
-`mkdir interfaces`
-
-`mkdir layers && cd layers`
-
-Starting from the first (base) layer we need:
-
-`git clone https://github.com/juju-solutions/layer-docker-resource.git`
-
-`git clone https://github.com/juju-solutions/layer-docker.git`
-
-`git clone https://github.com/juju-solutions/layer-tls-client.git`
-
-`cd ../interfaces`
-
-`git clone https://github.com/juju-solutions/interface-dockerhost.git`
-
-`git clone https://github.com/tengu-team/interface-docker-image-host.git`
-
-`git clone https://github.com/juju-solutions/interface-docker-registry.git`
-
-`git clone https://github.com/juju-solutions/interface-etcd.git`
-
-`git clone https://git.launchpad.net/interface-pgsql`
-
-`git clone https://github.com/juju-solutions/interface-redis.git`
-
-`git clone https://github.com/juju-solutions/interface-http.git`
-
 Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm tools" commands. Note also that each interface or layer is documented on its own repo site.}
 
-We have gone further, and assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). Aside from cloning this repo (inside the repo from `git clone https://github.com/john-itcsolutions/cheirrs.git`), one also needs to git clone the repo's above (10 in all) in the list of layers and interfaces above. These must be cloned into the "layers" and "interfaces" directories under "smart-web/".
+We have gone further, and assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). You need to obtain the charm code from the smart-web folder within the current repo. (layer.yaml, metadata.yaml and reactive/smart-web.py)
 
-`cd path/to/smart-web` (not the smart-web in cheirrs)
+Now within your created smart-web directory, we build and deploy smart-web to kubernetes:
 
-Now within smart-web charm directory, we build then deploy smart-web:
+`charm build -o ../path/to/cheirrs`
 
-`mkdir ../smart`
-
-`charm build -o ../smart`
-
-`cd ../smart && juju deploy ./smart-web`
+`juju deploy ./smart-web --to 7 --series focal --force`
 
 `juju add-relation smart-web easyrsa:client`
 
 `juju add-relation docker-registry containerd`
 
 We would also like to be able to develop the postgresql database structure and details ('house' database) using pgadmin4. To this end we construct a 'pgadmin4' charm as follows (with inspiration from 'smart-web').
-/
-The pgadmin4 docker container is available from Docker hub with:
-
-`docker pull dpage/pgadmin4`
 
 This image would need to be tagged and pushed to the docker-registry as in this document above (for smart-web), if the docker-registry works for you.
 
@@ -773,43 +717,17 @@ From your outer working directory:
 
 `cd pgadmin4`
 
-`mkdir interfaces`
-
-`mkdir layers && cd layers`
-
-Starting from the first (base) layer we need :
-
-`git clone https://github.com/juju-solutions/layer-docker-resource.git`
-
-`git clone https://github.com/juju-solutions/layer-docker.git`
-
-`git clone https://github.com/juju-solutions/layer-tls-client.git`
-
-`cd ../interfaces`
-
-`git clone https://github.com/juju-solutions/interface-dockerhost.git`
-
-`git clone https://github.com/tengu-team/interface-docker-image-host.git`
-
-`git clone https://github.com/juju-solutions/interface-docker-registry.git`
-
-`git clone https://github.com/juju-solutions/interface-etcd.git`
-
-`git clone https://git.launchpad.net/interface-pgsql`
-
-`git clone https://github.com/juju-solutions/interface-http.git`
-
 The layer.yaml, metadata.yaml and pgadmin4.py files are obtainable from 
 
-`git clone https://github.com/john-itcsolutions/cheirrs.git`
+the pgadmin4 folder in this repo
 
-As above, when completed, if docker registry were working, we could push our image to the registry. We will simply deploy pgadmin4 from the cheirrs repo.
+As above, when completed, we can obtain the docker container from the registry. We will simply deploy smart-web and pgadmin4 locally, but the creation of the kubernetes images locally relies on pushing the images to the local reverse-proxied docker-registry, initially pulling from the "trusted" docker repos dpage/pgadmin4  and <your-docker-repo-name>/smart.
 
 `cd cheirrs`
 
 Now within the cheirrs directory deploy pgadmin4:
 
-`juju deploy ./pgadmin4`
+`juju deploy ./pgadmin4 --to 8 --series focal --force`
 
 `juju expose smart-web`
 
@@ -837,13 +755,10 @@ ______________________________________________________________
 
 .. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. The logs of units housed by other machines are available on those machines. eg you can find smart-web logs on machine 7/kubernetes-worker/0.
 
-## So far it seems that the charm would run to completion of setup on the original werk model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to failure of loading process of kernel modules for the NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry. dpage/pgadmin4 is in the same situation, with image unable to be uploaded to the registry.
+## So far it seems that the charm would run to completion of setup on the original werk model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to failure of loading process of kernel modules for the NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry. dpage/pgadmin4 is in the same situation, with image unable to be uploaded to the registry. (It has emerged that we bought a bad device! We are temporarily dispensing with the Tesla K80, relying instead on RAM alone.)
 
 
               ____________________________
-              
-
-## There is no need to deploy Redis, as etcd takes care of caching duties with its clustered key:value database.
 
 (Note; you are user 'ubuntu' here, so if you need a new password, just
 
@@ -855,7 +770,7 @@ Later, within the master postgresql database container, you will need to give po
 
 does this.
 
-To add, for example, a load-balancer unit, simply
+To add, for example, 2 load-balancer units, simply
 
 `juju add-unit -n 2 kubeapi-load-balancer`
 
@@ -897,34 +812,6 @@ Create users in postgres:
 `psql haus`
 
 `\i /home/ubuntu/create_users.sql`
-
-<!-- `create role cheirrs_user with login password 'passwd';`
-
-`create role cheirrs_admin with superuser login password 'passwd';`
-
-`create role cheirrs_oseer_admin with superuser login password 'passwd';`
-
-`create role a_horse_admin with superuser login password 'passwd';`
-
-`create role chubba_morris_user with login password 'passwd';`
-
-`create role chubba_morris_admin with superuser login password 'passwd';`
-
-`create role chubba_morris_oseer_admin with superuser login password 'passwd';`
-
-`create role convey_it_user with login password 'passwd';`
-
-`create role convey_it_admin with superuser login password 'passwd';`
-
-`create role convey_it_oseer_admin with superuser login password 'passwd';`
-
-`create role the_general_user with login password 'passwd';`
-
-`create role the_general_admin with superuser login password 'passwd';`
-
-`create role the_general_oseer_admin with superuser login password 'passwd';`
-
-`create role gmu with login password 'gmu';` -->
 
 (Note for the smart-web blockchains to work, gmu must exist as a user with password gmu.)
 
@@ -1045,21 +932,21 @@ You're back on Host.
 
 _________________________________________________________________
 
-## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'house', within this cmr-model called 'dbase-bchains'.
+## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'house', within this cmr-model called 'werk'.
 
-(If not on "house" controller)
+(If not on "betrieb" controller)
 
-`juju switch house`
+`juju switch betrieb`
 
 `juju offer postgresql:db`
 
-then, if you `juju status` in the dbase-bchains model you will see, at the foot of the output, a reference to the Offer.
+then, if you `juju status` in the werk model you will see, at the foot of the output, a reference to the Offer.
 
 An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with (this needs to be run while in kubeflow model):
 
-`juju grant admin consume uk8s:admin/dbase-bchains.postgresql`
+`juju grant admin consume uk8s:admin/werk.postgresql`
 
-`juju grant ubuntu consume uk8s:ubuntu/dbase-bchains.postgresql`
+`juju grant ubuntu consume uk8s:ubuntu/werk.postgresql`
 
 .. then the authorised user (in the kubeflow model - see above) may use:
 
