@@ -508,7 +508,7 @@ sudo add-apt-repository ppa:chrisjohnston/flake8
 sudo apt-get update
 sudo apt-get install python-flake8 python-nose python-coverage ]
 
-juju config apache2 "vhost_http_template=$(base64 < http_vhost.tmpl)"
+`juju config apache2 "vhost_http_template=$(base64 < http_vhost.tmpl)"`
 
 .. where http_vhost.tmpl is of the form:
 
@@ -561,6 +561,12 @@ and "radiotiptop.org.uk" is your server's FQDN.
 
 `juju scp ./ca.cert haproxy/0:/etc/docker/registry`
 
+`juju config kubernetes-master image-registry=$REGISTRY`
+
+Test login to docker-registry:
+
+`juju run --unit docker-registry/0 "docker login -u <your-docker-repo-username> -p <your-docker-repo-password>`
+
 _______________________________________________________________
 
 
@@ -600,7 +606,7 @@ and;
 `juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest pull=True --wait`
 
 
-NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0 and /1), as follows (note that these kubernetes containers are separate from the docker container just built), and all still under development:
+NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0 and /1), as follows (note that these kubernetes containers are separate from the docker container just built), and all still under development. The `subordinate` option has been set to `True` in this repo for smart-web and for pgadmin, meaning these will be able to occupy any kubernetes-worker vm.
 
 1. `juju deploy ./smart-web --series  focal --force`
 
@@ -624,13 +630,13 @@ and:
 
 `juju add-relation pgadmin4 easyrsa:client`
 
-`juju add-relation postgresql:db smart-web`
+`juju add-relation pg-a:db smart-web`
 
-`juju add-relation postgresql:db pgadmin4`
+`juju add-relation pg-a:db pgadmin4`
 
 To allow access for administrative purposes from anywhere on your LAN:
 
-`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
+`juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-kubernetes-worker/0>,<ip-addr-kubernetes-worker/1>,<ip-addr-kubernetes-worker/2>`
 
 `juju add-relation apache2 containerd`
 
@@ -747,11 +753,11 @@ Now within the cheirrs directory deploy pgadmin4:
 
 `juju add-relation pgadmin4 containerd`
 
-`juju config postgresql admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>` 
+`juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-kubernetes-worker/0>,<ip-addr-kubernetes-worker/1>,<ip-addr-kubernetes-worker/2>` 
 
-`juju add-relation postgresql:db smart-web`
+`juju add-relation pg-a:db smart-web`
 
-`juju add-relation postgresql:db pgadmin4`
+`juju add-relation pg-a:db pgadmin4`
 
  }
 
@@ -946,21 +952,21 @@ _________________________________________________________________
 
 `juju switch betrieb`
 
-`juju offer postgresql:db`
+`juju offer pg-a:db`
 
 then, if you `juju status` in the werk model you will see, at the foot of the output, a reference to the Offer.
 
 An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with (this needs to be run while in kubeflow model):
 
-`juju grant admin consume uk8s:admin/werk.postgresql`
+`juju grant admin consume uk8s:admin/werk.pg-a`
 
-`juju grant ubuntu consume uk8s:ubuntu/werk.postgresql`
+`juju grant ubuntu consume uk8s:ubuntu/werk.pg-a`
 
 .. then the authorised user (in the kubeflow model - see above) may use:
 
-`juju add-relation <application>:db uk8s:admin/werk.postgresql:db`
+`juju add-relation <application>:db uk8s:admin/werk.pg-a:db`
 
-`juju add-relation <application>:db uk8s:ubuntu/werk.postgresql:db`
+`juju add-relation <application>:db uk8s:ubuntu/werk.pg-a:db`
 
 to connect "application" to the database (in werk model)from 'uk8s' controller, ie from the kubeflow model (in this case).
 
