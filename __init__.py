@@ -17,7 +17,7 @@ logging.basicConfig(
 db_name = config('haus')
 db_user = config('postgres')
 db_password = config('Buddha10')
-db_host = config('postgresql')
+db_host = config('pg-a')
 db_port = config('5432')
 
 database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"

@@ -406,9 +406,9 @@ Add a model named "werk"
 
 `juju add-model werk`
 
-Deploy the Kubernetes Charm
+Deploy the 'Calico' Kubernetes Charm, since default CNI provider 'Flannel' does not provide all necessary services:
 
-`juju deploy cs:bundle/charmed-kubernetes-679`
+`juju deploy cs:~containers/kubernetes-calico`
 
 `juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
 
@@ -424,7 +424,9 @@ When you see everything 'green', you may continue.
 
 Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
-`juju deploy -n 2 postgresql --storage pgdata=lxd,100G postgresql`
+`juju deploy postgresql pg-a`
+
+`juju add-unit pg-a`
 
 Deploy a Redis cluster for in-memory caching:
 
@@ -471,13 +473,17 @@ Now, enter docker-registry machine:
 
 `juju ssh <machine-number-docker-registry`
 
-`sudo mkdir -p /etc/docker/registry'
+`sudo mkdir -p /etc/docker/registry`
 
 `sudo cp *.cert /etc/docker/registry`
 
 `sudo cp *.crt /etc/docker/registry`
 
 `sudo cp *.key /etc/docker/registry`
+
+Exit vm:
+
+`exit`
 
 `juju config kubernetes-master image-registry=$REGISTRY`
 
@@ -587,20 +593,20 @@ You then push the resulting file to a Docker registry that is recognised as "sec
 
 The build processes may take some time (initially). When completed, we can push our images to the local onsite registry. 
 
-`juju run-action docker-registry/0 push image=<your-docker-repo-name>/smart tag=latest --wait`
+`juju run-action docker-registry/0 push image=<your-docker-repo-name>/smart tag=v0.01 --wait`
 
 and;
 
-`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest --wait`
+`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest pull=True --wait`
 
 
 NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0 and /1), as follows (note that these kubernetes containers are separate from the docker container just built), and all still under development:
 
-1. `juju deploy ./smart-web --to 7 --series  focal --force`
+1. `juju deploy ./smart-web --series  focal --force`
 
         (This is kubernetes-worker/0)
      
-2. `juju deploy ./pgadmin4 --to 8 --series  focal --force`
+2. `juju deploy ./pgadmin4 --series  focal --force`
 
         (This is kubernetes-worker/1)
 
@@ -699,7 +705,7 @@ Now within your created smart-web directory, we build and deploy smart-web to ku
 
 `charm build -o ../path/to/cheirrs`
 
-`juju deploy ./smart-web --to 7 --series focal --force`
+`juju deploy ./smart-web --series focal --force`
 
 `juju add-relation smart-web easyrsa:client`
 
@@ -727,7 +733,7 @@ As above, when completed, we can obtain the docker container from the registry. 
 
 Now within the cheirrs directory deploy pgadmin4:
 
-`juju deploy ./pgadmin4 --to 8 --series focal --force`
+`juju deploy ./pgadmin4 --series focal --force`
 
 `juju expose smart-web`
 
