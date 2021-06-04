@@ -92,81 +92,11 @@ ______________________________________________________________
 
 ## Preliminaries: NOTE The following remarks on installing the Nvidia and Cuda systems constitute a work in progress only:
 
-The system's nouveau drivers need to be blacklisted in /etc/modprobe.d as they block NVIDIA Driver installation, and you need to find a basic xorg.conf template to save in /etc/X11/xorg.conf.
-
-`sudo bash -c "echo blacklist nouveau > /etc/modprobe.d/blacklist-nvidia-nouveau.conf"`
-
-`sudo bash -c "echo options nouveau modeset=0 >> /etc/modprobe.d/blacklist-nvidia-nouveau.conf"`
-
-Confirm:
-
-`cat /etc/modprobe.d/blacklist-nvidia-nouveau.conf`
-
-Also, we need to remove blacklisting nvidia entries
-
-`sudo grep nvidia /etc/modprobe.d/* /lib/modprobe.d/*`
-
-And remove all entries for nvidia.
-
-Update kernel initramfs:
-
-`sudo update-initramfs -u`
-
-(After installation, NVIDIA can configure the X server with:
-
-`sudo nvidia-xconfig`
-
-but it requires you to provide a basic one-device/screen initial file for nvidia to work on).
-
-It is recommended to disable the X11 Server (the normal Window System and Manager) as you perform the following reboot. This involves the normal 'sudo reboot' but as the computer comes back up, you need to tap the `Esc` key continually until you open the bootloader (Grub) menu. You need to select the 'Advanced options' item with arrow key down one and `Enter`, then `e` (to edit) at the top kernel entry in the menu. Then at the file revealed, you arrow down to the line beginning with "linux", hit the `end` key, and enter `nomodprobe` after a space from the end of the existing line. Then hit `F10` and the system will reboot into a non-X-server (vesa-driven) mode such that the NVIDIA driver will not be blocked by the X11 server, as you install the NVIDIA/CUDA software. The quality of screen experience obtainable on the vesa system is definitely inferior to that available using the normal X server, however the performance is restored after the next reboot, until you repeat the above "nomodeset" kernel parameter setting procedure.
-
-`sudo reboot`
-
-In "vesa" mode:
-
-Now,
-
-check your system following here: https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
-
-Install kernel headers as per above documentation for the kernel matching your running version. The versions must match exactly. Follow above docs for an installation procedure (not recommended).
-
-OR:
-
-Alternatively you may use the system based package manager and installer 'synaptic' (recommended by NVIDIA themselves) with:
-
-`sudo apt install synaptic`
-
-`sudo apt install build-essential`
-
-`cat /proc/version`
-
-The previous command gives the running kernel version and gcc version it was compiled under. The gcc version mentioned there must match exactly with the result of:
-
-`gcc -v`
-
-(the version of gcc running currently)
-
-Make sure you also have the linux-source files for your kernel:
-
-`sudo apt install linux-source`
-
-and check /usr/src for existence of correct kernel header and kernel source files.
-
-Run synaptic from Applications tile.
-
-Carefully mark all nvidia and cuda packages, and relevant kernel modules for your version as well as relevant nvidia/cuda libraries for installation. Then 'apply' to install. This is quite a laborious process. Try to be patient and careful. Pay attention to kernel versions, as the installer errors out with non-matching versions amongst software. Now, ensure you have a basic single-device-and-screen /etc/X11/xorg.conf file for NVIDIA to work with, and:
-
-`sudo nvidia-xconfig`
-
-IF YOU HAVE BEEN SUCCESSFUL, UPON REBOOT YOU WILL FIND THE FOLLOWING WORKS:
-
-`sudo reboot`
-
-(No need to use vesa again)
+With the exception of noting that this:
 
 `nvidia-smi`
 
-should produce a positive message.
+should produce a positive message, if you want to use your nvidia gpu with CUDA capacities as part of the system; we cannot advise further.
 
 ________________________________________________________________
 
