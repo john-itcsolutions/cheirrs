@@ -8,7 +8,7 @@ storage:
   filesystem:
     rootdirectory: /home/ubuntu/registry
 http:
-  addr: 10.80.202.79:5000
+  addr: 10.80.202.233:5000
   headers:
     X-Content-Type-Options: [nosniff]
 auth:

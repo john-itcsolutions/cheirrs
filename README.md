@@ -449,8 +449,6 @@ Next we require an apache2 proxied server:
 
 `juju deploy cs:apache2-35`
 
-`juju add-relation apache2 easyrsa:client`
-
 You need to copy any CA.cert in your /etc/ssl/certs folder to <machine-number-docker-registry>:/home/ubuntu/, ie:
 
 `juju scp /etc/ssl/certs/xyz.pem <machine-number-docker-registry>:/home/ubuntu/ca.cert`
@@ -549,6 +547,8 @@ and "radiotiptop.org.uk" is your server's FQDN.
 
 `juju deploy cs:haproxy-61`
 
+`juju remove-relation docker-registry easyrsa:client`
+
 `juju add-relation docker-registry:website haproxy:reverseproxy`
 
 `juju add-relation apache2:reverseproxy haproxy:website`
@@ -561,11 +561,9 @@ and "radiotiptop.org.uk" is your server's FQDN.
 
 `juju scp ./ca.cert haproxy/0:/etc/docker/registry`
 
-`juju config kubernetes-master image-registry=$REGISTRY`
-
 Test login to docker-registry:
 
-`juju run --unit docker-registry/0 "docker login -u <your-docker-repo-username> -p <your-docker-repo-password>`
+`juju run --unit docker-registry/0 "docker login -u <your-docker-repo-username> -p <your-docker-repo-password> $REGISTRY"`
 
 _______________________________________________________________
 
@@ -599,14 +597,14 @@ You then push the resulting file to a Docker registry that is recognised as "sec
 
 The build processes may take some time (initially). When completed, we can push our images to the local onsite registry. 
 
-`juju run-action docker-registry/0 push image=<your-docker-repo-name>/smart tag=v0.01 --wait`
+`juju run-action docker-registry/0 push image=<your-docker-repo-username>/smart:v0.01 pull=True --wait`
 
-and;
+and
 
-`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=latest pull=True --wait`
+`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=$REGISTRY/pgadmin4 pull=True --wait`
 
 
-NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0 and /1), as follows (note that these kubernetes containers are separate from the docker container just built), and all still under development. The `subordinate` option has been set to `True` in this repo for smart-web and for pgadmin, meaning these will be able to occupy any kubernetes-worker vm.
+NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0 and /1), as follows (note that these kubernetes containers are separate from the docker container just built), and all still under development. The `subordinate` option has been set to `True` in this repo for smart-web and for pgadmin, meaning these will be able to occupy any kubernetes-worker vm. From /cheirrs/
 
 1. `juju deploy ./smart-web --series  focal --force`
 
