@@ -383,7 +383,7 @@ Next we require an apache2 proxied server:
 
 .. where http_vhost.tmpl is of the form:
 
-"For example a vhost that will pass all traffic on to an haproxy instance:
+(For example a vhost that will pass all traffic on to an haproxy instance:)
 ```
 <VirtualHost *:80>
     ServerName radiotiptop.org.uk
@@ -495,11 +495,7 @@ sudo apt-get install python-flake8 python-nose python-coverage ]
 
 `juju scp docker-registry/0:/etc/docker/registry/ca.cert ./ca.cert`
 
-`juju scp ./ca.cert haproxy/0:/etc/home/ubuntu`
-
-`juju ssh <machine-number-haproxy>`
-
-`sudo cp ca.cert /etc/docker/registry`
+`juju scp ./ca.cert haproxy/0:/etc/docker/registry`
 
 Test login to docker-registry:
 
