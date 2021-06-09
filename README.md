@@ -426,6 +426,14 @@ You also need to make your own host.crt and host.key from a self signed certific
 
 `juju scp path/to/host.crt <machine-number-docker-registry>:/home/ubuntu/`
 
+`juju ssh <docker-registry-machine-number>`
+
+`sudo mkdir -p /etc/docker/registry`
+
+`sudo cp host.* /etc/docker/registry`
+
+`sudo cp ca.cert /etc/docker/registry`
+
 In order to config docker-registry vm with certs:
 
 `juju config docker-registry tls-ca-path=/etc/docker/registry/ca.cert`
@@ -487,7 +495,11 @@ sudo apt-get install python-flake8 python-nose python-coverage ]
 
 `juju scp docker-registry/0:/etc/docker/registry/ca.cert ./ca.cert`
 
-`juju scp ./ca.cert haproxy/0:/etc/docker/registry`
+`juju scp ./ca.cert haproxy/0:/etc/home/ubuntu`
+
+`juju ssh <machine-number-haproxy>`
+
+`sudo cp ca.cert /etc/docker/registry`
 
 Test login to docker-registry:
 
