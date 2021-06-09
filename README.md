@@ -377,64 +377,7 @@ Deploy a Redis cluster for in-memory caching:
 
 Next we require an apache2 proxied server:
 
-`juju deploy cs:apache2-35`
-
-You need to copy any CA.cert in your /etc/ssl/certs folder to <machine-number-docker-registry>:/home/ubuntu/, ie:
-
-`juju scp /etc/ssl/certs/xyz.pem <machine-number-docker-registry>:/home/ubuntu/ca.cert`
-
-You also need to make your own host.crt and host.key from a self signed certificate, and then:
-
-`juju scp path/to/host.key <machine-number-docker-registry>:/home/ubuntu/`
-
-`juju scp path/to/host.crt <machine-number-docker-registry>:/home/ubuntu/`
-
-In order to config docker-registry vm with certs:
-
-`juju config docker-registry tls-ca-path=/etc/docker/registry/ca.cert`
-
-`juju config docker-registry tls-ca-path=/etc/docker/registry/host.crt`
-
-`juju config docker-registry tls-ca-path=/etc/docker/registry/host.key` 
-
-Now, enter docker-registry machine:
-
-`juju ssh <machine-number-docker-registry`
-
-`sudo mkdir -p /etc/docker/registry`
-
-`sudo cp *.cert /etc/docker/registry`
-
-`sudo cp *.crt /etc/docker/registry`
-
-`sudo cp *.key /etc/docker/registry`
-
-Exit vm:
-
-`exit`
-
-`juju config kubernetes-master image-registry=$REGISTRY`
-
-You may need to wait until the registry installation has stabilised, then:
-
-(PLEASE NOTE: )
-```
-export IP=`juju run --unit docker-registry/0 'network-get website --ingress-address'`
-
-export PORT=`juju config docker-registry registry-port`
-```
-
-`export REGISTRY=$IP:$PORT`
-
-`juju add-relation docker-registry containerd`
-
-
-[ The folowing for development only:
-
-sudo apt-get install python-software-properties
-sudo add-apt-repository ppa:chrisjohnston/flake8
-sudo apt-get update
-sudo apt-get install python-flake8 python-nose python-coverage ]
+`juju deploy apache2`
 
 `juju config apache2 "vhost_http_template=$(base64 < http_vhost.tmpl)"`
 
@@ -472,6 +415,61 @@ sudo apt-get install python-flake8 python-nose python-coverage ]
 ```
 
 and "radiotiptop.org.uk" is your server's FQDN.
+
+You need to copy any CA.cert in your /etc/ssl/certs folder to <machine-number-docker-registry>:/home/ubuntu/, ie:
+
+`juju scp /etc/ssl/certs/xyz.pem <machine-number-docker-registry>:/home/ubuntu/ca.cert`
+
+You also need to make your own host.crt and host.key from a self signed certificate, and then:
+
+`juju scp path/to/host.key <machine-number-docker-registry>:/home/ubuntu/`
+
+`juju scp path/to/host.crt <machine-number-docker-registry>:/home/ubuntu/`
+
+In order to config docker-registry vm with certs:
+
+`juju config docker-registry tls-ca-path=/etc/docker/registry/ca.cert`
+
+`juju config docker-registry tls-ca-path=/etc/docker/registry/host.crt`
+
+`juju config docker-registry tls-ca-path=/etc/docker/registry/host.key` 
+
+Now, enter docker-registry machine:
+
+`juju run --unit docker-registry/1 'mkdir -p /etc/docker/registry'`
+
+`juju run --unit docker-registry/1 'chown ubuntu:ubuntu /etc/docker/registry'`
+
+`juju ssh <docker-machine-numer>`
+
+`sudo cp *.cert /etc/docker/registry`
+
+`sudo cp *.crt /etc/docker/registry`
+
+`sudo cp *.key /etc/docker/registry`
+
+`juju config kubernetes-master image-registry=$REGISTRY`
+
+You may need to wait until the registry installation has stabilised, then:
+
+(PLEASE NOTE: )
+```
+export IP=`juju run --unit docker-registry/0 'network-get website --ingress-address'`
+
+export PORT=`juju config docker-registry registry-port`
+```
+
+`export REGISTRY=$IP:$PORT`
+
+`juju add-relation docker-registry containerd`
+
+
+[ The folowing for development only:
+
+sudo apt-get install python-software-properties
+sudo add-apt-repository ppa:chrisjohnston/flake8
+sudo apt-get update
+sudo apt-get install python-flake8 python-nose python-coverage ]
 
  Next deploy an haproxy instance:
 
