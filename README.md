@@ -338,7 +338,7 @@ Add a model named "werk"
 
 Deploy the 'Calico' Kubernetes Charm, since default CNI provider 'Flannel' does not provide all necessary services:
 
-`juju deploy cs:~containers/kubernetes-calico`
+`juju deploy cs:~containers/bundle/kubernetes-calico-1070`
 
 `juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
 
@@ -418,21 +418,17 @@ and "radiotiptop.org.uk" is your server's FQDN.
 
 You need to copy any CA.cert in your /etc/ssl/certs folder to <machine-number-docker-registry>:/home/ubuntu/, ie:
 
-`juju scp /etc/ssl/certs/xyz.pem <machine-number-docker-registry>:/home/ubuntu/ca.cert`
+`juju run --unit docker-registry/0 'mkdir -p /etc/docker/registry'`
+
+`juju run --unit docker-registry/0 'chown ubuntu:ubuntu /etc/docker/registry'`
+
+`juju scp path/to/ca.cert docker-registry/0:/etc/docker/registry`
 
 You also need to make your own host.crt and host.key from a self signed certificate, and then:
 
-`juju scp path/to/host.key <machine-number-docker-registry>:/home/ubuntu/`
+`juju scp path/to/host.key docker-registry/0:/etc/docker/registry`
 
-`juju scp path/to/host.crt <machine-number-docker-registry>:/home/ubuntu/`
-
-`juju ssh <docker-registry-machine-number>`
-
-`sudo mkdir -p /etc/docker/registry`
-
-`sudo cp host.* /etc/docker/registry`
-
-`sudo cp ca.cert /etc/docker/registry`
+`juju scp path/to/host.crtdocker-registry/0:/etc/docker/registry`
 
 In order to config docker-registry vm with certs:
 
@@ -441,22 +437,6 @@ In order to config docker-registry vm with certs:
 `juju config docker-registry tls-ca-path=/etc/docker/registry/host.crt`
 
 `juju config docker-registry tls-ca-path=/etc/docker/registry/host.key` 
-
-Now, enter docker-registry machine:
-
-`juju run --unit docker-registry/1 'mkdir -p /etc/docker/registry'`
-
-`juju run --unit docker-registry/1 'chown ubuntu:ubuntu /etc/docker/registry'`
-
-`juju ssh <docker-machine-numer>`
-
-`sudo cp *.cert /etc/docker/registry`
-
-`sudo cp *.crt /etc/docker/registry`
-
-`sudo cp *.key /etc/docker/registry`
-
-`juju config kubernetes-master image-registry=$REGISTRY`
 
 You may need to wait until the registry installation has stabilised, then:
 
@@ -471,6 +451,7 @@ export PORT=`juju config docker-registry registry-port`
 
 `juju add-relation docker-registry containerd`
 
+`juju config kubernetes-master image-registry=$REGISTRY`
 
 [ The folowing for development only:
 
