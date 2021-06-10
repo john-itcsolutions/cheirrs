@@ -375,113 +375,6 @@ Deploy a Redis cluster for in-memory caching:
 
 `juju config docker-registry auth-basic-user='your-docker-repo-username'  auth-basic-password='your-docker-repo-password'`
 
-<!-- 
-
-Next we require an apache2 proxied server:
-
-`juju deploy apache2`
-
-`juju config apache2 "vhost_http_template=$(base64 < http_vhost.tmpl)"`
-
-.. where http_vhost.tmpl is of the form:
-
-(For example a vhost that will pass all traffic on to an haproxy instance:)
-```
-<VirtualHost *:80>
-    ServerName radiotiptop.org.uk
-
-    CustomLog /var/log/apache2/radiotiptop-access.log combined
-    ErrorLog /var/log/apache2/radiotiptop-error.log
-
-    DocumentRoot /srv/radiotiptop/www/root
-
-    ProxyRequests off
-    <Proxy *>
-        Order Allow,Deny
-        Allow from All
-        ErrorDocument 403 /offline.html
-        ErrorDocument 500 /offline.html
-        ErrorDocument 502 /offline.html
-        ErrorDocument 503 /offline.html
-    </Proxy>
-
-    ProxyPreserveHost off
-    ProxyPassReverse / http://{{ haproxy_gunicorn }}/
-
-    RewriteEngine on
-
-    RewriteRule ^/$ /index.html [L]
-    RewriteRule ^/(.*)$ http://{{ haproxy_gunicorn }}/$1 [P,L]
-</VirtualHost>
-
-```
-
-and "radiotiptop.org.uk" is your server's FQDN.
- -->
-
-
-You need to copy any CA.cert in your /etc/ssl/certs folder to <machine-number-docker-registry>:/home/ubuntu/, ie:
-
-`juju run --unit docker-registry/0 'mkdir -p /etc/docker/registry'`
-
-`juju run --unit docker-registry/0 'chown ubuntu:ubuntu /etc/docker/registry'`
-
-`juju scp path/to/ca.cert docker-registry/0:/etc/docker/registry`
-
-You also need to make your own host.crt and host.key from a self signed certificate, and then:
-
-`juju scp path/to/host.key docker-registry/0:/etc/docker/registry`
-
-`juju scp path/to/host.crt docker-registry/0:/etc/docker/registry`
-
-In order to config docker-registry vm with certs:
-
-`juju config docker-registry tls-ca-path=/etc/docker/registry/ca.cert`
-
-`juju config docker-registry tls-ca-path=/etc/docker/registry/host.crt`
-
-`juju config docker-registry tls-ca-path=/etc/docker/registry/host.key` 
-
-You may need to wait until the registry installation has stabilised, then:
-
-(PLEASE NOTE: )
-```
-export IP=`juju run --unit docker-registry/0 'network-get website --ingress-address'`
-
-export PORT=`juju config docker-registry registry-port`
-```
-
-`export REGISTRY=$IP:$PORT`
-
-`juju add-relation docker-registry containerd`
-
-`juju config kubernetes-master image-registry=$REGISTRY`
-
-[ The folowing for development only:
-
-sudo apt-get install python-software-properties
-sudo add-apt-repository ppa:chrisjohnston/flake8
-sudo apt-get update
-sudo apt-get install python-flake8 python-nose python-coverage ]
-<!-- 
- Next deploy an haproxy instance:
-
-`juju deploy cs:haproxy-61`
-
-`juju remove-relation docker-registry easyrsa:client`
-
-`juju add-relation docker-registry:website haproxy:reverseproxy`
-
-`juju add-relation apache2:reverseproxy haproxy:website`
-
-`juju run --unit haproxy/0 'mkdir -p /etc/docker/registry'`
-
-`juju run --unit haproxy/0 'chown ubuntu:ubuntu /etc/docker/registry'`
-
-`juju scp docker-registry/0:/etc/docker/registry/ca.cert ./ca.cert`
-
-`juju scp ./ca.cert haproxy/0:/etc/docker/registry` -->
-
 Test login to docker-registry:
 
 `juju run --unit docker-registry/0 "docker login -u <your-docker-repo-username> -p <your-docker-repo-password> $REGISTRY"`
@@ -500,13 +393,13 @@ It is important to have both `__init__.py` files set up before building the 'sma
 
 `cd path/to/cheirrs/elastos-smartweb-service`
 
-The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web container ie the blockchain addresses and ports for smart-web. Build the 'smart' docker container, after deploying the kubernetes containers for each of smart-web and pgadmin4, so you know the relevant addresses to use (check on `juju status`) - see below:
+The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the load-balancer container ie the blockchain addresses and ports to access the smart-web environment. Smart-web could be running on any of the kubernetes-workers, as can pgadmin4.
 
-The blockchain server ip-addresses in the .env.example file need to match the address of kubernetes-worker/0, here. Also the database details will require alteration.
+The blockchain server ip-addresses in the .env.example file need to match the address of kubeapi-load-balancer/0, here. Also the database details will require alteration.
 
 Ensure you are in cheirrs/elastos-smartweb-service directory.
 
-At this point you can get and edit the addresses for the various blockchain connections in .env.example from the address of kubernetes-worker/0. In cheirrs/elastos-smartweb-service/ you simply:
+At this point you can get and edit the addresses for the various blockchain connections in .env.example from the address of kubeapi-load-balancer/0. You also need to edit __init__.py in grpc_adenine to insert correct database (master) ip-address. Then, in cheirrs/elastos-smartweb-service/ you simply:
 
 `docker image build -t smart .`
 
@@ -557,11 +450,7 @@ To allow access for administrative purposes from anywhere on your LAN:
 
 `juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-kubernetes-worker/0>,<ip-addr-kubernetes-worker/1>,<ip-addr-kubernetes-worker/2>`
 
-`juju add-relation apache2 containerd`
-
 `juju add-relation smart-web containerd`
-
-`juju add-relation pgadmin4 containerd`
 
 _______________________________________________________________
 
