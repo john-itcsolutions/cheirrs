@@ -375,6 +375,8 @@ Deploy a Redis cluster for in-memory caching:
 
 `juju config docker-registry auth-basic-user='your-docker-repo-username'  auth-basic-password='your-docker-repo-password'`
 
+<!-- 
+
 Next we require an apache2 proxied server:
 
 `juju deploy apache2`
@@ -415,6 +417,8 @@ Next we require an apache2 proxied server:
 ```
 
 and "radiotiptop.org.uk" is your server's FQDN.
+ -->
+
 
 You need to copy any CA.cert in your /etc/ssl/certs folder to <machine-number-docker-registry>:/home/ubuntu/, ie:
 
@@ -459,7 +463,7 @@ sudo apt-get install python-software-properties
 sudo add-apt-repository ppa:chrisjohnston/flake8
 sudo apt-get update
 sudo apt-get install python-flake8 python-nose python-coverage ]
-
+<!-- 
  Next deploy an haproxy instance:
 
 `juju deploy cs:haproxy-61`
@@ -476,7 +480,7 @@ sudo apt-get install python-flake8 python-nose python-coverage ]
 
 `juju scp docker-registry/0:/etc/docker/registry/ca.cert ./ca.cert`
 
-`juju scp ./ca.cert haproxy/0:/etc/docker/registry`
+`juju scp ./ca.cert haproxy/0:/etc/docker/registry` -->
 
 Test login to docker-registry:
 
