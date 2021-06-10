@@ -428,7 +428,7 @@ You also need to make your own host.crt and host.key from a self signed certific
 
 `juju scp path/to/host.key docker-registry/0:/etc/docker/registry`
 
-`juju scp path/to/host.crtdocker-registry/0:/etc/docker/registry`
+`juju scp path/to/host.crt docker-registry/0:/etc/docker/registry`
 
 In order to config docker-registry vm with certs:
 
