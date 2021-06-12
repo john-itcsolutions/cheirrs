@@ -158,7 +158,7 @@ you will aleady find that there exists a 'microk8s/localhost' cloud. Later we wi
 
 Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, available:
 
-Note: After this installation of the 'kubeflow' model on the 'uk8s' controller, we will be installing a 'house' controller with 'werk' model. The order of installation of these packages is important (why? because it doesn't ever work the other way!). So follow it.
+Note: After this installation of the 'kubefluss' model on the 'lernenmaschine' controller (we edited the cli script and names), we will be installing a 'betrieb' controller with 'werk' model. 
 
 Initially:
 
@@ -170,9 +170,9 @@ Initially:
 
 If you need to choose 'kubeflow lite' (recommended for initial development), you can edit the relevant code in scripts/cli.py and note that you may also alter the controller name, if you take care to alter the commands you issue.
 
-`python3 scripts/cli.py microk8s setup --controller uk8s`
+`python3 scripts/cli.py microk8s setup --controller lernenmaschine`
 
-The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. However in some deployment scenarios (such as local development), you may need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
+The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. However in some deployment scenarios (such as local development), you would need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
 
 `microk8s.kubectl edit configmap -n kube-system coredns`
 
@@ -184,7 +184,7 @@ If you make mistakes during editing, it is safest to:
 
 and restart from 
 
-`python3 scripts/cli.py microk8s setup --controller uk8s`
+`python3 scripts/cli.py microk8s setup --controller lernenmaschine`
 
 followed by editing the coredns configmap again.
 
@@ -192,7 +192,7 @@ followed by editing the coredns configmap again.
 
 Only when the coredns configmap is correct for your LAN:
 
-`python3 scripts/cli.py deploy-to uk8s`
+`python3 scripts/cli.py deploy-to lernenmaschine`
 
 (Passthrough should already be natively enabled to your Accelerator GPU.)
 
