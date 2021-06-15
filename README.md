@@ -385,7 +385,7 @@ Test login to docker-registry:
 ___________________________________________________________________________________________________________
 
 
-NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0 and /1), as follows (note that these kubernetes containers are separate from the docker container just built), and all still under development. The `subordinate` option has been set to `True` in this repo for smart-web and for pgadmin, meaning these will be able to occupy any kubernetes-worker vm. From /cheirrs/
+NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory, as follows (note that these kubernetes containers are separate from the docker container yet to be built - see below), and all still under development. From /cheirrs/
 
 1. `juju deploy ./smart-web`
 
