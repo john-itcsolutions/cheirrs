@@ -3,13 +3,14 @@ import os
 from pathlib import Path
 from subprocess import check_call
 
-from charms import layer
-from charms.reactive import hook
-from charms.reactive import set_state, remove_state
-from charms.reactive import when
-from charms.reactive import set_flag, clear_flag
-from charms.reactive import endpoint_from_flag
-from charms.reactive.helpers import data_changed
+from charmhelpers.core import layer
+from charmhelpers.core import hook
+from charmhelpers.core import set_state, remove_state
+from charmhelpers.core import when
+from charmhelpers.core import set_flag, clear_flag
+from charmhelpers.core import endpoint_from_flag
+from charmhelpers.core import helpers
+from charmhelpers.core import data_changed
 
 from charmhelpers.core import hookenv, unitdata
 from charmhelpers.core.hookenv import log

@@ -52,4 +52,4 @@
     "type": "oci-image"
     "auto-fetch": "true"
     "description": "The image for this charm"
-"subordinate": True
+"subordinate": False

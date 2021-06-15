@@ -18,24 +18,24 @@ from charmhelpers.fetch import apt_unhold
 from charmhelpers.fetch import filter_installed_packages
 from charmhelpers.contrib.charmsupport import nrpe
 
-from charms.reactive import hook
-from charms.reactive import remove_state
-from charms.reactive import set_state
-from charms.reactive import when
-from charms.reactive import when_any
-from charms.reactive import when_not
-from charms.reactive.helpers import data_changed
+from charmhelpers.core import hook
+from charmhelpers.core import remove_state
+from charmhelpers.core import set_state
+from charmhelpers.core import when
+from charmhelpers.core import when_any
+from charmhelpers.core import when_not
+from charmhelpers.core import data_changed
 
-from charms.layer import docker
-from charms.layer.docker import arch
-from charms.layer.docker import docker_packages
-from charms.layer.docker import determine_apt_source
-from charms.layer.docker import render_configuration_template
+from charmhelpers.core import docker
+from charmhelpers.core import arch
+from charmhelpers.core import docker_packages
+from charmhelpers.core import determine_apt_source
+from charmhelpers.core import render_configuration_template
 
-from charms.docker import Docker
-from charms.docker import DockerOpts
+from charmhelpers.core import Docker
+from charmhelpers.core import DockerOpts
 
-from charms import layer
+from charmhelpers.core import layer
 
 # 2 Major events are emitted from this layer.
 #

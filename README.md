@@ -210,6 +210,9 @@ Within controllers you may substitute <target-model-name> and use:
 
 to move between models on the same controller.
 
+The following image is a screenshot of the `lernenmaschine` model's status board after successful installation of "kubeflow-lite":
+
+<img src="./Screenshot from 2021-06-15 16-06-14.png">
 ______________________________________________________________
 
 ## USING KUBEFLOW

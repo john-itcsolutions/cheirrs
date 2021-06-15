@@ -26,14 +26,14 @@ from charms.reactive import when_any
 from charms.reactive import when_not
 from charms.reactive.helpers import data_changed
 
-from charms.layer import docker
-from charms.layer.docker import arch
-from charms.layer.docker import docker_packages
-from charms.layer.docker import determine_apt_source
-from charms.layer.docker import render_configuration_template
+from charms.reactive import docker
+from charms.reactive import arch
+from charms.reactive import docker_packages
+from charms.reactive import determine_apt_source
+from charms.reactive import render_configuration_template
 
-from charms.docker import Docker
-from charms.docker import DockerOpts
+from charms.reactive import Docker
+from charms.reactive import DockerOpts
 
 from charms import layer
 

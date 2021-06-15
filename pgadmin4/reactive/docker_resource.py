@@ -1,5 +1,5 @@
 from charmhelpers.core import hookenv
-from charms.reactive import set_flag, when, when_not, hook, is_flag_set
+from charmhelpers.core import set_flag, when, when_not, hook, is_flag_set
 
 from charms import layer
 

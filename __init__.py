@@ -78,5 +78,5 @@ def db_relation_changed():
 
     update_my_db_config(master=master_conn_str, slaves=slave_conn_strs)
 
-if __name__ == '__init__':
+if __name__ == '__main__':
     hooks.execute(sys.argv)

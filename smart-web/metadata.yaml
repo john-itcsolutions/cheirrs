@@ -18,9 +18,6 @@
   "logging":
     "interface": "logging-directory"
     "scope": "container"
-  "juju-info":
-    "interface": "juju-info"
-    "scope": "container"
   "docker-host":
     "interface": "dockerhost"
   "etcd":
@@ -56,4 +53,4 @@
     "type": "oci-image"
     "auto-fetch": "true"
     "description": "The image for this charm"
-"subordinate": True
+"subordinate": False
