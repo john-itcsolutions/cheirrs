@@ -382,54 +382,18 @@ Test login to docker-registry:
 
 `juju run --unit docker-registry/0 "docker login -u <your-docker-repo-username> -p <your-docker-repo-password> $REGISTRY"`
 
-_______________________________________________________________
-
-
-## Next we build the 'smart' docker image:
-
-but first there is an issue with the `__init__.py` file contained in the elastos-smartweb-service repo, where the existing file is blank (intentionally),
-however we need to be able to connect to the database upon initialisation and this should occur with code in the `__init__.py` file (in cheirrs/elastos-smartweb-service/grpc_adenine/):
-
-NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` file is empty in the elastos-smartweb-service module, we have included ITCSA's version of `__init__.py` in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine. The latter repo (python-grpc-adenine) is meant to be run from the client's (user's) device, and provides the protocol buffers which the smart-web service communicates to the client with; ie gRPC protocols. The grpc_adenine directory contains all current foundation blockchain services, and is where your own  microservices are to be located, beside existing blockchain services.
-
-It is important to have both `__init__.py` files set up before building the 'smart' docker image.
-
-`cd path/to/cheirrs/elastos-smartweb-service`
-
-The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the load-balancer container ie the blockchain addresses and ports to access the smart-web environment. Smart-web could be running on any of the kubernetes-workers, as can pgadmin4.
-
-The blockchain server ip-addresses in the .env.example file need to match the address of kubeapi-load-balancer/0, here. Also the database details will require alteration.
-
-Ensure you are in cheirrs/elastos-smartweb-service directory.
-
-At this point you can get and edit the addresses for the various blockchain connections in .env.example from the address of kubeapi-load-balancer/0. You also need to edit __init__.py in grpc_adenine to insert correct database (master) ip-address. Then, in cheirrs/elastos-smartweb-service/ you simply:
-
-`docker image build -t smart .`
-
-You then push the resulting file to a Docker registry that is recognised as "secure" by Docker,preceeded by:
-
-`docker tag smart:latest <your-docker-repo-name>/smart:v0.01`
-
-`docker push <your-docker-repo-name>/smart`  (to your own secure offsite registry)
-
-The build processes may take some time (initially). When completed, we can push our images to the local onsite registry. 
-
-`juju run-action docker-registry/0 push image=<your-docker-repo-username>/smart:v0.01 pull=True --wait`
-
-and
-
-`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=$REGISTRY/pgadmin4 pull=True --wait`
+___________________________________________________________________________________________________________
 
 
 NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory (we are deploying to the kubernetes-worker/0 and /1), as follows (note that these kubernetes containers are separate from the docker container just built), and all still under development. The `subordinate` option has been set to `True` in this repo for smart-web and for pgadmin, meaning these will be able to occupy any kubernetes-worker vm. From /cheirrs/
 
-1. `juju deploy ./smart-web --series  focal --force`
+1. `juju deploy ./smart-web`
 
-        (This is kubernetes-worker/0)
+      
      
-2. `juju deploy ./pgadmin4 --series  focal --force`
+2. `juju deploy ./pgadmin4`
 
-        (This is kubernetes-worker/1)
+     
 
 and:
 
@@ -451,7 +415,7 @@ and:
 
 To allow access for administrative purposes from anywhere on your LAN:
 
-`juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-kubernetes-worker/0>,<ip-addr-kubernetes-worker/1>,<ip-addr-kubernetes-worker/2>`
+`juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
 
 `juju add-relation smart-web containerd`
 
@@ -573,7 +537,45 @@ Now within the cheirrs directory deploy pgadmin4:
  }
 
 ______________________________________________________________
-______________________________________________________________
+
+     
+_______________________________________________________________
+
+
+## Next we build the 'smart' docker image:
+
+but first there is an issue with the `__init__.py` file contained in the elastos-smartweb-service repo, where the existing file is blank (intentionally),
+however we need to be able to connect to the database upon initialisation and this should occur with code in the `__init__.py` file (in cheirrs/elastos-smartweb-service/grpc_adenine/):
+
+NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` file is empty in the elastos-smartweb-service module, we have included ITCSA's version of `__init__.py` in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine. The latter repo (python-grpc-adenine) is meant to be run from the client's (user's) device, and provides the protocol buffers which the smart-web service communicates to the client with; ie gRPC protocols. The grpc_adenine directory contains all current foundation blockchain services, and is where your own  microservices are to be located, beside existing blockchain services.
+
+It is important to have both `__init__.py` files set up properly before building the 'smart' docker image.
+
+`cd path/to/cheirrs/elastos-smartweb-service`
+
+The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. Smart-web will be running on its own machine, as will pgadmin4.
+
+The blockchain server ip-addresses in the .env.example file need to match the address of the smart-web machine, here. Also the database details will require alteration.
+
+Ensure you are in cheirrs/elastos-smartweb-service directory.
+
+At this point you can get and edit the addresses for the various blockchain connections in .env.example from the address of kubeapi-load-balancer/0. You also need to edit __init__.py in grpc_adenine to insert correct database (master) ip-address. Then, in cheirrs/elastos-smartweb-service/ you simply:
+
+`docker image build -t smart .`
+
+You then push the resulting file to a Docker registry that is recognised as "secure" by Docker,preceeded by:
+
+`docker tag smart:latest <your-docker-repo-name>/smart:v0.01`
+
+`docker push <your-docker-repo-name>/smart`  (to your own secure offsite registry)
+
+The build processes may take some time (initially). When completed, we can push our images to the local onsite registry. 
+
+`juju run-action docker-registry/0 push image=<your-docker-repo-username>/smart:v0.01 pull=True --wait`
+
+and
+
+`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=$REGISTRY/pgadmin4 pull=True --wait`
 
 
 .. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. The logs of units housed by other machines are available on those machines. eg you can find smart-web logs on machine 7/kubernetes-worker/0.
