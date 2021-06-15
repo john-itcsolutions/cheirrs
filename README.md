@@ -262,17 +262,17 @@ See https://github.com/juju-solutions/charm-tf-serving
 To remove Kubeflow from your Kubernetes cluster, first run this command to
 remove Kubeflow itself:
 
-    juju destroy-model kubeflow --destroy-storage
+    juju destroy-model lernenmaschine --destroy-storage
 
 If you encounter errors while destroying the model, you can run this command
 to force deletion:
 
-    juju destroy-model kubeflow --yes --destroy-storage --force
+    juju destroy-model lernenmaschine --yes --destroy-storage --force
 
 Alternatively, to simply release storage instead of deleting it, run with this
 flag:
 
-    juju destroy-model kubeflow --release-storage
+    juju destroy-model lernenmaschine --release-storage
 
 ### Kubeflow controller
 
