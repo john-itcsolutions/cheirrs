@@ -180,7 +180,7 @@ Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1. You 
 
 If you make mistakes during editing, it is safest to:
 
-`juju destroy-controller uk8s --destroy-all-models --destroy-storage `
+`juju destroy-controller microk8s --destroy-all-models --destroy-storage `
 
 and restart from 
 
