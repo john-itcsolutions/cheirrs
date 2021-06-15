@@ -569,7 +569,7 @@ The blockchain server ip-addresses in the .env.example file need to match the ad
 
 Ensure you are in cheirrs/elastos-smartweb-service directory.
 
-At this point you can get and edit the addresses for the various blockchain connections in .env.example from the address of kubeapi-load-balancer/0. You also need to edit __init__.py in grpc_adenine to insert correct database (master) ip-address. Then, in cheirrs/elastos-smartweb-service/ you simply:
+At this point you can get and edit the addresses for the various blockchain connections in .env.example from the address of smart-web/0. You also need to edit __init__.py in grpc_adenine to insert correct database (master) ip-address. Then, in cheirrs/elastos-smartweb-service/ you simply:
 
 `docker image build -t smart .`
 
