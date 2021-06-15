@@ -196,6 +196,16 @@ Only when the coredns configmap is correct for your LAN:
 
 (Passthrough should already be natively enabled to your Accelerator GPU.)
 
+Check the status of the installation with:
+
+`watch -c juju status --color`
+
+or:
+
+`juju status`
+
+for a static summary.
+
 On Host, you could switch between other possible controllers by noting the current controllers known to juju:
 
 `juju controllers`
