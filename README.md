@@ -593,6 +593,8 @@ and
 .. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. The logs of units housed by other machines are available on those machines. eg you can find smart-web logs on machine 7/kubernetes-worker/0.
 
 ## So far it seems that the charm would run to completion of setup on the original werk model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to failure of loading process of kernel modules for the NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry. dpage/pgadmin4 is in the same situation, with image unable to be uploaded to the registry. (It has emerged that we bought a bad device! We are temporarily dispensing with the Tesla K80, relying instead on RAM alone.)
+     
+     A further issue has arisen due to the docker interface being unable to (either?) use or discover the dev/kvm owner. That is, the native KVM virtual machine kernel modules are not correctly installed. This is developing into quite a problem for us, as it is preventing installation of our Smart-Web charm.
 
 
               ____________________________
