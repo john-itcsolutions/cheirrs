@@ -854,5 +854,8 @@ Financial modeling (now involving M/L) encompasses certain agreed principles whi
 
 _________________________________________________________________
 
+   My LinkedIn:
+                                                                              
+   https://www.linkedin.com/in/john-lloyd-olsen/                                                                           
 _________________________________________________________________
 
