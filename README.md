@@ -783,19 +783,23 @@ _________________________________________________________________
 
 then, if you `juju status` in the werk model you will see, at the foot of the output, a reference to the Offer.
 
-An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'uk8s' controller, ie from the 'kubeflow' model), is connected with (this needs to be run while in kubeflow model):
+An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'microk8s' controller, ie from the 'lernenmaschine' model), is connected with (this needs to be run while in lernenmaschine model):
 
-`juju grant admin consume uk8s:admin/werk.pg-a`
+`juju grant admin consume microk8s:admin/werk.pg-a`
 
-`juju grant ubuntu consume uk8s:ubuntu/werk.pg-a`
+`juju grant ubuntu consume microk8s:ubuntu/werk.pg-a`
 
-.. then the authorised user (in the kubeflow model - see above) may use:
+.. then the authorised user (in the lernenmaschine model - see above) may use:
 
-`juju add-relation <application>:db uk8s:admin/werk.pg-a:db`
+`juju add-relation <application>:db microk8s:admin/werk.pg-a:db`
 
-`juju add-relation <application>:db uk8s:ubuntu/werk.pg-a:db`
+`juju add-relation <application>:db microk8s:ubuntu/werk.pg-a:db`
 
-to connect "application" to the database (in werk model)from 'uk8s' controller, ie from the kubeflow model (in this case).
+to connect "application" to the database (in werk model)from 'microk8s' controller, ie from the lernenmaschine model (in this case).
+     
+     The following is a screenshot of the status board after successful installation:
+     
+     <img src="./kubernetesinstallation-14-06-2021-2-with-proxy.png">
 
 _____________________________________________________________
 
