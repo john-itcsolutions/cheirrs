@@ -376,244 +376,12 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 Deploy a Redis cluster for in-memory caching:
 
 `juju deploy cs:~omnivector/bundle/redis-cluster-1`
+     
+`expose redis`
 
 
 *******************************************************
 
-`cd ../cheirrs` 
-
-`juju deploy cs:~containers/docker-registry`
-
-(We are deploying to a standalone vm)
-
-`juju add-relation docker-registry easyrsa:client`
-
-`juju config docker-registry auth-basic-user='your-docker-repo-username'  auth-basic-password='your-docker-repo-password'`
-
-Test login to docker-registry:
-
-`juju run --unit docker-registry/0 "docker login -u <your-docker-repo-username> -p <your-docker-repo-password> $REGISTRY"`
-
-___________________________________________________________________________________________________________
-
-
-NOTE: MUCH OF THE FOLLOWING TEXT CAN BE AVOIDED IF YOU SIMPLY CHOOSE TO DEPLOY SMART-WEB DIRECTLY FROM THE CHEIRRS REPO. ie, from "cheirrs" directory, as follows (note that these kubernetes containers are separate from the docker container yet to be built - see below), and all still under development. From /cheirrs/
-
-1. `juju deploy ./smart-web`
-
-      
-     
-2. `juju deploy ./pgadmin4`
-
-     
-
-and:
-
-`juju expose smart-web`
-
-`juju expose pgadmin4`
-
-`juju relate smart-web kubernetes-worker`
-
-`juju relate pgadmin4 kubernetes-worker`
-
-`juju add-relation smart-web easyrsa:client`
-
-`juju add-relation pgadmin4 easyrsa:client`
-
-`juju add-relation pg-a:db smart-web`
-
-`juju add-relation pg-a:db pgadmin4`
-
-To allow access for administrative purposes from anywhere on your LAN:
-
-`juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-pgadmin4>`
-
-`juju add-relation smart-web containerd`
-
-_______________________________________________________________
-
-ALSO:
-
-## Blockchains-Database Server (werk model) 
-
-We turn to finish setting up the Blockchain/Database gRPC Server Deployment,
-
-NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` file is empty in the elastos-smartweb-service module, we have included ITCSA's version of `__init__.py` in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine.
-
-______________________________________________________________
-
-THE FOLLOWING (in curly braces) CAN BE AVOIDED UNLESS YOU ARE INTERESTED IN HOW TO BUILD A CHARM .. { .. }
-_______________________________________________________________
-_______________________________________________________________
-
-## SMART-WEB - a Docker charm for the elastos-smartweb-service:
-
-## The way forward:
-
-{  We know that we must build a "smart-web" charm, rather than simply using kubectl to deploy the software, as was done in our smart-web-postgresql-grpc repo. Otherwise we would have no simple mechanisms for smart-web to find, connect and synchronise with its environment.
-
-For juju charms, their 'relations' and 'hooks' enable synchronous operation with the other charms in their environment. The relations and hooks operate by boolean logic and are programmed 'reactively', meaning the hooks react to changes in the environment to signal to other hooks. A change might be a machine going offline, or one coming online, or a machine moving from "available" to "ready", or some other change-in-state of the model containing the charms.
-
-
-Now, we need to begin to assemble the smart-web charm, layer by layer, before we can build it. There are fundamentally 3 stages in assembling the layers: first is the base layer with any of the provided base charms for this layer. We choose, not code, this layer. There is a minor amount of 'boilerplate' with some charms, layers and interfaces. This is found on their juju repo sites on github.
-
-Please refer to  https://github.com/juju/layer-index. 
-
-`git clone https://github.com/john-itcsolutions/cheirrs`
-
-Within this repo, the smart-web charm has been built as below, however only here in the repo can we share the other files necessary to build the charm from scratch.
-
-`cd cheirrs/smart-web`
-
-The layer.yaml file shows the base layers in the smart-web charm.
-
-You will also find the interfaces:
-
-The second stage consists of "interfaces" and "charm-layers", which we likewise choose, to satisfy our requirements, such that the coding revolves around the relations and hooks to be brought to life in response to planned (and less predictable) changes in the model environment as a charm, with its layers, is started and begins relating to its providers and requirers. The third stage is the building and packaging of the actual charm (a docker-based charm, in our case) But before this we require the charm tools:
-
-`sudo snap install charm --classic`
-
-This is how we proceeded to construct the charm:
-
-To the outer working directory:
-
-`cd ../../`
-
-`charm create smart-web`
-
-Refer to - https://discourse.charmhub.io/t/deploy-your-docker-container-to-any-cloud-with-charms/1135
-
-and: https://discourse.charmhub.io/t/layers-for-charm-authoring/1122
-
-and: https://discourse.charmhub.io/t/interface-layers/1121
-
-and for the base layer: https://charmsreactive.readthedocs.io/en/latest/layer-basic.html
-
-Refer to https://discourse.charmhub.io/t/charm-tools/1180 for details of "charm tools" commands. Note also that each interface or layer is documented on its own repo site.}
-
-We have gone further, and assembled the code in metadata.yaml, layer.yaml, and smart_web.py (the so-called reactive code in Python). You need to obtain the charm code from the smart-web folder within the current repo. (layer.yaml, metadata.yaml and reactive/smart-web.py)
-
-Now within your created smart-web directory, we build and deploy smart-web to kubernetes:
-
-`charm build -o ../path/to/cheirrs`
-
-`juju deploy ./smart-web --series focal --force`
-
-`juju add-relation smart-web easyrsa:client`
-
-`juju add-relation docker-registry containerd`
-
-We would also like to be able to develop the postgresql database structure and details ('house' database) using pgadmin4. To this end we construct a 'pgadmin4' charm as follows (with inspiration from 'smart-web').
-
-This image would need to be tagged and pushed to the docker-registry as in this document above (for smart-web), if the docker-registry works for you.
-
-The following builds and deploys the pgadmin4 charm which will seek the requested image (dpage/pgadmin4) from the docker-registry, as specified in metadata.yaml.
-
-From your outer working directory:
-
-`charm create pgadmin4`
-
-`cd pgadmin4`
-
-The layer.yaml, metadata.yaml and pgadmin4.py files are obtainable from 
-
-the pgadmin4 folder in this repo
-
-As above, when completed, we can obtain the docker container from the registry. We will simply deploy smart-web and pgadmin4 locally, but the creation of the kubernetes images locally relies on pushing the images to the local reverse-proxied docker-registry, initially pulling from the "trusted" docker repos dpage/pgadmin4  and <your-docker-repo-name>/smart.
-
-`cd cheirrs`
-
-Now within the cheirrs directory deploy pgadmin4:
-
-`juju deploy ./pgadmin4 --series focal --force`
-
-`juju expose smart-web`
-
-`juju expose pgadmin4`
-
-`juju add-relation smart-web easyrsa:client`
-
-`juju add-relation smart-web containerd`
-
-`juju add-relation pgadmin4 easyrsa:client`
-
-`juju add-relation pgadmin4 containerd`
-
-`juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-kubernetes-worker/0>,<ip-addr-kubernetes-worker/1>,<ip-addr-kubernetes-worker/2>` 
-
-`juju add-relation pg-a:db smart-web`
-
-`juju add-relation pg-a:db pgadmin4`
-
- }
-
-______________________________________________________________
-
-     
-_______________________________________________________________
-
-
-## Next we build the 'smart' docker image:
-
-but first there is an issue with the `__init__.py` file contained in the elastos-smartweb-service repo, where the existing file is blank (intentionally),
-however we need to be able to connect to the database upon initialisation and this should occur with code in the `__init__.py` file (in cheirrs/elastos-smartweb-service/grpc_adenine/):
-
-NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` file is empty in the elastos-smartweb-service module, we have included ITCSA's version of `__init__.py` in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from an existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine. The latter repo (python-grpc-adenine) is meant to be run from the client's (user's) device, and provides the protocol buffers which the smart-web service communicates to the client with; ie gRPC protocols. The grpc_adenine directory contains all current foundation blockchain services, and is where your own  microservices are to be located, beside existing blockchain services.
-
-It is important to have both `__init__.py` files set up properly before building the 'smart' docker image.
-
-`cd path/to/cheirrs/elastos-smartweb-service`
-
-The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. Smart-web will be running on its own machine, as will pgadmin4.
-
-The blockchain server ip-addresses in the .env.example file need to match the address of the smart-web machine, here. Also the database details will require alteration.
-
-Ensure you are in cheirrs/elastos-smartweb-service directory.
-
-At this point you can get and edit the addresses for the various blockchain connections in .env.example from the address of smart-web/0. You also need to edit __init__.py in grpc_adenine to insert correct database (master) ip-address. Then, in cheirrs/elastos-smartweb-service/ you simply:
-
-`docker image build -t smart .`
-
-You then push the resulting file to a Docker registry that is recognised as "secure" by Docker,preceeded by:
-
-`docker tag smart:latest <your-docker-repo-name>/smart:v0.01`
-
-`docker push <your-docker-repo-name>/smart`  (to your own secure offsite registry)
-
-The build processes may take some time (initially). When completed, we can push our images to the local onsite registry. 
-
-`juju run-action docker-registry/0 push image=<your-docker-repo-username>/smart:v0.01 pull=True --wait`
-
-and
-
-`juju run-action docker-registry/0 push image=dpage/pgadmin4 tag=$REGISTRY/pgadmin4 pull=True --wait`
-
-
-.. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. The logs of units housed by other machines are available on those machines. eg you can find smart-web logs on machine 7/kubernetes-worker/0.
-
-## So far it seems that the charm would run to completion of setup on the original werk model, as long as the NVIDIA driver is installed and loaded properly. We are seeking assistance with this currently. The smart-web charm runs up to the point of fetching the "smart" container which is the heart of our smart-web charm, however because the docker-registry is failing apparently due to failure of loading process of kernel modules for the NVIDIA driver (from logs), the smart-web charm fails to fetch the image from the registry. dpage/pgadmin4 is in the same situation, with image unable to be uploaded to the registry. (It has emerged that we bought a bad device! We are temporarily dispensing with the Tesla K80, relying instead on RAM alone.)
-     
-     A further issue has arisen due to the docker interface being unable to (either?) use or discover the dev/kvm owner. That is, the native KVM virtual machine kernel modules are not correctly installed. This is developing into quite a problem for us, as it is preventing installation of our Smart-Web charm.
-
-
-              ____________________________
-
-(Note; you are user 'ubuntu' here, so if you need a new password, just
-
-`sudo passwd ubuntu`
-
-Later, within the master postgresql database container, you will need to give postgres user a password:
-
-`sudo passwd postgres`
-
-does this.
-
-To add, for example, 2 load-balancer units, simply
-
-`juju add-unit -n 2 kubeapi-load-balancer`
-
-)
 ________________________________________________________________
  
 ## DATABASE: Internals
@@ -796,6 +564,64 @@ An application (and users - here admin and ubuntu) set to `consume` the postgres
 `juju add-relation <application>:db microk8s:ubuntu/werk.pg-a:db`
 
 to connect "application" to the database (in werk model)from 'microk8s' controller, ie from the lernenmaschine model (in this case).
+
+_______________________________________________________________
+
+ALSO:
+
+## Blockchains-Database Server (werk model) 
+
+We turn to finish setting up the Blockchain/Database gRPC Server Deployment,
+
+NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` file is empty in the elastos-smartweb-service module, we have included ITCSA's version of `__init__.py` in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account for repo and container registry storage. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine.
+   
+     On host:
+
+`cd path/to/cheirrs/elastos-smartweb-service`
+
+The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. Smart-web will be running on its own machine, as will pgadmin4.
+
+The blockchain server ip-addresses in the .env.example file need to match the address of the kubernetes-worker-0 machine, here. Also the database details will require alteration.
+     
+Presuming you have obtained a fresh clone of "elastos-smartweb-service", you will need to ensure the __init__.py within grpc_adenine directory is updated to our repo's version (as discussed above).
+     
+You also need to treat the "run.sh" (which is in cheirrs root directory also) identically. So copy it to elastos-smartweb-service over the existing "run.sh", when you are happy with the change. Postgres connections are not possible in the fashion assumed by "run.sh" in elastos by default.
+
+Ensure you are in the cheirrs directory.
+     
+`tar -zcvf elastos.tar.gz elastos-smartweb-service`
+
+`juju scp elastos.tar.gz <machine-number-worker-0>:/home/ubuntu`
+     
+Enter worker-0:
+     
+`juju ssh <machine-number-worker-0>`
+     
+`tar -zxvf elastos.tar.gz && rm -f elastos.tar.gz && cd el*`
+     
+`./run.sh` 
+
+.. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. The logs of units housed by other machines are available on those machines. eg you can find smart-web logs on machine 7/kubernetes-worker/0.
+
+
+              ____________________________
+
+(Note; you are user 'ubuntu' here, so if you need a new password, just
+
+`sudo passwd ubuntu`
+
+Later, within the master postgresql database container, you will need to give postgres user a password:
+
+`sudo passwd postgres`
+
+does this.
+
+To add, for example, 2 load-balancer units, simply
+
+`juju add-unit -n 2 kubeapi-load-balancer`
+
+)
+_________________________________________________________________________________________________
      
      The following is a screenshot of the status board after successful installation:
      
