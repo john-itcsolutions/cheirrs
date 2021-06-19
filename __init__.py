@@ -1,6 +1,6 @@
 from sqlalchemy_wrapper import SQLAlchemy
 from decouple import config
-from sqlalchemy import create_engine, MetaData, Table, Column, ForeignKey
+from sqlalchemy import create_engine, MetaData, Table, Column, ForeignKey, inspect
 from sqlalchemy.ext.automap import automap_base
 
 import sys
@@ -26,15 +26,6 @@ try:
     db_engine = create_engine(database_uri)
 except Exception as e:
     logging.fatal(f"Error while connecting to the database: {e}")
-
-# produce our own MetaData object
-metadata = MetaData(reflect=True)
-
-metadata.reflect(db_engine)
-
-Base = automap_base(metadata=metadata)
-
-Base.prepare()
 
 from charmhelpers.core.hookenv import (
     Hooks, config, relation_set, relation_get,
@@ -76,6 +67,16 @@ def db_relation_changed():
             slave_conn_strs.append(conn_str)
 
     update_my_db_config(master=master_conn_str, slaves=slave_conn_strs)
+
+# Utilise metadata inspection to reflect database/schema details
+
+meta = MetaData()
+insp = inspect(db_engine)
+
+for schema in insp.get_schema_names():
+    for table in insp.get_table_names(schema):
+        this_table = Table(schema.table, meta)
+        insp.reflect_table(this_table, None)
 
 if __name__ == '__main__':
     hooks.execute(sys.argv)
