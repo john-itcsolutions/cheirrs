@@ -1,5 +1,4 @@
-from sqlalchemy_wrapper import SQLAlchemy
-from decouple import config
+from sqlalchemy_wrapper import SQLAlchemy  
 from sqlalchemy import create_engine, MetaData, Table, Column, ForeignKey, inspect
 from sqlalchemy.ext.automap import automap_base
 
