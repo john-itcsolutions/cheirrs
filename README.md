@@ -799,7 +799,7 @@ to connect "application" to the database (in werk model)from 'microk8s' controll
      
      The following is a screenshot of the status board after successful installation:
      
-     <img src="./Screenshot from 2021-06-19 18-11-29.png">
+<img src="./Screenshot from 2021-06-19 18-11-29.png">
 
 _____________________________________________________________
 
