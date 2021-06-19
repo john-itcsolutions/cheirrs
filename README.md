@@ -377,7 +377,7 @@ Deploy a Redis cluster for in-memory caching:
 
 `juju deploy cs:~omnivector/bundle/redis-cluster-1`
      
-`expose redis`
+`juju expose redis`
 
 
 *******************************************************
