@@ -394,7 +394,7 @@ From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scrip
 
 ## The following command would be possible only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
 
-`cd ../../../../ && juju scp dbase_setup.sh *.sql <machine number of postgresql master>:/home/ubuntu/ && cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
+`cd ../../../../TO*master && juju scp dbase_setup.sh *.sql <machine number of postgresql master>:/home/ubuntu/ && cd ../../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
 where some of the relevant .sql backup files are outside the 'cheirrs' repository, and generally unavailable publically.
 
@@ -598,10 +598,29 @@ Enter worker-0:
 `juju ssh <machine-number-worker-0>`
      
 `tar -zxvf elastos.tar.gz && rm -f elastos.tar.gz && cd el*`
-     
-`./run.sh` 
 
-.. and wait and watch .. and examine logs, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. The logs of units housed by other machines are available on those machines. eg you can find smart-web logs on machine 7/kubernetes-worker/0.
+Note that in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the worker-0 machine. Therefore:
+
+`exit`
+
+`cd ....path/to/cheirrs`
+
+`juju scp TO*service/TO*service/run.sh <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service`
+
+`juju scp TO*service/TO*adenine/__init__.py server.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine`
+
+`juju scp TO*service/TO*python/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python`
+
+Re-enter worker-0:
+
+`juju ssh <machine-number-worker-0>`
+
+`cd el*`
+
+`./run.sh`
+ 
+
+.. and wait and watch .. and examine logs in case of errors, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. If all is well, you should be looking at the blockchains' log on stdout as the cycles roll every 30 seconds. The logs of units housed by other machines are available on those machines.
 
 
               ____________________________

@@ -1,8 +1,12 @@
-from sqlalchemy_wrapper import SQLAlchemy  
+from sqlalchemy_wrapper import SQLAlchemy
 from sqlalchemy import create_engine, MetaData, Table, Column, ForeignKey, inspect
 from sqlalchemy.ext.automap import automap_base
 
 import sys
+
+from charmhelpers.core.hookenv  import (
+    Hooks, config, relation_set, relation_get,
+    local_unit, related_units, remote_unit)
 
 import logging
 # Set up logging
@@ -14,8 +18,8 @@ logging.basicConfig(
 
 # Connect to the database
 db_name = 'haus'
-db_user = 'postgres'
-db_password = 'Buddha10'
+db_user = 'gmu'
+db_password = 'gmu'
 db_host = '10.57.133.149'
 db_port = '5432'
 
@@ -25,10 +29,6 @@ try:
     db_engine = create_engine(database_uri)
 except Exception as e:
     logging.fatal(f"Error while connecting to the database: {e}")
-
-from charmhelpers.core.hookenv import (
-    Hooks, config, relation_set, relation_get,
-    local_unit, related_units, remote_unit)
 
 hooks = Hooks()
 hook = hooks.hook
@@ -72,9 +72,9 @@ def db_relation_changed():
 meta = MetaData()
 insp = inspect(db_engine)
 
-for schema in insp.get_schema_names():
+for schema in ['public', 'a_horse', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general',  'the_general_oseer', 'topology']:
     for table in insp.get_table_names(schema):
-        this_table = Table(schema.table, meta)
+        this_table = Table(table, meta)
         insp.reflect_table(this_table, None)
 
 if __name__ == '__main__':

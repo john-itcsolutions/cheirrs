@@ -25,3 +25,25 @@ create role the_general_admin with superuser login password 'passwd';
 create role the_general_oseer_admin with superuser login password 'passwd';
 
 create role gmu with login password 'gmu';
+
+GRANT USAGE ON SCHEMA a_horse TO 'gmu';
+
+GRANT USAGE ON SCHEMA cheirrs TO 'gmu';
+
+GRANT USAGE ON SCHEMA cheirrs_oseer TO 'gmu';
+
+GRANT USAGE ON SCHEMA chubba_morris_oseer TO 'gmu';
+
+GRANT USAGE ON SCHEMA chubba_morris TO 'gmu';
+
+GRANT USAGE ON SCHEMA convey_it_oseer TO 'gmu';
+
+GRANT USAGE ON SCHEMA convey_it TO 'gmu';
+
+GRANT USAGE ON SCHEMA the_general_oseer TO 'gmu';
+
+GRANT USAGE ON SCHEMA the_general TO 'gmu';
+
+GRANT USAGE ON SCHEMA topology TO 'gmu';
+
+GRANT USAGE ON SCHEMA public TO 'gmu';
