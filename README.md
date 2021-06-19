@@ -607,7 +607,7 @@ Note that in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" dir
 
 `juju scp TO*service/TO*service/run.sh <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service`
 
-`juju scp TO*service/TO*adenine/__init__.py server.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine`
+`juju scp TO*service/TO*adenine/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine`
 
 `juju scp TO*service/TO*python/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python`
 
