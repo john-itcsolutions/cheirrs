@@ -645,6 +645,11 @@ ________________________________________________________________________________
      The following is a screenshot of the status board after successful installation:
      
 <img src="./Screenshot from 2021-06-19 18-11-29.png">
+     
+     stdout of Blockchains looks like:
+     
+<img src="./Screenshot from 2021-06-20 08-35-49.png">
+     
 
 _____________________________________________________________
 
