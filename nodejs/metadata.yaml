@@ -1,0 +1,10 @@
+"name": "nodejs"
+"summary": "Node.js runtime"
+"maintainer": "John L Olsen <john@itcsolutions.com.au>"
+"description": "Node.js runtime"
+"series":
+- "focal"
+"storage":
+  "app":
+    "type": "filesystem"
+    "location": "/srv/app"
