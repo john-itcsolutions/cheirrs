@@ -414,22 +414,6 @@ Enter your new postgres user's password twice.
 
 (.. wait a minute or 2. Don't worry about the syntax errors visible when the scripts have run)
 
-Create users in postgres:
-
-`psql haus`
-
-`\i /home/ubuntu/create_users.sql`
-
-(Note for the smart-web blockchains to work, gmu must exist as a user with password gmu.)
-
-Check Schemas: there should be 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer' and 'public'.
-
-`\dn`
-
-Check off users:
-
-`\du`
-
 `\dt ` should reveal no instances (in default public schema)
 
 `set search_path to cheirrs;`
@@ -528,7 +512,21 @@ Now you are interfaced to the haus database.
 -- rule based standardizer
 
 `CREATE EXTENSION address_standardizer;`
+                                                                              
+Finally, we can create all initial users and usage permissions
 
+`\i /home/ubuntu/create_users.sql`
+
+(Note for the smart-web blockchains to work, gmu must exist as a user with password gmu, and with usage permission to all schema.)
+
+Check Schemas: there should be 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer', 'topology', and 'public'.
+
+`\dn`
+
+Check off users:
+
+`\du`
+                                                                              
 `\q`
 
 `exit`
