@@ -585,17 +585,11 @@ Presuming you have obtained a fresh clone of "elastos-smartweb-service", you wil
      
 You also need to treat the "run.sh" (which is in cheirrs root directory also) identically. So copy it to elastos-smartweb-service over the existing "run.sh", when you are happy with the change. Postgres connections are not possible in the fashion assumed by "run.sh" in elastos by default.
 
-Ensure you are in the cheirrs directory.
-     
-`tar -zcvf elastos.tar.gz elastos-smartweb-service`
-
-`juju scp elastos.tar.gz <machine-number-worker-0>:/home/ubuntu`
-     
 Enter worker-0:
      
 `juju ssh <machine-number-worker-0>`
      
-`tar -zxvf elastos.tar.gz && rm -f elastos.tar.gz && cd el*`
+`git clone https://github.com/cyber-republic/elastos-smartweb-service.git`
 
 Note that in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the worker-0 machine. Therefore:
 
@@ -603,7 +597,7 @@ Note that in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" dir
 
 `cd ....path/to/cheirrs`
 
-`juju scp TO*service/TO*service/run.sh <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service`
+`juju scp TO*service/TO*service/*.sh <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service`
 
 `juju scp TO*service/TO*adenine/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine`
 
@@ -618,7 +612,7 @@ Re-enter worker-0:
 `./run.sh`
  
 
-.. and wait and watch .. and examine logs in case of errors, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. If all is well, you should be looking at the blockchains' log on stdout as the cycles roll every 30 seconds. The logs of units housed by other machines are available on those machines.
+.. and wait and watch .. and examine logs in case of errors, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds. The logs of units housed by other machines are available on those machines.
 
 
               ____________________________
