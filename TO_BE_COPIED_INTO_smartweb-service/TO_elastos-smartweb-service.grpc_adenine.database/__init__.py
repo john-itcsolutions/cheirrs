@@ -77,6 +77,7 @@ for schema in ['public', 'a_horse', 'cheirrs', 'cheirrs_oseer', 'chubba_morris',
     for table in insp.get_table_names(schema):
         this_table = Table(table, meta)
         insp.reflect_table(this_table, None)
+        print(schema, '.', this_table)
 
 if __name__ == '__main__':
     hooks.execute(sys.argv)
