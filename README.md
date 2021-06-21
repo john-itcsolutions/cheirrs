@@ -577,13 +577,13 @@ NOTE: As we don't own or control the elastos sub-modules, and since the `cheirrs
 
 `cd path/to/cheirrs/elastos-smartweb-service`
 
-The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. Smart-web will be running on its own machine, as will pgadmin4.
+The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env". However this cannot be done until we have cloned the elastos-smartweb-service repo into the worker (see below). Smart-web will be running on its own worker machine, as will pgadmin4 and the Carrier Node.
 
 The blockchain server ip-addresses in the .env.example file need to match the address of the kubernetes-worker-0 machine, here. Also the database details will require alteration.
      
 Presuming you have obtained a fresh clone of "elastos-smartweb-service", you will need to ensure the __init__.py within grpc_adenine directory is updated to our repo's version (as discussed above).
      
-You also need to treat the "run.sh" (which is in cheirrs root directory also) identically. So copy it to elastos-smartweb-service over the existing "run.sh", when you are happy with the change. Postgres connections are not possible in the fashion assumed by "run.sh" in elastos by default.
+You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) identically. So we will copy them soon to elastos-smartweb-service over the existing "run.sh". Postgres connections are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
 
 Enter worker-0:
      
