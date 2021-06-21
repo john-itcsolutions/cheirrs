@@ -1,4 +1,0 @@
-#!/bin/sh
-set -ux
-
-cp -v /var/log/juju/* $DEBUG_SCRIPT_DIR
