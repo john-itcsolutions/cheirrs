@@ -27,6 +27,7 @@ database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_na
 
 try:
     db_engine = create_engine(database_uri)
+    connection = SQLAlchemy(database_uri)
 except Exception as e:
     logging.fatal(f"Error while connecting to the database: {e}")
 
