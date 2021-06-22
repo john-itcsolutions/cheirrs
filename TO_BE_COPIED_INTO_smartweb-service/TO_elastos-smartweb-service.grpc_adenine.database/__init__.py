@@ -1,9 +1,9 @@
 from sqlalchemy_wrapper import SQLAlchemy
 from sqlalchemy import create_engine, MetaData, Table, Column, ForeignKey, inspect
 from sqlalchemy.ext.automap import automap_base
-
+import psycopg2
 import sys
-
+from decouple import config
 from charmhelpers.core.hookenv  import (
     Hooks, config, relation_set, relation_get,
     local_unit, related_units, remote_unit)
@@ -69,15 +69,38 @@ def db_relation_changed():
     update_my_db_config(master=master_conn_str, slaves=slave_conn_strs)
 
 # Utilise metadata inspection to reflect database/schema details
-
 meta = MetaData()
 insp = inspect(db_engine)
+n = 0
+m = 0
+l = 0
+max = [[]]
+mAX = 0
 
-for schema in ['public', 'a_horse', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general',  'the_general_oseer', 'topology']:
+schemata_names = ['public', 'a_horse', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general',  'the_general_oseer', 'topology']
+for schema in schemata_names:
+    n += 1
+    if n > 1:
+        max.append((last_schema, m))
+        mAX += m
+        m = 0
     for table in insp.get_table_names(schema):
         this_table = Table(table, meta)
         insp.reflect_table(this_table, None)
+        m += 1
+        l += 1
         print(schema, '.', this_table)
+        last_schema = schema
+max.append((last_schema, m))
+mAX += m
+print('All', n, 'schemata, with', l, 'total tables reflected')
+print(str(max).replace("),", "),\n"))
+
+print('Total tables by "max" =', mAX)
+if mAX - l == 0:
+    print('Totals agree!')
+else:
+    print('WARNING!! Totals not equal!')
 
 if __name__ == '__main__':
     hooks.execute(sys.argv)
