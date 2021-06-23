@@ -505,7 +505,8 @@ Now you are interfaced to the haus database.
 
 -- Enable US Tiger Geocoder
 
-`CREATE EXTENSION postgis_tiger_geocoder;`                                                                              
+`CREATE EXTENSION postgis_tiger_geocoder;`
+
 Finally, we can create all initial users and usage permissions
 
 `\i /home/ubuntu/create_users.sql`

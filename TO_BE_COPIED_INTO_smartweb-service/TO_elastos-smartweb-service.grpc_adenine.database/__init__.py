@@ -77,7 +77,7 @@ l = 0
 max = [[]]
 mAX = 0
 
-schemata_names = ['public', 'a_horse', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general',  'the_general_oseer', 'topology']
+schemata_names = ['public', 'a_horse', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general',  'the_general_oseer', 'tiger', 'tiger_data', 'topology']
 for schema in schemata_names:
     n += 1
     if n > 1:
