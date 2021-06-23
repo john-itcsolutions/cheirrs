@@ -494,7 +494,18 @@ Now you are interfaced to the haus database.
 -- rule based standardizer
 
 `CREATE EXTENSION address_standardizer;`
-                                                                              
+
+-- example rule data set
+
+`CREATE EXTENSION address_standardizer_data_us;`
+
+-- example rule data set
+
+`CREATE EXTENSION address_standardizer_data_us;`
+
+-- Enable US Tiger Geocoder
+
+`CREATE EXTENSION postgis_tiger_geocoder;`                                                                              
 Finally, we can create all initial users and usage permissions
 
 `\i /home/ubuntu/create_users.sql`
