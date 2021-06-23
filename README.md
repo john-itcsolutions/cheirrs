@@ -396,7 +396,7 @@ From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scrip
 
 ## The following command would be possible only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
 
-`cd ../../../../TO*master && juju scp dbase_setup.sh *.sql <machine number of postgresql master>:/home/ubuntu/ && cd ../../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
+`cd ../../../../ && juju scp dbase_setup.sh *.sql <machine number of postgresql master>:/home/ubuntu/ && cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
 where some of the relevant .sql backup files are outside the 'cheirrs' repository, and generally unavailable publically.
 
