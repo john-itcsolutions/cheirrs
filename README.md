@@ -440,27 +440,7 @@ Exit psql shell:
 
 `\q`
 
-Now, at /home/ubuntu:
 
-Run Elastos scripts to prepare database public schema for Blockchains interaction;
-
-`psql -h localhost -d haus -U gmu -a -q -f create_table_scripts.sql`
-
-`psql -h localhost -d haus -U gmu -a -q -f insert_rows_scripts.sql`
-
-Now if you
-
-`psql haus`
-
-then
-
-`\dt` (to reveal tables in default public schema) you should see 3 tables.
-
-Try:
-
-`select * from users;`
-
-You should see the single user's details.
 __________________________________________________________________
 
 ## Getting PostGIS and Open Street Maps
@@ -521,13 +501,37 @@ Finally, we can create all initial users and usage permissions
 
 (Note for the smart-web blockchains to work, gmu must exist as a user with password gmu, and with usage permission to all schema.)
 
-Check Schemas: there should be 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer', 'topology', and 'public'.
+Check Schemas: there should be 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer', 'tiger', 'tiger_data', 'topology', and 'public'.
 
 `\dn`
 
 Check off users:
 
 `\du`
+                                                                              
+` \q`
+                                                                              
+Now, at /home/ubuntu:
+
+Run Elastos scripts to prepare database public schema for Blockchains interaction;
+
+`psql -h localhost -d haus -U gmu -a -q -f create_table_scripts.sql`
+
+`psql -h localhost -d haus -U gmu -a -q -f insert_rows_scripts.sql`
+
+Now if you
+
+`psql haus`
+
+then
+
+`\dt` (to reveal tables in default public schema) you should see 3 tables.
+
+Try:
+
+`select * from users;`
+
+You should see the single user's details.
                                                                               
 `\q`
 
