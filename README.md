@@ -438,27 +438,7 @@ Exit psql shell:
 
 `\q`
 
-Now, at /home/ubuntu:
 
-Run Elastos scripts to prepare database public schema for Blockchains interaction;
-
-`psql -h localhost -d haus -U gmu -a -q -f create_table_scripts.sql`
-
-`psql -h localhost -d haus -U gmu -a -q -f insert_rows_scripts.sql`
-
-Now if you
-
-`psql haus`
-
-then
-
-`\dt` (to reveal tables in default public schema) you should see 3 tables.
-
-Try:
-
-`select * from users;`
-
-You should see the single user's details.
 __________________________________________________________________
 
 ## Getting PostGIS and Open Street Maps
@@ -500,7 +480,7 @@ Now you are interfaced to the haus database.
 `CREATE EXTENSION postgis_topology;`
 
 -- Enable PostGIS Advanced 3D
--- and other geoprocessing algorithms
+-- and other geoprocessing algorithms                  
 -- sfcgal not available with all distributions
 
 `CREATE EXTENSION postgis_sfcgal;`
@@ -512,14 +492,40 @@ Now you are interfaced to the haus database.
 -- rule based standardizer
 
 `CREATE EXTENSION address_standardizer;`
-                                                                              
-Finally, we can create all initial users and usage permissions
+
+`CREATE EXTENSION postgis_tiger_geocoder;`
+
+`\q`
+
+Now, at /home/ubuntu:
+
+Run Elastos scripts, as postgres, to prepare database public schema for Blockchains interaction;
+
+`psql -h localhost -d haus -U gmu -a -q -f create_table_scripts.sql`
+
+`psql -h localhost -d haus -U gmu -a -q -f insert_rows_scripts.sql`
+
+Now if you
+
+`psql haus`
+
+then
+
+`\dt` (to reveal tables in default public schema) you should see 3 tables.
+
+Try:
+
+`select * from users;`
+
+You should see the single user's details.
+                                                              
+Finally, (whilst interfaced to 'haus') we can create all initial users and usage permissions
 
 `\i /home/ubuntu/create_users.sql`
 
 (Note for the smart-web blockchains to work, gmu must exist as a user with password gmu, and with usage permission to all schema.)
 
-Check Schemas: there should be 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer', 'topology', and 'public'.
+Check Schemas: there should be 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer', 'tiger', 'tiger_data', 'topology', and 'public'.
 
 `\dn`
 
@@ -604,6 +610,8 @@ Note that in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" dir
 `juju scp TO*service/TO*database/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database`
 
 `juju scp TO*service/TO*python/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python`
+
+It is also necessary to copy both elastos-smartweb-service/.env and .env.test (which may be identical) files into worker-0, after ensuri                                 ng the addresses match your installation. The most common ip-address in the files should be that of worker-0. The other, mentioned once, is the pg-a master address. Also note to fix the database address in __init__.py inside el*/gr*/database/__init__.py. These files should have corrected copies copied over existing items inside worker-0.
 
 Re-enter worker-0:
 

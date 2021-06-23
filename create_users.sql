@@ -44,8 +44,12 @@ GRANT USAGE ON SCHEMA the_general_oseer TO 'gmu';
 
 GRANT USAGE ON SCHEMA the_general TO 'gmu';
 
+GRANT USAGE ON SCHEMA tiger TO 'gmu';
+
+GRANT USAGE ON SCHEMA tiger_data TO 'gmu';
+
 GRANT USAGE ON SCHEMA topology TO 'gmu';
 
 GRANT USAGE ON SCHEMA public TO 'gmu';
 
-ALTER ROLE gmu SET search_path TO public, a_horse, cheirrs, cheirrs_oseer, chubba_morris, chubba_morris_oseer, convey_it, convey_it_oseer, the_general, the_general_oseer, topology;
+ALTER ROLE gmu SET search_path TO public, a_horse, cheirrs, cheirrs_oseer, chubba_morris, chubba_morris_oseer, convey_it, convey_it_oseer, the_general, the_general_oseer, tiger, tiger_data, topology;
