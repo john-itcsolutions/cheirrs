@@ -81,8 +81,12 @@ schemata_names = ['public', 'a_horse', 'cheirrs', 'cheirrs_oseer', 'chubba_morri
 for schema in schemata_names:
     n += 1
     if n > 1:
-        max.append((last_schema, m))
+        max.append((last_schema, 'Tables =', m))
         mAX += m
+        m = 0
+    if len(list(insp.get_table_names(schema))) == 0:
+        print(schema, '. NULL')
+        last_schema = schema
         m = 0
     for table in insp.get_table_names(schema):
         this_table = Table(table, meta)
@@ -91,7 +95,7 @@ for schema in schemata_names:
         l += 1
         print(schema, '.', this_table)
         last_schema = schema
-max.append((last_schema, m))
+max.append((last_schema, 'Tables =', m))
 mAX += m
 print('All', n, 'schemata, with', l, 'total tables reflected')
 print(str(max).replace("),", "),\n"))
