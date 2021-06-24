@@ -58,6 +58,10 @@ This enables the Elastos Carrier system to do its magic and connect in a private
 
 Currently (May 2021) the Elastos Developer Documentation does not address development with the new Elastos Essentials.
 
+Our dApp Front End looks like this at the current stage of development:
+
+<img src="./Screenshot from 2021-06-17 18-11-23.png">
+
 ## ________________________________________________________________________________________________________________________
 
 ## Get:
