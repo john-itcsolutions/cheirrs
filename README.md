@@ -733,7 +733,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      
      A typical node-red site appears as follows:
      
- <img src="./Screenshot from 2021-06-24 22-56-05.png">
+ <img src="./Screenshot from 2021-06-25 02-37-18.png">
 
 _________________________________________________________________________________________________________________________________________
      
