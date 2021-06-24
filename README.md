@@ -499,10 +499,6 @@ Now you are interfaced to the haus database.
 
 `CREATE EXTENSION address_standardizer_data_us;`
 
--- example rule data set
-
-`CREATE EXTENSION address_standardizer_data_us;`
-
 -- Enable US Tiger Geocoder
 
 `CREATE EXTENSION postgis_tiger_geocoder;`
