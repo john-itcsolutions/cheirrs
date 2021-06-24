@@ -691,8 +691,42 @@ This is the real business end of the operation and where most of the data proces
 
 Use triggers and trigger functions liberally. Also consider only allowing http POST queries, proscribing deletions, and dividing your schemata into 2 sections: Use_case_forms_based_tables and Accounting_based_tables, with trigger functions to process and post data from the Use_case_forms to the accounting_based_tables. This is more inuitive than some of the more complex "middleware" approaches, assuming someone understands the data-processing that is necessary and also understands the structure of the accounting_based_tables.
 ________________________________________________________________
+     
+     ## Enter kubernetes-worker-2, to set-up an iot server with node-red.
+     
+     `juju ssh 9`
 
-Good luck! For refs see:
+## Get: node-red (see above if you do not yet have nodejs and npm installed):
+     
+`sudo npm install -g --unsafe-perm node-red`
+
+You also will need to mimic an "edge" client or source for iot messages and signals, on your host. So:
+     
+`exit`
+     
+`sudo npm install -g --unsafe-perm node-red`
+     
+`node-red`
+     
+     and go to your own host's LAN address on browser with port `1880`
+     
+     Now re-enter worker-2:
+     
+`juju ssh 9`
+     
+`node-red`
+     
+     and go to the ip address of the worker-2 vm with port `1880`, in your host browser. 
+     
+     These 2 pages can interact and generate and forward messages and events.
+     
+     Eventually the idea is to be able to "log" and respond (in appropriate timeframes corresponding to the message origin and content)
+     to events considered as "exceptional" in some way. The evnts and messages will be logged on blockchains and database via "smart-web" server.
+
+_________________________________________________________________________________________________________________________________________
+     
+     
+     Good luck! For refs see:
 
 See Using Kubeflow above.
 
