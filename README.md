@@ -721,7 +721,15 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      These 2 pages can interact and generate and forward messages and events.
      
      Eventually the idea is to be able to "log" and respond (in appropriate timeframes corresponding to the message origin and content)
-     to events considered as "exceptional" in some way. The evnts and messages will be logged on blockchains and database via "smart-web" server.
+     to events considered as "exceptional" in some way. The events and messages will be logged on blockchains and database via "smart-web" server.
+     
+     In order for the worker-2 server to talk to the "smart-web" server (on worker-0) we need to clone the smartweb client from elastos in worker-2:
+     
+`git clone https://github.com/cyber-republic/python-grpc-adenine.git`
+     
+     Follow the README.md instructions on the repo site to build the client.
+     
+     We are currently having a problem related to the errors when we ran "test.sh" from snart-web. It appears to be due to lack of a jwt token at authentication in both cases.
 
 _________________________________________________________________________________________________________________________________________
      
