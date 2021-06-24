@@ -694,9 +694,9 @@ This is the real business end of the operation and where most of the data proces
 Use triggers and trigger functions liberally. Also consider only allowing http POST queries, proscribing deletions, and dividing your schemata into 2 sections: Use_case_forms_based_tables and Accounting_based_tables, with trigger functions to process and post data from the Use_case_forms to the accounting_based_tables. This is more inuitive than some of the more complex "middleware" approaches, assuming someone understands the data-processing that is necessary and also understands the structure of the accounting_based_tables.
 ________________________________________________________________
      
-     ## Enter kubernetes-worker-2, to set-up an iot server with node-red.
+## Enter kubernetes-worker-2, to set-up an iot server with node-red.
      
-     `juju ssh 9`
+`juju ssh 9`
 
 ## Get: node-red (see above if you do not yet have nodejs and npm installed):
      
