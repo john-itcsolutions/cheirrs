@@ -735,7 +735,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      
      Follow the README.md instructions on the repo site to build the client.
      
-     We are currently having a problem related to the errors when we ran "test.sh" from snart-web. It appears to be due to lack of a jwt token at authentication in both cases.
+     We are currently having a problem related to the errors when we ran "test.sh" from smart-web. It appears to be due to lack of a jwt token at authentication in both cases.
      
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - as well as the server can show pages similar to this):
      
