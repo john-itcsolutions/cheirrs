@@ -720,7 +720,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      
      and go to your own host's LAN address, on a new tab in the browser, with port `1880`
      
-    These 2 pages can interact and generate and forward messages and events.
+    These 2 pages can interact, and generate and forward messages and events.
      
      Eventually the idea is to be able to "log" and respond (in appropriate timeframes corresponding to the message origin and content)
      to events considered as "exceptional" in some way. The events and messages (originating on iot devices connected to "edge" raspberry-pi units or similar, in the field) will be logged on blockchains and database via node-red on worker-2 to the onboard python-grpc client, thence to the "smart-web" server.
