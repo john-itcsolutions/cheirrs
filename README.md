@@ -428,7 +428,7 @@ Enter your new postgres user's password twice.
 
 .. now, `\dt` should reveal a full set of 600+ tables in 2 categories: 1) accounting_<xyz> and 2) uc_<uvw> ('uc_' for use_case)
 
-Identical results will appear for:
+Fewer results will appear for:
 
 `set search_path to cheirrs_oseer;`
 
