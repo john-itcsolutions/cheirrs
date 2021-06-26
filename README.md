@@ -92,7 +92,7 @@ We rely on the "redis" cluster of the kubernetes charmed ecosystem to provide th
 
 TensorFlow by Google. 
 
-The predominant language used to code for this project is Python (here, mainly version 3.8).
+The predominant language used to code for this project is Python (here, mainly version 3.8). The Front End dApp is in typescript, a version of javascript. The IoT system ("node-red") is written in node.js, a server-compataible version of javascript, both for edge and server machines. Both the Front End dApp and the IoT system communicate with the smart-web blockchain-and-database server using the python gRPC protocol buffers, which can be found in the python-grpc-adenine github repo by cyber-republic.
 
 ______________________________________________________________
 
