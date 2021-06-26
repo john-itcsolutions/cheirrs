@@ -26,8 +26,6 @@ create role the_general_oseer_admin with superuser login password 'passwd';
 
 create role gmu with login password 'gmu';
 
-CREATE SCHEMA iot;
-
 GRANT USAGE ON SCHEMA a_horse TO gmu;
 
 GRANT USAGE ON SCHEMA cheirrs TO gmu;

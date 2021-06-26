@@ -539,7 +539,7 @@ Now if you
 
 then
 
-`\dt` (to reveal tables in default public schema) you should see 3 tables.
+`\dt` (to reveal tables in default public schema) you should see 7 tables.
 
 Try:
 
