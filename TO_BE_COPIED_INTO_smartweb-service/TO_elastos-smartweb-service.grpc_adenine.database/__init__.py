@@ -96,8 +96,12 @@ for schema in schemata_names:
         print(schema, '.', this_table)
         last_schema = schema
 max.append((last_schema, 'Tables =', m))
-mAX += m
-print('All', n, 'schemata, with', l, 'total tables reflected')
+mAX += m 
+if n == len(schemata_names):
+    print('All', n, 'schemata, with', l, 'total tables reflected')
+else:
+    print('WARNING!! Number of schemata does not match.')
+    
 print(str(max).replace("),", "),\n"))
 
 print('Total tables by "max" =', mAX)
