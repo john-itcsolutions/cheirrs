@@ -559,7 +559,7 @@ _________________________________________________________________
 
 ## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'betrieb', within this cmr-model called 'werk'.
 
-[cmr-model == "Container Managed Reference"-model]
+[cmr-model == "Cross-Model Referenced"-model]
 
 (If not on "betrieb" controller)
 
