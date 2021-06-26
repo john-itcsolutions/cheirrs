@@ -1,7 +1,7 @@
 from sqlalchemy_wrapper import SQLAlchemy
 from sqlalchemy import create_engine, MetaData, Table, Column, ForeignKey, inspect
 from sqlalchemy.ext.automap import automap_base
-import psycopg2
+import os
 import sys
 from decouple import config
 from charmhelpers.core.hookenv  import (
@@ -79,7 +79,7 @@ mAX = 0
 
 schemata_names = ['public', 'a_horse', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'iot', 'the_general',  'the_general_oseer', 'tiger', 'tiger_data', 'topology']
 for schema in schemata_names:
-    n += 1
+    n += 1 
     if n > 1:
         max.append((last_schema, 'Tables =', m))
         mAX += m
@@ -100,7 +100,7 @@ mAX += m
 if n == len(schemata_names):
     print('All', n, 'schemata, with', l, 'total tables reflected')
 else:
-    print('WARNING!! Number of Schemata does not match! ie', n, 'and', len(schemata_names))
+    print('WARNING!! Number of Schemata does not match! ie', n, '(after processing), and', len(schemata_names), '(latter is original schemata_names list length')
 
 print(str(max).replace("),", "),\n"))
 

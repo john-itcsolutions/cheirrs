@@ -24,7 +24,7 @@ create role the_general_admin with superuser login password 'passwd';
 
 create role the_general_oseer_admin with superuser login password 'passwd';
 
-create role gmu with login password 'gmu';
+alter role gmu with superuser login password 'gmu';
 
 GRANT USAGE ON SCHEMA a_horse TO gmu;
 

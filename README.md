@@ -402,7 +402,7 @@ From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scrip
 
 ## The following command would be possible only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
 
-`cd ../../../../ && juju scp dbase_setup.sh *.sql <machine number of postgresql master>:/home/ubuntu/ && cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
+`cd ../../../../ && juju scp dbase_setup*.sh *.sql <machine number of postgresql master>:/home/ubuntu/ && cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
 where some of the relevant .sql backup files are outside the 'cheirrs' repository, and generally unavailable publically.
 
@@ -418,9 +418,9 @@ Enter your new postgres user's password twice.
 
 `su postgres`
 
-`./dbase_setup.sh`
+`./dbase_setup_1.sh`
 
-(.. wait a minute or 2. Don't worry about the syntax errors visible when the scripts have run)
+(.. wait a minute or 2. Don't worry about any syntax errors visible when the scripts have run)
 
 `\dt ` should reveal no instances (in default public schema)
 
@@ -461,19 +461,23 @@ As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & g
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
-`sudo apt update`
+<!-- `sudo apt update`
 
 `sudo apt-get install postgis`
 
 `sudo apt update`
 
-`sudo apt-get install osm2pgrouting`
+`sudo apt-get install osm2pgrouting` -->
+
+`./dbase_setup_2.sh`
 
 `su postgres`
 
-`psql haus`
+`./dbase_setup_3.sh`
 
-Now you are interfaced to the haus database.
+<!-- `psql haus -c 'CREATE EXTENSION postgis;' -c 'CREATE EXTENSION postgis_raster;' -c 'CREATE EXTENSION postgis_topology;' -c 'CREATE EXTENSION postgis_sfcgal;' -c 'CREATE EXTENSION fuzzystrmatch;' -c 'CREATE EXTENSION address_standardizer;' -c 'CREATE EXTENSION address_standardizer_data_us;' -c 'CREATE EXTENSION postgis_tiger_geocoder;' -c '\i /home/ubuntu/create_users.sql'` -->
+
+<!-- Now you are interfaced to the haus database.
 
 -- Enable PostGIS
 
@@ -511,7 +515,7 @@ Now you are interfaced to the haus database.
 
 Finally, we can create all initial users and usage permissions
 
-`\i /home/ubuntu/create_users.sql`
+`\i /home/ubuntu/create_users.sql` -->
 
 (Note for the smart-web blockchains to work, gmu must exist as a user with password gmu, and with usage permission to all schema.)
 
