@@ -702,7 +702,7 @@ ________________________________________________________________
      
 `juju ssh <machine-number-worker-2>`
 
-## Get: node-red (see above if you do not yet have nodejs and npm installed):
+## Get: node-red (see towards beginning of this README if you do not yet have nodejs and npm installed):
      
 `sudo npm install -g --unsafe-perm node-red`
      
@@ -723,7 +723,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
     These 2 pages can interact, and generate and forward messages and events.
      
      Eventually the idea is to be able to "log" and respond (in appropriate timeframes corresponding to the message origin and content)
-     to events considered as "exceptional" in some way. The events and messages (originating on iot devices connected to "edge" raspberry-pi units or similar, in the field) will be logged on blockchains and database via node-red on worker-2 to the onboard python-grpc client, thence to the "smart-web" server.
+     to events considered as "exceptional" in some way. The events and messages (originating on iot devices connected to "edge" raspberry-pi units or similar, in the field) will be logged on blockchains and database, via javascript functions on node-red on worker-2, to the onboard python-grpc client, thence to the "smart-web" server.
      
      In order for the worker-2 server to talk to the "smart-web" server (on worker-0) we need to clone the smartweb client from elastos in worker-2:
      
@@ -731,7 +731,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      
      Follow the README.md instructions on the repo site to build the client.
      
-     We are currently having a problem related to the errors when we ran "test.sh" from smart-web. It appears to be due to lack of a jwt token at authentication in both cases.
+     We are currently having a problem related to the same errors when we ran "test.sh" from smart-web. It appears to be due to lack of a jwt token at authentication in both cases.
      
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - as well as the server can show pages similar to this):
      
