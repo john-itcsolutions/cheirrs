@@ -100,15 +100,15 @@ mAX += m
 if n == len(schemata_names):
     print('All', n, 'schemata, with', l, 'total tables reflected')
 else:
-    print('WARNING!! Number of schemata does not match.')
-    
+    print('WARNING!! Number of Schemata does not match! ie', n, 'and', len(schemata_names))
+
 print(str(max).replace("),", "),\n"))
 
 print('Total tables by "max" =', mAX)
 if mAX - l == 0:
-    print('Totals agree!')
+    print('Totals for Tables agree.')
 else:
-    print('WARNING!! Totals not equal!')
+    print('WARNING!! Totals for Tables not equal! ie', mAX, 'and', l)
 
 if __name__ == '__main__':
     hooks.execute(sys.argv)
