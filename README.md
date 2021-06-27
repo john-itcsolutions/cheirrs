@@ -461,61 +461,11 @@ As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & g
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
-<!-- `sudo apt update`
-
-`sudo apt-get install postgis`
-
-`sudo apt update`
-
-`sudo apt-get install osm2pgrouting` -->
-
 `./dbase_setup_2.sh`
 
 `su postgres`
 
 `./dbase_setup_3.sh`
-
-<!-- `psql haus -c 'CREATE EXTENSION postgis;' -c 'CREATE EXTENSION postgis_raster;' -c 'CREATE EXTENSION postgis_topology;' -c 'CREATE EXTENSION postgis_sfcgal;' -c 'CREATE EXTENSION fuzzystrmatch;' -c 'CREATE EXTENSION address_standardizer;' -c 'CREATE EXTENSION address_standardizer_data_us;' -c 'CREATE EXTENSION postgis_tiger_geocoder;' -c '\i /home/ubuntu/create_users.sql'` -->
-
-<!-- Now you are interfaced to the haus database.
-
--- Enable PostGIS
-
-`CREATE EXTENSION postgis;`
-
--- enable raster support (only for 3+ - may lead to an error on postgres < v12 - ignorable)
-
-`CREATE EXTENSION postgis_raster;`
-
--- Enable Topology
-
-`CREATE EXTENSION postgis_topology;`
-
--- Enable PostGIS Advanced 3D
--- and other geoprocessing algorithms
--- sfcgal not available with all distributions
-
-`CREATE EXTENSION postgis_sfcgal;`
-
--- fuzzy matching needed for Tiger
-
-`CREATE EXTENSION fuzzystrmatch;`
-
--- rule based standardizer
-
-`CREATE EXTENSION address_standardizer;`
-
--- example rule data set
-
-`CREATE EXTENSION address_standardizer_data_us;`
-
--- Enable US Tiger Geocoder
-
-`CREATE EXTENSION postgis_tiger_geocoder;`
-
-Finally, we can create all initial users and usage permissions
-
-`\i /home/ubuntu/create_users.sql` -->
 
 (Note for the smart-web blockchains to work, gmu must exist as a user with password gmu, and with usage permission to all schema.)
 
@@ -526,20 +476,6 @@ Check Schemas: there should be 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_mo
 Check off users:
 
 `\du`
-                                                                              
-` \q`
-                                                                              
-Now, at /home/ubuntu:
-
-Run Elastos scripts to prepare database public schema for Blockchains interaction;
-
-`psql -h localhost -d haus -U gmu -a -q -f create_table_scripts.sql`
-
-`psql -h localhost -d haus -U gmu -a -q -f insert_rows_scripts.sql`
-
-Now if you
-
-`psql haus`
 
 then
 
@@ -549,8 +485,8 @@ Try:
 
 `select * from users;`
 
-You should see the single user's details.
-                                                                              
+You should see the single registered user's details.
+
 `\q`
 
 `exit`
@@ -621,7 +557,7 @@ Note that in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" dir
 
 `cd ....path/to/cheirrs`
 
-`juju scp TO*service/TO*service/*.sh <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service`
+`juju scp TO*/*service/*.sh 7:/home/ubuntu/el* && juju scp TO*/*service/.env* 7:/home/ubuntu/el*`
 
 `juju scp TO*service/TO*adenine/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine`
 
