@@ -358,16 +358,24 @@ _________________________________________________________________
 
 (The database schema for ITCSA's project are private and available only under certain conditions.)
 
-In a host terminal, from a second HDD if available, to save working files in case of a crash:
+In a host terminal, from a second HDD if available, to save working files in case of a crash, launch a second multipass vm:
+     
+     `multipass launch -c 4 -d 50G -m 18G -n industrie focal`
 
 Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, it recognised that localhost was already installed, and juju created a 'localhost' cloud for you to use. Verify this with `juju clouds`):
 
-(You should change ownership of files on your system to your own username. Do this with 
-
-`sudo chown -R <your-username-on-linux> ~ && sudo chown -R <your-username-on-linux> /tmp`
-
-). Then (on Host! Not in multipass or a multipass vm!!):
-
+     `multipass shell industrie`
+     
+     `mkdir shared`
+     
+     `exit`
+     
+     `multipass mount your/outer/working/directory industrie:/home/ubuntu/shared`
+     
+     `multipass shell industrie`
+     
+     `cd shared`
+     
 `juju bootstrap localhost betrieb`
 
 Add a model named "werk"
@@ -413,7 +421,9 @@ ________________________________________________________________
 
 ## Copy sql scripts; Build Database Schema:
 
-From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder:
+From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder,
+     
+     It's best to manage from the shared folder in the industrie vm (if you have the cheirrs folder within your outer working directory!):
 
 `juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
@@ -638,7 +648,7 @@ _____________________________________________________________
 To be continued ..
 _____________________________________________________________
 
-## Enter kubernetes-worker-1, to set-up pgadmin4.
+[## Enter kubernetes-worker-1, to set-up pgadmin4.
 
 ## Get: PGADMIN4:  Got to https://www.pgadmin.org/download/pgadmin-4-apt/ and follow instructions for web-server mode.
 
@@ -672,7 +682,7 @@ Use triggers and trigger functions liberally. Also consider only allowing http P
      `\q`
      
      `psql haus < <schema-name>_backup.sql`
-________________________________________________________________
+________________________________________________________________](url)
      
 ## Enter kubernetes-worker-2, to set-up an iot server with node-red.
      
