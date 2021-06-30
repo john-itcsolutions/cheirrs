@@ -110,23 +110,40 @@ ________________________________________________________________
 ## We continue by installing Kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
 ________________________________________________________________
 
+In order to escape the random rebooting problem we had in an earlier stage of development, we intend to try abstracting the microk8s/juju/kubeflow system with an intervening 'multipass' layer to then create a microk8s/juju installation upon a separate vm system. We will rely on linux networking to be able to intercommunicate with the Host-based system (betrieb/werk).
 
-In case lxd is not already installed, this is how, however it is most likely to be present initially:
+From Host:
+
+`sudo snap install multipass`
+
+`multipass launch -c 4 -d 50G -m 18G -n primary focal`
+
+`multipass shell`
+
+`mkdir shared`
+
+In case mounting $HOME from Host fails:
+
+`mkdir shared_home`
+
+`multipass mount /home/postgres primary:/home/ubuntu/shared_home`
+
+You can mount any working directory-system to its own folder in the 'primary' vm in a similar way.
+
+(In case lxd is not already installed, this is how, however it is most likely to be present initially:
 
 `sudo snap install lxd`
 
 `sudo lxd init`
 
-storage type must be "dir" and ipv6 should be "none", otherwise all default answers are fine.
+storage type must be "dir" and ipv6 should be "none", otherwise all default answers are fine.)
 
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
 
 Unfortunately the charmed system is mainly oriented for Public Clouds when it comes to the Kubeflow charm bundle. However in combination with microk8s, much can still be achieved ..
 
-From the outermost directory in your working system (on a second HDD if available), check out these repositories locally:
-
-`git clone https://github.com/john-itcsolutions/cheirrs.git`
+From the outermost directory in your working system (on a second HDD if available), check out this repository locally:
 
 `git clone https://github.com/juju-solutions/bundle-kubeflow.git`
 
@@ -138,7 +155,7 @@ Then, follow the instructions from the subsection below to deploy Kubeflow to mi
 
 Microk8s is the only way to easily obtain a working Kubeflow/tensorflow installation on your localhost without paying cloud fees ..
 
-Setup microk8s on the Ubuntu Host:
+Setup microk8s on the Ubuntu vm:
 
 `sudo snap install microk8s --classic`
 
@@ -349,7 +366,7 @@ Bootstrap a new controller - but this time on the 'localhost' cloud - (when you 
 
 `sudo chown -R <your-username-on-linux> ~ && sudo chown -R <your-username-on-linux> /tmp`
 
-). Then:
+). Then (on Host! Not in multipass or a multipass vm!!):
 
 `juju bootstrap localhost betrieb`
 
