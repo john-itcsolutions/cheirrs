@@ -376,6 +376,12 @@ Bootstrap a new controller - but this time on the 'localhost' cloud - (when you 
      
      `cd shared`
      
+     `sudo snap install juju --classic`
+     
+     `sudo snap install juju wait --classic`
+     
+     `sudo snap install juju-helpers --classic`
+     
 `juju bootstrap localhost betrieb`
 
 Add a model named "werk"
