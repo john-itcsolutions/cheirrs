@@ -378,7 +378,7 @@ Bootstrap a new controller - but this time on the 'localhost' cloud - (when you 
      
      `sudo snap install juju --classic`
      
-     `sudo snap install juju wait --classic`
+     `sudo snap install juju-wait --classic`
      
      `sudo snap install juju-helpers --classic`
      
