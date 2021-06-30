@@ -648,41 +648,6 @@ _____________________________________________________________
 To be continued ..
 _____________________________________________________________
 
-[## Enter kubernetes-worker-1, to set-up pgadmin4.
-
-## Get: PGADMIN4:  Got to https://www.pgadmin.org/download/pgadmin-4-apt/ and follow instructions for web-server mode.
-
-Allow installation of Apache server.
-
-Then visit your own kubernetes-worker-1 address in http mode in a browser such as (example only):
-
-http://10.57.133.75/pgadmin4
-
-You should now have administrative access to your database. You will need to connect as user 'gmu' with password 'gmu'.
-
-This is the real business end of the operation and where most of the data processing needs to occur. ITCSA has, for example, 626 tables in our 'cheirrs' schema, currently. 
-
-Use triggers and trigger functions liberally. Also consider only allowing http POST queries, proscribing deletions, and dividing your schemata into 2 sections: Use_case_forms_based_tables and Accounting_based_tables, with trigger functions to process and post data from the Use_case_forms to the accounting_based_tables. This is more inuitive than some of the more complex "middleware" approaches, assuming someone understands the data-processing that is necessary and also understands the structure of the accounting_based_tables.
-     
-     Having said all that, we have found that running pgadmin4 from a worker seems to cause random rebooting. We have altered our approach to
-     now installing pgadmin4 on Host and adding a Host-based installation of PostgreSQL with PostGIS for desktop development.
-     
-     Schema backups are copied to pg-a master server and installed with:
-     
-     `juju scp path/to/<schema-name>_backup.sql <machine-number-postgres-master>:/home/ubuntu`
-     
-     `juju ssh <machine-number-postgres-master>`
-     
-     `su postgres`
-     
-     `psql haus`
-     
-     `drop schema <schema-name> cascade;`
-     
-     `\q`
-     
-     `psql haus < <schema-name>_backup.sql`
-________________________________________________________________](url)
      
 ## Enter kubernetes-worker-2, to set-up an iot server with node-red.
      
