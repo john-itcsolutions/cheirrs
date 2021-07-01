@@ -297,50 +297,50 @@ See https://github.com/juju-solutions/charm-tf-serving
 To remove Kubeflow from your Kubernetes cluster, first run this command to
 remove Kubeflow itself:
 
-    juju destroy-model lernenmaschine --destroy-storage
+`juju destroy-model lernenmaschine --destroy-storage`
 
 If you encounter errors while destroying the model, you can run this command
 to force deletion:
 
-    juju destroy-model lernenmaschine --yes --destroy-storage --force
+`juju destroy-model lernenmaschine --yes --destroy-storage --force`
 
 Alternatively, to simply release storage instead of deleting it, run with this
 flag:
 
-    juju destroy-model lernenmaschine --release-storage
+`juju destroy-model lernenmaschine --release-storage`
 
 ### Kubeflow controller
 
 You can destroy the controller itself with this command:
 
     # For microk8s
-    juju destroy-controller $(juju show-controller | head -n1 | sed 's/://g') --destroy-storage
+`juju destroy-controller $(juju show-controller | head -n1 | sed 's/://g') --destroy-storage`
 
 ## Tests
 
 To run the test suite included in this repository (bundle-kubeflow), start by installing the Python dependencies:
 
-    pip install --user -r requirements.txt -r test-requirements.txt
+`pip install --user -r requirements.txt -r test-requirements.txt`
 
 Next, ensure that you either have the `juju-helpers` snap package installed, or you have
 the `kubectl` binary available with `~/.kube/config` set up correctly.
 
 Then, run the tests with this command:
 
-    pytest tests/ -m <bundle>
+`pytest tests/ -m <bundle>`
 
 where `<bundle>` is whichever bundle you have deployed, one of `full`, `lite`, or `edge`.
 
 If you have Charmed Kubeflow deployed to a remote machine with an SSH proxy available
 (for example, if you have MicroK8s running on an AWS VM), you can run the tests like this to run them against the remote machine:
 
-    pytest tests/ -m <bundle> --proxy=localhost:9999 --url=http://10.64.140.43.xip.io/ --password=password
+`pytest tests/ -m <bundle> --proxy=localhost:9999 --url=http://10.64.140.43.xip.io/ --password=password`
 
 Additionally, if you'd like to view the Selenium tests as they're in progress, you can
 pass in the `--headful` option like this:
 
-    pytest tests/ -m <bundle> --headful
-______________________________________________________________
+`pytest tests/ -m <bundle> --headful`
+ ______________________________________________________________
 
 # There is a possibility of setting up a Postgres database with PostGIS and Open Street Maps. It appears that the procedure Canonical have taken with Kubeflow above utilises MongoDB during installation, a no-SQL, non-relational database system, as one of the persistence stores as well as Mariadb (a resurrection of the opensource version of mysql) within the "kubeflow" model (which we are calling `lernenmaschine` ..)
 
@@ -360,27 +360,27 @@ _________________________________________________________________
 
 In a host terminal, from a second HDD if available, to save working files in case of a crash, launch a second multipass vm:
      
-     `multipass launch -c 4 -d 50G -m 18G -n industrie focal`
+ `multipass launch -c 4 -d 50G -m 18G -n industrie focal`
 
 Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, it recognised that localhost was already installed, and juju created a 'localhost' cloud for you to use. Verify this with `juju clouds`):
 
-     `multipass shell industrie`
+`multipass shell industrie`
      
-     `mkdir shared`
+`mkdir shared`
      
-     `exit`
+`exit`
      
-     `multipass mount your/outer/working/directory industrie:/home/ubuntu/shared`
+`multipass mount your/outer/working/directory industrie:/home/ubuntu/shared`
      
-     `multipass shell industrie`
+`multipass shell industrie`
      
-     `cd shared`
+`cd shared`
      
-     `sudo snap install juju --classic`
+`sudo snap install juju --classic`
      
-     `sudo snap install juju-wait --classic`
+`sudo snap install juju-wait --classic`
      
-     `sudo snap install juju-helpers --classic`
+`sudo snap install juju-helpers --classic`
      
 `juju bootstrap localhost betrieb`
 
