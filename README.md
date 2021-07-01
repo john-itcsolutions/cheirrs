@@ -181,7 +181,7 @@ you will aleady find that there exists a 'microk8s/localhost' cloud. Later we wi
 
 Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, available:
 
-Note: After this installation of the 'lernenmaschine' model on the 'microk8s' controller in a 'kubeflow-lite' package (we edited the cli script and names), we will be installing a 'betrieb' controller with 'werk' model. 
+Note: After this installation of the 'lernenmaschine' model on the 'kubefluss' controller in a 'kubeflow-lite' package (we edited the cli script and names), we will be installing a 'betrieb' controller with 'werk' model. 
 
 Initially:
 
