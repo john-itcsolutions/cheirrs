@@ -207,7 +207,7 @@ If you make mistakes during editing, it is safest to:
 
 and restart from 
 
-`python3 scripts/cli.py microk8s setup --controller lernenmaschine`
+`python3 scripts/cli.py microk8s setup --controller kubefluss`
 
 followed by editing the coredns configmap again.
 
