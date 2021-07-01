@@ -360,7 +360,7 @@ _________________________________________________________________
 
 In a host terminal, from a second HDD if available, to save working files in case of a crash, launch a second multipass vm:
      
- `multipass launch -c 4 -d 50G -m 18G -n industrie focal`
+ `multipass launch -c 4 -d 50G -m 10G -n industrie focal`
 
 Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, it recognised that localhost was already installed, and juju created a 'localhost' cloud for you to use. Verify this with `juju clouds`):
 
