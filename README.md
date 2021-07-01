@@ -215,7 +215,7 @@ followed by editing the coredns configmap again.
 
 Only when the coredns configmap is correct for your LAN:
 
-`python3 scripts/cli.py deploy-to lernenmaschine`
+`python3 scripts/cli.py deploy-to kubefluss`
 
 (Passthrough should already be natively enabled to your Accelerator GPU.)
 
