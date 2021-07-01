@@ -193,7 +193,7 @@ Initially:
 
 If you need to choose 'kubeflow lite' (recommended for initial development), you can edit the relevant code in scripts/cli.py and note that you may also alter the controller name, if you take care to alter the commands you issue.
 
-`python3 scripts/cli.py microk8s setup --controller lernenmaschine`
+`python3 scripts/cli.py microk8s setup --controller kubefluss`
 
 The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. However in some deployment scenarios (such as local development), you would need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
 
@@ -203,7 +203,7 @@ Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1. You 
 
 If you make mistakes during editing, it is safest to:
 
-`juju destroy-controller microk8s --destroy-all-models --destroy-storage `
+`juju destroy-controller kubefluss --destroy-all-models --destroy-storage `
 
 and restart from 
 
