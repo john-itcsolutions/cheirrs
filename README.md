@@ -110,26 +110,6 @@ ________________________________________________________________
 ## We continue by installing Kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
 ________________________________________________________________
 
-In order to escape the random rebooting problem we had in an earlier stage of development, we intend to try abstracting the microk8s/juju/kubeflow system with an intervening 'multipass' layer to then create a microk8s/juju installation upon a separate vm system. We will rely on linux networking to be able to intercommunicate with the Host-based system (betrieb/werk).
-
-From Host:
-
-`sudo snap install multipass`
-
-`multipass launch -c 4 -d 50G -m 18G -n primary focal`
-
-`multipass shell`
-
-`mkdir shared`
-
-In case mounting $HOME from Host fails:
-
-`mkdir shared_home`
-
-`multipass mount /home/postgres primary:/home/ubuntu/shared_home`
-
-You can mount any working directory-system to its own folder in the 'primary' vm in a similar way.
-
 (In case lxd is not already installed, this is how, however it is most likely to be present initially:
 
 `sudo snap install lxd`
@@ -358,30 +338,9 @@ _________________________________________________________________
 
 (The database schema for ITCSA's project are private and available only under certain conditions.)
 
-In a host terminal, from a second HDD if available, to save working files in case of a crash, launch a second multipass vm:
-     
- `multipass launch -c 4 -d 50G -m 10G -n industrie focal`
-
 Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, it recognised that localhost was already installed, and juju created a 'localhost' cloud for you to use. Verify this with `juju clouds`):
 
-`multipass shell industrie`
-     
-`mkdir shared`
-     
-`exit`
-     
-`multipass mount your/outer/working/directory industrie:/home/ubuntu/shared`
-     
-`multipass shell industrie`
-     
-`cd shared`
-     
-`sudo snap install juju --classic`
-     
-`sudo snap install juju-wait --classic`
-     
-`sudo snap install juju-helpers --classic`
-     
+
 `juju bootstrap localhost betrieb`
 
 Add a model named "werk"
@@ -429,7 +388,6 @@ ________________________________________________________________
 
 From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder,
      
-     It's best to manage from the shared folder in the industrie vm (if you have the cheirrs folder within your outer working directory!):
 
 `juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
@@ -720,7 +678,7 @@ ________________________________________________________________________________
      
      Good luck! For refs see:
 
-See Using Kubeflow above.
+See 'Using Kubeflow' above.
 
 Also refer to any official docs on TensorFlow and its history, background and usage.
 
