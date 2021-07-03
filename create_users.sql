@@ -28,6 +28,8 @@ alter role gmu with superuser login password 'gmu';
 
 GRANT USAGE ON SCHEMA a_horse TO gmu;
 
+GRANT USAGE ON SCHEMA australian_addresses TO gmu;
+
 GRANT USAGE ON SCHEMA cheirrs TO gmu;
 
 GRANT USAGE ON SCHEMA cheirrs_oseer TO gmu;
@@ -54,4 +56,4 @@ GRANT USAGE ON SCHEMA topology TO gmu;
 
 GRANT USAGE ON SCHEMA public TO gmu;
 
-ALTER ROLE gmu SET search_path TO public, a_horse, cheirrs, cheirrs_oseer, chubba_morris, chubba_morris_oseer, convey_it, convey_it_oseer, iot, the_general, the_general_oseer, tiger, tiger_data, topology;
+ALTER ROLE gmu SET search_path TO public, a_horse, australian_addresses, cheirrs, cheirrs_oseer, chubba_morris, chubba_morris_oseer, convey_it, convey_it_oseer, iot, the_general, the_general_oseer, tiger, tiger_data, topology;
