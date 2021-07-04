@@ -613,9 +613,9 @@ To be continued ..
 _____________________________________________________________
 
      
-## Enter kubernetes-worker-2, to set-up an iot server with node-red.
+## Enter kubernetes-worker-0, to set-up an iot server with node-red, on the same vm as smart-web.
      
-`juju ssh <machine-number-worker-2>`
+`juju ssh <machine-number-worker-0>`
 
 ## Get: node-red (To install nodejs and npm:
      
@@ -629,7 +629,7 @@ _____________________________________________________________
      
 `node-red`
      
-     and go to the ip address of the worker-2 vm with port `1880`, in your host browser. 
+     and go to the ip address of the worker-0 vm with port `1880`, in your host browser. 
 
 You also will need to mimic an "edge" client or source for iot messages and signals, on your host. So:
      
@@ -658,8 +658,8 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      via javascript functions in node-red on worker-2, to the onboard python-grpc client,
      thence to the "smart-web" server.
      
-     In order for the worker-2 server to talk to the "smart-web" server (on worker-0) we need 
-     to clone the smartweb client from elastos in worker-2:
+     In order for the node-red server on worker-0 to talk to the "smart-web" server (on worker-0) we need 
+     to clone the smartweb client from elastos in worker-0:
      
 `git clone https://github.com/cyber-republic/python-grpc-adenine.git`
      
