@@ -655,7 +655,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      corresponding to the message origin and content) to events considered as "exceptional"
      in some way. The events and messages (originating on iot devices connected to "edge" 
      raspberry-pi units or similar, in the field) will be logged on blockchains and database,
-     via javascript functions in node-red on worker-2, to the onboard python-grpc client,
+     via javascript functions in node-red on worker-0, to the onboard python-grpc client,
      thence to the "smart-web" server.
      
      In order for the node-red server on worker-0 to talk to the "smart-web" server (on worker-0) we need 
