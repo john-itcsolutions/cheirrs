@@ -665,6 +665,9 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      
      Follow the README.md instructions on the repo site to build the client.
      
+     Similarly we need to allow (Elastos) Carrier-shielded communication between "edge" (here, Host),
+     and worker-0. Thus we must install the same Python client (python-grpc-adenine) from github.
+     
      We are currently having a problem related to the same errors when we ran "test.sh" from 
      smart-web. It appears to be due to lack of a jwt token at authentication in both cases.
      
