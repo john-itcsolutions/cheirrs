@@ -38,9 +38,11 @@ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt -y install nodejs
 ```
 
-As well as installing Ionic:
+As well as installing Ionic & Cordova (which enables single-pass coding for iOS and Android as well as desktop - ie browser - platforms):
 
 `sudo npm i -g @ionic/cli`
+
+`sudo npm i -g cordova`
 
 The Ionic docs are at:
 
