@@ -466,7 +466,7 @@ As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & g
 
 (Note for the smart-web blockchains to work, gmu must exist as a user with password gmu, and with usage permission to all schema.)
 
-Check Schemas: there should be 'a_horse'; 'cheirrs'; 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'the_general', 'the_general_oseer', 'tiger', 'tiger_data', 'topology', and 'public'.
+Check Schemas: there should be 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'a_horse', 'the_general', 'the_general_oseer', 'tiger', 'tiger_data', 'topology', and 'public'.
 
 `\dn`
 
@@ -619,7 +619,7 @@ To be continued ..
 _____________________________________________________________
 
      
-## Enter kubernetes-worker-0, to set-up an iot server with node-red, on the same vm as smart-web.
+## Enter kubernetes-worker-0 again, to set-up an iot server with node-red, on the same vm as smart-web.
      
 `juju ssh <machine-number-worker-0>`
 
@@ -672,7 +672,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      Follow the README.md instructions on the repo site to build the client.
      
      Similarly we need to allow (Elastos) Carrier-shielded communication between "edge" (here, Host),
-     and worker-0. Thus we must install the same Python client (python-grpc-adenine) from github.
+     and worker-0. Thus we must install the same Python client (python-grpc-adenine) from github onto the Host.
      
      We are currently having a problem related to the same errors when we ran "test.sh" from 
      smart-web. It appears to be due to lack of a jwt token at authentication in both cases.
