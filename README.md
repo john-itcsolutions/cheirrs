@@ -147,6 +147,10 @@ Next, you will need to add yourself to the microk8s group:
 
 `sudo su - $USER`   (quick reset of terminal)
 
+We must enable kubeflow before installing juju. So:
+
+`microk8s enable dns storage kubeflow`
+
 On the Host, you'll need to install these snaps to get started:
 
 `sudo snap install juju --classic`
