@@ -20,7 +20,7 @@ logging.basicConfig(
 db_name = 'haus'
 db_user = 'gmu'
 db_password = 'gmu'
-db_host = '10.57.133.92'
+db_host = '10.118.212.22'
 db_port = '5432'
 
 database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
@@ -74,14 +74,16 @@ insp = inspect(db_engine)
 n = 0
 m = 0
 l = 0
-max = [[]]
+p = 0
+Max = [[]]
 mAX = 0
+accounting_tables_totals = [[]]
 
-schemata_names = ['public', 'a_horse', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'iot', 'the_general',  'the_general_oseer', 'tiger', 'tiger_data', 'topology']
+schemata_names = ['public', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'das_fuhrwerk', 'iot', 'the_general',  'the_general_oseer', 'tiger', 'tiger_data', 'topology']
 for schema in schemata_names:
     n += 1 
     if n > 1:
-        max.append((last_schema, 'Tables =', m))
+        Max.append((last_schema, 'Tables =', m, n))
         mAX += m
         m = 0
     if len(list(insp.get_table_names(schema))) == 0:
@@ -93,18 +95,24 @@ for schema in schemata_names:
         insp.reflect_table(this_table, None)
         m += 1
         l += 1
+        if str(this_table)[0:3] == 'acc':
+            p +=1
         print(schema, '.', this_table)
         last_schema = schema
-max.append((last_schema, 'Tables =', m))
+    accounting_tables_totals.append((last_schema, 'Accounting_Tables =', p, 'Schema Id', n))
+    p = 0
+Max.append((last_schema, 'Tables =', m, 'Schema Id', n))
 mAX += m 
 if n == len(schemata_names):
     print('All', n, 'schemata, with', l, 'total tables reflected')
 else:
     print('WARNING!! Number of Schemata does not match! ie', n, '(after processing), and', len(schemata_names), '(latter is original schemata_names list length')
 
-print(str(max).replace("),", "),\n"))
+print(str(Max).replace("),", "),\n"))
 
-print('Total tables by "max" =', mAX)
+print(str(accounting_tables_totals).replace("),", "),\n, 'Other Tables =', (Max(n-1,2) - p), \n"))    
+
+print('Total tables by "Max" =', mAX)
 if mAX - l == 0:
     print('Totals for Tables agree.')
 else:
