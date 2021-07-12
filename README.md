@@ -118,7 +118,7 @@ ________________________________________________________________
 
 `sudo lxd init`
 
-storage type must be "dir" and ipv6 should be "none", otherwise all default answers are fine.)
+We need to choose "yes" to the "lxd clistering?" option (not the default), and storage type must be "dir" and ipv6 should be "none", otherwise all default answers are fine.)
 
 
 ## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
