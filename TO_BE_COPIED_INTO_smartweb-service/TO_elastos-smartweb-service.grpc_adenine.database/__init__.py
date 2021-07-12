@@ -20,7 +20,7 @@ logging.basicConfig(
 db_name = 'haus'
 db_user = 'gmu'
 db_password = 'gmu'
-db_host = '10.118.212.22'
+db_host = '240.104.0.52'
 db_port = '5432'
 
 database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
@@ -83,7 +83,7 @@ schemata_names = ['public', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba
 for schema in schemata_names:
     n += 1 
     if n > 1:
-        Max.append((last_schema, 'Tables =', m, n))
+        Max.append((last_schema, 'Tables =', m, 'Schema Id', n-1))
         mAX += m
         m = 0
     if len(list(insp.get_table_names(schema))) == 0:
@@ -110,7 +110,7 @@ else:
 
 print(str(Max).replace("),", "),\n"))
 
-print(str(accounting_tables_totals).replace("),", "),\n, 'Other Tables =', (Max(n-1,2) - p), \n"))    
+print(str(accounting_tables_totals).replace("),", "),\n"))    
 
 print('Total tables by "Max" =', mAX)
 if mAX - l == 0:
