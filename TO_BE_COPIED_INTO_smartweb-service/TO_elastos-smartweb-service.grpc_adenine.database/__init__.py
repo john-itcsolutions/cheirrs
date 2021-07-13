@@ -77,7 +77,7 @@ l = 0
 p = 0
 Max = [[]]
 mAX = 0
-accounting_tables_totals = [[]]
+tables_totals_summary = [[]]
 
 schemata_names = ['public', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'das_fuhrwerk', 'iot', 'the_general',  'the_general_oseer', 'tiger', 'tiger_data', 'topology']
 for schema in schemata_names:
@@ -99,7 +99,7 @@ for schema in schemata_names:
             p +=1
         print(schema, '.', this_table)
         last_schema = schema
-    accounting_tables_totals.append((last_schema, 'Accounting_Tables =', p, 'Schema Id', n))
+    tables_totals_summary.append((last_schema, 'Total Tables =', m, 'Accounting_Tables =', p, 'Other_Tables =', m-p, 'Schema Id', n))
     p = 0
 Max.append((last_schema, 'Tables =', m, 'Schema Id', n))
 mAX += m 
@@ -108,9 +108,7 @@ if n == len(schemata_names):
 else:
     print('WARNING!! Number of Schemata does not match! ie', n, '(after processing), and', len(schemata_names), '(latter is original schemata_names list length')
 
-print(str(Max).replace("),", "),\n"))
-
-print(str(accounting_tables_totals).replace("),", "),\n"))    
+print(str(tables_totals_summary).replace("),", "),\n"))
 
 print('Total tables by "Max" =', mAX)
 if mAX - l == 0:
