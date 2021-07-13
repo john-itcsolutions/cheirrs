@@ -54,4 +54,4 @@ GRANT USAGE ON SCHEMA topology TO gmu;
 
 GRANT USAGE ON SCHEMA public TO gmu;
 
-ALTER ROLE gmu SET search_path TO public, a_horse, cheirrs, cheirrs_oseer, chubba_morris, chubba_morris_oseer, convey_it, convey_it_oseer, iot, the_general, the_general_oseer, tiger, tiger_data, topology;
+ALTER ROLE gmu SET search_path TO public, cheirrs, cheirrs_oseer, chubba_morris, chubba_morris_oseer, convey_it, convey_it_oseer, das_fuhrwerk, iot, the_general, the_general_oseer, tiger, tiger_data, topology;
