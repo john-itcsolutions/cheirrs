@@ -519,7 +519,14 @@ ALSO:
 
 ## Blockchains-Database Server (werk model) 
 
-We turn to finish setting up the Blockchain/Database gRPC Server Deployment,
+We turn to finish setting up the Blockchain/Database gRPC Server Deployment.
+     
+_______________________________________________________________
+     
+## You need to repeat the following for worker-1 and worker-2 after completing the setup on worker-0
+     
+________________________________________________________________
+     
 
 NOTE: As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITCSA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/database/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine.
    
@@ -547,7 +554,7 @@ Note that in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" dir
 
 `cd ....path/to/cheirrs`
 
-`juju scp TO*/*service/*.sh 7:/home/ubuntu/el* && juju scp TO*/*service/.env* 7:/home/ubuntu/el*`
+`juju scp TO*/*service/*.sh <machine-number-worker-0>:/home/ubuntu/el* && juju scp TO*/*service/.env* <machine-number-worker-0>:/home/ubuntu/el*`
 
 `juju scp TO*service/TO*adenine/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine`
 
@@ -613,6 +620,8 @@ _____________________________________________________________
 
      
 ## Enter kubernetes-worker-0 again, to set-up an iot server with node-red, on the same vm as smart-web.
+     
+## Repeat for worker-1 and worker-2.
      
 `juju ssh <machine-number-worker-0>`
 
