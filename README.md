@@ -666,7 +666,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      via javascript functions in node-red on worker-0, to the onboard python-grpc client,
      thence to the "smart-web" server.
      
-     In order for the node-red server on worker-0 to talk to the "smart-web" server (on worker-0) we need 
+     In order for the node-red server on the workers to talk to the "smart-web" servers (on same workers) we need 
      to clone the smartweb client from elastos in worker-0:
      
 `git clone https://github.com/cyber-republic/python-grpc-adenine.git`
@@ -674,10 +674,13 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      Follow the README.md instructions on the repo site to build the client.
      
      Similarly we need to allow (Elastos) Carrier-shielded communication between "edge" (here, Host),
-     and worker-0. Thus we must install the same Python client (python-grpc-adenine) from github onto the Host.
+     and the workers. For this we require the Carrier Native SDK and to follow this by installing the Carrier Nodejs Wrapper package on the Host.
+     This would need to also occur on Real Edge Clients running node-red.
+     
+     https://github.com/elastos/Elastos.NET.Carrier.Nodejs.SDK and https://github.com/elastos/Elastos.NET.Carrier.Native.SDK have details.
      
      We are currently having a problem related to the same errors when we ran "test.sh" from 
-     smart-web. It appears to be due to lack of a jwt token at authentication in both cases.
+     smart-web. It appears to be relating to configuration/provision of a jwt token at authentication in both cases.
      
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - 
      as well as the server can show pages similar to this):
