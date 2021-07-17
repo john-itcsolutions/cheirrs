@@ -71,6 +71,7 @@ def db_relation_changed():
 # Utilise metadata inspection to reflect database/schema details
 meta = MetaData()
 insp = inspect(db_engine)
+cols = 0
 n = 0
 m = 0
 l = 0
@@ -93,6 +94,8 @@ for schema in schemata_names:
     for table in insp.get_table_names(schema):
         this_table = Table(table, meta)
         insp.reflect_table(this_table, None)
+        for column in this_table.c:
+            cols += 1
         m += 1
         l += 1
         if str(this_table)[0:3] == 'acc':
@@ -115,6 +118,6 @@ if mAX - l == 0:
     print('Totals for Tables agree.')
 else:
     print('WARNING!! Totals for Tables not equal! ie', mAX, 'and', l)
-
+print('Total Columns =', cols)
 if __name__ == '__main__':
     hooks.execute(sys.argv)
