@@ -703,6 +703,9 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      To match this, a server might look like:
      
 <img src="./Screenshot from 2021-07-18 04-59-44.png">
+     
+     It is easy to see in the first shot (of Edge client) the increased processing necessary when an actuation 
+     is to be controlled from the server ie. in "second_fleet".
 
 _________________________________________________________________________________________________________________________________________
      
