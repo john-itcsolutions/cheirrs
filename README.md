@@ -674,17 +674,26 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      Follow the README.md instructions on the repo site to build the client.
      
      Similarly we need to allow (Elastos) Carrier-shielded communication between "edge" (here, Host),
-     and the workers. For this we require the Carrier Native SDK and to follow this by installing the Carrier Nodejs Wrapper package on the Host.
+     and the workers. For this we require the Carrier Native SDK and to follow this by installing the 
+     Carrier Nodejs Wrapper package on the Host.
      This would need to also occur on Real Edge Clients running node-red.
      
-     https://github.com/elastos/Elastos.NET.Carrier.Nodejs.SDK and https://github.com/elastos/Elastos.NET.Carrier.Native.SDK have details.
+     https://github.com/elastos/Elastos.NET.Carrier.Nodejs.SDK and 
+     https://github.com/elastos/Elastos.NET.Carrier.Native.SDK have details.
      
      We are currently having a problem related to the same errors when we ran "test.sh" from 
-     smart-web. It appears to be relating to configuration/provision of a jwt token at authentication in both cases.
+     smart-web, when we try to complete the connection between node-red and smart-web via the grpc client 
+     (cohabiting with smart-web). It appears to be relating to configuration/provision of a jwt token at 
+     authentication in both cases.
+     
+     At the command line a typical launch of node-red looks like:
+     
+ <img src="./Screenshot from 2021-07-18 02-09-17.png"> 
      
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - 
-     as well as the server can show pages similar to this). Here is shown the "Edge" site page mimicked by the Host, ideally enclosed
-     in Carrier (however the Nodejs wrapper, needed to access Native Carrier, is missing a file currently ..):
+     as well as the server can show pages similar to this). Here is shown the "Edge" site page mimicked by 
+     the Host, ideally enclose in Carrier (however the Nodejs wrapper, needed to access Native Carrier, is 
+     missing a file currently ..):
      
  <img src="./Screenshot from 2021-07-18 02-09-17.png">
 
