@@ -459,7 +459,7 @@ As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & g
 
 (Note for the smart-web blockchains to work, gmu must exist as a user with password gmu, and with usage permission to all schema.)
 
-Check Schemas: there should be 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'a_horse', 'the_general', 'the_general_oseer', 'tiger', 'tiger_data', 'topology', and 'public'.
+Check Schemas: there should be 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'das_fuhrwerk', 'the_general', 'the_general_oseer', 'tiger', 'tiger_data', 'topology', and 'public'.
 
 `\dn`
 
@@ -534,15 +534,15 @@ NOTE: As we don't own or control the elastos sub-modules, and since the `elastos
 
 `cd path/to/cheirrs/elastos-smartweb-service`
 
-The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you might like to copy .env.example as edited to cheirrs/elastos-smartweb-service/TO*/*database/.env and while you're at it copy the same file to the same directory as ".env.test". However the final copy into the kubernetes-worker-0 cannot be done until we have cloned the elastos-smartweb-service repo into the worker (see below). Smart-web will be running on its own worker machine, as will pgadmin4. There is no need for a separate Carrier Node as smart-web contains a Carrier implementation.
+The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you will be copying .env.test and .env as edited to cheirrs/elastos-smartweb-service/TO*/*database/.env and while you're at it copy the same file to the same directory as ".env.test". However the final copy into the kubernetes-worker-0, -1 and -2 cannot be done until we have cloned the elastos-smartweb-service repo into the worker (see below). Smart-web will be running on its own worker machine. There is no need for a separate Carrier Node as smart-web contains a Carrier implementation.
 
-The blockchain server ip-addresses in the .env.example, .env, and .env.test files need to match the address of the kubernetes-worker-0 machine, here. Also the database details will require alteration.
+The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0, -1 and -2 machines, here, as appropriate. Also the database details will require alteration.
      
 Presuming you have obtained a fresh clone of "elastos-smartweb-service", you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above).
      
 You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) identically. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
 
-Enter worker-0:
+Enter worker-0 (repeat for -1 and -2):
      
 `juju ssh <machine-number-worker-0>`
      
@@ -664,10 +664,13 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      in some way. The events and messages (originating on iot devices connected to "edge" 
      raspberry-pi units or similar, in the field) will be logged on blockchains and database,
      via javascript functions in node-red on worker-0, to the onboard python-grpc client,
-     thence to the "smart-web" server.
+     thence to the "smart-web" server. As noted elsewhere, the required response times of 
+     some machinery and systems means sub-millisecond cycles, which cannot be achievd without 
+     dedicated Edge-client/server support geographically close to sites, when actuation is 
+     involved. Otherwise, notification functions can be handled directly to the Cloud. 
      
      In order for the node-red server on the workers to talk to the "smart-web" servers (on same workers) we need 
-     to clone the smartweb client from elastos in worker-0:
+     to clone the smartweb client from elastos in worker-0 (and -1 and -2):
      
 `git clone https://github.com/cyber-republic/python-grpc-adenine.git`
      
