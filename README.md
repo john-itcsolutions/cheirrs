@@ -698,11 +698,11 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      the Host, ideally enclosed in Carrier (however the Nodejs wrapper, needed to access Native Carrier, is 
      missing a file currently ..):
      
- <img src="./Screenshot from 2021-07-18 03-49-12.png">
+<img src="./Screenshot from 2021-07-18 03-49-12.png">
      
      To match this, a server might look like:
      
-<img src="./Screenshot from 2021-07-18 03-49-12.png">
+<img src="./Screenshot from 2021-07-18 03-49-27.png">
 
 _________________________________________________________________________________________________________________________________________
      
