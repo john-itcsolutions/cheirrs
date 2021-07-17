@@ -702,7 +702,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      
      To match this, a server might look like:
      
-<img src="./Screenshot from 2021-07-18 03-49-27.png">
+<img src="./Screenshot from 2021-07-18 04-59-44.png">
 
 _________________________________________________________________________________________________________________________________________
      
