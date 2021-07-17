@@ -683,9 +683,10 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      smart-web. It appears to be relating to configuration/provision of a jwt token at authentication in both cases.
      
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - 
-     as well as the server can show pages similar to this):
+     as well as the server can show pages similar to this). Here is shown the "Edge" site page mimicked by the Host, ideally enclosed
+     in Carrier (however the Nodejs wrapper, needed to access Native Carrier, is missing a file currently ..):
      
- <img src="./Screenshot from 2021-06-25 11-35-40.png">
+ <img src="./Screenshot from 2021-07-18 02-09-17.png">
 
 _________________________________________________________________________________________________________________________________________
      
