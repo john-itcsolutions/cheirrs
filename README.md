@@ -663,9 +663,9 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      corresponding to the message origin and content) to events considered as "exceptional"
      in some way. The events and messages (originating on iot devices connected to "edge" 
      raspberry-pi units or similar, in the field) will be logged on blockchains and database,
-     via javascript functions in node-red on worker-0, to the onboard python-grpc client,
+     via javascript functions in node-red on worker-0, -1 and -2, to the onboard python-grpc client,
      thence to the "smart-web" server. As noted elsewhere, the required response times of 
-     some machinery and systems means sub-millisecond cycles, which cannot be achievd without 
+     some machinery and systems means sub-millisecond cycles, which cannot be achieved without 
      dedicated Edge-client/server support geographically close to sites, when actuation is 
      involved. Otherwise, notification functions can be handled directly to the Cloud. 
      
@@ -686,7 +686,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      
      We are currently having a problem related to the same errors when we ran "test.sh" from 
      smart-web, when we try to complete the connection between node-red and smart-web via the grpc client 
-     (cohabiting with smart-web). It appearsv to relate to configuration/provision of a jwt token at 
+     (cohabiting with smart-web). It appears to relate to configuration/provision of a jwt token at 
      authentication in both cases.
      
      At the command line a typical launch of node-red looks like:
