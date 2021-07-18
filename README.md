@@ -384,13 +384,14 @@ ________________________________________________________________
 ## DATABASE: Internals
 
 ## Copy sql scripts; Build Database Schema:
+     
+`git clone recurse-submodules https://github.com/john-itcsolutions/cheirrs.git`
 
 From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder,
-     
 
 `juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
-## The following command would be possible only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
+## The following command would be possible, as presented, only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
 
 `cd ../../../../ && juju scp dbase_setup*.sh <machine-number-postgresql-master>:/home/ubuntu && juju scp *.sql <machine-number-postgresql-master>:/home/ubuntu && cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
@@ -528,17 +529,19 @@ _______________________________________________________________
 ________________________________________________________________
      
 
-NOTE: As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITCSA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/database/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account. Please note you will actually have to delete the initial elastos repo directories after cloning cheirrs, followed by cloning the complete repo's back into cheirrs/ from https://github.com/cyber-republic/elstos-smartweb-service and https://github.com/cyber-republic/python-grpc-adenine.
+NOTE: As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITCSA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to re-insert the root-directory-version at your `cheirrs/elastos-smartweb-service/grpc_adenine/database/__init__.py` (in local copies) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account, for example.
    
      After this, on host:
 
 `cd path/to/cheirrs/elastos-smartweb-service`
 
-The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you will be copying .env.test and .env as edited to cheirrs/elastos-smartweb-service/TO*/*database/.env and while you're at it copy the same file to the same directory as ".env.test". However the final copy into the kubernetes-worker-0, -1 and -2 cannot be done until we have cloned the elastos-smartweb-service repo into the worker (see below). Smart-web will be running on its own worker machine. There is no need for a separate Carrier Node as smart-web contains a Carrier implementation.
+The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you will be copying .env.test and .env as edited to cheirrs/elastos-smartweb-service/TO*/*database/.env and while you're at it copy the same file to the same directory as ".env.test". 
+     
+     There is no need for a separate Carrier Node as smart-web contains a Carrier implementation.
 
 The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0, -1 and -2 machines, here, as appropriate. Also the database details will require alteration.
      
-Presuming you have obtained a fresh clone of "elastos-smartweb-service", you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above).
+Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules" at 'cheirrs' cloning-time, you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above).
      
 You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) identically. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
 
