@@ -409,6 +409,8 @@ Enter your new postgres user's password twice.
 
 `su postgres`
 
+     Note that you could simply take any schema you have available, suitable to Postgres, and edit it in a good editor replacing the occurrences of the schema name, in an sql backup of the schema, with the series of schema names you can find in "dbase_setup_1.sh", in turn (we leave out public, tiger, tiger_data, and topology as they are provided by the overall process here).
+     
 `./dbase_setup_1.sh`
 
 (.. wait a minute or 2. Don't worry about any syntax errors visible when the scripts have run)
@@ -417,7 +419,7 @@ Enter your new postgres user's password twice.
 
 `set search_path to cheirrs;`
 
-.. now, `\dt` should reveal a full set of 600+ tables in 2 categories: 1) accounting_<xyz> and 2) uc_<uvw> ('uc_' for use_case)
+.. now, `\dt` should reveal a full set of 600+ tables in 2 categories: 1) accounting_<xyz> and 2) uc_<uvw> ('uc_' for use_case). Or in most people's cases it will reveal whatever you provided in the first place.
 
 Fewer results will appear for:
 
@@ -535,7 +537,7 @@ NOTE: As we don't own or control the elastos sub-modules, and since the `elastos
 
 `cd path/to/cheirrs/elastos-smartweb-service`
 
-The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you will be copying .env.test and .env as edited to cheirrs/elastos-smartweb-service/TO*/*database/.env and while you're at it copy the same file to the same directory as ".env.test". 
+The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you will be copying .env.test and .env as edited to cheirrs/elastos-smartweb-service/TO*/*database/.env and .env.test. 
      
      There is no need for a separate Carrier Node as smart-web contains a Carrier implementation.
 
@@ -708,7 +710,7 @@ You also will need to mimic an "edge" client or source for iot messages and sign
 <img src="./Screenshot from 2021-07-19 11-11-14.png">
      
      It is easy to see in the first shot (of Edge client) the increased processing necessary when an actuation 
-     is to be controlled from the server ie. in "second_fleet".
+     is to be controlled from the server via the edge client, ie. in "second_fleet".
 
 _________________________________________________________________________________________________________________________________________
      
