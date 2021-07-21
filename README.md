@@ -413,7 +413,7 @@ Enter your new postgres user's password twice.
      
 `./dbase_setup_1.sh`
 
-(.. wait a minute or 2. Don't worry about any syntax errors visible when the scripts have run)
+(.. this takes 1.5 hours on my machine. Don't worry about any syntax errors visible when the scripts have run)
 
 `\dt ` should reveal no instances (in default public schema)
 
@@ -427,7 +427,7 @@ Fewer results will appear for:
 
 and, for example;
 
-`set search_path to a_horse;`
+`set search_path to das_fuhrwerk;`
 
 when you run 
 
