@@ -413,7 +413,7 @@ Enter your new postgres user's password twice.
      
 `./dbase_setup_1.sh`
 
-(.. this takes 1.5 hours on my machine, with a mechanical HDD. Don't worry about any syntax errors visible when the scripts have run)
+(.. this takes 1.2 hours on my machine, with a mechanical HDD. Don't worry about any syntax errors visible when the scripts have run)
 
 `\dt ` should reveal no instances (in default public schema)
 
