@@ -581,17 +581,13 @@ Re-enter worker-0:
 
               ____________________________
 
-(Note; you are user 'ubuntu' here, so if you need a new password, just
+(Notes; 
+     
+1. you are user 'ubuntu' here (in all vm's), so if you, or any user, needs a new password, just
 
-`sudo passwd ubuntu`
+`sudo passwd ubuntu` or `sudo passwd <user-name>`
 
-Later, within the master postgresql database container, you will need to give postgres user a password:
-
-`sudo passwd postgres`
-
-does this.
-
-To add, for example, 2 load-balancer units, simply
+2. To add, for example, 2 load-balancer units, simply
 
 `juju add-unit -n 2 kubeapi-load-balancer`
 
