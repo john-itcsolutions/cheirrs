@@ -679,8 +679,9 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      
      Similarly we need to allow (Elastos) Carrier-shielded communication between "edge" (here, Host),
      and the workers. For this we require the Carrier Native SDK and to follow this by installing the 
-     Carrier Nodejs Wrapper package on the Host.
-     This would need to also occur on Real Edge Clients running node-red.
+     Carrier Nodejs Wrapper package on the Host. The Smart-Web servers also require the Nodejs wrapper to be 
+     installed to enable communication with the onboard Carrier node.
+     This would need to also occur on Real-World Edge Clients running node-red.
      
      https://github.com/elastos/Elastos.NET.Carrier.Nodejs.SDK and 
      https://github.com/elastos/Elastos.NET.Carrier.Native.SDK have details.
