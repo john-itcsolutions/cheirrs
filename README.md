@@ -574,6 +574,10 @@ Re-enter worker-0:
 `cd el*`
 
 `./run.sh`
+     
+     NOTE: Before moving on to copy files to worker-1 and -2 the, .env and .env.test files in the elastos-smartweb-service/ directories 
+     will need to contain the appropriate addresses for the particular worker upon which the .env files are to be copied. Thus the 
+     .env files in the workers are each different. Be sure to re-edit before copying.
  
 
 .. and wait and watch .. and examine logs in case of errors, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds. The logs of units housed by other machines are available on those machines.
