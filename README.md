@@ -409,7 +409,14 @@ Enter your new postgres user's password twice.
 
 `su postgres`
 
-     Note that you could simply take any schema you have available, suitable to Postgres, and edit it in a good editor replacing the occurrences of the schema name, in an sql backup of the schema, with the series of schema names you can find in "dbase_setup_1.sh", in turn (we leave out public, tiger, tiger_data, and topology as they are provided by the overall process here).
+     Note that you could simply take any schema you have available, suitable to ANSI or 
+     Postgres standards, and edit it in a good editor replacing the occurrences of the schema name, 
+     in an sql backup of your schema, with the series of schema names you can find in 
+     "dbase_setup_1.sh", in turn (we leave out public, tiger, tiger_data, and topology as 
+     they are provided by the overall process here).
+     
+     Alternatively you could edit "dbase_setup_1.sh" to reflect your own database and its 
+     set of schemata.
      
 `./dbase_setup_1.sh`
 
