@@ -509,19 +509,19 @@ _________________________________________________________________
 
 then, if you `juju status` in the werk model you will see, at the foot of the output, a reference to the Offer.
 
-An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'microk8s' controller, ie from the 'lernenmaschine' model), is connected with (this needs to be run while in lernenmaschine model):
+An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'kubefluss' controller, ie from the 'lernenmaschine' model), is connected with (this needs to be run while in lernenmaschine model):
 
-`juju grant admin consume microk8s:admin/werk.pg-a`
+`juju grant admin consume kubefluss:admin/werk.pg-a`
 
-`juju grant ubuntu consume microk8s:ubuntu/werk.pg-a`
+`juju grant ubuntu consume kubefluss:ubuntu/werk.pg-a`
 
 .. then the authorised user (in the lernenmaschine model - see above) may use:
 
-`juju add-relation <application>:db microk8s:admin/werk.pg-a:db`
+`juju add-relation <application>:db kubefluss:admin/werk.pg-a:db`
 
-`juju add-relation <application>:db microk8s:ubuntu/werk.pg-a:db`
+`juju add-relation <application>:db kubefluss:ubuntu/werk.pg-a:db`
 
-to connect "application" to the database (in werk model)from 'microk8s' controller, ie from the lernenmaschine model (in this case).
+to connect "application" to the database (in werk model)from 'kubefluss' controller, ie from the lernenmaschine model (in this case).
 
 _______________________________________________________________
 
