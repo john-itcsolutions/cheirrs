@@ -544,13 +544,14 @@ NOTE: As we don't own or control the elastos sub-modules, and since the `elastos
 
 `cd path/to/cheirrs/elastos-smartweb-service`
 
-The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you will be copying .env.test and .env as edited to cheirrs/elastos-smartweb-service/TO*/*database/.env and .env.test. 
+The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you will be copying .env.test and .env as edited to cheirrs/TO*/*service/.env and .env.test. 
      
      There is no need for a separate Carrier Node as smart-web contains a Carrier implementation.
 
 The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0, -1 and -2 machines, here, as appropriate. Also the database details will require alteration.
      
-Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules" at 'cheirrs' cloning-time, you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above).
+Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules" at 'cheirrs' cloning-time, you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above). Actually there is no need to alter the __init__.py 
+file in the repo, rather in the cheirrs/TO*/*database/, which is where the file will be copied (soon) to the vm's.
      
 You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) identically. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
 
@@ -560,7 +561,7 @@ Enter worker-0 (repeat for -1 and -2):
      
 `git clone https://github.com/cyber-republic/elastos-smartweb-service.git`
 
-Note that in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the worker-0 machine. Therefore:
+So in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the worker-0 machine. Therefore:
 
 `exit`
 
