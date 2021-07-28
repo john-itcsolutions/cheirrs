@@ -11,7 +11,7 @@ The following figure represents the 'betrieb' controller with its 'werk' model, 
 
 We base initial development such as this locally. It's cheaper!
 
-<img src="./kubernetesinstallation-29-07-2021-2.png">
+<img src="./kubernetesinstallation-29-07-2021-4.png">
 
 The schema above are labeled G(n,m) for the internetworked, multiple member class dApps. In reality there are only n schema with the member classes (m) being a data field in every table within the nth schema. In this way we can keep all transactions internal to a network on the same schema. The nth network is on the nth schema. The single member class, non-internetworked dApps (F(i)) are likewise constituted of all members of a network or dApp subscribers' group, on their own schema. Although this is the case with the set F(i), within a single network ie schema ie dApp, we will be able to use the field for a member's id to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. While the same is ideally the case for the G(n,m) set, such individual member Tables and dApps being theoretically possible, the design and coding would be expensive.
 
