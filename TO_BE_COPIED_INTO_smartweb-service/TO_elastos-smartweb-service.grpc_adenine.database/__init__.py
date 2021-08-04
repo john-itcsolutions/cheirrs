@@ -20,7 +20,7 @@ logging.basicConfig(
 db_name = 'haus'
 db_user = 'gmu'
 db_password = 'gmu'
-db_host = '240.104.0.52'
+db_host = '10.242.143.152'
 db_port = '5432'
 
 database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
