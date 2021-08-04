@@ -99,7 +99,7 @@ for schema in schemata_names:
         m += 1
         l += 1
         if str(this_table)[0:3] == 'acc':
-            p +=1
+            p += 1
         print(schema, '.', this_table)
         last_schema = schema
     tables_totals_summary.append((last_schema, 'Total Tables =', m, 'Accounting_Tables =', p, 'Other_Tables =', m-p, 'Schema Id', n))
