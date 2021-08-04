@@ -81,6 +81,7 @@ mAX = 0
 tables_totals_summary = [[]]
 
 schemata_names = ['public', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'das_fuhrwerk', 'iot', 'the_general',  'the_general_oseer', 'tiger', 'tiger_data', 'topology']
+f = open('/home/ubuntu/dbase_report.txt', 'w')
 for schema in schemata_names:
     n += 1 
     if n > 1:
@@ -94,16 +95,19 @@ for schema in schemata_names:
     for table in insp.get_table_names(schema):
         this_table = Table(table, meta)
         insp.reflect_table(this_table, None)
+        f.write(schema, '.', this_table)
         for column in this_table.c:
+            f.write(str(this_table.c))
             cols += 1
         m += 1
         l += 1
         if str(this_table)[0:3] == 'acc':
-            p +=1
+            p += 1
         print(schema, '.', this_table)
         last_schema = schema
     tables_totals_summary.append((last_schema, 'Total Tables =', m, 'Accounting_Tables =', p, 'Other_Tables =', m-p, 'Schema Id', n))
     p = 0
+f.close()
 Max.append((last_schema, 'Tables =', m, 'Schema Id', n))
 mAX += m 
 if n == len(schemata_names):
