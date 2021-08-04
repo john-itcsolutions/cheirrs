@@ -95,7 +95,7 @@ for schema in schemata_names:
     for table in insp.get_table_names(schema):
         this_table = Table(table, meta)
         insp.reflect_table(this_table, None)
-        f.write(schema, '.', this_table)
+        f.write(str(schema + '.' + this_table))
         for column in this_table.c:
             f.write(str(this_table.c))
             cols += 1
