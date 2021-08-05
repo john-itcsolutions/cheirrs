@@ -589,6 +589,8 @@ Re-enter worker-0:
  
 
 .. and wait and watch .. and examine logs in case of errors, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds. The logs of units housed by other machines are available on those machines.
+     
+     There is alo a dbase_report.txt in /home/ubuntu on each vm.
 
 
               ____________________________
