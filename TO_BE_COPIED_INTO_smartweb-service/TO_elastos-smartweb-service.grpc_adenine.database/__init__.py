@@ -113,7 +113,7 @@ mAX += m
 if n == len(schemata_names):
     print('All', n, 'schemata, with', l, 'total tables reflected')
 else:
-    print('WARNING!! Number of Schemata does not match! ie', n, '(after processing), and', len(schemata_names), '(latter is original schemata_names list length')
+    print('WARNING!! Number of Schemata does not match! \nie', n, '(after processing), and', len(schemata_names), '\n(latter is original schemata_names list length')
 
 print(str(tables_totals_summary).replace("),", "),\n"))
 
