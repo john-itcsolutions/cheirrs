@@ -727,6 +727,8 @@ You also will need to mimic an "edge" client or source for iot messages and sign
 _________________________________________________________________________________________________________________________________________
      
      
+     When fully developed, the system on the betrieb controller is a fully cloud-compliant Kubernetes System, ready to be deployed to any Cloud.
+     Normally, the database is setup on the cloud separately and connected to the rest of the system later.
      Good luck! For refs see:
 
 See 'Using Kubeflow' above.
