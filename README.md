@@ -732,7 +732,7 @@ ________________________________________________________________________________
      
      
      When fully developed, the system on the betrieb controller is a fully cloud-compliant Kubernetes System, ready to be deployed to any Cloud.
-     Normally, the database is setup on the cloud separately and connected to the rest of the system later.
+     Normally, the database is setup on the cloud separately and connected to the rest of the system later. You would be required to develop your own gRPC system calls (in node.js) to the .proto files (in Python) in the Front End dApps, and the corresponding methods (ie microservices in Python) on the Smart-Web server.
      Good luck! For refs see:
 
 See 'Using Kubeflow' above.
