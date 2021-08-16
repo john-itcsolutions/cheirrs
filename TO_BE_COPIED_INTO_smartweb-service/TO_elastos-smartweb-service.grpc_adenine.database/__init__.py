@@ -20,7 +20,7 @@ logging.basicConfig(
 db_name = 'haus'
 db_user = 'gmu'
 db_password = 'gmu'
-db_host = '10.242.143.152'
+db_host = '10.148.236.221'
 db_port = '5432'
 
 database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
@@ -123,5 +123,6 @@ if mAX - l == 0:
 else:
     print('WARNING!! Totals for Tables not equal! ie', mAX, 'and', l)
 print('Total Columns =', cols)
+print('Summary available in "/home/ubuntu/dbase_report.txt"')
 if __name__ == '__main__':
     hooks.execute(sys.argv)
