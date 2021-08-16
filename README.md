@@ -396,7 +396,7 @@ From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scrip
 
 `juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
-## The following command would be possible, as presented, only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own!
+## The following command would be possible, as presented, only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own (see below)!
 
 `cd ../../../../ && juju scp dbase_setup*.sh <machine-number-postgresql-master>:/home/ubuntu && juju scp *.sql <machine-number-postgresql-master>:/home/ubuntu && cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
@@ -421,7 +421,8 @@ Enter your new postgres user's password twice.
      they are provided by the overall process here).
      
      Alternatively you could edit "dbase_setup_1.sh" to reflect your own database and its 
-     set of schemata.
+     set of schemata, and place copies of your .sql schema backups in the parent directory of the 
+     cloned "cheirrs" directory. The above scripts will then work for you.
      
 `./dbase_setup_1.sh`
 
