@@ -234,8 +234,8 @@ The following image is a screenshot of the `lernenmaschine` model's status board
 
 <img src="./Screenshot from 2021-06-16 18-14-22.png">
      
-Note that we have actually found it impossible to sustain a kubeflow controller on the microk8s cloud at the same time as we are running the second controller on the localhost cloud referred to in the text below the kubeflow Manual (following). The host randomly reboots. The latter cloud works alone, and, as it represents the more business-end of our business, we continue with no kubeflow. A singleton setup may work better with Kubeflow installed alone on a microk8s/localhost host. There is sufficient RAM onboard our host according to the system monitor, so at this stage the cause is unknown. There were less crashes after installing a Mechanical HDD, but still unsatisfactory. Stay tuned.
-______________________________________________________________
+Note that we have actually found it impossible to sustain a kubeflow controller on the microk8s cloud at the same time as we are running the second controller on the localhost cloud referred to in the text below the kubeflow Manual (following). The host randomly reboots. The latter cloud works alone, and, as it represents the more business-end of our business, we continue with no kubeflow. A singleton setup may work better with Kubeflow installed alone on a microk8s/localhost host. There is sufficient RAM onboard our host according to the system monitor, so at this stage the cause is unknown. There were less crashes after installing a Mechanical HDD, but still unsatisfactory. One possibility may be to employ a MAAS (Metal as a Service) installation as the basis for the Desktop setup. Stay tuned.
+____________________________________________________________________________________
 
 ## USING KUBEFLOW
 
