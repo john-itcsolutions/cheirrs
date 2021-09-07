@@ -723,7 +723,8 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      
      Add a file called `iota_connector.js` with the following content:
      
-`async function run() {
+```
+     async function run() {
      const {
      ClientBuilder
      } = require('@iota/client');
@@ -738,7 +739,8 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      //will continue to receive events for 'milestones/confirmed', etc
      client.subscriber().topics(['messages']).unsubscribe((err, data) => {
      console.log(data);    })}
-run()`
+run()
+     ```
      
      Please refer to https://client-lib.docs.iota.org/docs/libraries/nodejs/examples for a full explanation of all topics 
      to which an application may subscribe on IOTA. The approach we have taken here is to rely on Message exchanges on MQTT 
