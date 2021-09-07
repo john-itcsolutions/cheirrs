@@ -738,7 +738,8 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
     await new Promise(resolve => setTimeout(resolve, 1500));    // unsubscribe from 'messages' topic, 
      //will continue to receive events for 'milestones/confirmed', etc
      client.subscriber().topics(['messages']).unsubscribe((err, data) => {
-     console.log(data);    })}
+     console.log(data);
+     })}
 run()
 ```
      
