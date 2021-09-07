@@ -755,14 +755,10 @@ for validation of IoT actions and events.
      By choosing the node.js version of the IOTA client, we get the ability to easily communicate with the other 
      apps on the worker-2 vm.
      
-     At the command line a typical launch of node-red looks like:
-     
- <img src="./Screenshot from 2021-07-18 02-12-36.png"> 
-     
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - 
      as well as the server can show pages similar to this). Here is shown the "Edge" site page mimicked by 
      the Host, ideally enclosed in Carrier (however the Nodejs wrapper, needed to access Native Carrier, is 
-     missing a file currently ..):
+     missing a file currently :-)
      
 <img src="./Screenshot from 2021-07-19 11-11-29.png">
      
