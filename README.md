@@ -739,7 +739,8 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      //will continue to receive events for 'milestones/confirmed', etc
      client.subscriber().topics(['messages']).unsubscribe((err, data) => {
      console.log(data);
-     })}
+     })
+     }
 run()
 ```
      
