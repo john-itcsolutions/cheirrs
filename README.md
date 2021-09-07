@@ -686,8 +686,8 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      raspberry-pi (or Industrial Pi) units or similar, in the field) will be logged on 
      blockchains and database, via javascript functions in node-red wrapped in Carrier and 
      using the gRPC protocols on worker-2, to the "smart-web" server. Before logging or any 
-     IoT Admin response occurs, worker-2 verifies the IoT action via the IOTA client (connected to the 'Tangle'), 
-     originally reported by Node-Red-Industrial on the Edge server.
+     IoT Admin response occurs, worker-2 verifies the IoT action via the IOTA client 
+     (connected to the 'Tangle'), originally reported by Node-Red-Industrial on the Edge server.
      
      As noted elsewhere, the required response times of some machinery and systems means 
      sub-millisecond cycles, which cannot be achieved without dedicated Edge-client/server 
@@ -773,7 +773,9 @@ ________________________________________________________________________________
      
      
      When fully developed, the system on the betrieb controller is a fully cloud-compliant Kubernetes System, ready to be deployed to any Cloud.
-     Normally, the database is setup on the cloud separately and connected to the rest of the system later. You would be required to develop your own gRPC system calls (in node.js) to the .proto files (in Python) in the Front End dApps, and the corresponding methods (ie microservices in Python) on the Smart-Web server.
+     Normally, the database is setup on the cloud separately and connected to the rest of the system later. You would be required to develop your 
+     own gRPC system calls (in node.js) to the .proto files (programmed in Python, but openly connectable) in the Front End dApps, and the corresponding methods 
+     (ie microservices in Python) on the Smart-Web server.
      Good luck! For refs see:
 
 See 'Using Kubeflow' above.
