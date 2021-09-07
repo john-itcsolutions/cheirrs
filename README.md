@@ -638,7 +638,7 @@ _____________________________________________________________
 
      
 ## Enter kubernetes-worker-2, to set-up an IoT server with Python-gRPC, 
-   node-red-industrial and IOTA client, on their own vm.
+## node-red-industrial and IOTA client, on their own vm.
      
 `juju ssh <machine-number-worker-2>`
 
@@ -659,14 +659,17 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      
 `sudo snap install node-red-industrial`
      
-     Node-Red-Industrial is packaged as a Flask (Python) application. On Host, 
-     we need to set 2 environment variables with:
+     Node-Red-Industrial is packaged as a Flask (Python) application.
+     
+     Refer to https://snapcraft.io/node-red-industrial.
+     
+     On Host, we need to set 2 environment variables with:
      
 `export FLASK_APP=node-red-industrial`
      
 `export FLASK_ENV=development`
      
-     Also it is a good idea to add the binary code location for the snap app to your PATH. 
+     Also it is a good idea to add the binary code location following, for the snap app, to your PATH. 
      For now;
      
 `cd /snap/node-red-industrial/30/bin`
@@ -675,7 +678,7 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      
      and go to your own host's LAN address, on a new tab in the 
      browser, with port `1881`,
-     then, in worker-2, `node-red`, and go to your worker-2's address with port 1881
+     then, in worker-2, `flask run`, from the same location, and go to your worker-2's address with port 1881
      in a browser tab on your Host.
      
     These 2 pages can interact, and generate and forward messages, events and commands.
@@ -702,10 +705,8 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      Follow the README.md instructions on the repo site to build the client.
      
      Similarly we need to allow (Elastos) Carrier-shielded communication between "edge" (here, Host),
-     and the workers. For this we require the Carrier Native SDK and to follow this by installing the 
-     Carrier Nodejs Wrapper package on the Host. The Smart-Web servers also require the Nodejs wrapper to be 
-     installed to enable communication with the onboard Carrier node.
-     This would need to also occur on Real-World Edge Clients running node-red.
+     and worker-2. For this, on both Edge (Host here) and worker-2, we require the Carrier Native SDK and to follow this by installing the 
+     Carrier Nodejs Wrapper package. This would need to also occur on Real-World Edge Clients running node-red-industrial.
      
      https://github.com/elastos/Elastos.NET.Carrier.Nodejs.SDK and 
      https://github.com/elastos/Elastos.NET.Carrier.Native.SDK have details.
