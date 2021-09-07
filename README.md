@@ -559,7 +559,7 @@ The .env.example file here needs to be filled-in with the correct database name,
      
      There is no need for a separate Carrier Node as smart-web contains a Carrier implementation.
 
-The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0, -1 and -2 machines, here, as appropriate. Also the database details will require alteration.
+The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0 and -1 machines, here, as appropriate. Also the database details will require alteration.
      
 Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules" at 'cheirrs' cloning-time, you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above). Actually there is no need to alter the __init__.py 
 file in the repo, rather in the cheirrs/TO*/*database/, which is where the file will be copied (soon) to the vm's.
@@ -579,21 +579,20 @@ So in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory 
 `juju scp TO*service/TO*database/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database`
 
 `juju scp TO*service/TO*python/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python`
-
-Re-enter worker-0:
-
-`juju ssh <machine-number-worker-0>`
-
-`cd el*`
-
-`./run.sh`
      
      NOTE: Before moving on to copy files to worker-1, the .env and .env.test files in the elastos-smartweb-service/ directories 
      will need to contain the appropriate addresses for the particular worker upon which the .env files are to be copied. Thus the 
      .env files in the workers -0 and -1 are each different. Be sure to re-edit before copying.
  
+Re-enter worker-0 (and repeat for -1):
 
-.. and wait and watch .. and examine logs in case of errors, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds. The logs of units housed by other machines are available on those machines.
+`juju ssh <machine-number-worker-0>`
+
+`cd el* && ./run.sh`
+
+.. and wait and watch .. and examine logs in case of errors, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. 
+     If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds. The logs of units housed 
+     by other machines are available on those machines.
      
      There is also a dbase_report.txt in /home/ubuntu on each vm.
 
