@@ -742,9 +742,9 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
 run()
      ```
      
-     Please refer to https://client-lib.docs.iota.org/docs/libraries/nodejs/examples for a full explanation of all topics 
-     to which an application may subscribe on IOTA. The approach we have taken here is to rely on Message exchanges on MQTT 
-     for validation of IoT actions and events.
+Please refer to https://client-lib.docs.iota.org/docs/libraries/nodejs/examples for a full explanation of all topics 
+to which an application may subscribe on IOTA. The approach we have taken here is to rely on Message exchanges on MQTT 
+for validation of IoT actions and events.
      
      The launch of the client occurs with:
      
