@@ -716,7 +716,7 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      (cohabiting with smart-web). It appears to relate to configuration/provision of a jwt token at 
      authentication in both cases.
      
-     The installation of IOTA client proceeds as follows:
+     The installation of IOTA client proceeds as follows (repeat for both Host - ie Edge - and worker-2):
      
 `mkdir iota && cd iota`
      
@@ -749,7 +749,7 @@ Please refer to https://client-lib.docs.iota.org/docs/libraries/nodejs/examples 
 to which an application may subscribe on IOTA. The approach we have taken here is to rely on Message exchanges on MQTT 
 for validation of IoT actions and events.
      
-     The launch of the client occurs with:
+     The launch of the client, on both Edge (Host) and worker-2, occurs with:
      
 `node iota_connector`   from the iota root directory.
      
@@ -758,7 +758,7 @@ for validation of IoT actions and events.
      
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - 
      as well as the server can show pages similar to this). Here is shown the "Edge" site page mimicked by 
-     the Host, ideally enclosed in Carrier (however the Nodejs wrapper, needed to access Native Carrier, is 
+     the Host, ideally enclosed in Carrier (however the Nodejs wrapper, needed to access Native Carrier, appears to be
      missing a file currently :-)
      
 <img src="./Screenshot from 2021-07-19 11-11-29.png">
