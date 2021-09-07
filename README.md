@@ -541,7 +541,7 @@ We turn to finish setting up the Blockchain/Database gRPC Server Deployment.
      
 _______________________________________________________________
      
-## You need to repeat the following for worker-1 and worker-2 after completing the setup on worker-0
+## You need to repeat the following for worker-1 after completing the setup on worker-0
      
 ________________________________________________________________
      
@@ -563,12 +563,6 @@ Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "re
 file in the repo, rather in the cheirrs/TO*/*database/, which is where the file will be copied (soon) to the vm's.
      
 You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) identically. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
-
-Enter worker-0 (repeat for -1 and -2):
-     
-`juju ssh <machine-number-worker-0>`
-     
-`git clone https://github.com/cyber-republic/elastos-smartweb-service.git`
 
 So in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the worker-0 machine. Therefore:
 
@@ -592,9 +586,9 @@ Re-enter worker-0:
 
 `./run.sh`
      
-     NOTE: Before moving on to copy files to worker-1 and -2 the, .env and .env.test files in the elastos-smartweb-service/ directories 
+     NOTE: Before moving on to copy files to worker-1, the .env and .env.test files in the elastos-smartweb-service/ directories 
      will need to contain the appropriate addresses for the particular worker upon which the .env files are to be copied. Thus the 
-     .env files in the workers are each different. Be sure to re-edit before copying.
+     .env files in the workers -0 and -1 are each different. Be sure to re-edit before copying.
  
 
 .. and wait and watch .. and examine logs in case of errors, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds. The logs of units housed by other machines are available on those machines.
@@ -606,7 +600,7 @@ Re-enter worker-0:
 
 (Notes; 
      
-1. you are user 'ubuntu' here (in all vm's), so if you, or any user, needs a new password, just
+1. You are user 'ubuntu' here (in all vm's), so if you, or any user, needs a new password, just
 
 `sudo passwd ubuntu` or `sudo passwd <user-name>`
 
@@ -643,13 +637,13 @@ To be continued ..
 _____________________________________________________________
 
      
-## Enter kubernetes-worker-0 again, to set-up an iot server with node-red, on the same vm as smart-web.
+## Enter kubernetes-worker-2, to set-up an IoT server with Python-gRPC, 
+   node-red-industrial and IOTA client, on their own vm.
      
-## Repeat for worker-1 and worker-2.
-     
-`juju ssh <machine-number-worker-0>`
+`juju ssh <machine-number-worker-2>`
 
-## Get: node-red (To install nodejs and npm:
+(To install nodejs and npm, needed for the Carrier wrapper and to connect 
+with gRPC as well as the IOTA node.js client:)
      
 `curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`
 
@@ -657,44 +651,51 @@ _____________________________________________________________
      
 )  
      
-`sudo npm install -g --unsafe-perm node-red`
-     
-`node-red`
-     
-     and go to the ip address of the worker-0 vm with port `1880`, in your host browser. 
+To get Node-Red-Industrial:
 
-You also will need to mimic an "edge" client or source for iot messages and signals, on your host. So:
+`sudo snap install node-red-industrial` on the Host (acting as an Edge server)
      
-`exit`
+Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      
-(To install nodejs and npm:
+`sudo snap install node-red-industrial`
      
-`curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`
-
-`sudo apt -y install nodejs`
+     Node-Red-Industrial is packaged as a Flask (Python) application. On Host, 
+     we need to set 2 environment variables with:
      
-)  
+`export FLASK_APP=node-red-industrial`
      
-`sudo npm install -g --unsafe-perm node-red`
+`export FLASK_ENV=development`
      
-`node-red`
+     Also it is a good idea to add the binary code location for the snap app to your PATH. 
+     For now;
      
-     and go to your own host's LAN address, on a new tab in the browser, with port `1880`
+`cd /snap/node-red-industrial/30/bin`
      
-    These 4 pages can interact, and generate and forward messages, events and commands.
+`flask run`
+     
+     and go to your own host's LAN address, on a new tab in the 
+     browser, with port `1881`,
+     then, in worker-2, `node-red`, and go to your worker-2's address with port 1881
+     in a browser tab on your Host.
+     
+    These 2 pages can interact, and generate and forward messages, events and commands.
      
      Eventually the idea is to be able to "log" and respond (in appropriate timeframes
      corresponding to the message origin and content) to events considered as "exceptional"
      in some way. The events and messages (originating on iot devices connected to "edge" 
-     raspberry-pi units or similar, in the field) will be logged on blockchains and database,
-     via javascript functions in node-red on worker-0, -1 and -2, to the onboard python-grpc client,
-     thence to the "smart-web" server. As noted elsewhere, the required response times of 
-     some machinery and systems means sub-millisecond cycles, which cannot be achieved without 
-     dedicated Edge-client/server support geographically close to sites, when actuation is 
-     involved. Otherwise, notification functions can be handled directly to the Cloud. 
+     raspberry-pi (or Industrial Pi) units or similar, in the field) will be logged on 
+     blockchains and database, via javascript functions in node-red wrapped in Carrier and 
+     using the gRPC protocols on worker-2, to the "smart-web" server. Before logging or any 
+     IoT Admin response occurs, worker-2 verifies the IoT action via the IOTA client (connected to the 'Tangle'), 
+     originally reported by Node-Red-Industrial on the Edge server.
      
-     In order for the node-red server on the workers to talk to the "smart-web" servers (on same workers) we need 
-     to clone the smartweb client from elastos in worker-0 (and -1 and -2):
+     As noted elsewhere, the required response times of some machinery and systems means 
+     sub-millisecond cycles, which cannot be achieved without dedicated Edge-client/server 
+     support geographically close to sites, when actuation is involved. Otherwise, 
+     notification functions can be handled directly to the Cloud. 
+     
+     In order for the node-red server on the workers to talk to the "smart-web" servers we need 
+     to clone the smartweb client from elastos in worker-2:
      
 `git clone https://github.com/cyber-republic/python-grpc-adenine.git`
      
@@ -713,6 +714,42 @@ You also will need to mimic an "edge" client or source for iot messages and sign
      smart-web, when we try to complete the connection between node-red and smart-web via the grpc client 
      (cohabiting with smart-web). It appears to relate to configuration/provision of a jwt token at 
      authentication in both cases.
+     
+     The installation of IOTA client proceeds as follows:
+     
+`mkdir iota && cd iota`
+     
+`npm i @iota/client`
+     
+     Add a file called `iota_connector.js` with the following content:
+     
+`async function run() {
+     const {
+     ClientBuilder
+     } = require('@iota/client');
+    // client connects to a node that has MQTT enabled
+     const client = new ClientBuilder()
+     .node('https://api.hornet-2.testnet.chrysalis2.com')
+     .build();
+     client.subscriber().topics(['milestones/confirmed', 'messages', 'messages/referenced']).subscribe((err, data) => {
+     console.log(data);        // To get the message id from messages `client.getMessageId(data.payload)` can be used
+     })
+    await new Promise(resolve => setTimeout(resolve, 1500));    // unsubscribe from 'messages' topic, 
+     //will continue to receive events for 'milestones/confirmed', etc
+     client.subscriber().topics(['messages']).unsubscribe((err, data) => {
+     console.log(data);    })}
+run()`
+     
+     Please refer to https://client-lib.docs.iota.org/docs/libraries/nodejs/examples for a full explanation of all topics 
+     to which an application may subscribe on IOTA. The approach we have taken here is to rely on Message exchanges on MQTT 
+     for validation of IoT actions and events.
+     
+     The launch of the client occurs with:
+     
+`node iota_connector`   from the iota root directory.
+     
+     By choosing the node.js version of the IOTA client, we get the ability to easily communicate with the other 
+     apps on the worker-2 vm.
      
      At the command line a typical launch of node-red looks like:
      
