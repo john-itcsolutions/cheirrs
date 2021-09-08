@@ -672,16 +672,11 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      
 `export FLASK_ENV=development`
      
-     Also it is a good idea to add the binary code location following, for the snap app, to your PATH. 
-     For now;
-     
-`cd /snap/node-red-industrial/30/bin`
-     
 `flask run`
      
      and go to your own host's LAN address, on a new tab in the 
      browser, with port `1881`,
-     then, in worker-2, `flask run`, from the same location, and go to your worker-2's address with port 1881
+     then, in worker-2, `flask run`, from the home directory, and go to your worker-2's address with port 1881
      in a browser tab on your Host.
      
     These 2 pages can interact, and generate and forward messages, events and commands.
@@ -757,7 +752,7 @@ for validation of IoT actions and events.
 `node iota_connector`   from the iota root directory.
      
      By choosing the node.js version of the IOTA client, we get the ability to easily communicate with the other 
-     apps on the worker-2 vm.
+     apps on the worker-2 vm, and on the Edge server (Host here).
      
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - 
      as well as the server can show pages similar to this). Here is shown the "Edge" site page mimicked by 
@@ -778,8 +773,8 @@ ________________________________________________________________________________
      
      When fully developed, the system on the betrieb controller is a fully cloud-compliant Kubernetes System, ready to be deployed to any Cloud.
      Normally, the database is setup on the cloud separately and connected to the rest of the system later. You would be required to develop your 
-     own gRPC system calls (in node.js) to the .proto files (programmed in Python, but openly connectable) in the Front End dApps, and the corresponding methods 
-     (ie microservices in Python) on the Smart-Web server.
+     own gRPC system calls (in node.js) to the .proto files (programmed in Python, but openly connectable) in the Front End dApps, and the corresponding 
+     methods (ie microservices in Python) on the Smart-Web server.
      Good luck! For refs see:
 
 See 'Using Kubeflow' above.
