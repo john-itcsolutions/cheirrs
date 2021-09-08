@@ -672,6 +672,9 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      
 `export FLASK_ENV=development`
      
+     It is a good idea to add these last 2 commands to the end of your ~/.bashrc file, 
+     to ensure persistence of these variables
+     
 `flask run`
      
      and go to your own host's LAN address, on a new tab in the 
