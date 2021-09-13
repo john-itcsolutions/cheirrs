@@ -428,7 +428,9 @@ Enter your new postgres user's password twice.
      
      Alternatively you could edit "dbase_setup_1.sh" to reflect your own database and its 
      set of schemata, and place copies of your .sql schema backups in the parent directory of the 
-     cloned "cheirrs" directory. The above scripts will then work for you.
+     cloned "cheirrs" directory. The above scripts will then work for you. It is suggested to also 
+     edit the "create_users.sql" file in the cheirrs root directory to suite your own needs. Note as 
+     the code stands you do require a superuser 'gmu'.
      
 `./dbase_setup_1.sh`
 
@@ -695,18 +697,16 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      Eventually the idea is to be able to "log" and respond (in appropriate timeframes
      corresponding to the message origin and content) to events considered as "exceptional"
      in some way. The events and messages (originating on iot devices connected to "edge" 
-     raspberry-pi (or Industrial Pi) units or similar, in the field) will be logged on 
-     blockchains and database, via javascript functions in node-red wrapped in Carrier and 
-     using the gRPC protocols on worker-2, to the "smart-web" server. Before logging or any 
-     IoT Admin response occurs, worker-2 verifies the IoT action via the IOTA client 
-     (connected to the 'Tangle'), originally reported by Node-Red-Industrial on the Edge server.
+     raspberry-pi (or Industrial Pi) units or similar, in the field) will be logged on the IOTA 
+     Tangle and your database, via javascript functions in node-red wrapped in Carrier and 
+     using the gRPC protocols on worker-2, to the "smart-web" server.
      
      As noted elsewhere, the required response times of some machinery and systems means 
      sub-millisecond cycles, which cannot be achieved without dedicated Edge-client/server 
      support geographically close to sites, when actuation is involved. Otherwise, 
      notification functions can be handled directly to the Cloud. 
      
-     In order for the node-red server on the workers to talk to the "smart-web" servers we need 
+     In order for the node-red server on the worker to talk to the "smart-web" servers we need 
      to clone the smartweb client from elastos in worker-2:
      
 `git clone https://github.com/cyber-republic/python-grpc-adenine.git`
