@@ -654,6 +654,17 @@ with gRPC as well as the IOTA node.js client:)
 
 `sudo apt -y install nodejs`
      
+     You may also require node version 9 in server-2 so using the 'nvm' 
+     (Node Version Manager) helps as you can install node verions (eg 9) with 
+     
+ `nvm install 9`
+     
+     and after installations you can swap versions in use with 
+     
+ `nvm use 12`
+     
+     Google nvm.
+     
 )  
      
 To get Node-Red-Industrial:
