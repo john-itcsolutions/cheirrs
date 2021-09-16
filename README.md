@@ -11,7 +11,7 @@ The following figure represents the 'betrieb' controller with its 'werk' model, 
 
 We base initial development such as this locally. It's cheaper!
 
-<img src="./kubernetesinstallation-17-09-2021-1.png">
+<img src="./kubernetesinstallation-16-09-2021-9.png">
 
 The schema above are labeled G(n,m) for the internetworked, multiple member class dApps. In reality there are only n schema with the member classes (m) being a data field in every table within the nth schema. In this way we can keep all transactions internal to a network on the same schema. The nth network is on the nth schema. The single member class, non-internetworked dApps (F(i)) are likewise constituted of all members of a network or dApp subscribers' group, on their own schema. Although this is the case with the set F(i), within a single network ie schema ie dApp, we will be able to use the field for a member's id to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. While the same is ideally the case for the G(n,m) set, such individual member Tables and dApps being theoretically possible, the design and coding would be expensive.
 
@@ -170,11 +170,14 @@ If you
 
 `juju clouds`
 
-you will aleady find that there exists a 'microk8s/localhost' cloud. Later we will set up another 'localhost/localhost' cloud with different properties, for the main blockchains, database schema and database servers in a kubernetes installation.
+you will aleady find that there exists a 'microk8s/localhost' cloud. Later we will set up another 'localhost/localhost' 
+cloud with different properties, for the main blockchains, database schema and database servers in a kubernetes installation.
 
-Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from the above section, available:
+Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from 
+the above section, available:
 
-Note: After this installation of the 'lernenmaschine' model on the 'kubefluss' controller in a 'kubeflow-lite' package (we edited the cli script and names), we will be installing a 'betrieb' controller with 'werk' model. 
+Note: After this installation of the 'lernenmaschine' model on the 'kubefluss' controller in a 'kubeflow-lite' package (we edited 
+the cli script and names), we will be installing a 'betrieb' controller with 'werk' model. 
 
 Initially:
 
@@ -184,15 +187,19 @@ Initially:
 
 `cd /path/to/bundle-kubeflow`
 
-If you need to choose 'kubeflow lite' (recommended for initial development), you can edit the relevant code in scripts/cli.py and note that you may also alter the controller name, if you take care to alter the commands you issue.
+If you need to choose 'kubeflow lite' (recommended for initial development), you can edit the relevant code in 
+scripts/cli.py and note that you may also alter the controller name, if you take care to alter the commands you issue.
 
 `python3 scripts/cli.py microk8s setup --controller kubefluss`
 
-The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. However in some deployment scenarios (such as local development), you would need to configure MicroK8s to use LAN DNS instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
+The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. 
+However in some deployment scenarios (such as local development), you would need to configure MicroK8s to use LAN DNS 
+instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
 
 `microk8s.kubectl edit configmap -n kube-system coredns`
 
-Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1. You will need to use the arrow keys and the 'insert' and 'delete' keys carefully! Save and exit as for vim.
+Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1. You will need to use the arrow keys and the 
+'insert' and 'delete' keys carefully! Save and exit as for vim.
 
 If you make mistakes during editing, it is safest to:
 
@@ -240,7 +247,12 @@ The following image is a screenshot of the `lernenmaschine` model's status board
 
 <img src="./Screenshot from 2021-06-16 18-14-22.png">
      
-Note that we have actually found it impossible to sustain a kubeflow controller on the microk8s cloud at the same time as we are running the second controller on the localhost cloud referred to in the text below the kubeflow Manual (following). The host randomly reboots. The latter cloud works alone, and, as it represents the more business-end of our business, we continue with no kubeflow. A singleton setup may work better with Kubeflow installed alone on a microk8s/localhost host. There is sufficient RAM onboard our host according to the system monitor, so at this stage the cause is unknown. There were less crashes after installing a Mechanical HDD, but still unsatisfactory. One possibility may be to employ a MAAS (Metal as a Service) installation as the basis for a solo Desktop setup. Stay tuned.
+     Note that we have actually found it impossible to sustain a kubeflow controller on the microk8s cloud at the same time as we are running 
+     the second controller on the localhost cloud referred to in the text below the kubeflow Manual (following). The host randomly reboots. 
+     The latter cloud works alone, and, as it represents the more business-end of our business, we continue with no kubeflow. A singleton setup 
+     may work better with Kubeflow installed alone on a microk8s/localhost host. There is sufficient RAM onboard our host according to the system 
+     monitor, so at this stage the cause is unknown. There were less crashes after installing a Mechanical HDD, but still unsatisfactory. One 
+     possibility may be to employ a MAAS (Metal as a Service) installation as the basis for a solo Desktop setup. Stay tuned.
 ____________________________________________________________________________________
 
 ## USING KUBEFLOW
@@ -402,7 +414,8 @@ From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scrip
 
 `juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
-## The following command would be possible, as presented, only after you are positively identified, gain our trust, and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own (see below)!
+## The following command would be possible, as presented, only after you are positively identified, gain our trust, 
+     and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own (see below)!
 
 `cd ../../../../ && juju scp dbase_setup*.sh <machine-number-postgresql-master>:/home/ubuntu && juju scp *.sql <machine-number-postgresql-master>:/home/ubuntu && cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
@@ -434,29 +447,30 @@ Enter your new postgres user's password twice.
      
 `./dbase_setup_1.sh`
 
-(.. this takes 1.2 hours on my machine, with a mechanical HDD. Don't worry about any syntax errors visible when the scripts have run)
+     (.. this takes 1.2 hours on my machine, with a mechanical HDD. Don't worry about any syntax errors visible when the scripts have run)
 
 `\dt ` should reveal no instances (in default public schema)
 
 `set search_path to cheirrs;`
 
-.. now, `\dt` should reveal a full set of 600+ tables in 2 categories: 1) accounting_<xyz> and 2) uc_<uvw> ('uc_' for use_case). Or in most people's cases it will reveal whatever you provided in the first place.
+     .. now, `\dt` should reveal a full set of 600+ tables in 2 categories: 1) accounting_<xyz> and 2) uc_<uvw> ('uc_' for use_case). 
+     Or in most people's cases it will reveal whatever you provided in the first place.
 
-Fewer results will appear for:
+     Fewer results will appear for:
 
 `set search_path to cheirrs_oseer;`
 
-and, for example;
+     and, for example;
 
 `set search_path to das_fuhrwerk;`
 
-when you run 
+     when you run 
 
 `\dt`
 
-In postgres master machine:
+     In postgres master machine:
 
-Exit psql shell:
+     Exit psql shell:
 
 `\q`
 
@@ -471,7 +485,7 @@ Inside your postgresql Master (
 
 )
 
-As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & get ubuntugis repo:
+     As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & get ubuntugis repo:
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
@@ -481,9 +495,10 @@ As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & g
 
 `./dbase_setup_3.sh`
 
-(Note for the smart-web blockchains to work, gmu must exist as a user with password gmu, and with usage permission to all schema.)
+     (Note for the smart-web blockchains to work, gmu must exist as a user with password gmu, and with usage permission to all schema.)
 
-Check Schemas: there should be 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'das_fuhrwerk', 'the_general', 'the_general_oseer', 'tiger', 'tiger_data', 'topology', and 'public'.
+     Check Schemas: there should be 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 
+     'das_fuhrwerk', 'the_general', 'the_general_oseer', 'tiger', 'tiger_data', 'topology', and 'public'.
 
 `\dn`
 
@@ -511,31 +526,33 @@ You're back on Host.
 
 _________________________________________________________________
 
-## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller called 'betrieb', within this cmr-model called 'werk'.
+## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller 
+     
+     called 'betrieb', within this cmr-model called 'werk'.
 
-[cmr-model == "Cross-Model Referenced"-model]
+     [cmr-model == "Cross-Model Referenced"-model]
 
-(If not on "betrieb" controller)
+     (If not on "betrieb" controller)
 
 `juju switch betrieb`
 
 `juju offer pg-a:db`
 
-then, if you `juju status` in the werk model you will see, at the foot of the output, a reference to the Offer.
+     then, if you `juju status` in the werk model you will see, at the foot of the output, a reference to the Offer.
 
-An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'kubefluss' controller, ie from the 'lernenmaschine' model), is connected with (this needs to be run while in lernenmaschine model):
+     An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'kubefluss'      controller, ie from the 'lernenmaschine' model), is connected with (this needs to be run while in lernenmaschine model):
 
 `juju grant admin consume kubefluss:admin/werk.pg-a`
 
 `juju grant ubuntu consume kubefluss:ubuntu/werk.pg-a`
 
-.. then the authorised user (in the lernenmaschine model - see above) may use:
+     .. then the authorised user (in the lernenmaschine model - see above) may use:
 
 `juju add-relation <application>:db kubefluss:admin/werk.pg-a:db`
 
 `juju add-relation <application>:db kubefluss:ubuntu/werk.pg-a:db`
 
-to connect "application" to the database (in werk model)from 'kubefluss' controller, ie from the lernenmaschine model (in this case).
+     to connect "application" to the database (in werk model)from 'kubefluss' controller, ie from the lernenmaschine model (in this case).
 
 _______________________________________________________________
 
@@ -543,13 +560,9 @@ ALSO:
 
 ## Blockchains-Database Server (werk model) 
 
-We turn to finish setting up the Blockchain/Database gRPC Server Deployment.
+     We turn to finish setting up the Blockchain/Database gRPC Server Deployment.
      
 _______________________________________________________________
-     
-## You need to repeat the following for worker-1 after completing the setup on worker-0
-     
-________________________________________________________________
      
 
 NOTE: As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITCSA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to edit this file carefully to suit your own database, at your
@@ -583,12 +596,9 @@ So in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory 
 `juju scp TO*service/TO*database/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database`
 
 `juju scp TO*service/TO*python/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python`
-     
-     NOTE: Before moving on to copy files to worker-1, the .env and .env.test files in the elastos-smartweb-service/ directories 
-     will need to contain the appropriate addresses for the particular worker upon which the .env files are to be copied. Thus the 
-     .env files in the workers -0 and -1 are each different. Be sure to re-edit before copying.
+
  
-Re-enter worker-0 (and repeat for -1):
+Re-enter worker-0:
 
 `juju ssh <machine-number-worker-0>`
 
@@ -642,10 +652,10 @@ To be continued ..
 _____________________________________________________________
 
      
-## Enter kubernetes-worker-2, to set-up an IoT server with Python-gRPC, 
+## Enter kubernetes-worker-1, to set-up an IoT server with Python-gRPC, 
 ## node-red-industrial and IOTA client, on their own vm.
      
-`juju ssh <machine-number-worker-2>`
+`juju ssh <machine-number-worker-1>`
 
 (To install nodejs and npm, needed for the Carrier wrapper and to connect 
 with gRPC as well as the IOTA node.js client:)
@@ -663,7 +673,7 @@ with gRPC as well as the IOTA node.js client:)
      
  `nvm use 12`
      
-     Google nvm.
+     (Google "nvm").
      
 )  
      
@@ -769,17 +779,17 @@ Please refer to https://client-lib.docs.iota.org/docs/libraries/nodejs/examples 
 to which an application may subscribe on IOTA. The approach we have taken here is to rely on Message exchanges on MQTT 
 for validation of IoT actions and events.
      
-     The launch of the client, on both Edge (Host) and worker-2, occurs with:
+     The launch of the client, on both Edge (Host) and worker-1, occurs with:
      
 `node iota_connector`   from the iota root directory.
      
      By choosing the node.js version of the IOTA client, we get the ability to easily communicate with the other 
-     apps on the worker-2 vm, and on the Edge server (Host here).
+     apps on the worker-1 vm, and on the Edge server (Host here).
      
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - 
      as well as the server can show pages similar to this). Here is shown the "Edge" site page mimicked by 
      the Host, ideally enclosed in Carrier (however the Nodejs wrapper, needed to access Native Carrier, appears to be
-     missing a file currently :-)
+     not working, or we are not setting it up correctly :-)).
      
 <img src="./Screenshot from 2021-07-19 11-11-29.png">
      
