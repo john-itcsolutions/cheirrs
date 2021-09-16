@@ -792,6 +792,14 @@ for validation of IoT actions and events.
 
 _________________________________________________________________________________________________________________________________________
      
+## The diagram at the top of this page shows a Private IOTA Tangle. 
+     
+     We are currently investigating how to set this up properly with the major hold-up being the running of the .go script to obtain an account.
+     
+     So we shall return with news after learning GO.
+     
+___________________________________________________________________________________________________________________________________________
+     
      
      When fully developed, the system on the betrieb controller is a fully cloud-compliant Kubernetes System, ready to be deployed to any Cloud.
      Normally, the database is setup on the cloud separately and connected to the rest of the system later. You would be required to develop your 
