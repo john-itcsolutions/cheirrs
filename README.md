@@ -794,9 +794,10 @@ ________________________________________________________________________________
      
 ## The diagram at the top of this page shows a Private IOTA Tangle. 
      
-     We are currently investigating how to set this up properly with the major hold-up being the running of the .go script to obtain an account.
+     We are currently investigating how to set this up properly with the major hold-up being 
+     the running of the .go script (readily available) to obtain an account.
      
-     So we shall return with news after learning GO.
+     So we shall return with news after learning some GO fundamentals :-)
      
 ___________________________________________________________________________________________________________________________________________
      
