@@ -828,23 +828,29 @@ ________________________________________________________________________________
 ## THE FUTURE:
      
      
-     When fully developed, the system on the betrieb controller is a fully cloud-compliant Kubernetes System, ready to be deployed to any Cloud.
-     Normally, the database is setup on the cloud separately and connected to the rest of the system later. You would be required to develop your 
-     own gRPC system calls (in node.js) to the .proto files (programmed in Python, but openly connectable) in the Front End dApps, and the corresponding 
-     methods (ie microservices in Python) on the Smart-Web server.
+     When fully developed, the system on the betrieb controller is a fully cloud-compliant Kubernetes System, 
+     ready to be deployed to any Cloud. Normally, the database is setup on the cloud separately and connected 
+     to the rest of the system later. You would be required to develop your own gRPC system calls (in node.js) 
+     to the .proto files (programmed in Python, but openly connectable) in the Front End dApps, and the 
+     corresponding methods (ie microservices in Python) on the Smart-Web server.
      Good luck! For refs see:
 
 See 'Using Kubeflow' above.
 
 Also refer to any official docs on TensorFlow and its history, background and usage.
 
-## (In particular, visit either https://statlearning.com/ (the Authors' own website) - or -  https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  & download "An Introduction to Statistical Learning"; 2017. James, Witten, Hastie, Tibshirani. 441p.). 
+## (In particular, visit either https://statlearning.com/ (the Authors' own website) - or -  
+     https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  
+     & download "An Introduction to Statistical Learning"; 2017. James, Witten, Hastie, Tibshirani. 441p.). 
 
-Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
+     Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of 
+     TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
 
-## (For a more mathematical treatment you can obtain a copy of 'The Mother of Statistical Learning Texts' at https://web.stanford.edu/~hastie/Papers/ESLII.pdf Elements of Statistical Learning 2nd Ed; 2008. Hastie, Tibshirani, Friedman. 764p.)
+## (For a more mathematical treatment you can obtain a copy of 'The Mother of Statistical Learning Texts' at 
+     https://web.stanford.edu/~hastie/Papers/ESLII.pdf Elements of Statistical Learning 2nd Ed; 2008. Hastie, Tibshirani, Friedman. 764p.)
 
-AI (Artificial Intelligence) includes further technical solutions to involve the results of the deployment of models in military, industrial and commercial production applications, to achieve economic and strategic benefits.
+     AI (Artificial Intelligence) includes further technical solutions to involve the results of the deployment of models in military, 
+     industrial and commercial production applications, to achieve economic and strategic benefits.
 _________________________________________________________________
 
 ## NOW: How to use a spatial database in connection with TensorFlow?
