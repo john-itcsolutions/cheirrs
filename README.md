@@ -816,8 +816,8 @@ ________________________________________________________________________________
      
      At this point we have a handful of problems preventing the werk model from working:
      
-     1.  Complete MAAS setup to allow desktop hosting of two controllers thus allowing Kubeflow to be 
-         implemented alongside 'werk'
+     1.  Complete MAAS setup to allow desktop hosting of two controllers thus allowing our (TensorFlow) 
+         'lernenmaschine' model to be implemented alongside 'werk'
      2.  We have a minor problem involving shaping Australian Address data for our requirements
      3.  The generation of an acceptable JWT token to authenticate to SmartWeb
      4.  Get the Nodejs Wrapper package for Carrier working properly
