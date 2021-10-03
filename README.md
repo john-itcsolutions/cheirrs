@@ -745,7 +745,7 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      
      We are currently having a problem related to the same errors when we ran "test.sh" from 
      smart-web, when we try to complete the connection between node-red and smart-web via the grpc client 
-     (cohabiting with smart-web). It appears to relate to configuration/provision of a jwt token at 
+     (cohabiting with the node-red server). It appears to relate to configuration/provision of a jwt token at 
      authentication in both cases.
      
      The installation of IOTA client proceeds as follows (repeat for both Host - ie Edge - and worker-2):
@@ -823,7 +823,8 @@ ________________________________________________________________________________
      2.  We have a minor problem involving shaping Australian Address data for our requirements
      3.  The generation of an acceptable JWT token to authenticate to SmartWeb
      4.  Get the Nodejs Wrapper package for Carrier working properly
-     5.  Find out how to run the provided .go code to create an IOTA account
+     5.  Find out how to run the provided .go code to create an IOTA account. This is not necessary
+         if you simply connect "live" to the IOTA Tangle as above. It is necessary to deploy a private tangle.
      
  _________________________________________________________________________________________________________________________________________________
      
