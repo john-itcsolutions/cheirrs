@@ -669,23 +669,23 @@ _____________________________________________________________
      
 `juju ssh <machine-number-worker-1>`
 
-(To install nodejs and npm, needed for the Carrier wrapper and to connect 
+(To install nodejs and npm, needed for Node-red, the Carrier wrapper and to connect 
 with gRPC as well as the IOTA node.js client:)
      
-`curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`
+`curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash`
 
-`sudo apt -y install nodejs`
+`source ~/.profile`
      
      You may also require node version 9 in server-2 so using the 'nvm' 
      (Node Version Manager) helps as you can install node verions (eg 9) with 
      
- `nvm install 9`
+`nvm install 9`
      
      and after installations you can swap versions in use with 
      
- `nvm use 12`
+`nvm install 12`
      
-     (Google "nvm").
+`nvm use 12`
      
 )  
      
@@ -693,7 +693,7 @@ To get Node-Red-Industrial:
 
 `sudo snap install node-red-industrial` on the Host (acting as an Edge server)
      
-Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
+Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
 `sudo snap install node-red-industrial`
      
@@ -710,7 +710,7 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      It is a good idea to add these last 2 commands to the end of your ~/.bashrc files, 
      on all machines involved with node-red, to ensure persistence of these variables.
      
-`flask run`
+`source ~/.bashrc`
      
      and go to your own host's LAN address, on a new tab in the 
      browser, with port `1881`,
@@ -758,7 +758,7 @@ Also, in worker-2 (`juju ssh <machine-number-worker-2>`,
      (cohabiting with the node-red server). It appears to relate to configuration/provision of a jwt token at 
      authentication in both cases.
      
-     The installation of IOTA client proceeds as follows (repeat for both Host - ie Edge - and worker-2):
+     The installation of IOTA client proceeds as follows (repeat for Host - ie Edge):
      
 `mkdir iota && cd iota`
      
