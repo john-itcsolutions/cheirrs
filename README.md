@@ -400,7 +400,13 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 Deploy a Redis cluster for in-memory caching:
 
-`juju deploy cs:~omnivector/bundle/redis-cluster-1`
+`juju deploy redis redis1`
+     
+`juju deploy redis redis2`
+     
+`juju add-relation redis1:master redis2:slave`
+     
+`juju expose redis`
      
 *******************************************************
 
