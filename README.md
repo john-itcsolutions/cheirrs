@@ -762,6 +762,12 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
 `mkdir iota && cd iota`
      
+`nvm use 12`
+     
+`npm i neon-cli`
+     
+`npm i prebuild-install`
+     
 `npm i @iota/client`
      
      Add a file called `iota_connector.js` with the following content:
@@ -818,6 +824,9 @@ ________________________________________________________________________________
      
      We are currently investigating how to set this up properly with the major hold-up being 
      the running of the .go script (readily available) to obtain an account.
+     
+     At this stage it is actually simpler to hold just one IOTA client in the cloud and the 
+     ones on the edge - all clients and no nodes.
      
      So we shall return with news after learning some GO fundamentals :-)
      
