@@ -766,9 +766,9 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
 `npm init`
      
-`npm install @iota/core @iota/converter`
+`npm install @iota/core @iota/converter @iota/client`
      
-     Add a file called `iota_connector.js` with the following content:
+     Add a file called `index.js` with the following content:
      
 ```
      async function run() {
@@ -777,7 +777,7 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      } = require('@iota/client');
     // client connects to a node that has MQTT enabled
      const client = new ClientBuilder()
-     .node('mqtt.lb-0.h.chrysalis-devnet.iota.cafe:1883')
+     .node('https://api.lb-0.h.chrysalis-devnet.iota.cafe/')
      .build();
      client.subscriber().topics(['milestones/confirmed', 'messages', 'messages/referenced']).subscribe((err, data) => {
      console.log(data);        // To get the message id from messages `client.getMessageId(data.payload)` can be used
