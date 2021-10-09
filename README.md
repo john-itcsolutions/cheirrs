@@ -793,13 +793,14 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
 run()
 ```
      
-Please refer to https://client-lib.docs.iota.org/docs/libraries/nodejs/examples for a full explanation of all topics 
-to which an application may subscribe on IOTA. The approach we have taken here is to rely on Message exchanges on MQTT 
+The approach we have taken here is to rely on Message exchanges on MQTT 
 for validation of IoT actions and events.
+     Please refer to https://client-lib.docs.iota.org/docs/libraries/nodejs/examples 
+     for a full explanation of all topics to which an application may subscribe on IOTA. 
      
      The launch of the client, on both Edge (Host) and worker-1, occurs with:
      
-`node iota_connector`   from the iota root directory.
+`node index`   from the iota root directory.
      
      By choosing the node.js version of the IOTA client, we get the ability to easily communicate with the other 
      apps on the worker-1 vm, and on the Edge server (Host here).
