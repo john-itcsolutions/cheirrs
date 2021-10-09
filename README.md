@@ -667,7 +667,7 @@ _____________________________________________________________
 
      
 ## Enter kubernetes-worker-1, to set-up an IoT server with Python-gRPC, 
-## node-red-industrial and IOTA client, on their own vm.
+## node-red-industrial, Carrier and IOTA client, on their own vm.
      
 `juju ssh <machine-number-worker-1>`
 
@@ -818,6 +818,26 @@ for validation of IoT actions and events.
      
      It is easy to see in the first shot (of Edge client) the increased processing necessary when an actuation 
      is to be controlled from the server via the edge client, ie. in "second_fleet".
+     
+## Obtain and install Carrier and the Carrier Nodejs Wrapper:
+     
+     In worker-1:
+     
+`git clone https://github.com/elastos/Elastos.NET.Carrier.Native.SDK.git`
+     
+     Follow instructions on the repo to compile and install.
+     
+`git clone https://github.com/elastos/Elastos.NET.Carrier.Nodejs.SDK.git`
+     
+     Run:
+     
+`nvm use 9`
+     
+     Follow instructions on repo from after installation of node.js @9.
+     
+     Repeat the above on Edge clients.
+     
+     NOTE: We have not yet succeeded in installing the Nodejs Wrapper.
 
 _________________________________________________________________________________________________________________________________________
      
