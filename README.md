@@ -588,12 +588,14 @@ NOTE: As we don't own or control the elastos sub-modules, and since the `elastos
 
 The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you will be copying .env.test and .env as edited to cheirrs/TO*/*service/.env and .env.test. 
      
-     There is no need for a separate Carrier Node as smart-web contains a Carrier implementation.
+     So, edit .env and .env.test to reflect your addresses.
 
 The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0 and -1 machines, here, as appropriate. Also the database details will require alteration.
      
 Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules" at 'cheirrs' cloning-time, you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above). Actually there is no need to alter the __init__.py 
 file in the repo, rather in the cheirrs/TO*/*database/, which is where the file will be copied (soon) to the vm's.
+     
+     So, edit cheirrs/TO*/database/__init__.py to insert your schema names, database name & database url.
      
 You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) identically. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
 
