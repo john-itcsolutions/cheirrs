@@ -764,11 +764,9 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
 `nvm use 12`
      
-`npm i neon-cli`
+`npm init`
      
-`npm i prebuild-install`
-     
-`npm i @iota/client`
+`npm install @iota/core @iota/converter`
      
      Add a file called `iota_connector.js` with the following content:
      
@@ -779,7 +777,7 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      } = require('@iota/client');
     // client connects to a node that has MQTT enabled
      const client = new ClientBuilder()
-     .node('https://api.hornet-2.testnet.chrysalis2.com')
+     .node('mqtt.lb-0.h.chrysalis-devnet.iota.cafe:1883')
      .build();
      client.subscriber().topics(['milestones/confirmed', 'messages', 'messages/referenced']).subscribe((err, data) => {
      console.log(data);        // To get the message id from messages `client.getMessageId(data.payload)` can be used
