@@ -841,18 +841,6 @@ for validation of IoT actions and events.
 
 _________________________________________________________________________________________________________________________________________
      
-## The diagram at the top of this page shows a Private IOTA Tangle. 
-     
-     We are currently investigating how to set this up properly with the major hold-up being 
-     the running of the .go script (readily available) to obtain an account.
-     
-     At this stage it is actually simpler to hold just one IOTA client in the cloud and the 
-     ones on the edge - all clients and no nodes.
-     
-     So we shall return with news after learning some GO fundamentals :-)
-     
-___________________________________________________________________________________________________________________________________________
-     
      
  ## SUMMARY:
      
@@ -863,8 +851,6 @@ ________________________________________________________________________________
      2.  We have a minor problem involving shaping Australian Address data for our requirements
      3.  The generation of an acceptable JWT token to authenticate to SmartWeb
      4.  Get the Nodejs Wrapper package for Carrier working properly
-     5.  Find out how to run the provided .go code to create an IOTA account. This is not necessary
-         if you simply connect "live" to the IOTA Tangle as above. It is necessary to deploy a private tangle.
      
  _________________________________________________________________________________________________________________________________________________
      
