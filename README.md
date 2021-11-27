@@ -715,7 +715,7 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
 `source ~/.bashrc`
      
      and go to your own host's LAN address, on a new tab in the 
-     browser, with port `1881`,
+     browser, with port `1891`,
      then, in worker-1, 
      
 `export FLASK_APP=node-red-industrial`
@@ -724,7 +724,7 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
  `flask run` 
      
-     from the home directory, and go to your worker-1's address with port 1881
+     from the home directory, and go to your worker-1's address with port 1891
      in a browser tab on your Host.
      
     These 2 pages can interact, and generate and forward messages, events and commands.
