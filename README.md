@@ -678,7 +678,7 @@ with gRPC as well as the IOTA node.js client:)
 
 `source ~/.profile`
      
-     You may also require node version 9 in server-2 so using the 'nvm' 
+     You may also require node version 9 in server-1 so using the 'nvm' 
      (Node Version Manager) helps as you can install node verions (eg 9) with 
      
 `nvm install 9`
@@ -716,7 +716,7 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
      and go to your own host's LAN address, on a new tab in the 
      browser, with port `1881`,
-     then, in worker-2, 
+     then, in worker-1, 
      
 `export FLASK_APP=node-red-industrial`
      
@@ -724,7 +724,7 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
  `flask run` 
      
-     from the home directory, and go to your worker-2's address with port 1881
+     from the home directory, and go to your worker-1's address with port 1881
      in a browser tab on your Host.
      
     These 2 pages can interact, and generate and forward messages, events and commands.
@@ -742,14 +742,14 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      notification functions can be handled directly to the Cloud. 
      
      In order for the node-red server on the worker to talk to the "smart-web" servers we need 
-     to clone the smartweb client from elastos in worker-2:
+     to clone the smartweb client from elastos in worker-1:
      
 `git clone https://github.com/cyber-republic/python-grpc-adenine.git`
      
      Follow the README.md instructions on the repo site to build the client.
      
      Similarly we need to allow (Elastos) Carrier-shielded communication between "edge" (here, Host),
-     and worker-2. For this, on both Edge (Host here) and worker-2, we require the Carrier Native SDK and to follow this by installing the 
+     and worker-1. For this, on both Edge (Host here) and worker-1, we require the Carrier Native SDK and to follow this by installing the 
      Carrier Nodejs Wrapper package. This would need to also occur on Real-World Edge Clients running node-red-industrial.
      
      https://github.com/elastos/Elastos.NET.Carrier.Nodejs.SDK and 
