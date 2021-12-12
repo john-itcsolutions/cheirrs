@@ -870,7 +870,9 @@ Also refer to any official docs on TensorFlow and its history, background and us
 
 ## (In particular, visit either https://statlearning.com/ (the Authors' own website) - or -  
      https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  
-     & download "An Introduction to Statistical Learning"; 2017. James, Witten, Hastie, Tibshirani. 441p.). 
+     & download:
+     
+## "An Introduction to Statistical Learning"; 2017. James, Witten, Hastie, Tibshirani. 441p.). 
 
      Read it slowly, carefully and repeatedly. This represents only the theoretical framework for the more general field of 
      TensorFlow and Machine Learning. One develops, builds, trains, tests and finally deploys Machine Learning "models". 
