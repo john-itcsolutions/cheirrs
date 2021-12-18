@@ -868,9 +868,9 @@ https://grpc.io/docs/languages/python/basics/
      
 ________________________________________________________________________________________________________________________________________ 
 
-Also see 'Using Kubeflow' above.
+Also see 'Using Kubeflow' above,
 
-Also refer to any official docs on TensorFlow and its history, background and usage.
+and refer to any official docs on TensorFlow and its history, background and usage.
 
 ## (In particular, visit either https://statlearning.com/ (the Authors' own website) - or -  
      https://dokumen.pub/introduction-to-statistical-learning-7th-printingnbsped-9781461471370-9781461471387-2013936251.html -  
