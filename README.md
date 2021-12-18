@@ -862,9 +862,13 @@ ________________________________________________________________________________
      to the rest of the system later. You would be required to develop your own gRPC system calls (in typescript) 
      to the .proto files (programmed in Python, but openly connectable) in the Front End dApps, and the 
      corresponding methods (ie microservices in Python) on the Smart-Web server.
-     Good luck! For refs see:
+     Good luck! For refs see (regarding gRPC services):
+     
+     https://grpc.io/docs/languages/python/basics/
+     
+________________________________________________________________________________________________________________________________________ 
 
-See 'Using Kubeflow' above.
+Also see 'Using Kubeflow' above.
 
 Also refer to any official docs on TensorFlow and its history, background and usage.
 
