@@ -864,7 +864,7 @@ ________________________________________________________________________________
      corresponding methods (ie microservices in Python) on the Smart-Web server.
      Good luck! For refs see (regarding gRPC services):
      
-     https://grpc.io/docs/languages/python/basics/
+https://grpc.io/docs/languages/python/basics/
      
 ________________________________________________________________________________________________________________________________________ 
 
