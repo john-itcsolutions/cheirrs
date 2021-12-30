@@ -590,12 +590,12 @@ The .env.example file here needs to be filled-in with the correct database name,
      
      So, edit .env and .env.test to reflect your addresses.
 
-The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0 and -1 machines, here, as appropriate. Also the database details will require alteration.
+The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0 machine, here, as appropriate. Also the database details will require alteration.
      
 Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules" at 'cheirrs' cloning-time, you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above). Actually there is no need to alter the __init__.py 
 file in the repo, rather in the cheirrs/TO*/*database/, which is where the file will be copied (soon) to the vm's.
      
-     So, edit cheirrs/TO*/database/__init__.py to insert your schema names, database name & database url.
+     So, edit cheirrs/TO*/*database/__init__.py to insert your schema names, database name & database url.
      
 You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) identically. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
 
