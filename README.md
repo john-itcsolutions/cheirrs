@@ -734,7 +734,7 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      in some way. The events and messages (originating on iot devices connected to "edge" 
      raspberry-pi (or Industrial Pi) units or similar, in the field) will be logged on the IOTA 
      Tangle and your database, via javascript functions in node-red wrapped in Carrier and 
-     using the gRPC protocols on worker-2, to the "smart-web" server.
+     using the gRPC protocols on worker-1, to the "smart-web" server.
      
      As noted elsewhere, the required response times of some machinery and systems means 
      sub-millisecond cycles, which cannot be achieved without dedicated Edge-client/server 
