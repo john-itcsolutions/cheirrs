@@ -47,8 +47,13 @@ You would also require some dev tools and the openjdk for Java, as well as nodej
 # Base requirements 
 sudo apt -y install openjdk-8-jdk build-essential curl dirmngr apt-transport-https lsb-release ca-certificates
 # Install NodeJS 12 instead of 8 or 10
-curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-sudo apt -y install nodejs
+
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+
+nvm install 12
+
+source ~/.profile
+
 ```
 
 As well as installing Ionic & Cordova (which enables single-pass coding for iOS and Android as well as desktop - ie browser - platforms):
