@@ -762,6 +762,8 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
      The installation of IOTA client proceeds as follows (repeat for Host - ie Edge):
      
+     In worker-1:
+     
 `mkdir iota && cd iota`
      
 `nvm use 12`
