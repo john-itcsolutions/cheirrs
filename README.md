@@ -679,55 +679,23 @@ _____________________________________________________________
 (To install nodejs and npm, needed for Node-red, the Carrier wrapper and to connect 
 with gRPC as well as the IOTA node.js client:)
      
-`curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash`
-
-`source ~/.profile`
+# Install NodeJS 12 instead of 8 or 10
      
-     You may also require node version 9 in server-1 so using the 'nvm' 
-     (Node Version Manager) helps as you can install node verions (eg 9) with 
-     
-`nvm install 9`
-     
-     and after installations you can swap versions in use with 
-     
-`nvm install 12`
-     
-`nvm use 12`
-     
-)  
+`curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+sudo apt -y install nodejs`
      
 To get Node-Red-Industrial:
 
-`sudo snap install node-red-industrial` on the Host (acting as an Edge server)
+`bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)`
+             on the Host (acting as an Edge server)
      
 Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
-`sudo snap install node-red-industrial`
-     
-     Node-Red-Industrial is packaged as a Flask (Python) application.
-     
-     Refer to https://snapcraft.io/node-red-industrial.
-     
-     On Host, we need to set 2 environment variables with:
-     
-`export FLASK_APP=node-red-industrial`
-     
-`export FLASK_ENV=development`
-     
-     It is a good idea to add these last 2 commands to the end of your ~/.bashrc files, 
-     on all machines involved with node-red, to ensure persistence of these variables.
-     
-`source ~/.bashrc`
+`bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)`
      
      and go to your own host's LAN address, on a new tab in the 
      browser, with port `1891`,
      then, in worker-1, 
-     
-`export FLASK_APP=node-red-industrial`
-     
-`export FLASK_ENV=development`
-     
- `flask run` 
      
      from the home directory, and go to your worker-1's address with port 1891
      in a browser tab on your Host.
