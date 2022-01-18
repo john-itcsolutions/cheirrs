@@ -1,0 +1,75 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: "2021-08-16T21:38:10Z"
+    labels:
+      component: apiserver
+      provider: kubernetes
+    name: kubernetes
+    namespace: default
+    resourceVersion: "202"
+    uid: 366cee58-b96a-4a91-8519-e590ed2b40b6
+  spec:
+    clusterIP: 10.113.128.1
+    clusterIPs:
+    - 10.113.128.1
+    ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 443
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIDKjCCAhKgAwIBAgIQKJpGG1syZCVir/+0cjYchzANBgkqhkiG9w0BAQsFADAv
+      MS0wKwYDVQQDEyQwNTc1Njc2NS02MGY4LTRmM2MtYWYxNy03MGI4MjMxYTZhNmQw
+      HhcNMjEwODE2MjAzNTI4WhcNMjYwODE1MjEzNTI4WjAvMS0wKwYDVQQDEyQwNTc1
+      Njc2NS02MGY4LTRmM2MtYWYxNy03MGI4MjMxYTZhNmQwggEiMA0GCSqGSIb3DQEB
+      AQUAA4IBDwAwggEKAoIBAQCm1YU51RKAnBndmXQbWnCzOU23Q+dS+F5iobwYc9Qx
+      krh24BxjpBKQ6OizmGkNHRfkBd8wDp4RAWapK1VvlwXSFHFeL6VSvt+3PsA8NttN
+      G1MakS6S6mED6rEdrrGc6T9smzIvs63YrVncz/2FIx+NLG7YTvGVvHHdIxYQfPOW
+      yf2nLaDOXBpyg8Z8iFvHvU1BSNUxlXjxVbE5UXs6FgA12n9nnvdbdlSmbudpBEKl
+      QURcr9mI2vwoP+1sQajUISBVHQYPWfj4pwk8e4qGmEVTpg7YK0myth5gpl77Y/1l
+      eubZW5wwhxxC+DC8CMwg0DK/p1fV5dXjRybrQJ7Kfeu3AgMBAAGjQjBAMA4GA1Ud
+      DwEB/wQEAwICBDAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBS66vb+SJKxgMr+
+      Vb/qth3k54UJDTANBgkqhkiG9w0BAQsFAAOCAQEAQmr9a2pulpYfFsYvgA8BgAUU
+      rbrUGRtVPsltBQIZ1m/CV42aMxMsUyQ1uQggHm3msD91o3YA69oCaP50LNxytVR/
+      sMd/mjB5+jj4nY65f4ZYLZ5rJZ2OBKXsdOuqXRrzkAWVwI8yTJ7gBoHL/mGELVcY
+      AEDPV0ovFPNGk2cgNdFHrPzVRFCJbdE8CdG92cw0S3arLd6rSB6RnXJAwbXFyWO2
+      FBKvl1l+4REe3A9g9Cz/Lo6VOEQO0ggRtYgPM5fCWyBXER5jsDD/xqEpiEYiwWLY
+      hxLHKwFFVgz7xM9V0xze5gMfEkCyue/YIc0nwCMrThpvACq+JsYiXml/2W2eKQ==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    creationTimestamp: "2021-08-16T21:38:26Z"
+    name: kube-root-ca.crt
+    namespace: default
+    resourceVersion: "317"
+    uid: 8610e714-bf4d-4a25-b756-a841578c2a32
+- apiVersion: v1
+  data:
+    ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURLakNDQWhLZ0F3SUJBZ0lRS0pwR0cxc3laQ1Zpci8rMGNqWWNoekFOQmdrcWhraUc5dzBCQVFzRkFEQXYKTVMwd0t3WURWUVFERXlRd05UYzFOamMyTlMwMk1HWTRMVFJtTTJNdFlXWXhOeTAzTUdJNE1qTXhZVFpoTm1RdwpIaGNOTWpFd09ERTJNakF6TlRJNFdoY05Nall3T0RFMU1qRXpOVEk0V2pBdk1TMHdLd1lEVlFRREV5UXdOVGMxCk5qYzJOUzAyTUdZNExUUm1NMk10WVdZeE55MDNNR0k0TWpNeFlUWmhObVF3Z2dFaU1BMEdDU3FHU0liM0RRRUIKQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUUNtMVlVNTFSS0FuQm5kbVhRYlduQ3pPVTIzUStkUytGNWlvYndZYzlReAprcmgyNEJ4anBCS1E2T2l6bUdrTkhSZmtCZDh3RHA0UkFXYXBLMVZ2bHdYU0ZIRmVMNlZTdnQrM1BzQThOdHROCkcxTWFrUzZTNm1FRDZyRWRyckdjNlQ5c216SXZzNjNZclZuY3ovMkZJeCtOTEc3WVR2R1Z2SEhkSXhZUWZQT1cKeWYybkxhRE9YQnB5ZzhaOGlGdkh2VTFCU05VeGxYanhWYkU1VVhzNkZnQTEybjlubnZkYmRsU21idWRwQkVLbApRVVJjcjltSTJ2d29QKzFzUWFqVUlTQlZIUVlQV2ZqNHB3azhlNHFHbUVWVHBnN1lLMG15dGg1Z3BsNzdZLzFsCmV1YlpXNXd3aHh4QytEQzhDTXdnMERLL3AxZlY1ZFhqUnliclFKN0tmZXUzQWdNQkFBR2pRakJBTUE0R0ExVWQKRHdFQi93UUVBd0lDQkRBUEJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJTNjZ2YitTSkt4Z01yKwpWYi9xdGgzazU0VUpEVEFOQmdrcWhraUc5dzBCQVFzRkFBT0NBUUVBUW1yOWEycHVscFlmRnNZdmdBOEJnQVVVCnJiclVHUnRWUHNsdEJRSVoxbS9DVjQyYU14TXNVeVExdVFnZ0htM21zRDkxbzNZQTY5b0NhUDUwTE54eXRWUi8Kc01kL21qQjUramo0blk2NWY0WllMWjVySloyT0JLWHNkT3VxWFJyemtBV1Z3STh5VEo3Z0JvSEwvbUdFTFZjWQpBRURQVjBvdkZQTkdrMmNnTmRGSHJQelZSRkNKYmRFOENkRzkyY3cwUzNhckxkNnJTQjZSblhKQXdiWEZ5V08yCkZCS3ZsMWwrNFJFZTNBOWc5Q3ovTG82Vk9FUU8wZ2dSdFlnUE01ZkNXeUJYRVI1anNERC94cUVwaUVZaXdXTFkKaHhMSEt3RkZWZ3o3eE05VjB4emU1Z01mRWtDeXVlL1lJYzBud0NNclRocHZBQ3ErSnNZaVhtbC8yVzJlS1E9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    namespace: ZGVmYXVsdA==
+    token: ZXlKaGJHY2lPaUpTVXpJMU5pSXNJbXRwWkNJNklrd3lMV2RCY25vNWJXeFdVQzF1YlRZeFZUVjVSazVuWVc4NVdFWnZjVVkwVW01NGJUaFNaMEpMUnpRaWZRLmV5SnBjM01pT2lKcmRXSmxjbTVsZEdWekwzTmxjblpwWTJWaFkyTnZkVzUwSWl3aWEzVmlaWEp1WlhSbGN5NXBieTl6WlhKMmFXTmxZV05qYjNWdWRDOXVZVzFsYzNCaFkyVWlPaUprWldaaGRXeDBJaXdpYTNWaVpYSnVaWFJsY3k1cGJ5OXpaWEoyYVdObFlXTmpiM1Z1ZEM5elpXTnlaWFF1Ym1GdFpTSTZJbVJsWm1GMWJIUXRkRzlyWlc0dGEyWnRjM0lpTENKcmRXSmxjbTVsZEdWekxtbHZMM05sY25acFkyVmhZMk52ZFc1MEwzTmxjblpwWTJVdFlXTmpiM1Z1ZEM1dVlXMWxJam9pWkdWbVlYVnNkQ0lzSW10MVltVnlibVYwWlhNdWFXOHZjMlZ5ZG1salpXRmpZMjkxYm5RdmMyVnlkbWxqWlMxaFkyTnZkVzUwTG5WcFpDSTZJakJqTmpGalltSmpMVGhsWkRFdE5ESmxNUzA0Wm1WbExUUTVNVEl3WTJJell6SmpNeUlzSW5OMVlpSTZJbk41YzNSbGJUcHpaWEoyYVdObFlXTmpiM1Z1ZERwa1pXWmhkV3gwT21SbFptRjFiSFFpZlEuT1VTQnlDUmM0aHRpUHlpSXU3a3ZxVXY4WmpYTWtpMTBVQ0plVFUtZVl5bjAxaHVEZU5Xbl9ITFB3MFI0dU1TWVRKZV9CYTBNNjFaajdBTmpmR1dnZzNpUDJqZmRxTURxVzZXeUwzeGFSNWVvZzRWUWI4a2h3WEZkWW55SXlyYmN0N3hNSzY2a2xLVlBKamVrWnRoOGt0dlVnVnJUckowYkxEWWtadkVFRTU0MnQzcmtxb0c2YmtKcmZLWmVQUmVmZTd3YUwwQjMzTXdXLXdSamswSTdFSVhacmprQUM3bWJ1ZnVKOHBNUmVORFpueHpRS2RDMWxmTlhVdTFmaHFpRW5lb20yNmFlNzBMaG03REtaSlZfM1Y0WGlXU21VT0YzeDd5VzhfUnJ2cWZ1RFBaeEszejB6UUxpSFpZM1JwREl6VTdHS1dFd0pLU0tpUldrRC1fdDFB
+  kind: Secret
+  metadata:
+    annotations:
+      kubernetes.io/service-account.name: default
+      kubernetes.io/service-account.uid: 0c61cbbc-8ed1-42e1-8fee-49120cb3c2c3
+    creationTimestamp: "2021-08-16T21:38:26Z"
+    name: default-token-kfmsr
+    namespace: default
+    resourceVersion: "329"
+    uid: b414bf2b-7408-4b57-8a96-cace79184ff5
+  type: kubernetes.io/service-account-token
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

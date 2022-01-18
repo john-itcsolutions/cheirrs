@@ -15,7 +15,7 @@ groups:
 users:
   - default
   - name: gmu
-    gecos: Foo B. Bar
+    gecos: John L Olsen
     primary_group: gmu
     groups: users, admin
     selinux_user: staff_u
@@ -25,7 +25,7 @@ users:
     lock_passwd: false
     passwd: gmu
   - name: ubuntu
-    gecos: Bar B. Foo
+    gecos: John L Olsen
     groups: users, admin
     ssh_import_id: None
     plain_text_passwd: true
