@@ -421,7 +421,7 @@ ________________________________________________________________
 
 ## Copy sql scripts; Build Database Schema:
      
-`git clone recurse-submodules https://github.com/john-itcsolutions/cheirrs.git`
+`git clone --recurse-submodules https://github.com/john-itcsolutions/cheirrs.git`
 
 From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder,
 
