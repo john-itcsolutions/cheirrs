@@ -199,6 +199,10 @@ scripts/cli.py and note that you may also alter the controller name, if you take
 
 `python3 scripts/cli.py microk8s setup --controller kubefluss`
 
+## EXCEPTIONAL: To deploy Kubeflow on top of Charmed Kubernetes, run ## 
+
+`python3 scripts/cli.py deploy-to {controller}`
+
 The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. 
 However in some deployment scenarios (such as local development), you would need to configure MicroK8s to use LAN DNS 
 instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
