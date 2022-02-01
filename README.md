@@ -289,7 +289,7 @@ https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      
 `juju add-model kubeflow`  (the dashboard requires the model name to be "kubeflow")
      
-`juju deploy kubeflow-lite`  - or full kubeflow
+`juju deploy kubeflow-lite --trust`  - or full kubeflow
      
 `watch -c juju status --color`  to watch progress.
      
