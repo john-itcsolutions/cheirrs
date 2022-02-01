@@ -267,7 +267,8 @@ The following image is a screenshot of the `lernenmaschine` model's status board
      
 _____________________________________________________________________________________
      
-     As an alternative to the above approach to installing kubeflow, we offer the following, which has been adapted from:
+##   As an alternative 
+     to the above approach to installing kubeflow, we offer the following, which has been adapted from:
      
 https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      
@@ -275,9 +276,12 @@ https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      If the following is implemented on the Host directly, the upcoming section 
      on installing the cheirrs backend with database and blockchains, should 
      be performed on a multipass ubuntu vm on top of the same Host. See below.
-     1. Install microk8s as above
+     For now:
+     1. Install microk8s on Host as above
      2. Add yourself to the microk8s group
      3. Perform quick reset of terminal.
+     
+     Then:
     
 `snap install juju --classic`
      
