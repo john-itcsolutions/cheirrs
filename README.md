@@ -264,6 +264,60 @@ The following image is a screenshot of the `lernenmaschine` model's status board
      may work better with Kubeflow installed alone on a microk8s/localhost host. There is sufficient RAM onboard our host according to the system 
      monitor, so at this stage the cause is unknown. There were less crashes after installing a Mechanical HDD, but still unsatisfactory. One 
      possibility may be to employ a MAAS (Metal as a Service) installation as the basis for a dual-controller Desktop setup. Stay tuned.
+     
+_____________________________________________________________________________________
+     
+     As an alternative to the above approach to installing kubeflow, we offer the following, which has been adapted from:
+     
+https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
+     
+     There seems to be a problem with mixing controller types on the Host.
+     If the following is implemented on the Host directly, the upcoming section 
+     on installing the cheirrs backend with database and blockchains, should 
+     be performed on a multipass ubuntu vm on top of the same Host. See below.
+     1. Install microk8s as above
+     2. Add yourself to the microk8s group
+     3. Perform quick reset of terminal.
+    
+`snap install juju --classic`
+     
+`juju bootstrap microk8s <my-controller>`
+     
+`juju add-model kubeflow`  (the dashboard requires the model name to be "kubeflow")
+     
+`juju deploy kubeflow-lite`  - or full kubeflow
+     
+`watch -c juju status --color`  to watch progress.
+     
+     The following is necessary:
+     
+`kubectl patch role -n kubeflow istio-ingressgateway-operator -p '{"apiVersion":"rbac.authorization.k8s.io/v1","kind":"Role","metadata":{"name":"istio-ingressgateway-operator"},"rules":[{"apiGroups":["*"],"resources":["*"],"verbs":["*"]}]}'`
+     
+     Dashboard auth credentials at:
+     
+```
+     juju config dex-auth static-username
+     juju config dex-auth static-password
+```
+     
+     Dashboard IP Address:
+     
+`kubectl get services kubeflow`
+     
+     
+
+    Logout from the current session with the exit command
+
+    Re-establish connection to the machine using ssh with SOCKS proxy enabled through the -D9999 parameter. As in the example below:
+
+ `ssh -D9999 ubuntu@<machine_public_ip>`
+
+    On your computer, go to Settings > Network > Network Proxy, and enable SOCKS proxy pointing to: 127.0.0.1:9999
+
+    On a new browser window, access the link given in the previous step, appended by .xip.io, for example: http://10.64.140.43.xip.io
+
+
+     
 ____________________________________________________________________________________
 
 ## USING KUBEFLOW
@@ -373,6 +427,38 @@ _________________________________________________________________
 ## A Second Model on a second controller:
 
 (The database schema for ITCSA's project are private and available only under certain conditions.)
+     
+   {  If you have implemented a kubeflow installation (above) on the Host (on a microk8s cloud/controller),
+     you will need to obtain multipass:
+     
+`sudo snap install multipass --classic`
+     
+     then 
+     
+`multipass launch -n <machine-name> -c 2 -m 12GB -d 25GB`
+     
+     (You can tweak these settings)
+     And end-up with a LTS Ubuntu vm to install the following software on.
+     
+`multipass shell <machine-name>`
+     
+     is how to enter the vm.
+     
+     You should create a place to mount your Host's working directory:
+     
+`mkdir ~/shared`
+     
+     You will need to mount your working directory on the Host to the vm:
+     
+ `multipass mount /path/to/working/dir <machine-name>:~/shared`
+     
+ `sudo snap install juju --classic`
+     
+ `sudo snap install juju-helpers --classic`
+     
+ `sudo snap install juju-wait --classic`
+     
+     The following is to be performed on the vm, in this case ..  }
 
 Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, it recognised that localhost was already installed, and juju created a 'localhost' cloud for you to use. Verify this with `juju clouds`):
 
