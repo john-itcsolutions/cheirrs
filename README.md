@@ -503,6 +503,8 @@ juju deploy cs:~omnivector/redis \
      
 ```
      
+     OR, figure out how to use the provided 3-vm etcd cluster for the same purposes!
+     
 *******************************************************
 
 ________________________________________________________________
