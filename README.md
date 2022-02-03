@@ -491,9 +491,9 @@ Add a model named "werk"
 
 `juju add-model werk`
 
-Deploy the 'Calico' Kubernetes Charm, since default CNI provider 'Flannel' does not provide all necessary services:
+Deploy the full Kubernetes Charm,
 
-`juju deploy cs:~containers/bundle/kubernetes-calico-1070`
+`juju deploy charmed-kubernetes`
 
 `juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
 
