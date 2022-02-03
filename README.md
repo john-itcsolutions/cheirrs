@@ -303,6 +303,8 @@ On the Host, you'll need to install these snaps to get started:
      
      Then:
      
+`microk8s enable storage dns dashboard`
+     
 `juju bootstrap microk8s <my-controller>`
      
 `juju add-model kubeflow`  (the dashboard and other components require the model name to be "kubeflow")
