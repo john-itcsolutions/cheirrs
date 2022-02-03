@@ -157,7 +157,9 @@ Microk8s is the only way to easily obtain a working Kubeflow/tensorflow installa
 
 Setup microk8s on the Ubuntu vm:
 
-`sudo snap install microk8s --classic`
+`sudo snap install microk8s --classic --channel=1.20/stable`
+
+(Version 20 has better support for kubeflow)
 
 Next, you will need to add yourself to the microk8s group:
 
@@ -279,15 +281,31 @@ https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      For now:
      1. Install microk8s on Host as above
      2. Add yourself to the microk8s group
-     3. Perform quick reset of terminal.
+     3. Perform quick reset of terminal, as follows
+     
+`sudo snap install microk8s --classic --channel=1.20/stable`
+
+(Version 20 has better support for kubeflow)
+
+Next, you will need to add yourself to the microk8s group:
+
+`sudo usermod -aG microk8s $USER && newgrp microk8s`
+
+`sudo su - $USER`   (quick reset of terminal)
+
+On the Host, you'll need to install these snaps to get started:
+
+`sudo snap install juju --classic`
+
+`sudo snap install juju-wait --classic`
+
+`sudo snap install juju-helpers --classic`
      
      Then:
-    
-`snap install juju --classic`
      
 `juju bootstrap microk8s <my-controller>`
      
-`juju add-model kubeflow`  (the dashboard requires the model name to be "kubeflow")
+`juju add-model kubeflow`  (the dashboard and other components require the model name to be "kubeflow")
      
 `juju deploy kubeflow-lite --trust`  - or full kubeflow
      
