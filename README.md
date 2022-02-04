@@ -303,7 +303,7 @@ On the Host, you'll need to install these snaps to get started:
      
      Then:
      
-`microk8s enable storage dns dashboard`
+`microk8s enable storage dns ingress metallb:10.64.140.43-10.64.140.49`
      
 `juju bootstrap microk8s <my-controller>`
      
@@ -312,10 +312,6 @@ On the Host, you'll need to install these snaps to get started:
 `juju deploy kubeflow-lite --trust`  - or full kubeflow
      
 `watch -c juju status --color`  to watch progress.
-     
-     The following is necessary:
-     
-`kubectl patch role -n kubeflow istio-ingressgateway-operator -p '{"apiVersion":"rbac.authorization.k8s.io/v1","kind":"Role","metadata":{"name":"istio-ingressgateway-operator"},"rules":[{"apiGroups":["*"],"resources":["*"],"verbs":["*"]}]}'`
      
      Dashboard auth credentials at:
      
@@ -327,19 +323,6 @@ On the Host, you'll need to install these snaps to get started:
      Dashboard IP Address:
      
 `kubectl get services kubeflow`
-     
-     
-
-    Logout from the current session with the exit command
-
-    Re-establish connection to the machine using ssh with SOCKS proxy enabled through the -D9999 parameter. As in the example below:
-
- `ssh -D9999 ubuntu@<machine_public_ip>`
-
-    On your computer, go to Settings > Network > Network Proxy, and enable SOCKS proxy pointing to: 127.0.0.1:9999
-
-    On a new browser window, access the link given in the previous step, appended by .xip.io, for example: http://10.64.140.43.xip.io
-
 
      
 ____________________________________________________________________________________
@@ -459,7 +442,7 @@ _________________________________________________________________
      
      then 
      
-`multipass launch -n <machine-name> -c 2 -m 12GB -d 25GB`
+`multipass launch -n <machine-name> -c 4 -m 14GB -d 65GB`
      
      (You can tweak these settings)
      And end-up with a LTS Ubuntu vm to install the following software on.
