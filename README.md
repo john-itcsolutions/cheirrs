@@ -514,6 +514,10 @@ Deploy the full Kubernetes Charm,
 `juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
 
 `juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
+     
+`juju scp kubernetes-master/0:config ~/.kube/config`
+     
+`sudo snap install kubectl --classic`
 
 At this stage your juju assemblage is converging towards stability. You can observe the status of the assemblage with
 
