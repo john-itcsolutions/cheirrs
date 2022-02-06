@@ -466,6 +466,12 @@ _________________________________________________________________
      
  `multipass mount /path/to/working/dir <machine-name>:~/shared`
      
+     On the vm (
+     
+`multipass shell <machine-name>`
+     
+     )
+     
  `sudo snap install juju --classic`
      
  `sudo snap install juju-helpers --classic`
