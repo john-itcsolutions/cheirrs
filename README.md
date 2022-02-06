@@ -339,6 +339,10 @@ On the Host, you'll need to install these snaps to get started:
      Dashboard IP Address:
      
 `kubectl get services -n kubeflow`
+     
+     (look for the IP Address associated with the NAME "kubeflow dashboard")
+     
+Use this to locate the dash in your browser.
 
      
 ____________________________________________________________________________________
