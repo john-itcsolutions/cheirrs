@@ -320,11 +320,20 @@ On the Host, you'll need to install these snaps to get started:
      
 `watch -c juju status --color`  to watch progress.
      
+`sudo snap install kubectl`
+     
+`alias kubectl='microk8s kubectl'`
+     
      Dashboard auth credentials at:
      
 ```
-     juju config dex-auth static-username
-     juju config dex-auth static-password
+     juju config dex-auth public-url=http://10.64.140.43.nip.io
+     juju config oidc-gatekeeper public-url=http://10.64.140.43.nip.io
+```
+     
+```
+     juju config dex-auth static-username=<your_username>
+     juju config dex-auth static-password=<your_password>
 ```
      
      Dashboard IP Address:
