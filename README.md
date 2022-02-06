@@ -480,15 +480,15 @@ _________________________________________________________________
      
      The following is to be performed on the vm, in this case ..  }
 
-Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, 
-     it recognised that localhost (lxd) was already installed, and juju created a 'localhost' 
+     Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed 
+     juju, it recognised that localhost (lxd) was already installed, and juju created a 'localhost' 
      cloud for you to use. Verify this with `juju clouds`):
 
 `juju bootstrap localhost betrieb`
      
-     This, and the entire process of installation to the point of having blockchains running, 
-     IOTA client connected and following the Tangle, and Node-Red-Industrial running,
-     took me well over 24 hours to complete. 
+     This, and the entire process of installation to the point of having blockchains running on worker-0 
+     & connected to PostgreSQL + PostGIS replicated database, IOTA client connected and following the Tangle, 
+     together with Node-Red-Industrial both running on worker-1, took me well over 24 hours to complete. 
 
 Add a model named "werk"
 
