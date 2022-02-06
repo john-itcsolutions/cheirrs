@@ -332,7 +332,7 @@ On the Host, you'll need to install these snaps to get started:
 ```
      
 ```
-     juju config dex-auth static-username=<your_username>
+     juju config dex-auth static-username=admin
      juju config dex-auth static-password=<your_password>
 ```
      
