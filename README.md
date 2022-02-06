@@ -445,7 +445,7 @@ _________________________________________________________________
    {  If you have implemented a kubeflow installation (above) on the Host (on a microk8s cloud/controller),
      you will need to obtain multipass to allow creation of Ubuntu virtual machines:
      
-`sudo snap install multipass --classic`
+`sudo snap install multipass`
      
      then 
      
