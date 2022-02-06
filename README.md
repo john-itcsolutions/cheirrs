@@ -58,9 +58,9 @@ source ~/.profile
 
 As well as installing Ionic & Cordova (which enables single-pass coding for iOS and Android as well as desktop - ie browser - platforms):
 
-`npm i -g @ionic/cli`
+`sudo npm i -g @ionic/cli`
 
-`npm i -g cordova`
+`sudo npm i -g cordova`
 
 The Ionic docs are at:
 
