@@ -202,9 +202,11 @@ scripts/cli.py and note that you may also alter the controller name, if you take
 
 `python3 scripts/cli.py microk8s setup --controller kubefluss`
 
-## EXCEPTIONAL: To deploy Kubeflow on top of Charmed Kubernetes, run ## 
+_____________________________________________________________________________________________________
 
-`python3 scripts/cli.py deploy-to {controller}`
+## (EXCEPTIONAL: To deploy Kubeflow on top of Charmed Kubernetes, run ## 
+
+`python3 scripts/cli.py deploy-to {controller}` )
 
 ______________________________________________________________________________________________________
 
