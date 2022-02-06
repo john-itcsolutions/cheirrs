@@ -205,6 +205,8 @@ scripts/cli.py and note that you may also alter the controller name, if you take
 
 `python3 scripts/cli.py deploy-to {controller}`
 
+______________________________________________________________________________________________________
+
 The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. 
 However in some deployment scenarios (such as local development), you would need to configure MicroK8s to use LAN DNS 
 instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
@@ -309,7 +311,9 @@ On the Host, you'll need to install these snaps to get started:
      
 `juju add-model kubeflow`  (the dashboard and other components require the model name to be "kubeflow")
      
-`juju deploy kubeflow-lite --trust`  - or full kubeflow
+`juju deploy kubeflow-lite --trust`  - or full kubeflow:  `juju deploy kubeflow --trust`
+   
+     You require 4 spare cores, 16GB spare memory and 60GB disk space - minimum - for the full kubeflow.
      
 `watch -c juju status --color`  to watch progress.
      
@@ -436,7 +440,7 @@ _________________________________________________________________
 (The database schema for ITCSA's project are private and available only under certain conditions.)
      
    {  If you have implemented a kubeflow installation (above) on the Host (on a microk8s cloud/controller),
-     you will need to obtain multipass:
+     you will need to obtain multipass to allow creation of Ubuntu virtual machines:
      
 `sudo snap install multipass --classic`
      
@@ -467,10 +471,15 @@ _________________________________________________________________
      
      The following is to be performed on the vm, in this case ..  }
 
-Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, it recognised that localhost was already installed, and juju created a 'localhost' cloud for you to use. Verify this with `juju clouds`):
-
+Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed juju, 
+     it recognised that localhost (lxd) was already installed, and juju created a 'localhost' 
+     cloud for you to use. Verify this with `juju clouds`):
 
 `juju bootstrap localhost betrieb`
+     
+     This, and the entire process of installation to the point of having blockchains running, 
+     IOTA client connected and following the Tangle, and Node-Red-Industrial running,
+     took me well over 24 hours to complete. 
 
 Add a model named "werk"
 
