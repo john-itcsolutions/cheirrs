@@ -338,7 +338,7 @@ On the Host, you'll need to install these snaps to get started:
      
      Dashboard IP Address:
      
-`kubectl get services kubeflow`
+`kubectl get services -n kubeflow`
 
      
 ____________________________________________________________________________________
