@@ -84,7 +84,7 @@ Our dApp Front End looks like this at the current stage of development:
 
 ## ________________________________________________________________________________________________________________________
 
-## Get:
+## If doing initial work, where, for example, database development is involved, consider getting:
 
 Docker for Ubuntu: https://docs.docker.com/engine/install/ubuntu/  - SAFEST WAY!
 
