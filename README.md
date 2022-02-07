@@ -324,7 +324,7 @@ On the Host, you'll need to install these snaps to get started:
      
 `alias kubectl='microk8s kubectl'`
      
-     Dashboard auth credentials at:
+     Dashboard auth credentials by:
      
 ```
      juju config dex-auth public-url=http://10.64.140.43.nip.io
@@ -342,7 +342,7 @@ On the Host, you'll need to install these snaps to get started:
      
      (look for the IP Address associated with the NAME "kubeflow dashboard")
      
-Use this to locate the dash in your browser.
+Use this to locate the dash in your browser, on port 8082.
 
      
 ____________________________________________________________________________________
@@ -456,13 +456,13 @@ _________________________________________________________________
 (The database schema for ITCSA's project are private and available only under certain conditions.)
      
    {  If you have implemented a kubeflow installation (above) on the Host (on a microk8s cloud/controller),
-     you will need to obtain multipass to allow creation of Ubuntu virtual machines:
+     you will need to obtain multipass to allow creation of an Ubuntu virtual machine:
      
 `sudo snap install multipass`
      
      then 
      
-`multipass launch -n <machine-name> -c 4 -m 14GB -d 65GB`
+`multipass launch -n <machine-name> -c 4 -m 12GB -d 65GB`
      
      (You can tweak these settings)
      And end-up with a LTS Ubuntu vm to install the following software on.
@@ -471,7 +471,7 @@ _________________________________________________________________
      
      is how to enter the vm.
      
-     You should create a place to mount your Host's working directory:
+     Inside the vm, you should create a place to mount your Host's working directory:
      
 `mkdir ~/shared`
      
@@ -491,7 +491,7 @@ _________________________________________________________________
      
  `sudo snap install juju-wait --classic`
      
-     The following is to be performed on the vm, in this case ..  }
+     The following is also to be performed on the vm, in this case ..  }
 
      Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed 
      juju, it recognised that localhost (lxd) was already installed, and juju created a 'localhost' 
@@ -555,9 +555,13 @@ ________________________________________________________________
 
 ## Copy sql scripts; Build Database Schema:
      
+     (On host, in the working directory or a sub-directory - as this must be available 
+     via the ~/shared folder in the case of running the cluster on a vm)
+     
 `git clone --recurse-submodules https://github.com/john-itcsolutions/cheirrs.git`
 
-From Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder,
+Either from Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder,
+     or from the correct location within the shared directory in a vm (if appropriate)
 
 `juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
@@ -714,6 +718,8 @@ _______________________________________________________________
 
 NOTE: As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITCSA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to edit this file carefully to suit your own database, at your
 ` cheirrs/TO_BE_COPIED_INTO_smartweb-service/TO_elastos-smartweb-service.grpc_adenine.database/__init__.py` (in local clones of this repo) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account, for example.
+
+     As appropriate, either on host or from a vm:
      
 `juju ssh 7`
      
@@ -721,13 +727,13 @@ NOTE: As we don't own or control the elastos sub-modules, and since the `elastos
      
  `exit`
    
-     After this, on host:
+     After this, on Host (or multipass vm):
 
 `cd path/to/cheirrs/elastos-smartweb-service`
 
 The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you will be copying .env.test and .env as edited to cheirrs/TO*/*service/.env and .env.test. 
      
-     So, edit .env and .env.test to reflect your addresses.
+     So, edit (from cheirrs root) TO*/*service/.env and TO*/*service/.env.test to reflect your addresses.
 
 The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0 machine, here, as appropriate. Also the database details will require alteration.
      
@@ -741,13 +747,21 @@ You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root dir
 So in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the worker-0 machine. Therefore:
 
 `cd ....path/to/cheirrs`
+     
+     1:
 
 `juju scp TO*/*service/*.sh <machine-number-worker-0>:/home/ubuntu/el* && juju scp TO*/*service/.env* <machine-number-worker-0>:/home/ubuntu/el*`
 
+     2:
+     
 `juju scp TO*service/TO*adenine/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine`
 
+     3:
+     
 `juju scp TO*service/TO*database/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database`
 
+     4:
+     
 `juju scp TO*service/TO*python/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python`
 
  
@@ -813,26 +827,38 @@ _____________________________________________________________
 (To install nodejs and npm, needed for Node-red, the Carrier wrapper and to connect 
 with gRPC as well as the IOTA node.js client:)
      
-# Install NodeJS 12 instead of 8 or 10
+# Install NodeJS 14
      
-`curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-sudo apt -y install nodejs`
+`sudo apt update`
      
-To get Node-Red-Industrial:
-
-`bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)`
+`curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -`
+     
+`cat /etc/apt/sources.list.d/nodesource.list`
+     
+`sudo apt -y install nodejs`
+     
+     Check version:
+     
+`node  -v`
+     
+     To get Node-Red-Industrial:
+     
+`sudo snap install node-red-industrial`
+     
              on the Host (acting as an Edge server)
      
 Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
-`bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)`
+`sudo snap install node-red-industrial`
      
      and go to your own host's LAN address, on a new tab in the 
      browser, with port `1891`,
      then, in worker-1, 
      
      from the home directory, and go to your worker-1's address with port 1891
-     in a browser tab on your Host.
+     in a browser tab on your Host. If using multipass you may need to use the URL of 
+
+`0.0.0.0:1891` to obtain access to the multipass>juju>[worker-1] vm. 
      
     These 2 pages can interact, and generate and forward messages, events and commands.
      
@@ -873,9 +899,7 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      
 `mkdir iota && cd iota`
      
-`nvm use 12`
-     
-`npm init`
+`npm init`  (accepting all defaults will do)
      
 `npm install @iota/core @iota/converter @iota/client`
      
@@ -953,7 +977,8 @@ ________________________________________________________________________________
      
  ## SUMMARY:
      
-     At this point we have a handful of problems preventing the werk model from working:
+     At this point we have a handful of problems preventing the werk model from working with a kubeflow model without resorting to multipass 
+     for the Elastos/Node-Red/IOTA/PostgreSQL+GIS model:
      
      1.  Complete MAAS setup to allow desktop hosting of two controllers thus allowing our (TensorFlow) 
          'lernenmaschine' model to be implemented alongside 'werk'
