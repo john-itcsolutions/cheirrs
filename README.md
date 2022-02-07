@@ -858,7 +858,9 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      from the home directory, and go to your worker-1's address with port 1891
      in a browser tab on your Host. If using multipass you may need to use the URL of 
 
-`0.0.0.0:1891` to obtain access to the multipass>juju>[worker-1] vm. 
+`0.0.0.0:1891` 
+     
+     to obtain access to the multipass>juju>[worker-1] vm. 
      
     These 2 pages can interact, and generate and forward messages, events and commands.
      
