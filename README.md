@@ -966,9 +966,14 @@ for validation of IoT actions and events.
      
      Run:
      
-`nvm use 9`
+$ cd $(SRC_ROOT)
+$ git clone --branch v9.10.0 https://github.com/nodejs/node.git
+$ cd node
+$ ./configure
+$ make
+$ make install
      
-     Follow instructions on repo from after installation of node.js @9.
+     Follow instructions on repo from here.
      
      Repeat the above on Edge clients.
      
