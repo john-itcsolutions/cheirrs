@@ -308,7 +308,7 @@ On the Host, you'll need to install these snaps to get started:
      
      Then:
      
-`microk8s enable storage dns ingress metallb:10.64.140.43-10.64.140.49`
+`microk8s enable dns storage ingress metallb:10.64.140.43-10.64.140.49`
      
 `juju bootstrap microk8s <my-controller>`
      
