@@ -344,6 +344,20 @@ On the Host, you'll need to install these snaps to get started:
      
 Use this to locate the dash in your browser, on port 8082.
 
+
+___________________________________________________________________________________________
+     
+##   As another alternative:
+     
+     See https://chapeau.freevariable.com/2021/04/microk8s.html
+     
+     for a rundown which seems very reliable and well-thought-through. 
+     Note the section on creating storage linked to the host machine.
+     Also note that you should skip the GPU section if you do not have
+     a GPU (Graphical Processor Unit - a Pluggable physical device) running.
+     
+________________________________________________________________________________________________
+     
      
 ____________________________________________________________________________________
 
