@@ -342,7 +342,7 @@ On the Host, you'll need to install these snaps to get started:
      
      (look for the IP Address associated with the NAME "kubeflow dashboard")
      
-Use this to locate the dash in your browser, on port 8082.
+Use this to locate the dash in your browser, on port 8082. ie <ip-addr>:8082
 
 
 ___________________________________________________________________________________________
