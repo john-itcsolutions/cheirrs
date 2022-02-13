@@ -300,6 +300,14 @@ Next, you will need to add yourself to the microk8s group:
 `sudo usermod -aG microk8s $USER && newgrp microk8s`
 
 `sudo su - $USER`   (quick reset of terminal)
+     
+`microk8s enable dns storage ingress metallb:10.64.140.43-10.64.140.49`
+     
+`microk8s enable istio`
+     
+     (Check staus)
+     
+`microk8s status --wait-ready`
 
 On the Host, you'll need to install these snaps to get started:
 
@@ -310,8 +318,6 @@ On the Host, you'll need to install these snaps to get started:
 `sudo snap install juju-helpers --classic`
      
      Then:
-     
-`microk8s enable dns storage ingress metallb:10.64.140.43-10.64.140.49`
      
 `juju bootstrap microk8s <my-controller>`
      
