@@ -308,6 +308,15 @@ Next, you will need to add yourself to the microk8s group:
      (Check staus)
      
 `microk8s status --wait-ready`
+     
+     During the following, you may need to reboot the vm and find that the
+     multipass daemon is inaccessible, and you are unable to shell into the vm.
+     In that case:
+     
+`sudo snap refresh multipass`
+     
+     Although the response may appear sad to you, the good reconnecting work 
+     has already been done. Repeat the shell command and you should succeed.
 
 On the Host, you'll need to install these snaps to get started:
 
