@@ -335,7 +335,7 @@ Next, you will need to add yourself to the microk8s group:
 
      Then:
      
-`juju bootstrap microk8s <my-controller>`
+`juju bootstrap microk8s [<my-controller>]`
      
 `juju add-model kubeflow`  (the dashboard and other components require the model name to be "kubeflow")
      
