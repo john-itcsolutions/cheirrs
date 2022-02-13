@@ -316,6 +316,8 @@ Next, you will need to add yourself to the microk8s group:
      
 `microk8s enable dns storage ingress metallb:10.64.140.43-10.64.140.49`
      
+`sudo iptables -P FORWARD ACCEPT`
+     
      (Check staus)
      
 `microk8s status --wait-ready`
