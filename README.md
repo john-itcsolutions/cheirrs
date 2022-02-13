@@ -292,7 +292,7 @@ https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      2. Add yourself to the microk8s group
      3. Perform quick reset of terminal; as follows
 
-On the Host, you'll need to install these snaps to get started:
+On the Host, or a multipass vm, you'll need to install these snaps to get started:
 
 `sudo snap install juju --classic`
 
