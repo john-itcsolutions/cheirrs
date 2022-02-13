@@ -286,10 +286,19 @@ https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      If the following is implemented on the Host directly, the upcoming section 
      on installing the cheirrs backend with database and blockchains, should 
      be performed on a multipass ubuntu vm on top of the same Host. See below.
-     For now:
+     For now, the following may be performed on a multipass vm or the Host:
+     1. Install juju components
      1. Install microk8s on Host as above
      2. Add yourself to the microk8s group
-     3. Perform quick reset of terminal, as follows
+     3. Perform quick reset of terminal; as follows
+
+On the Host, you'll need to install these snaps to get started:
+
+`sudo snap install juju --classic`
+
+`sudo snap install juju-wait --classic`
+
+`sudo snap install juju-helpers --classic`
      
 `sudo snap install microk8s --classic --channel=1.20/stable`
 
@@ -301,9 +310,11 @@ Next, you will need to add yourself to the microk8s group:
 
 `sudo su - $USER`   (quick reset of terminal)
      
-`microk8s enable dns storage ingress metallb:10.64.140.43-10.64.140.49`
+     OR eqivalently:
      
-`microk8s enable istio`
+`sudo usermod -aG microk8s $USER && newgrp microk8s && sudo su - $USER`
+     
+`microk8s enable dns storage ingress metallb:10.64.140.43-10.64.140.49`
      
      (Check staus)
      
@@ -318,14 +329,6 @@ Next, you will need to add yourself to the microk8s group:
      Although the response may appear sad to you, the good reconnecting work 
      has already been done. Repeat the shell command and you should succeed.
 
-On the Host, you'll need to install these snaps to get started:
-
-`sudo snap install juju --classic`
-
-`sudo snap install juju-wait --classic`
-
-`sudo snap install juju-helpers --classic`
-     
      Then:
      
 `juju bootstrap microk8s <my-controller>`
