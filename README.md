@@ -287,10 +287,15 @@ https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      on installing the cheirrs backend with database and blockchains, should 
      be performed on a multipass ubuntu vm on top of the same Host. See below.
      For now, the following may be performed on a multipass vm or the Host:
+     
+`sudo snap install multipass`
+     
+`multipass launch -n <vm-name> -c 3 -m 12G -d 100GB`
+     
      1. Install juju components
-     1. Install microk8s on Host as above
-     2. Add yourself to the microk8s group
-     3. Perform quick reset of terminal; as follows
+     2. Install microk8s on Host or vm as above
+     3. Add yourself to the microk8s group
+     4. Perform quick reset of terminal; as follows
 
 On the Host, or a multipass vm, you'll need to install these snaps to get started:
 
