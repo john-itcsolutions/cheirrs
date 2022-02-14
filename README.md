@@ -506,7 +506,7 @@ _________________________________________________________________
      
      then 
      
-`multipass launch -n <machine-name> -c 4 -m 12GB -d 65GB`
+`multipass launch -n <machine-name> -c 2 -m 12GB -d 100GB`
      
      (You can tweak these settings)
      And end-up with a LTS Ubuntu vm to install the following software on.
