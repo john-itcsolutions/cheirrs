@@ -286,11 +286,12 @@ https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      If the following is implemented on the Host directly, the upcoming section 
      on installing the cheirrs backend with database and blockchains, should 
      be performed on a multipass ubuntu vm on top of the same Host. See below.
-     For now, the following may be performed on a multipass vm or the Host:
+     For now, the following should be performed on the Host (unless you feel like arranging X11 
+     port forwarding to be able to access the Kubeflow Dashboard on the host browser):
      
-`sudo snap install multipass`
+`[sudo snap install multipass]`
      
-`multipass launch -n <vm-name> -c 3 -m 12G -d 100GB`
+`[multipass launch -n <vm-name> -c 3 -m 12G -d 100GB]`
      
      1. Install juju components
      2. Install microk8s on Host or vm as above
@@ -329,15 +330,16 @@ Next, you will need to add yourself to the microk8s group:
      
 `microk8s status --wait-ready`
      
-     During the following, you may need to reboot the vm and find that the
-     multipass daemon is inaccessible, and you are unable to shell into the vm.
+     [During the following, you may need to reboot a vm (if you chose this option) 
+     and find that the multipass daemon is inaccessible, and you are unable to 
+     shell into the vm.
      In that case:
      
 `sudo snap refresh multipass`
      
      Although the response may appear sad to you, the good reconnecting work 
      has already been done. Repeat the shell command and you should succeed.
-
+     If not, repeat last steps.]
      Then:
      
 `juju bootstrap microk8s [<my-controller>]`
@@ -366,7 +368,7 @@ Next, you will need to add yourself to the microk8s group:
      juju config dex-auth static-password=<your_password>
 ```
      
-     Dashboard IP Address:
+     Dashboard IP Address [we do not cover X11 port forwarding here]:
      
 `kubectl get services -n kubeflow`
      
