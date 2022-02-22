@@ -599,7 +599,7 @@ Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
 `juju add-unit pg-a`
      
-`juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,<ip-addr-worker-1>,<ip-addr-worker-2>`
+`juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,<ip-addr-worker-1>[,<ip-addr-worker-2>]`
 
 Deploy a Redis cluster for in-memory caching:
 
