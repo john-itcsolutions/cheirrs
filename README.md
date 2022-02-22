@@ -586,6 +586,12 @@ At this stage your juju assemblage is converging towards stability. You can obse
 It may take a few hours if your network is slow. Be patient.
 
 When you see everything 'green', you may continue.
+     
+     If you installed "kubernetes-core", add a kubernetes-worker unit:
+     
+`juju add-unit kubernetes-worker`
+     
+     In both cases of installed source:
 
 Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
