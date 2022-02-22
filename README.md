@@ -506,7 +506,11 @@ _________________________________________________________________
      
 `sudo snap install multipass`
      
-     then 
+     then (if you have a spare 32GB RAM)
+     
+`multipass launch -n <machine-name> -c 2 -m 32GB -d 250GB`
+     
+     and if you don't;
      
 `multipass launch -n <machine-name> -c 2 -m 12GB -d 100GB`
      
@@ -554,8 +558,20 @@ Add a model named "werk"
 `juju add-model werk`
 
 Deploy the full Kubernetes Charm,
+     
+     a. if you have a spare 32GB RAM
 
 `juju deploy charmed-kubernetes`
+     
+     b. if you don't;
+     
+`juju deploy kubernetes-core`
+     
+     (only 1 etcd, 1 master, 1 worker etc)
+     
+     But we need 2 workers, so after assembly has converged:
+     
+`juju add-unit kubernetes-worker`
 
 `juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
 
