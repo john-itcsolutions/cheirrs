@@ -308,7 +308,7 @@ On the Host, or a multipass vm, you'll need to install these snaps to get starte
      
 `sudo snap install microk8s --classic --channel=1.20/stable`
 
-(Version 20 has better support for kubeflow)
+(Version 20, reputedly, has better support for kubeflow)
 
 Next, you will need to add yourself to the microk8s group:
 
