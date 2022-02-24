@@ -569,7 +569,9 @@ Deploy the full Kubernetes Charm,
      
      (only 1 etcd, 1 master, 1 worker etc)
      
-     But we need 2 workers, so after assembly has converged:
+     When you see everything 'green', you may continue.
+     
+     If you installed "kubernetes-core", add a kubernetes-worker unit:
      
 `juju add-unit kubernetes-worker`
 
@@ -583,22 +585,14 @@ At this stage your juju assemblage is converging towards stability. You can obse
 
 `watch -c juju status --color` or, `juju status` for short.
 
-It may take a few hours if your network is slow. Be patient.
-
-When you see everything 'green', you may continue.
-     
-     If you installed "kubernetes-core", add a kubernetes-worker unit:
-     
-`juju add-unit kubernetes-worker`
+It may take a few hours if your network is slow. Be patient
      
      In both cases of installed source:
 
 Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
-`juju deploy postgresql pg-a`
+`juju deploy -n 2 postgresql pg-a`
 
-`juju add-unit pg-a`
-     
 `juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,<ip-addr-worker-1>[,<ip-addr-worker-2>]`
 
 Deploy a Redis cluster for in-memory caching:
