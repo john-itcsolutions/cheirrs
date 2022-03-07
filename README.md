@@ -44,7 +44,7 @@ https://github.com/elastos/Elastos.Essentials
 Note that you may develop entirely on and for desktop computers with Ionic to get to a stage ready for deployment, however to make that dApp work with Elastos
 you would be required to employ the Elastos.Essentials utilities to connect to the required systems. If you develop also for mobile devices you need to upload the Essentials ".apk" file for Android and obtain various DID's and keys to securely connect on (for example) a USB-connected real mobile device using the Android Studio's "adb" tool. Aside from Android, iOS systems are currently being developed by Elastos for Essentials.
 
-You would also require some dev tools and the openjdk for Java, as well as nodejs@12.x:
+You would also require some dev tools and the openjdk for Java, as well as nodejs@14.x:
 
 ```
 # Base requirements 
