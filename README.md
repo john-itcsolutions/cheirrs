@@ -49,13 +49,20 @@ You would also require some dev tools and the openjdk for Java, as well as nodej
 ```
 # Base requirements 
 sudo apt -y install openjdk-8-jdk build-essential curl dirmngr apt-transport-https lsb-release ca-certificates
-# Install NodeJS 12 instead of 8 or 10
-
-curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-
-nvm install 12
-
-source ~/.profile
+     
+# Install NodeJS 14
+     
+`sudo apt update`
+     
+`curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -`
+     
+`cat /etc/apt/sources.list.d/nodesource.list`
+     
+`sudo apt -y install nodejs`
+     
+     Check version:
+     
+`node  -v`
 
 ```
 
