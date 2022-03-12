@@ -313,9 +313,7 @@ On the Host, or a multipass vm, you'll need to install these snaps to get starte
 
 `sudo snap install juju-helpers --classic`
      
-`sudo snap install microk8s --classic --channel=1.20/stable`
-
-(Version 20, reputedly, has better support for kubeflow)
+`sudo snap install microk8s --classic --channel=1.21/stable`
 
 Next, you will need to add yourself to the microk8s group:
 
