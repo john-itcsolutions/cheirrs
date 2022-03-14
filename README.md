@@ -325,6 +325,8 @@ Next, you will need to add yourself to the microk8s group:
      
 `sudo usermod -aG microk8s $USER && newgrp microk8s && sudo su - $USER`
      
+`mkdir ~/.kube`
+     
 `sudo chown -f -R $USER ~/.kube`
      
 `microk8s enable dns storage ingress metallb:10.64.140.43-10.64.140.49`
