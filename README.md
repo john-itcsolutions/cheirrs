@@ -347,6 +347,14 @@ Next, you will need to add yourself to the microk8s group:
      Although the response may appear sad to you, the good reconnecting work 
      has already been done. Repeat the shell command and you should succeed.
      If not, repeat last steps.]
+     
+     In the following, the version of juju which works is (currently - 15/03/2022):
+     2.9.22. However the only version obtainable via snap is 2.9.26.
+     One way of obtaining the necessary executable is to go to 
+     https://launchpad.net/juju/+milestone/2.9.22
+     and download a copy, then extract it and save a copy of the "juju" binary file 
+     somewhere safe as well as copying the "juju" binary to /snap/bin/.
+     
      Then:
      
 `juju bootstrap microk8s [<my-controller>]`
