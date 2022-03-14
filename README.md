@@ -47,7 +47,7 @@ you would be required to employ the Elastos.Essentials utilities to connect to t
 You would also require some dev tools and the openjdk for Java, as well as nodejs@14.x:
 
 # Base requirements 
-sudo apt -y install openjdk-8-jdk build-essential curl dirmngr apt-transport-https lsb-release ca-certificates
+sudo apt -y install openjdk-11-jdk build-essential curl dirmngr apt-transport-https lsb-release ca-certificates
      
 # Install NodeJS 14
      
