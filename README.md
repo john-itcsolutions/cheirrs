@@ -139,140 +139,7 @@ ________________________________________________________________
 ## We continue by installing Kubeflow to obtain a controller compatible with this Juju/TensorFlow environment:
 ________________________________________________________________
 
-(In case lxd is not already installed, this is how, however it is most likely to be present initially:
-
-`sudo snap install lxd`
-
-`sudo lxd init`
-
-We need to choose "yes" to the "lxd clustering?" option (not the default), and storage type must be "dir" and ipv6 should be "none", otherwise all default answers are fine.)
-
-
-## 'KUBEFLOW', TensorFlow and Machine Learning (Artificial Intelligence & Statistical Learning)
-
-Unfortunately the charmed system is mainly oriented for Public Clouds when it comes to the Kubeflow charm bundle. However in combination with microk8s, much can still be achieved ..
-
-From the outermost directory in your working system (on a second HDD if available), check out this repository locally:
-
-`git clone https://github.com/juju-solutions/bundle-kubeflow.git`
-
-`cd bundle-kubeflow`
-
-The below commands will assume you are running them from the bundle-kubeflow directory.
-
-Then, follow the instructions from the subsection below to deploy Kubeflow to microk8s.
-
-Microk8s is the only way to easily obtain a working Kubeflow/tensorflow installation on your localhost without paying cloud fees ..
-
-Setup microk8s on the Ubuntu vm:
-
-`sudo snap install microk8s --classic --channel=1.20/stable`
-
-(Version 20 has better support for kubeflow)
-
-Next, you will need to add yourself to the microk8s group:
-
-`sudo usermod -aG microk8s $USER && newgrp microk8s`
-
-`sudo su - $USER`   (quick reset of terminal)
-
-On the Host, you'll need to install these snaps to get started:
-
-`sudo snap install juju --classic`
-
-`sudo snap install juju-wait --classic`
-
-`sudo snap install juju-helpers --classic`
-
-If you
-
-`juju clouds`
-
-you will aleady find that there exists a 'microk8s/localhost' cloud. Later we will set up another 'localhost/localhost' 
-cloud with different properties, for the main blockchains, database schema and database servers in a kubernetes installation.
-
-Finally, you can run these commands to set up kubeflow/TensorFlow, but you have to have the cloned "bundle-kubeflow", from 
-the above section, available:
-
-Note: After this installation of the 'lernenmaschine' model on the 'kubefluss' controller in a 'kubeflow-lite' package (we edited 
-the cli script and names), we will be installing a 'betrieb' controller with 'werk' model. 
-
-Initially:
-
-`sudo apt install python3-pip`
-
-`pip3 install click`
-
-`cd /path/to/bundle-kubeflow`
-
-If you need to choose 'kubeflow lite' (recommended for initial development), you can edit the relevant code in 
-scripts/cli.py and note that you may also alter the controller name, if you take care to alter the commands you issue.
-
-`python3 scripts/cli.py microk8s setup --controller kubefluss`
-
-_____________________________________________________________________________________________________
-
-## (EXCEPTIONAL: To deploy Kubeflow on top of Charmed Kubernetes, run ## 
-
-`python3 scripts/cli.py deploy-to {controller}` )
-
-______________________________________________________________________________________________________
-
-The upcoming deploy-to command allows manually setting a public address that is used for accessing Kubeflow on MicroK8s. 
-However in some deployment scenarios (such as local development), you would need to configure MicroK8s to use LAN DNS 
-instead of the default of 8.8.8.8. To do this, edit the coredns configmap with this command:
-
-`microk8s.kubectl edit configmap -n kube-system coredns`
-
-Edit the line with 8.8.8.8 8.8.4.4 to use your local DNS, e.g. 192.168.1.1. You will need to use the arrow keys and the 
-'insert' and 'delete' keys carefully! Save and exit as for vim.
-
-If you make mistakes during editing, it is safest to:
-
-`juju destroy-controller kubefluss --destroy-all-models --destroy-storage `
-
-and restart from 
-
-`python3 scripts/cli.py microk8s setup --controller kubefluss`
-
-followed by editing the coredns configmap again.
-
-     _____________________________________________
-
-Only when the coredns configmap is correct for your LAN:
-
-`python3 scripts/cli.py deploy-to kubefluss`
-
-(Passthrough should already be natively enabled to your Accelerator GPU.)
-
-Check the status of the installation with:
-
-`watch -c juju status --color`
-
-or:
-
-`juju status`
-
-for a static summary.
-
-On Host, you could switch between other possible controllers by noting the current controllers known to juju:
-
-`juju controllers`
-
-and then selecting the target for switching, and:
-
-`juju switch <target-controller-name>`
-
-Within controllers you may substitute <target-model-name> and use:
-
-`juju switch <target-model-name>`
-
-to move between models on the same controller.
-
-The following image is a screenshot of the `lernenmaschine` model's status board after successful installation of "kubeflow-lite":
-
-<img src="./Screenshot from 2021-06-16 18-14-22.png">
-     
+   
      Note that we have actually found it impossible to sustain a kubeflow controller on the microk8s cloud at the same time as we are running 
      the second controller on the localhost cloud referred to in the text below the kubeflow Manual (ie our main Application on the 'betrieb' controller
      following the Kubeflow "manual"). The host randomly reboots. There is sufficient RAM onboard our host according to the system monitor, so at this stage the
@@ -321,12 +188,6 @@ On the Host, or a multipass vm, you'll need to install these snaps to get starte
      https://launchpad.net/juju/+milestone/2.9.22
      and download a copy, then extract it and save a copy of the "juju" binary file 
      somewhere safe as well as copying the "juju" binary to /snap/bin/. Then:
-
-`sudo snap install juju --classic`
-
-`sudo snap install juju-wait --classic`
-
-`sudo snap install juju-helpers --classic`
      
 `sudo snap install microk8s --classic --channel=1.21/stable`
 
@@ -369,16 +230,24 @@ Next, you will need to add yourself to the microk8s group:
      
 `juju add-model kubeflow`  (the dashboard and other components require the model name to be "kubeflow")
      
-`juju deploy kubeflow-lite --trust`  - or full kubeflow:  `juju deploy kubeflow --trust`
+`juju deploy kubeflow-lite --trust`  
+
+- or full kubeflow:  
+
+`juju deploy kubeflow --trust`
    
-     You require 4 spare cores, 16GB spare memory and 60GB disk space - minimum - for the full kubeflow.
+     (You require 4 spare cores, 16GB spare memory and 60GB disk space - minimum - for the full kubeflow.)
      
 `watch -c juju status --color`  to watch progress.
      
+Optional:
+[
+
 `sudo snap install kubectl`
      
 `alias kubectl='microk8s kubectl'`
-     
+
+]     
      Dashboard auth credentials by:
      
 ```
@@ -412,11 +281,15 @@ ________________________________________________________________________________
      a GPU (Graphical Processor Unit - a Pluggable physical device) running.
      
 ________________________________________________________________________________________________
-     
+
+     The following image is a screenshot of the `lernenmaschine` model's status board after 
+     successful installation of "kubeflow-lite":
+
+<img src="./Screenshot from 2021-06-16 18-14-22.png">
      
 ____________________________________________________________________________________
 
-## USING KUBEFLOW
+## KUBEFLOW MANUAL
 
 ### Main Dashboard
 
@@ -481,6 +354,10 @@ You can destroy the controller itself with this command:
 
     # For microk8s
 `juju destroy-controller $(juju show-controller | head -n1 | sed 's/://g') --destroy-storage`
+
+As a last resort (eg lost contact with API server) you can:
+
+`juju kill-controller my-controller`
 
 ## Tests
 
