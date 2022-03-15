@@ -164,11 +164,12 @@ https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      There seems to be a problem with mixing controller types on the Host.
      If the following is implemented on the Host directly, the upcoming section 
      on installing the cheirrs backend with database and blockchains, should 
-     be performed on a multipass ubuntu vm on top of the same Host. See below.
+     be performed on a multipass ubuntu vm on top a separate Host. See above.
      For now, the following should be performed on the Host (unless you feel like arranging X11 
-     port forwarding to be able to access the Kubeflow Dashboard on the host browser). We finished
+     port forwarding to be able to access the Kubeflow Dashboard from a vm on the Host browser). We finished
      by repartitioning the Main HDD into 2 installations - one for kubeflow (directly on Host), and
-     the other for Elastos, the Blockchains and database server:
+     the other for Elastos, the Blockchains and database server on an array of 2 identical vm's:
+     For Kubeflow:
      
 `[sudo snap install multipass]`
      
