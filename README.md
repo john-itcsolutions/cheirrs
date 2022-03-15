@@ -157,8 +157,7 @@ ________________________________________________________________
      
 _____________________________________________________________________________________
      
-##   As an alternative 
-     to the above approach to installing kubeflow, we offer the following, which has been adapted from:
+##   We offer the following, which has been adapted from:
      
 https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      
