@@ -274,11 +274,19 @@ The following image is a screenshot of the `lernenmaschine` model's status board
 <img src="./Screenshot from 2021-06-16 18-14-22.png">
      
      Note that we have actually found it impossible to sustain a kubeflow controller on the microk8s cloud at the same time as we are running 
-     the second controller on the localhost cloud referred to in the text below the kubeflow Manual (following). The host randomly reboots. 
-     The latter cloud works alone, and, as it represents the more business-end of our business, we continue with no kubeflow. A singleton setup 
-     may work better with Kubeflow installed alone on a microk8s/localhost host. There is sufficient RAM onboard our host according to the system 
-     monitor, so at this stage the cause is unknown. There were less crashes after installing a Mechanical HDD, but still unsatisfactory. One 
-     possibility may be to employ a MAAS (Metal as a Service) installation as the basis for a dual-controller Desktop setup. Stay tuned.
+     the second controller on the localhost cloud referred to in the text below the kubeflow Manual (ie our main Application on the 'betrieb' controller
+     following the Kubeflow "manual"). The host randomly reboots. There is sufficient RAM onboard our host according to the system monitor, so at this stage the
+     cause is unknown. There were less crashes after installing a Mechanical HDD, but still unsatisfactory.
+     
+     The latter cloud running the 'betrieb' controller works alone, and, as it represents the more business-end of our business, we continue with an alternative
+     kubflow arrangement. 
+     
+     An isolated setup for the kubeflow/juju/microk8s cloud works better with Kubeflow installed alone on a dual boot Ubuntu/Ubuntu system with one partition
+     running a juju/microk8s host for a "kubeflow" model. 
+     
+     The second Linux (Ext4) filesystem partition runs the localhost/lxd/juju cloud with betrieb controller and "werk" model. The werk model runs the main
+     backend Kubernetes Apps within an array of 2 identical virtual multipass machines (with only 1 operating at a time, designed for redundancy during
+     development).
      
 _____________________________________________________________________________________
      
@@ -306,6 +314,13 @@ https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      4. Perform quick reset of terminal; as follows
 
 On the Host, or a multipass vm, you'll need to install these snaps to get started:
+     
+     In the following, the version of juju which works is (currently - 15/03/2022):
+     2.9.22. However the only version obtainable via snap is 2.9.26.
+     One way of obtaining the necessary executable is to go to 
+     https://launchpad.net/juju/+milestone/2.9.22
+     and download a copy, then extract it and save a copy of the "juju" binary file 
+     somewhere safe as well as copying the "juju" binary to /snap/bin/. Then:
 
 `sudo snap install juju --classic`
 
@@ -347,13 +362,6 @@ Next, you will need to add yourself to the microk8s group:
      Although the response may appear sad to you, the good reconnecting work 
      has already been done. Repeat the shell command and you should succeed.
      If not, repeat last steps.]
-     
-     In the following, the version of juju which works is (currently - 15/03/2022):
-     2.9.22. However the only version obtainable via snap is 2.9.26.
-     One way of obtaining the necessary executable is to go to 
-     https://launchpad.net/juju/+milestone/2.9.22
-     and download a copy, then extract it and save a copy of the "juju" binary file 
-     somewhere safe as well as copying the "juju" binary to /snap/bin/.
      
      Then:
      
