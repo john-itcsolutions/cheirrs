@@ -399,18 +399,19 @@ _________________________________________________________________
 
 ## A Second Model on a second controller:
 
-(The database schema for ITCSA's project are private and available only under certain conditions.)
+(The database schemata for ITCSA's project are private and available only under certain conditions.)
      
-   {  If you have implemented a kubeflow installation (above) on the Host (on a microk8s cloud/controller),
-     you will need to obtain multipass to allow creation of an Ubuntu virtual machine:
+   {  If you have implemented a kubeflow installation (above) on one partition of the Host (on a microk8s cloud/controller),
+     you will need to obtain multipass to allow creation of two Ubuntu virtual machines, on this second partition 
+     (ie dual-boot Ubuntu/Ubuntu). Repeat all the following relevant instructions for a second ubuntu vm (run only one vm at a time):
      
 `sudo snap install multipass`
      
-     then (if you have a spare 32GB RAM)
+     then (if you have a spare 16GB RAM and 4 spare cores)
      
-`multipass launch -n <machine-name> -c 2 -m 32GB -d 250GB`
+`multipass launch -n <machine-name> -c 4 -m 16GB -d 250GB`
      
-     and if you don't;
+     and if you don't, you could try (as a minimum standard);
      
 `multipass launch -n <machine-name> -c 2 -m 6GB -d 100GB`
      
@@ -426,6 +427,8 @@ _________________________________________________________________
 `mkdir ~/shared`
      
      You will need to mount your working directory on the Host to the vm:
+     
+`exit`
      
  `multipass mount /path/to/working/dir <machine-name>:~/shared`
      
@@ -459,7 +462,7 @@ Add a model named "werk"
 
 Deploy the full Kubernetes Charm,
      
-     a. if you have a spare 32GB RAM
+     a. if you have a spare 32GB RAM and spare 250GB disk space
 
 `juju deploy charmed-kubernetes`
      
@@ -520,8 +523,11 @@ ________________________________________________________________
      
 `git clone --recurse-submodules https://github.com/john-itcsolutions/cheirrs.git`
 
-Either from Host, in .... /cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts folder,
-     or from the correct location within the shared directory in a vm (if appropriate)
+Either from Host, in .... 
+
+`/cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts` 
+
+folder, or from the associated location within the mounted 'shared' directory in a vm (if appropriate)
 
 `juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
 
@@ -677,7 +683,8 @@ _______________________________________________________________
      
 
 NOTE: As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITCSA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to edit this file carefully to suit your own database, at your
-` cheirrs/TO_BE_COPIED_INTO_smartweb-service/TO_elastos-smartweb-service.grpc_adenine.database/__init__.py` (in local clones of this repo) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account, for example.
+`cheirrs/TO_BE_COPIED_INTO_smartweb-service/TO_elastos-smartweb-service.grpc_adenine.database/__init__.py` 
+(in local clones of this repo) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account, for example.
 
      As appropriate, either on host or from a vm:
      
@@ -704,7 +711,7 @@ file in the repo, rather in the cheirrs/TO*/*database/, which is where the file 
      
 You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) identically. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
 
-So in the host's (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the worker-0 machine. Therefore:
+So in the host's - or in the vm - (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the worker-0 machine. Therefore:
 
 `cd ....path/to/cheirrs`
      
