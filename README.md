@@ -477,7 +477,7 @@ Deploy the full Kubernetes Charm,
      
      When you see everything 'green', you may continue.
      
-     If you installed "kubernetes-core", add a kubernetes-worker unit:
+     If you installed "kubernetes-core", add a (second) kubernetes-worker unit:
      
 `juju add-unit kubernetes-worker`
 
