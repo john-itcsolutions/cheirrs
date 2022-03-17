@@ -238,6 +238,9 @@ Next, you will need to add yourself to the microk8s group:
    
      (You require 4 spare cores, 16GB spare memory and 60GB disk space - minimum - for the full kubeflow.)
      
+     Either of the above 2 versions of the deploy command may be simply repeated in cases of broken links, 
+     i/o timeouts, etc in mid-deployment.
+     
 `watch -c juju status --color`  to watch progress.
      
 Optional:
