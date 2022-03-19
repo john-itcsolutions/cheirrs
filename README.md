@@ -282,6 +282,8 @@ or, in general:
 
 `juju update-k8s --client <cloud-name>`
 
+and be prepared to wait quite some time.
+
 
 ___________________________________________________________________________________________
      
