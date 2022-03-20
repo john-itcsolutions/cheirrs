@@ -274,7 +274,7 @@ Optional:
      
 Use this to locate the dash in your browser, on port 8082. ie ip-addr:8082
 
-## NOTE: If you lose connection to the juju cloud:
+## NOTE: If you juju loses connection to the microk8s cloud:
 
 `juju update-k8s --client microk8s`
 
