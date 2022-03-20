@@ -167,11 +167,11 @@ https://discourse.ubuntu.com/t/install-kubeflow-anywhere/20207
      There seems to be a problem with mixing controller types on the Host.
      If the following is implemented on the Host directly, the upcoming section 
      on installing the cheirrs backend with database and blockchains, should 
-     be performed on a multipass ubuntu vm on top a separate Host. See above.
+     be performed on a multipass ubuntu vm on top a separate Host (we have created a second bootable partition). See above.
      For now, the following should be performed on the Host (unless you feel like arranging X11 
-     port forwarding to be able to access the Kubeflow Dashboard from a vm on the Host browser). We finished
+     port forwarding to be able to access the Kubeflow Dashboard from a vm on the Host browser). As noted, we finished
      by repartitioning the Main HDD into 2 installations - one for kubeflow (directly on Host), and
-     the other for Elastos, the Blockchains and database server on an array of 2 identical vm's:
+     the other for Elastos, the Blockchains and database server on an array of 2 identical multipass vm's:
      For Kubeflow:
      
 `[sudo snap install multipass]`
@@ -274,7 +274,7 @@ Optional:
      
 Use this to locate the dash in your browser, on port 8082. ie ip-addr:8082
 
-## NOTE: If juju loses connection to the microk8s cloud:
+## NOTE: If juju loses connection to the microk8s cloud at any stage:
 
 `juju update-k8s --client microk8s`
 
