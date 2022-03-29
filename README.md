@@ -489,7 +489,8 @@ Deploy the full Kubernetes Charm,
      (only 1 etcd, 1 master, 1 worker etc)
      
      When you see everything 'green', you may continue. (This may require several 
-     reboots of the vm in order to get the base installed first.)
+     reboots of the vm in order to get the base installed first). You need to have 
+     containerd and flannel running on master(s) and worker(s) first.
      
      If you installed "kubernetes-core", add a (second) kubernetes-worker unit:
      
