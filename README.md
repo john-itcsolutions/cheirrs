@@ -230,7 +230,8 @@ Sign in and create a server. You will need to check
 
 `docker inspect container postgis_container`
 
-and search for the container's ip-address. Enter this in Database server address in PgAdmin4.
+and search for the container's ip-address. Enter this in Database server address in PgAdmin4. 
+The database server address is a static address because of the details of the docker-compose format used.
 
 Before running the elastos run script you would usually need to restore the schemata you have in the form of 
 schema-backups (safest in .sql format). Consistent with folowing text, we show how our company has developed 
@@ -279,7 +280,7 @@ is found as above from
 
 `docker container inspect postgis_container`
 
-The container ip-address should be inserted in env.example together with the Gateway address, which should be inserted as the blockchain access addresses in the same file. Next, alter port for database to 5432 and give it your own database's name. Then save the env.example file as a. .env, and b. as .env.test with these edited settings.
+The container ip-address should be inserted in env.example together with the Gateway address (found in `docker container inspect postgis_container`), which should be inserted as the blockchain access addresses in the same file. Next, alter port for database to 5432 and give it your own database's name. Then save the env.example file as a. .env, and b. as .env.test with these edited settings.
 
 Next we edit the elastos-smartweb-service/grpc-adenine/database/__init__.py file to insert the same database ip-address and your own database name.
 
@@ -333,6 +334,19 @@ print("These are the schema names: ", schemata)
 print("Done!")
 
 ```
+
+Finally, we are in a position to issue the command (from <project_root>/elastos-smartweb-service/):
+
+`./run.sh`
+
+Unlike the case following, where we develop in Kubernetes, the database is directly accessible via a gui 
+(provided by PgAdmin4) in this form of development. You must develop tables, columns, views and a foreign key 
+relationship system in the database itself.
+
+In addition, the Python-gRPC protocol buffer services must be developed on the smartweb server to provide the 
+Ionic/Cordova front end gui with target procedures to call from Typescript (to Python-encoded protobufs) 
+via Carrier and the Python-gRPC clients. These procedures will do the data input and output query work on Postgis. 
+You may also need to program trigger functions in PLpgSQL on the database.
 
 
 
