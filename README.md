@@ -321,7 +321,7 @@ except Exception as e:
 
 meta = MetaData()
 insp = inspect(db_engine)
-schema_view = [[]]
+
 schemata = insp.get_schema_names()
 num_sch = len(schemata)
 num_tab = 0
