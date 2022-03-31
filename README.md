@@ -46,7 +46,7 @@ Note that you may develop entirely on and for desktop computers with Ionic to ge
 You would also require some dev tools and the openjdk for Java, as well as nodejs@14.x:
 
 # Base requirements 
-sudo apt -y install openjdk-11-jdk build-essential curl dirmngr apt-transport-https lsb-release ca-certificates git
+`sudo apt -y install openjdk-11-jdk build-essential curl dirmngr apt-transport-https lsb-release ca-certificates git`
      
 # Install NodeJS 14
      
