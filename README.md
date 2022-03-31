@@ -231,7 +231,7 @@ Sign in and create a server. You will need to check
 `docker inspect container postgis_container`
 
 and search for the container's ip-address. Enter this in Database server address in PgAdmin4. 
-The database server address is a static address because of the details of the docker-compose format used.
+The database server address is a static address because we defined a static network in the docker-compose.yml file.
 
 Before running the elastos run script you would usually need to restore the schemata you have in the form of 
 schema-backups (safest in .sql format). Consistent with following text, we show how our company has developed 
