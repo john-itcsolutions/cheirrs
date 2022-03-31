@@ -262,6 +262,79 @@ Insert the following text and replace with your own db_name (most of this is to 
 
 `docker exec -i postgis_container psql db_name -c 'CREATE SCHEMA IF NOT EXISTS postgis;' -c 'CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;' -c 'CREATE SCHEMA IF NOT EXISTS topology;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;' -c 'CREATE SCHEMA IF NOT EXISTS postgis_sfcgal;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_sfcgal WITH SCHEMA postgis_sfcgal;' -c 'CREATE SCHEMA IF NOT EXISTS fuzzystrmatch;' -c 'CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA fuzzystrmatch;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer WITH SCHEMA address_standardizer;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer_data_us;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer_data_us WITH SCHEMA address_standardizer_data_us;' -c 'CREATE SCHEMA IF NOT EXISTS tiger;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;' -c 'CREATE SCHEMA IF NOT EXISTS tiger_data;' -c 'CREATE EXTENSION IF NOT EXISTS tiger_data WITH SCHEMA tiger;'  && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d docker exec -i postgis_container psql db_name -c 'CREATE SCHEMA IF NOT EXISTS postgis;' -c 'CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;' -c 'CREATE SCHEMA IF NOT EXISTS topology;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;' -c 'CREATE SCHEMA IF NOT EXISTS postgis_sfcgal;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_sfcgal WITH SCHEMA postgis_sfcgal;' -c 'CREATE SCHEMA IF NOT EXISTS fuzzystrmatch;' -c 'CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA fuzzystrmatch;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer WITH SCHEMA address_standardizer;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer_data_us;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer_data_us WITH SCHEMA address_standardizer_data_us;' -c 'CREATE SCHEMA IF NOT EXISTS tiger;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;' -c 'CREATE SCHEMA IF NOT EXISTS tiger_data;' -c 'CREATE EXTENSION IF NOT EXISTS tiger_data WITH SCHEMA tiger;'  && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i insert_rows_scripts.sql' db_name`
 
+We have a running database on port 5432 (since issuing "docker-compose up").
+
+So:
+
+`./docker_dbase_setup_1.sh`
+
+And wait until complete.
+
+Then:
+
+`docker_dbase_setup_3.sh`
+
+You now need to edit the elastos-smartweb-service/.env.example file to reflect your own docker network addresses. The database ip-address
+is found as above from 
+
+`docker container inspect postgis_container`
+
+The container ip-address should be inserted in env.example together with the Gateway address, which should be inserted as the blockchain access addresses in the same file. Next, alter port for database to 5432 and give it your own database's name. Then save the env.example file as a. .env, and b. as .env.test with these edited settings.
+
+Next we edit the elastos-smartweb-service/grpc-adenine/database/__init__.py file to insert the same database ip-address and your own database name.
+
+Save all this work.
+
+If you wish to get a sanity check on whether elastos is connected to your database after running, you can use the following to replace the elastos-smartweb-service/grpc-adenine/database/__init__.py:
+
+```
+import logging
+
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy import inspect
+
+from sqlalchemy_wrapper import SQLAlchemy
+from decouple import config
+
+# Set up logging
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.DEBUG,
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
+# Connect to the database
+db_name = config('DB_NAME')
+db_user = config('DB_USER')
+db_password = config('DB_PASSWORD')
+db_host = config('DB_HOST')
+db_port = config('DB_PORT')
+
+database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+
+try:
+    db_engine = create_engine(database_uri)
+    connection = SQLAlchemy(database_uri)
+except Exception as e:
+    logging.fatal(f"Error while connecting to the database: {e}")
+
+meta = MetaData()
+insp = inspect(db_engine)
+schema_view = [[]]
+schemata = insp.get_schema_names()
+num_sch = len(schemata)
+num_tab = 0
+for schema in schemata:
+	num_tab += len(insp.get_table_names(schema))
+print("There are ", num_sch, " schemata")
+print("There are ", num_tab, " tables")
+print("These are the schema names: ", schemata)
+
+print("Done!")
+
+```
+
+
 
 
 ______________________________________________________________
