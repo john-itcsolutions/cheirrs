@@ -345,7 +345,7 @@ relationship system in the database itself.
 
 In addition, the Python-gRPC protocol buffer services must be developed on the smartweb server to provide the 
 Ionic/Cordova front end gui with target procedures to call from your Ionic Typescript code (to Python-encoded protobufs) 
-via Carrier and the Python-gRPC clients. These procedures will do the data input and output query work for your dApp 
+via Carrier and the Python-gRPC client. These procedures will do the data input and output query work for your dApp 
 on Postgis. You may also need to program trigger functions in PLpgSQL on the database in order to process data. 
 
 Remember it is more efficient to have postgis processing data wherever possible, and not having the smartweb server doing 
