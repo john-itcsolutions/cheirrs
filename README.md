@@ -349,7 +349,7 @@ via Carrier and the Python-gRPC client. These procedures will do the data input 
 on Postgis. You may also need to program trigger functions in PLpgSQL on the database in order to process data. 
 
 Remember it is more efficient to have postgis processing data wherever possible, and not having the smartweb server doing 
-more than necessary.
+more than necessary. This is one good reason to learn PLpgSQL!
 
 
 
