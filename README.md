@@ -226,7 +226,7 @@ and remember that the clean way to bring the Project back down is:
 
 Navigate to 127.0.0.1:5050 by entering that address/port into the address bar in your browser.
 
-Sign in and create a server. You will need to check 
+Sign in to the pgadmin4 application and create a server. You will need to check 
 
 `docker inspect container postgis_container`
 
