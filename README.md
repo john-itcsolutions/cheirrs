@@ -105,6 +105,10 @@ Remember to
 
 after install is complete.
 
+You will also require docker-compose
+
+`sudo apt install docker-compose`
+
 The docker-based development on this project is adapted from the code in:
 
 https://github.com/cyber-republic/elastos-smartweb-service  (smartweb-server, providing blockchain access, containerised by ITCSA)
@@ -124,7 +128,141 @@ however you can use the "redis" bundle (see below).
 
 TensorFlow by Google. 
 
-The predominant language used to code for this project is Python (here, mainly version 3.8). The Front End dApp is in typescript, a version of javascript. The IoT system ("node-red") is written in node.js, a server-compataible version of javascript, both for edge and server machines. Both the Front End dApp and the IoT system communicate with the smart-web blockchain-and-database server using the python gRPC protocol buffers, which can be found in the python-grpc-adenine github repo by cyber-republic (https://github.com/cyber-republic/python-grpc-adenine). All communications between sites and servers are protected by the Elastos 'Carrier" ultra-security system.
+The predominant language used to code for this project is Python (here, mainly version 3.8). The Front End dApp is in typescript, a version of javascript. On the full-fledged Kubernetes version, the IoT system ("node-red") is written in node.js, a server-compataible version of javascript, both for edge and server machines. Both the Front End dApp and the IoT system communicate with the smart-web blockchain-and-database server using the python gRPC protocol buffers, which can be found in the python-grpc-adenine github repo by cyber-republic (https://github.com/cyber-republic/python-grpc-adenine). All communications between sites and servers are protected by the Elastos 'Carrier" ultra-security system.
+
+##DOCKER-BASED DEVELOPMENT (Using pgadmin4_container to bind to postgis_container with database development & administration on localhost:5050)
+
+Proceed as follows:
+
+Get Docker and Docker-compose (see above). Pull 2 container images:
+
+`docker pull dpage/pgadmin4`
+
+`docker pull postgis/postgis`
+
+create a home folder for your docker-based project `mkdir path/to/<my-project> && cd path/to/<my-project>`
+
+Make a file called docker-compose.yml
+
+`nano docker-compose.yml`
+
+Insert the following text:
+```
+version: '3.3'
+networks:
+  static-network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+services:
+  db:
+    container_name: postgis_container
+    image: postgis/postgis
+    restart: always
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.2
+    environment:
+      POSTGRES_USER: you
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: db_name
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.3
+    environment:
+      PGADMIN_DEFAULT_EMAIL: you@example.com
+      PGADMIN_DEFAULT_PASSWORD: secret
+    ports:
+      - "5050:80"
+```
+
+Next we have to clone the Elastos Smartweb blockchain and database server package to the Project root directory:
+
+`git clone --recurse-submodules https://github.com/cyber-republic/elastos-smartweb-service.git`
+
+With the development of the database enabled after we run the docker-compose file (administer and develop at 
+127.0.0.1:5050 on your Host), the "run.sh" script as defined in the Elastos repo we just cloned needs to be edited.
+
+Open elastos-smartweb-service/run.sh in an editor and comment out the top lines as shown here:
+
+```
+#!/bin/bash
+
+# Run postgres server as a docker container
+#cd tools
+#./postgres.sh
+#cd ..
+virtualenv -p `which python3` venv
+
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+export PYTHONPATH="$PYTHONPATH:$PWD/grpc_adenine/stubs/"
+
+python3 grpc_adenine/server.py
+```
+
+so that the run.sh script does not attempt to start any "postgres" container (we are using "postgis/postgis" 
+image as the postgis_container, however it will already be running when "./run.sh" is executed - see below)
+
+In the Project root directory, at the command line type:
+
+`docker-compose up`
+
+and remember that the clean way to bring the Project back down is:
+
+`docker-compose down`  (possibly after ctrl-c or ctrl-z in the running docker terminal to halt the processes)
+
+Navigate to 127.0.0.1:5050 by entering that address/port into the address bar in your browser.
+
+Sign in and create a server. You will need to check 
+
+`docker inspect container postgis_container`
+
+and search for the container's ip-address. Enter this in Database server address in PgAdmin4.
+
+Before running the elastos run script you would usually need to restore the schemata you have in the form of 
+schema-backups (safest in .sql format). Consistent with folowing text, we show how our company has developed 
+2 simple scripts to restore the entire database (including all schemata) at once. This assumes you have developed
+some of the schemata already. As noted below we do not release our actual schema backups.
+
+Nevertheless as a model of how to proceed, you will require 2 shell scripts following these patterns:
+
+In root directory of Project;
+
+`nano docker_dbase_setup_1.sh`
+
+Insert the following content, follow the pattern,  and adapt as required to your own db_name and schema names. Note that the actual schema_backup.sql files need to exist in the root directory when you run this script.
+
+```
+#!/bin/bash
+
+# docker_dbase_setup_1.sh 
+
+docker exec -i postgis_container createuser gmu docker exec -i postgis_container createdb haus && cat das_fuhrwerk_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat cheirrs_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat cheirrs_oseer_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat chubba_morris_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat chubba_morris_oseer_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat convey_it_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat convey_it_oseer_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat iot_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat the_general_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat the_general_oseer_backup.sql | docker exec -i postgis_container psql -U postgres -d haus
+
+```
+
+Now create a follow-up script in the root directory
+
+`nano docker_dbase_setup_3.sh`
+
+Insert the following text and replace with your own db_name (most of this is to provide schemata and extensions for the 'gis' part of postgis, the final 2 sql scripts addressing elastos requirements):
+
+`docker exec -i postgis_container psql db_name -c 'CREATE SCHEMA IF NOT EXISTS postgis;' -c 'CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;' -c 'CREATE SCHEMA IF NOT EXISTS topology;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;' -c 'CREATE SCHEMA IF NOT EXISTS postgis_sfcgal;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_sfcgal WITH SCHEMA postgis_sfcgal;' -c 'CREATE SCHEMA IF NOT EXISTS fuzzystrmatch;' -c 'CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA fuzzystrmatch;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer WITH SCHEMA address_standardizer;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer_data_us;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer_data_us WITH SCHEMA address_standardizer_data_us;' -c 'CREATE SCHEMA IF NOT EXISTS tiger;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;' -c 'CREATE SCHEMA IF NOT EXISTS tiger_data;' -c 'CREATE EXTENSION IF NOT EXISTS tiger_data WITH SCHEMA tiger;'  && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d docker exec -i postgis_container psql db_name -c 'CREATE SCHEMA IF NOT EXISTS postgis;' -c 'CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;' -c 'CREATE SCHEMA IF NOT EXISTS topology;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;' -c 'CREATE SCHEMA IF NOT EXISTS postgis_sfcgal;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_sfcgal WITH SCHEMA postgis_sfcgal;' -c 'CREATE SCHEMA IF NOT EXISTS fuzzystrmatch;' -c 'CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA fuzzystrmatch;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer WITH SCHEMA address_standardizer;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer_data_us;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer_data_us WITH SCHEMA address_standardizer_data_us;' -c 'CREATE SCHEMA IF NOT EXISTS tiger;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;' -c 'CREATE SCHEMA IF NOT EXISTS tiger_data;' -c 'CREATE EXTENSION IF NOT EXISTS tiger_data WITH SCHEMA tiger;'  && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i insert_rows_scripts.sql' db_name`
+
+
 
 ______________________________________________________________
 
