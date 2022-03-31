@@ -234,9 +234,9 @@ and search for the container's ip-address. Enter this in Database server address
 The database server address is a static address because of the details of the docker-compose format used.
 
 Before running the elastos run script you would usually need to restore the schemata you have in the form of 
-schema-backups (safest in .sql format). Consistent with folowing text, we show how our company has developed 
+schema-backups (safest in .sql format). Consistent with following text, we show how our company has developed 
 2 simple scripts to restore the entire database (including all schemata) at once. This assumes you have developed
-some of the schemata already. As noted below we do not release our actual schema backups.
+at least some of your own schemata already. As noted below we do not release our actual schema backups.
 
 Nevertheless as a model of how to proceed, you will require 2 shell scripts following these patterns:
 
@@ -339,14 +339,17 @@ Finally, we are in a position to issue the command (from <project_root>/elastos-
 
 `./run.sh`
 
-Unlike the case following, where we develop in Kubernetes, the database is directly accessible via a gui 
+Unlike the cases following, where we develop in Kubernetes, the database is directly accessible via a gui 
 (provided by PgAdmin4) in this form of development. You must develop tables, columns, views and a foreign key 
 relationship system in the database itself.
 
 In addition, the Python-gRPC protocol buffer services must be developed on the smartweb server to provide the 
-Ionic/Cordova front end gui with target procedures to call from Typescript (to Python-encoded protobufs) 
-via Carrier and the Python-gRPC clients. These procedures will do the data input and output query work on Postgis. 
-You may also need to program trigger functions in PLpgSQL on the database.
+Ionic/Cordova front end gui with target procedures to call from your Ionic Typescript code (to Python-encoded protobufs) 
+via Carrier and the Python-gRPC clients. These procedures will do the data input and output query work for your dApp 
+on Postgis. You may also need to program trigger functions in PLpgSQL on the database in order to process data. 
+
+Remember it is more efficient to have postgis processing data wherever possible, and not having the smartweb server doing 
+more than necessary.
 
 
 
