@@ -359,6 +359,7 @@ server. I killed that old process with
 
 and all was well.
 
+Also, do not try to use the elastos-smartweb-service repo with Python3.10. Version 3.8 is required. Trust us ...
 
 
 ______________________________________________________________
