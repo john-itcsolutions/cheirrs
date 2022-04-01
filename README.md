@@ -164,9 +164,7 @@ services:
       static-network:
         ipv4_address: 172.20.128.2
     environment:
-      POSTGRES_USER: you
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: db_name
+      POSTGRES_PASSWORD: yoursecret
     volumes:
       - ./data:/var/lib/postgresql/data
     ports:
@@ -181,9 +179,10 @@ services:
         ipv4_address: 172.20.128.3
     environment:
       PGADMIN_DEFAULT_EMAIL: you@example.com
-      PGADMIN_DEFAULT_PASSWORD: secret
+      PGADMIN_DEFAULT_PASSWORD: yoursecret
     ports:
       - "5050:80"
+
 ```
 
 Next we have to clone the Elastos Smartweb blockchain and database server package to the Project root directory:
