@@ -262,7 +262,7 @@ Now create a follow-up script in the root directory
 
 Insert the following text and replace with your own db_name (most of this is to provide schemata and extensions for the 'gis' part of postgis, the final 2 sql scripts addressing elastos requirements):
 
-`docker exec -i postgis_container psql -d db_name -U postgres -c 'ALTER ROLE gmu WITH PASSWORD "gmu";' -c 'CREATE SCHEMA IF NOT EXISTS postgis;' -c 'CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;' -c 'CREATE SCHEMA IF NOT EXISTS topology;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;' -c 'CREATE SCHEMA IF NOT EXISTS postgis_sfcgal;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_sfcgal WITH SCHEMA postgis_sfcgal;' -c 'CREATE SCHEMA IF NOT EXISTS fuzzystrmatch;' -c 'CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA fuzzystrmatch;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer WITH SCHEMA address_standardizer;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer_data_us;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer_data_us WITH SCHEMA address_standardizer_data_us;' -c 'CREATE SCHEMA IF NOT EXISTS tiger;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;' -c 'CREATE SCHEMA IF NOT EXISTS tiger_data;' -c 'CREATE EXTENSION IF NOT EXISTS tiger_data WITH SCHEMA tiger;'  && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i insert_rows_scripts.sql'`
+`docker exec -i postgis_container psql -d db_name -U postgres -c "ALTER ROLE gmu WITH PASSWORD 'gmu';" -c 'CREATE SCHEMA IF NOT EXISTS postgis;' -c 'CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;' -c 'CREATE SCHEMA IF NOT EXISTS topology;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;' -c 'CREATE SCHEMA IF NOT EXISTS postgis_sfcgal;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_sfcgal WITH SCHEMA postgis_sfcgal;' -c 'CREATE SCHEMA IF NOT EXISTS fuzzystrmatch;' -c 'CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA fuzzystrmatch;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer WITH SCHEMA address_standardizer;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer_data_us;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer_data_us WITH SCHEMA address_standardizer_data_us;' -c 'CREATE SCHEMA IF NOT EXISTS tiger;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;' -c 'CREATE SCHEMA IF NOT EXISTS tiger_data;' -c 'CREATE EXTENSION IF NOT EXISTS tiger_data WITH SCHEMA tiger;'  && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i insert_rows_scripts.sql'`
 
 We have a running database on port 5432 (since issuing "docker-compose up").
 
@@ -352,12 +352,18 @@ on Postgis. You may also need to program trigger functions in PLpgSQL on the dat
 Remember it is more efficient to have postgis processing data wherever possible, and not having the smartweb server doing 
 more than necessary. This is one good reason to learn PLpgSQL!
 
+Postscript: Without knowing exactly how, I managed to start a separate process on tcp 8001, reserved for the grpc smartweb 
+server. I killed that old process with 
+
+`sudo kill -9 $(sudo lsof -t -i:8001)`
+
+and all was well.
 
 
 
 ______________________________________________________________
 
-## Preliminaries: NOTE The following remarks on installing the Nvidia and Cuda systems constitute a work in progress only:
+## KUBEFLOW Preliminaries: NOTE The following remarks on installing the Nvidia and Cuda systems constitute a work in progress only:
 
 With the exception of noting that this:
 
@@ -373,12 +379,11 @@ ________________________________________________________________
 
    
      Note that we have actually found it impossible to sustain a kubeflow controller on the microk8s cloud at the same time as we are running 
-     the second controller on the localhost cloud referred to in the text below the kubeflow Manual (ie our main Application on the 'betrieb' controller
-     following the Kubeflow "manual"). The host randomly reboots. There is sufficient RAM onboard our host according to the system monitor, so at this stage the
+     the second controller on the localhost cloud referred to in the text below the kubeflow Manual (ie our main Application on the 'betrieb' controller, with instructions following the Kubeflow "manual"). The host randomly reboots. There is sufficient RAM onboard our host according to the system monitor, so at this stage the
      cause is unknown. There were less crashes after installing a Mechanical HDD, but still unsatisfactory.
      
      The latter cloud running the 'betrieb' controller works alone, and, as it represents the more business-end of our business, we continue with an alternative
-     kubflow arrangement. 
+     kubeflow arrangement. 
      
      An isolated setup for the kubeflow/juju/microk8s cloud works better with Kubeflow installed alone on a dual boot Ubuntu/Ubuntu system with one partition
      running a juju/microk8s host for a "kubeflow" model. 
