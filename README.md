@@ -283,18 +283,19 @@ Then:
 
 `docker_dbase_setup_3.sh`
 
-You now need to edit the elastos-smartweb-service/.env.example file to reflect your own docker network addresses. The database ip-address
+You now need to edit the `elastos-smartweb-service/.env.example` file to reflect your own docker network addresses. The database ip-address
 is found as above from 
 
 `docker container inspect postgis_container`
 
-The container ip-address should be inserted in env.example together with the Gateway address (found in `docker container inspect postgis_container`), which should be inserted as the blockchain access addresses in the same file. Next, alter port for database to 5432 and give it your own database's name. Then save the env.example file as a. .env, and b. as .env.test with these edited settings.
+The container ip-address should be inserted in env.example together with the Gateway address (found in `docker container inspect postgis_container`), which should be inserted as the blockchain access addresses in the same file. Next, alter port for database to 5432 and give it your own database's name. Then save the `env.example` file as a) `.env`, and b) as `.env.test` with these edited settings.
 
-Next we edit the elastos-smartweb-service/grpc-adenine/database/__init__.py file to insert the same database ip-address and your own database name.
+Next we edit the `elastos-smartweb-service/grpc-adenine/database/__init__.py` file to insert the same database ip-address and your own database name.
 
 Save all this work.
 
-If you wish to get a sanity check on whether elastos is connected to your database after running, you can use the following to replace the elastos-smartweb-service/grpc-adenine/database/__init__.py:
+If you wish to get a sanity check on whether elastos is connected to your database after running, you can use the following to replace the 
+`elastos-smartweb-service/grpc-adenine/database/__init__.py`:
 
 ```
 import logging
