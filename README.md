@@ -219,6 +219,12 @@ Note that for postgres database development the progress is easier if you are us
 
 In the Project root directory, at the command line type:
 
+(If you scroll down to "Postscript" below, you will see why we recommend that first you issue:
+
+`sudo kill -9 $(sudo lsof -t -i:8001)`
+
+), then:
+
 `docker-compose up`
 
 and remember that the clean way to bring the Project back down is:
@@ -231,7 +237,8 @@ Sign in to the pgadmin4 application and create a server. You will need to check
 
 `docker inspect container postgis_container`
 
-and search for the container's ip-address. Enter this in Database server address in PgAdmin4. 
+and search for the container's ip-address, or just copy it from the docker-compose.yml file. 
+Enter this in 'Database server address' in PgAdmin4. 
 The database server address is a static address because we defined a static network in the docker-compose.yml file.
 
 Before running the elastos run script you would usually need to restore the schemata you have in the form of 
@@ -352,8 +359,9 @@ on Postgis. You may also need to program trigger functions in PLpgSQL on the dat
 Remember it is more efficient to have postgis processing data wherever possible, and not having the smartweb server doing 
 more than necessary. This is one good reason to learn PLpgSQL!
 
-Postscript: Without knowing exactly how, I managed to start a separate process on tcp 8001, reserved for the grpc smartweb 
-server. I killed that old process with 
+Postscript: Without knowing exactly how, I managed to start a separate process on tcp 8001, labelled as a Postgres process 
+which I now understand to be the still-running "old" process from the previous "docker-compose up" command. This is actually 
+one of the ports reserved for the grpc smartweb server. I killed that old process with 
 
 `sudo kill -9 $(sudo lsof -t -i:8001)`
 
