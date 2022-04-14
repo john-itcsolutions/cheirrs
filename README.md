@@ -357,6 +357,30 @@ Ionic/Cordova front end gui with target procedures to call from your Ionic Types
 via Carrier and the Python-gRPC client. These procedures will do the data input and output query work for your dApp 
 on Postgis. You may also need to program trigger functions in PLpgSQL on the database in order to process data. 
 
+## Instructions on how to build and run python-grpc-adenine locally
+Clone the repository
+```
+git clone https://github.com/cyber-republic/python-grpc-adenine.git
+cd python-grpc-adenine
+```
+Setup virtualenv:
+```
+virtualenv -p `which python3` venv;
+source venv/bin/activate;
+```
+Install dependencies:
+```
+pip3 install -r requirements.txt;
+```
+Setup environment variables and update variables if needed:
+```
+cp .env.example .env;
+```
+Run sample.py:
+```
+python3 sample.py
+```
+
 Remember it is more efficient to have postgis processing data wherever possible, and not having the smartweb server doing 
 more than necessary. This is one good reason to learn PLpgSQL!
 
