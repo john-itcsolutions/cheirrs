@@ -35,7 +35,7 @@ We utilise one "oseer" schema per network/member-class, so there is one schema f
 You need to develop initially on docker. ITCSA uses Ubuntu 20.04 as the host platform, with Python 3.8. DO NOT TRY TO USE PYTHON 3.10 (as on JammyJellyfish Ubuntu 22.04) for Elastos development on Docker.
 You will not need an Extreme Gaming level of computer for Docker-based (initial - eg. database) work without Kubernetes.
 
-See our website at https://www.itcsolutions.com.au/kubernetes-yaml-file-example/ for an older but more visual idea of this project and others.
+See our website at https://www.itotchaincloud.com.au/kubernetes-yaml-file-example/ for an older but more visual idea of this project and others.
 
 The Front End dApp (Ionic only version) corresponding to this project is at https://github.com/john-itcsolutions/au.com.itcsolutions.cheirrs.0.01. It uses the Ionic Platform for web app (in our cases, "distributed app") development. However the Ionic system must be used in conjunction with the newly developing 'Elastos Essentials' package. This package will include all necessary interfaces for the Elastos Ecosystem from the points of view of both developers and users. You can follow this development process (expected to introduce the first stable distribution around July, 2021) at:
 
