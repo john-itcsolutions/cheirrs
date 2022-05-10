@@ -1,7 +1,26 @@
 ## INTRODUCTION:
 
 # CHEIRRS
-Project based on  Lxd, Juju, Charms and Kubernetes; merged with Cyber Republic's Elastos Smartweb gRPC-based Blockchain and Database Server. Database ORM, reflection (at initialisation) and querying uses SQLAlchemy. The blockchain end of a transaction occurs first, followed by writing or reading of data to or from Postgres, via the "etcd" (or you can use redis) cluster on the Kubernetes installation. 
+This project was based on  Lxd, Juju, Charms and Kubernetes; merged with Cyber Republic's Elastos Smartweb gRPC-based Blockchain and Database Server. Database ORM, reflection (at initialisation) and querying uses SQLAlchemy. Although there has been a major shift in the foundations of 'cheirrs', with a new discovery of research by IBM from 2019 which could potentially remove the need of our customers to actually invest any more than a modicum of Trust in ITOTCCA, with the concept of "Blockchain meets Database". The blockchain end of a transaction still occurs first, followed by writing or reading of data to or from Postgres, via the "etcd" (or you can use redis) cluster on the Kubernetes installation. However our intention is to follow the lead of research from IBM in India, where apparently a practical way of making a database as immutable and tamper-proof as a blockchain, for the purposes of Smart Contract Trading and any internetworked transactions. The paper, Blockchain Meets Database: Design and Implementation
+of a Blockchain Relational Database
+∗
+Senthil Nathan 1 , Chander Govindarajan 1 , Adarsh Saraf 1 ,
+Manish Sethi 2 , and Praveen Jayachandran 1
+1
+1
+IBM Research India, 2 IBM Industry Platforms USA
+(snatara7, chandg12, adasaraf, praveen.j)@in.ibm.com, 2 manish.sethi1@ibm.com
+
+.. refer to this link:  https://arxiv.org/pdf/1903.01919.pdf ..
+
+
+has revealed that it is possible to provide Trust in a natural way in networking between Companies, whilst basically distrusting each other, by making a network of Postgres Databases behave like a large-data-capacity blockchain. To ITOTCCA, this is revolutionary. Prospective customers no longer have to trust our company to any extent as far as daily operational security is concerned. Neither do they have to trust other companies. The idea is to allow the machines owned by each Company to keep each other honest. There is a hole in the plan, in that if globally over 50% of Ordering nodes were to be caused to act fraudulently, the factor of Trust would be destroyed. Elsewhere (on our website at itotchaincloud.com.au/security) we note the contribution of Rong Chen and Elastos in devising a hardware enhancement which is necessary for Blockchain Miners to be fitted with in order to be able to participate in Mining. This device ensures by design that no corps can act together in a gang of >50% ownership and direction. The idea is currently operational with Elastos.
+
+These developments have caused ITOTCCA to review our monolithic design, opting now for an isolation of Business Networks from each other and restricting the scope of connectivity to be strictly internal to each separate Business Network. Networks are independent now. The design is now to have a range of cloud servers per Business Network. Each member would ideally take responsibility for its own virtual hardware. The virtual servers are all linked between company nodes with a Master/Master replication system. All members carry identical copies of the entire network's databases, with one strictly private Business Channel per member, enforced by the hardware/software in the cloud. Here, the machines are designed to be ensuring clean play all the time.
+
+However, in the above article, it is envisaged that a section of non-internetworked transactions would be outside the network. This implies that a company's own employees can be trusted more than the internetworked transaction parties. We believe this to be highly questionable.
+
+To this end, we are striving to implement a Hybrid model with 2 layers. We intend to offer a system which, for even the most trivial of transactions or actions, records traces on the Elastos Blockchains, an immutable source of Truth which also provides a Distributed Identity Blockchain (DID Sidechain). This will mesh with the Postgres DataChain to provide indisputable Identification of players across the entire system. Elastos is a Global Network Operating System with permissioned Blockchains. Naturally the bulk Corporate Data will belong on the new databases, but there is a role to be played by the  flexibility and mobility of the Elastos system, especially when we consider the strengths of Carrier and the DID together. So we still intend to utilise the Elastos-Smartweb-Service github repo and docker image to play the role of joining the datachains systems to the Blockchains systems, by acting as a very smart webserver and database server and blockchain server; all at once.
 
 gRPC protocols replace the older style REST APIs, for communicating requests, and data inputs, from the client, and responses from the blockchain &/or database back to the client; all this occurs through the smart-web server, employing a "microservices" architecture. Here the gRPC protocols are implemented in Python. The smart-web server has Carrier installed onboard, guaranteeing security. Carrier is also installed via plugin on the Ionic dApp clients (which are developed hierarchically inside Elastos.Essentials) as well as manually on the IoT Edge client/servers (running 'node-red').
 
@@ -686,25 +705,26 @@ _________________________________________________________________
 (The database schemata for ITCSA's project are private and available only under certain conditions.)
      
    {  If you have implemented a kubeflow installation (above) on one partition of the Host (on a microk8s cloud/controller),
-     you will need to obtain multipass to allow creation of two Ubuntu virtual machines, on this second partition 
-     (ie dual-boot Ubuntu/Ubuntu). Repeat all the following relevant instructions for a second ubuntu vm (run only one vm at a time):
+     you will need to obtain multipass to allow creation of four (a master control plane machine called 'primary', with node-1, node-2 and node-3)    
+     Ubuntu virtual machines (Kubernetes "nodes"), on this second partition (ie dual-boot Ubuntu/Ubuntu). Repeat all the following relevant
+     instructions for four ubuntu vm's:
      
 `sudo snap install multipass`
      
-     then (if you have a spare 16GB RAM and 4 spare cores)
+`multipass launch -n primary -c 1 -m 8GB -d 90GB`
+
+`multipass launch -n node-1 -c 1 -m 6GB -d 90GB`
+
+`multipass launch -n node-2 -c 1 -m 6GB -d 90GB`
+
+`multipass launch -n node-3 -c 1 -m 6GB -d 90GB`
      
-`multipass launch -n <machine-name> -c 4 -m 16GB -d 250GB`
+     (You can tweak those settings)
+     And end-up with 4 x LTS Ubuntu vm's to install the following software on.
      
-     and if you don't, you could try (as a minimum standard);
-     
-`multipass launch -n <machine-name> -c 2 -m 6GB -d 100GB`
-     
-     (You can tweak these settings)
-     And end-up with a LTS Ubuntu vm to install the following software on.
-     
-`multipass shell <machine-name>`
-     
-     is how to enter the vm.
+`multipass shell primary`
+
+    is how to enter the vm.
      
      Inside the vm, you should create a place to mount your Host's working directory:
      
@@ -714,248 +734,146 @@ _________________________________________________________________
      
 `exit`
      
- `multipass mount /path/to/working/dir <machine-name>:~/shared`
+ `multipass mount /path/to/working/dir primary:~/shared/`
      
      On the vm (
      
-`multipass shell <machine-name>`
+`multipass shell primary`
      
      )
      
- `sudo snap install juju --classic`
-     
- `sudo snap install juju-helpers --classic`
-     
- `sudo snap install juju-wait --classic`
-     
-     The following is also to be performed on the vm, in this case ..  }
+     This, and the entire process of installation to the point of having blockchains running on the workers 
+     (node-x's) & connected to PostgreSQL + PostGIS replicated database, IOTA client connected and following
+     the Tangle, together with a Node-Red-Industrial pod on each worker, took me well over 24 hours to complete. 
 
-     Bootstrap a new controller - but this time on the 'localhost' cloud - (when you installed 
-     juju, it recognised that localhost (lxd) was already installed, and juju created a 'localhost' 
-     cloud for you to use. Verify this with `juju clouds`):
 
-`juju bootstrap localhost betrieb`
+It may take longer if your network is slow. Be patient
+
+ITOTCCA have also disovered "kubegres", and we are currently learning to set up a Master/Master replication system, 
+so each network member (here each of the node-x's) functions as a peer of the others. The system works on Multipass 
+vm's, each running microk8s, and connected in a Kubernetes Cluster.
+
+The kubegres webpages can be followed from here:  https://www.kubegres.io/doc/getting-started.html
+
+On each node as it becomes ready:
+
+`sudo snap install microk8s --classic`
+
+`sudo usermod -aG microk8s $USER && newgrp microk8s && sudo su - $USER`
      
-     This, and the entire process of installation to the point of having blockchains running on worker-0 
-     & connected to PostgreSQL + PostGIS replicated database, IOTA client connected and following the Tangle, 
-     together with Node-Red-Industrial both running on worker-1, took me well over 24 hours to complete. 
+`sudo iptables -P FORWARD ACCEPT`
 
-Add a model named "werk"
+On primary, when everything is settled,
 
-`juju add-model werk`
+`microk8s add-node`
 
-Deploy the full Kubernetes Charm,
+.. and paste the resulting line, ending in ".. worker", into node-1. Repeat for nodes 2 and 3.
+
+You then have a small 3 node cluster of machines with a fourth acting as Control Plane Master ("primary").
+
+On primary:
+
+`microk8s enable dns storage ingress`
      
-     a. if you have a spare 32GB RAM and spare 250GB disk space
-
-`juju deploy charmed-kubernetes`
+     (Check staus)
      
-     b. if you don't;
-     
-`juju deploy kubernetes-core`
-     
-     (only 1 etcd, 1 master, 1 worker etc)
-     
-     When you see everything 'green', you may continue. (This may require several 
-     reboots of the vm in order to get the base installed first). You need to have 
-     containerd and flannel running on master(s) and worker(s) first.
-     
-     If you installed "kubernetes-core", add a (second) kubernetes-worker unit:
-     
-`juju add-unit kubernetes-worker`
+`microk8s status --wait-ready`
 
-`juju config kubernetes-master proxy-extra-args="proxy-mode=userspace"`
+On primary, again;
 
-`juju config kubernetes-worker proxy-extra-args="proxy-mode=userspace"`
-     
-`juju scp kubernetes-master/0:config ~/.kube/config`
+`sudo snap install kubectl`
 
-At this stage your juju assemblage is converging towards stability. You can observe the status of the assemblage with
+In order to simplify things:
 
-`watch -c juju status --color` or, `juju status` for short.
+`sudo snap alias microk8s.kubectl kubectl`
 
-It may take a few hours if your network is slow. Be patient
-     
-     In both cases of installed source:
+ .. then you can just use "kubectl blah .." instead of "microk8s.kubectl blah ..".
+ 
+ So far we opted to follow the page referred to above at kubegres, and avoided installing postgis. Keep It Simple Sweetheart!
+ 
+ The best advice we can give now is to set up your Kubernetes system by following that reference. We have not managed to 
+ arrange for Master/Master replication as yet. Everything happens from "primary". You should come back to here when you have Persistent Volume Claims, Persistent Volumes, Services, secrets, configmaps, Pods, 3 x Stateful Postgres (v 14.1) Sets and used node-affinity and anti-affinity to spread your pods uniquely and evenly on each worker node.
 
-Deploy PostgreSQL (Juju sorts out Master and Replicating servers automatically).
 
-`juju deploy -n 2 postgresql pg-a`
-
-`juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,<ip-addr-worker-1>[,<ip-addr-worker-2>]`
-
-Deploy a Redis cluster for in-memory caching:
-
-```
-juju deploy cs:~omnivector/redis \
-  --config cluster-enabled=true  \
-  --constraints 'mem=4G' \
-  --num-units 3       
-     
-```
-     
-     OR, figure out how to use the provided 3-vm etcd cluster for the same purposes!
-     
 *******************************************************
 
 ________________________________________________________________
  
 ## DATABASE: Internals
 
-## Copy sql scripts; Build Database Schema:
-     
-     (On host, in the working directory or a sub-directory - as this must be available 
-     via the ~/shared folder in the case of running the cluster on a vm)
-     
-`git clone --recurse-submodules https://github.com/john-itcsolutions/cheirrs.git`
+You will need a database schema (we use 2 - the_general, and the_general_oseer) to serve as material for development.
 
-Either from Host, in .... 
+In our case when a single member-class network exists (such as our Real Estate Property dApps) we would be required 
+to separate the existing single network into several (3 at least) servers designed to keep everyone honest.
 
-`/cheirrs/elastos-smartweb-service/grpc_adenine/database/scripts` 
+In our case, with The General, we started the process of building the databases from schema backup .sql files:
 
-folder, or from the associated location within the mounted 'shared' directory in a vm (if appropriate)
+You need to do some trials to determine the leading Database Node (taken at this preliminary stage as a Master, with 2 
+secondary nodes. It will be necessary to develop a way of allowing Master/Master relationships.
 
-`juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
+On primary:
 
-## The following command would be possible, as presented, only after you are positively identified, gain our trust, 
-     and sign an agreement to work with us, in order to obtain these backup files. Or, develop your own (see below)!
+`kubectl cp path/to/backup.sql node-1:/backup.sql`
 
-`cd ../../../../ && juju scp dbase_setup*.sh <machine-number-postgresql-master>:/home/ubuntu && juju scp *.sql <machine-number-postgresql-master>:/home/ubuntu && cd ../ && juju scp *.sql <machine number of postgresql master>:/home/ubuntu/`
+You may need to choose other than node-1.
 
-where some of the relevant .sql backup files are outside the 'cheirrs' repository, and generally unavailable publically.
+`kubectl exec -it <your-dbpod-name-1-0> -- /bin/bash`
 
-exec into master db container:
+As long as the target pod ("your-dbpod-name-1-0", here) is in fact the Master, you will land in a pod from which you will
+be able to restore your schema. If not, you will be informed you cannot write to a read-only database-copy. In that case try 
+a different pod. Having found the Master:
 
-`juju ssh <machine number of postgresql master>`
+`sudo passwd postgres` and enter your password twice to change existing unknown password.
 
-Now you are inside postgres master container, in the /home/ubuntu directory:
+`su postgres`  You are at / - the root directory - and your backup.sql is there too.
 
-`sudo passwd postgres`
+`createdb <dbname>`
 
-Enter your new postgres user's password twice.
+`createuser gmu` (For Elastos' purposes.)
 
-`su postgres`
+`psql <dbname> < backup.sql`
 
-     Note that you could simply take any schema you have available, suitable to ANSI or 
-     Postgres standards, and edit it in a good editor replacing the occurrences of the schema name, 
-     in an sql backup of your schema, with the series of schema names you can find in 
-     "dbase_setup_1.sh", in turn (we leave out public, tiger, tiger_data, and topology as 
-     they are provided by the overall process here).
-     
-     Alternatively you could edit "dbase_setup_1.sh" to reflect your own database and its 
-     set of schemata, and place copies of your .sql schema backups in the parent directory of the 
-     cloned "cheirrs" directory. The above scripts will then work for you. It is suggested to also 
-     edit the "create_users.sql" file in the cheirrs root directory to suite your own needs. Note as 
-     the code stands you do require a superuser 'gmu'.
-     
-`./dbase_setup_1.sh`
+At this point the remaining task is to construct the Elastos-Smartweb-Service server as a deployment with 3 replica pods.
 
-     (.. this takes 1.2 hours on my machine, with a mechanical HDD. Don't worry about any syntax errors visible when the scripts have run)
+See the following ..
 
-`\dt ` should reveal no instances (in default public schema)
+elastos-deployment.yaml:
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastos-smartweb-service
+spec:
+  selector:
+    matchLabels:
+      app: elastos
+  replicas: 3 # tells deployment to run 3 pods matching the template
+  template:
+    metadata:
+      labels:watch -c kubectl get deployment,pod,statefulset,svc,configmap,pv,pvc -o wide
+        app: elastos
+    spec:
+      containers:
+      - name: elastos
+        image: cyberrepublic/elastos-smartweb-service:latest
+        ports:
+        - containerPort: 80
+```
 
-`set search_path to cheirrs;`
+Apply the above file:
 
-     .. now, `\dt` should reveal a full set of 600+ tables in 2 categories: 1) accounting_<xyz> and 2) uc_<uvw> ('uc_' for use_case). 
-     Or in most people's cases it will reveal whatever you provided in the first place.
+On primary:
 
-     Fewer results will appear for:
+`kubectl apply -f elastos-deployment.yaml`
 
-`set search_path to cheirrs_oseer;`
+You can watch everything with:
 
-     and, for example;
-
-`set search_path to das_fuhrwerk;`
-
-     when you run 
-
-`\dt`
-
-     In postgres master machine:
-
-     Exit psql shell:
-
-`\q`
+`watch -c kubectl get deployment,pod,statefulset,svc,configmap,pv,pvc -o wide`
 
 
-__________________________________________________________________
+_______________________________________________________
 
 ## Getting PostGIS and Open Street Maps
-
-Inside your postgresql Master (
-
-`juju ssh <postgresql_Master_machine_number>`, or if you are already acting as user 'postgres' on postgresql-master, simply `exit` 
-
-)
-
-     As user ubuntu (if acting as "postgres" `exit`as "postgres" is not a sudoer) & get ubuntugis repo:
-
-`sudo add-apt-repository ppa:ubuntugis/ppa`
-
-`./dbase_setup_2.sh`
-
-`su postgres`
-
-`./dbase_setup_3.sh`
-
-     (Note for the smart-web blockchains to work, gmu must exist as a user with password gmu, and with usage permission to all schema.)
-
-     Check Schemas: there should be 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 
-     'das_fuhrwerk', 'the_general', 'the_general_oseer', 'tiger', 'tiger_data', 'topology', and 'public'.
-
-`\dn`
-
-Check off users:
-
-`\du`
-
-then
-
-`\dt` (to reveal tables in default public schema) you should see 7 tables.
-
-Try:
-
-`select * from users;`
-
-You should see the single registered user's details.
-
-`\q`
-
-`exit`
-
-`exit`
-
-You're back on Host.
-
-_________________________________________________________________
-
-## Set up Cross-Model Referenced "offer" for apps on other models to access PostgreSQL solo installation on this controller 
-     
-     called 'betrieb', within this cmr-model called 'werk'.
-
-     [cmr-model == "Cross-Model Referenced"-model]
-
-     (If not on "betrieb" controller)
-
-`juju switch betrieb`
-
-`juju offer pg-a:db`
-
-     then, if you `juju status` in the werk model you will see, at the foot of the output, a reference to the Offer.
-
-     An application (and users - here admin and ubuntu) set to `consume` the postgres service from a different model and controller (eg here: from the 'kubefluss'      controller, ie from the 'lernenmaschine' model), is connected with (this needs to be run while in lernenmaschine model):
-
-`juju grant admin consume kubefluss:admin/werk.pg-a`
-
-`juju grant ubuntu consume kubefluss:ubuntu/werk.pg-a`
-
-     .. then the authorised user (in the lernenmaschine model - see above) may use:
-
-`juju add-relation <application>:db kubefluss:admin/werk.pg-a:db`
-
-`juju add-relation <application>:db kubefluss:ubuntu/werk.pg-a:db`
-
-     to connect "application" to the database (in werk model)from 'kubefluss' controller, ie from the lernenmaschine model (in this case).
 
 _______________________________________________________________
 
@@ -972,22 +890,7 @@ NOTE: As we don't own or control the elastos sub-modules, and since the `elastos
 `cheirrs/TO_BE_COPIED_INTO_smartweb-service/TO_elastos-smartweb-service.grpc_adenine.database/__init__.py` 
 (in local clones of this repo) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account, for example.
 
-     As appropriate, either on host or from a vm:
      
-`juju ssh 7`
-     
-`git clone https://github.com/cyber-republic/elastos-smartweb-service.git`
-     
- `exit`
-   
-     After this, on Host (or multipass vm):
-
-`cd path/to/cheirrs/elastos-smartweb-service`
-
-The .env.example file here needs to be filled-in with the correct database name, database server address and port as well as the correct addresses for the smart-web virtual machine. ie the blockchain addresses and ports to access the smart-web environment. It then will need to be copied to the worker machine as ".env" (but if you follow the instructions below, you will be copying .env.test and .env as edited to cheirrs/TO*/*service/.env and .env.test. 
-     
-     So, edit (from cheirrs root) TO*/*service/.env and TO*/*service/.env.test to reflect your addresses.
-
 The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0 machine, here, as appropriate. Also the database details will require alteration.
      
 Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules" at 'cheirrs' cloning-time, you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above). Actually there is no need to alter the __init__.py 
@@ -1003,24 +906,24 @@ So in the host's - or in the vm - (in cheirrs root) "TO_BE_COPIED_TO_smartweb-se
      
      1:
 
-`juju scp TO*/*service/*.sh <machine-number-worker-0>:/home/ubuntu/el* && juju scp TO*/*service/.env* <machine-number-worker-0>:/home/ubuntu/el*`
+`kubectl cp TO*/*service/*.sh <machine-number-worker-0>:/home/ubuntu/el* && juju scp TO*/*service/.env* <machine-number-worker-0>:/home/ubuntu/el*`
 
      2:
      
-`juju scp TO*service/TO*adenine/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine`
+`kubectl cp TO*service/TO*adenine/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine`
 
      3:
      
-`juju scp TO*service/TO*database/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database`
+`kubectl cp TO*service/TO*database/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database`
 
      4:
      
-`juju scp TO*service/TO*python/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python`
+`kubectl cp TO*service/TO*python/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python`
 
  
 Re-enter worker-0:
 
-`juju ssh <machine-number-worker-0>`
+`kubectl exec -it <machine-number-worker-0> /bin/bash`
 
 `cd el* && ./run.sh`
 
@@ -1048,7 +951,7 @@ ________________________________________________________________________________
      
      The following is a screenshot of the status board after successful installation:
      
-<img src="./Screenshot from 2021-06-22 06-28-06.png">
+<img src="./Screenshot from 2022-05-10 14-56-57.png">
      
      stdout of Blockchains looks like:
      
@@ -1071,7 +974,7 @@ _____________________________________________________________
 To be continued ..
 _____________________________________________________________
 
-     
+##THE FOLLOWING REQUIRES A LOT OF WORK.    
 ## Enter kubernetes-worker-1, to set-up an IoT server with Python-gRPC, 
 ## node-red-industrial, Carrier and IOTA client, on their own vm.
      
