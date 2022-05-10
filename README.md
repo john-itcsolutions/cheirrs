@@ -702,7 +702,7 @@ _________________________________________________________________
 
 ## A Second Model on a second controller:
 
-(The database schemata for ITCSA's project are private and available only under certain conditions.)
+(The database schemata for ITOTCCA's project are private and available only under certain conditions.)
      
    {  If you have implemented a kubeflow installation (above) on one partition of the Host (on a microk8s cloud/controller),
      you will need to obtain multipass to allow creation of four (a master control plane machine called 'primary', with node-1, node-2 and node-3)    
