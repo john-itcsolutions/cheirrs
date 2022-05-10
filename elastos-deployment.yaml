@@ -1,0 +1,22 @@
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastos-smartweb-service
+spec:
+  selector:
+    matchLabels:
+      app: elastos
+  replicas: 3 # tells deployment to run 3 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: elastos
+    spec:
+      containers:
+      - name: elastos
+        image: cyberrepublic/elastos-smartweb-service:latest
+        ports:
+        - containerPort: 80
+
