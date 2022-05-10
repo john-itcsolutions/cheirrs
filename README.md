@@ -706,8 +706,7 @@ _________________________________________________________________
      
    {  If you have implemented a kubeflow installation (above) on one partition of the Host (on a microk8s cloud/controller),
      you will need to obtain multipass to allow creation of four (a master control plane machine called 'primary', with node-1, node-2 and node-3)    
-     Ubuntu virtual machines (Kubernetes "nodes"), on this second partition (ie dual-boot Ubuntu/Ubuntu). Repeat all the following relevant
-     instructions for four ubuntu vm's:
+     Ubuntu virtual machines (Kubernetes "nodes"), on this second partition (ie dual-boot Ubuntu/Ubuntu)}.
      
 `sudo snap install multipass`
      
@@ -793,7 +792,43 @@ In order to simplify things:
  
  The best advice we can give now is to set up your Kubernetes system by following that reference. We have not managed to 
  arrange for Master/Master replication as yet. Everything happens from "primary". You should come back to here when you have Persistent Volume Claims, Persistent Volumes, Services, secrets, configmaps, Pods, 3 x Stateful Postgres (v 14.1) Sets and used node-affinity and anti-affinity to spread your pods uniquely and evenly on each worker node.
+ 
+ By following the instruction provided by Kubegres, we obtain the following sequence:
+ 
+ `kubectl apply -f https://raw.githubusercontent.com/reactive-tech/kubegres/v1.15/kubegres.yaml`
+ 
+ Check status:
+ 
+ `watch -c kubectl get all -n kubegres-system`
+ 
+ When ready:
+ 
+ Check that your storage situation is functioning:
+ 
+ `kubectl get sc`
+ 
+ Assuming positive result (otherwise set up storage with `microk8s enable storage`):
+ 
+ Create and edit a secrets yaml file following the kubegres instructions, and keep it private. Then:
+ 
+ `kubectl apply -f my-postgres-secret.yaml`
+ 
+ In the database-as-blockchain folder in the current repo you will find "my-pvc.yml" which actually contains one Persistent Volume Claim
+ for each node (ie 3). Follow this model and apply your file:
+ 
+ `kubectl apply -f my-pvc.yml`
+ 
+ The actual Persistent Volumes required are defined in cheirrs/database-as-blockchin/nginx-mypv.yml. Follow that model and:
+ 
+ `kubectl apply -f nginx-mypv.yml`
 
+The final deployment steps are to create and edit your own version of what we call "pg-wendermaus.yaml" (in cheirrs/database-as-blockchin) and then:
+
+`kubectl apply -f pg-wendermaus.yaml`
+
+You can watch the results of deployments as they finalise with:
+
+`watch -c kubectl get pod,statefulset,svc,configmap,pv,pvc -o wide`
 
 *******************************************************
 
@@ -813,15 +848,17 @@ secondary nodes. It will be necessary to develop a way of allowing Master/Master
 
 On primary:
 
-`kubectl cp path/to/backup.sql node-1:/backup.sql`
+`kubectl cp path/to/backup.sql pg-wendermaus-1-0:/backup.sql`
 
-You may need to choose other than node-1.
+You may need to choose a different pod number to find the master.
 
-`kubectl exec -it <your-dbpod-name-1-0> -- /bin/bash`
+Having copied the backup(s) to the root directory in the master pod, one "kubectl execs" into the container with:
+
+`kubectl exec -it postgres-sample-0 -- /bin/bash`
 
 As long as the target pod ("your-dbpod-name-1-0", here) is in fact the Master, you will land in a pod from which you will
-be able to restore your schema. If not, you will be informed you cannot write to a read-only database-copy. In that case try 
-a different pod. Having found the Master:
+be able to restore your schema(s). If not, you will be informed you cannot write to a read-only database-copy. In that case try 
+a different pod. Having found the Master, from the container:
 
 `sudo passwd postgres` and enter your password twice to change existing unknown password.
 
@@ -831,9 +868,14 @@ a different pod. Having found the Master:
 
 `createuser gmu` (For Elastos' purposes.)
 
-`psql <dbname> < backup.sql`
+`psql <dbname> < backup.sql`, and similarly for other schemata. 
 
-At this point the remaining task is to construct the Elastos-Smartweb-Service server as a deployment with 3 replica pods.
+At this stage it is envisaged that we would set up one schema for each member-class in an inter-enterprise network, plus an iot 
+schema and an oversight schema (to run Business Process Supervision from). Also the design would require only one database pod 
+per member-class (not per member as in the IBM paper). All pods would be situated together in the cloud (and probably replicated at a 
+site-level globally).
+
+At this point the remaining task is to construct the Elastos-Smartweb-Service server as a deployment with 3 replica pods, and connect them to the databases.
 
 See the following ..
 
@@ -850,7 +892,7 @@ spec:
   replicas: 3 # tells deployment to run 3 pods matching the template
   template:
     metadata:
-      labels:watch -c kubectl get deployment,pod,statefulset,svc,configmap,pv,pvc -o wide
+      labels:
         app: elastos
     spec:
       containers:
@@ -869,6 +911,10 @@ On primary:
 You can watch everything with:
 
 `watch -c kubectl get deployment,pod,statefulset,svc,configmap,pv,pvc -o wide`
+
+The next step involves configuring the elastos deployment to connect & access the database replicas. 
+This will be done from inside the elastos pods. 
+
 
 
 _______________________________________________________
