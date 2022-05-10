@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # any PVC name
+  name: my-pvc
+spec:
+  # access mode:
+  # - ReadWriteMany (RW from multi nodes)
+  # - ReadWriteOnce (RW from a node)
+  # - ReadOnlyMany (R from multi nodes)
+  accessModes:
+    - ReadWriteMany
+  # specify microk8s-hostpath
+  storageClassName: microk8s-hostpath
+  resources:
+    requests:
+      # storage size to use
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # any PVC name
+  name: my-pvc-2
+spec:
+  # access mode:
+  # - ReadWriteMany (RW from multi nodes)
+  # - ReadWriteOnce (RW from a node)
+  # - ReadOnlyMany (R from multi nodes)
+  accessModes:
+    - ReadWriteMany
+  # specify microk8s-hostpath
+  storageClassName: microk8s-hostpath
+  resources:
+    requests:
+      # storage size to use
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  # any PVC name
+  name: my-pvc-3
+spec:
+  # access mode:
+  # - ReadWriteMany (RW from multi nodes)
+  # - ReadWriteOnce (RW from a node)
+  # - ReadOnlyMany (R from multi nodes)
+  accessModes:
+    - ReadWriteMany
+  # specify microk8s-hostpath
+  storageClassName: microk8s-hostpath
+  resources:
+    requests:
+      # storage size to use
+      storage: 1Gi

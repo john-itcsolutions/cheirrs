@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-mypv
+  labels:
+    name: nginx-mypv
+spec:
+  containers:
+    - name: nginx-mypv
+      image: ubuntu/nginx
+      ports:
+        - name: web
+          containerPort: 80
+      volumeMounts:
+        - name: my-persistent-volume
+          mountPath: /usr/share/nginx/html
+  affinity:
+     nodeAffinity:
+       requiredDuringSchedulingIgnoredDuringExecution:
+         nodeSelectorTerms:
+         - matchExpressions:
+           - key: kubernetes.io/hostname
+             operator: In
+             values:
+             - node-1
+  volumes:
+    - name: my-persistent-volume
+      persistentVolumeClaim:
+        # specify PVC name you defined
+        claimName: my-pvc
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-mypv-2
+  labels:
+    name: nginx-mypv-2
+spec:
+  containers:
+    - name: nginx-mypv-2
+      image: ubuntu/nginx
+      ports:
+        - name: web
+          containerPort: 80
+      volumeMounts:
+        - name: my-persistent-volume-2
+          mountPath: /usr/share/nginx/html
+  affinity: 
+     nodeAffinity:
+       requiredDuringSchedulingIgnoredDuringExecution:
+         nodeSelectorTerms:
+         - matchExpressions:
+           - key: kubernetes.io/hostname
+             operator: In
+             values:
+             - node-2
+  volumes:
+    - name: my-persistent-volume-2
+      persistentVolumeClaim:
+        # specify PVC name you defined
+        claimName: my-pvc-2
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-mypv-3
+  labels:
+    name: nginx-mypv-3
+spec:
+  containers:
+    - name: nginx-mypv-3
+      image: ubuntu/nginx
+      ports:
+        - name: web
+          containerPort: 80
+      volumeMounts:
+        - name: my-persistent-volume-3
+          mountPath: /usr/share/nginx/html
+  affinity: 
+     nodeAffinity:
+       requiredDuringSchedulingIgnoredDuringExecution:
+         nodeSelectorTerms:
+         - matchExpressions:
+           - key: kubernetes.io/hostname
+             operator: In
+             values:
+             - node-3
+  volumes:
+    - name: my-persistent-volume-3
+      persistentVolumeClaim:
+        # specify PVC name you defined
+        claimName: my-pvc-3
