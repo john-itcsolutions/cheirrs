@@ -785,7 +785,7 @@ On primary:
 
 On primary, again;
 
-`sudo snap install kubectl`
+`sudo snap install kubectl --classic`
 
 In order to simplify things:
 
