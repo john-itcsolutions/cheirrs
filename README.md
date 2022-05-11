@@ -920,8 +920,7 @@ This will be done from inside each copy of the elastos pods.
 
 `kubectl exec -it elastos-sample-0 -- /bin/bash`
 
-
-
+and take a look around ..
 
 
 _______________________________________________________
@@ -932,7 +931,7 @@ _______________________________________________________________
 
 ALSO:
 
-## Blockchains-Database Server (werk model) 
+## Blockchains-Database Server 
 
      We turn to finish setting up the Blockchain/Database gRPC Server Deployment.
      
@@ -944,14 +943,13 @@ NOTE: As we don't own or control the elastos sub-modules, and since the `elastos
 (in the shared directory on "primary" with a local clone of this repo) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account, for example.
 
      
-The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0 machine, here, as appropriate. Also the database details will require alteration.
+The blockchain server ip-addresses in the .env, and .env.test files on each elastos pod, need to match the address of the targeted pod. Also the database details will require alteration.
      
-Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules" at 'cheirrs' cloning-time, you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above). Actually there is no need to alter the __init__.py 
-file in the repo, rather in the cheirrs/TO*/*database/, which is where the file will be copied (soon) to the vm's.
+Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules" at 'cheirrs' cloning-time (we actually forked the elastos repo), you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above). Actually there is no need to alter the __init__.py file in the repo, rather in the cheirrs/TO*/*database/, which is where the file will be copied (soon) to the vm's.
      
      So, edit cheirrs/TO*/*database/__init__.py to insert your schema names, database name & database url.
      
-You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) identically. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
+You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) similarly. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
 
 So in "primary" (in shared/cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the target elastos pods, after editing .env and .env.test to replace existing database and pod addresses with addresses obtained from the installation. Therefore, on primary:
 
@@ -990,11 +988,11 @@ So in "primary" (in shared/cheirrs root) "TO_BE_COPIED_TO_smartweb-service" dire
 `kubectl cp TO*service/TO*python/wallet_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/wallet_pb2_grpc.py`
 
  
-Re-enter worker-0:
+exit to primary:
 
 `kubectl exec -it <target-pod-name> /elastos-smartweb-service/run.sh`
 
-.. and wait and watch .. and examine logs in case of errors, which are available at . 
+.. and wait and watch .. and examine logs in case of errors, which are available at (TODO). 
      If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds.
      
      There is also a dbase_report.txt in / on each pod.
