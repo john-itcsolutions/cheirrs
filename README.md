@@ -787,12 +787,6 @@ On primary, again;
 
 `sudo snap install kubectl --classic`
 
-In order to simplify things:
-
-`sudo snap alias microk8s.kubectl kubectl`
-
- .. then you can just use "kubectl blah .." instead of "microk8s.kubectl blah ..".
- 
  So far we opted to follow the page referred to above at kubegres, and avoided installing postgis. Keeping It Simple Sweetheart!
  
  The best advice we can give now is to set up your Kubernetes system by following that reference. We have not managed to 
@@ -802,40 +796,40 @@ In order to simplify things:
  
  By following the instruction provided by Kubegres, we obtain the following sequence:
  
- `kubectl apply -f https://raw.githubusercontent.com/reactive-tech/kubegres/v1.15/kubegres.yaml`
+ `microk8s.kubectl apply -f https://raw.githubusercontent.com/reactive-tech/kubegres/v1.15/kubegres.yaml`
  
  Check status:
  
- `watch -c kubectl get all -n kubegres-system`
+ `watch -c microk8s.kubectl get all -n kubegres-system`
  
  When ready:
  
  Check that your storage situation is functioning:
  
- `kubectl get sc`
+ `microk8s.kubectl get sc`
  
  Assuming positive result (otherwise set up storage with `microk8s enable storage`):
  
  Create and edit a secrets yaml file following the kubegres instructions, and keep it private. Then:
  
- `kubectl apply -f my-postgres-secret.yaml`
+ `microk8s.kubectl apply -f my-postgres-secret.yaml`
  
  In the database-as-blockchain folder in the current repo you will find "my-pvc.yml" which actually contains one Persistent Volume Claim
  for each node (ie 3). Follow this model and apply your file:
  
- `kubectl apply -f pvc.yml`
+ `microk8s.kubectl apply -f pvc.yml`
  
  The actual Persistent Volumes required are defined in cheirrs/database-as-blockchin/nginx-mypv.yml. Follow that model and:
  
- `kubectl apply -f mypv.yml`
+ `microk8s.kubectl apply -f mypv.yml`
 
 The final deployment steps are to create and edit your own version of what we call "pg-wendermaus.yaml" (in cheirrs/database-as-blockchain) and then:
 
-`kubectl apply -f pg-wendermaus.yaml`
+`microk8s.kubectl apply -f pg-wendermaus.yaml`
 
 You can watch the results of deployments as they finalise with:
 
-`watch -c kubectl get pod,statefulset,svc,configmap,pv,pvc -o wide`
+`watch -c microk8s.kubectl get pod,statefulset,svc,configmap,pv,pvc -o wide`
 
 *******************************************************
 
@@ -855,13 +849,13 @@ secondary nodes. It will be necessary to develop a way of allowing Master/Master
 
 On primary:
 
-`kubectl cp path/to/backup.sql pg-wendermaus-1-0:/backup.sql`
+`microk8s.kubectl cp path/to/backup.sql pg-wendermaus-1-0:/backup.sql`
 
 You may need to choose a different pod number to find the master.
 
 Having copied the backup(s) to the root directory in the master pod, one "kubectl execs" into the container with:
 
-`kubectl exec -it postgres-sample-0 -- /bin/bash`
+`microk8s.kubectl exec -it postgres-sample-0 -- /bin/bash`
 
 As long as the target pod ("pg-wendermaus-1-0", here) is in fact the Master, you will land in a pod from which you will
 be able to restore your schema(s). If not, you will be informed you cannot write to a read-only database-copy. In that case try 
@@ -913,16 +907,16 @@ Apply the above file:
 
 On primary:
 
-`kubectl apply -f elastos-deployment.yaml`
+`microk8s.kubectl apply -f elastos-deployment.yaml`
 
 You can watch everything with:
 
-`watch -c kubectl get deployment,pod,statefulset,svc,configmap,pv,pvc -o wide`
+`watch -c microk8s.kubectl get deployment,pod,statefulset,svc,configmap,pv,pvc -o wide`
 
 The next step involves configuring the elastos deployment to connect & access the database replicas. 
 This will be done from inside each copy of the elastos pods. 
 
-`kubectl exec -it elastos-sample-0 -- /bin/bash`
+`microk8s.kubectl exec -it elastos-sample-0 -- /bin/bash`
 
 and take a look around ..
 
@@ -961,40 +955,40 @@ So in "primary" (in shared/cheirrs root) "TO_BE_COPIED_TO_smartweb-service" dire
      
      1:
 
-`kubectl cp TO*/*service/run.sh <target-pod-name>:/elastos-smartweb-service/run.sh`
+`microk8s.kubectl cp TO*/*service/run.sh <target-pod-name>:/elastos-smartweb-service/run.sh`
 
-`kubectl cp TO*/*service/test.sh <target-pod-name>:/elastos-smartweb-service/test.sh`
+`microk8s.kubectl cp TO*/*service/test.sh <target-pod-name>:/elastos-smartweb-service/test.sh`
 
-`kubectl cp TO*/*service/.env <target-pod-name>:/elastos-smartweb-service/.env`
+`microk8s.kubectl cp TO*/*service/.env <target-pod-name>:/elastos-smartweb-service/.env`
 
-`kubectl cp TO*/*service/.env.test <target-pod-name>:/elastos-smartweb-service/.env.test`
+`microk8s.kubectl cp TO*/*service/.env.test <target-pod-name>:/elastos-smartweb-service/.env.test`
 
      2:
      
-`kubectl cp TO*service/TO*adenine/server.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/server.py`
+`microk8s.kubectl cp TO*service/TO*adenine/server.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/server.py`
 
      3:
      
-`kubectl cp TO*service/TO*database/__init__.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
+`microk8s.kubectl cp TO*service/TO*database/__init__.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
 
      4:
      
-`kubectl cp TO*service/TO*python/common_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/common_pb2_grpc.py`
+`microk8s.kubectl cp TO*service/TO*python/common_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/common_pb2_grpc.py`
 
-`kubectl cp TO*service/TO*python/health_check_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/health_check_pb2_grpc.py`
+`microk8s.kubectl cp TO*service/TO*python/health_check_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/health_check_pb2_grpc.py`
 
-`kubectl cp TO*service/TO*python/hive_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/hive_pb2_grpc.py`
+`microk8s.kubectl cp TO*service/TO*python/hive_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/hive_pb2_grpc.py`
 
-`kubectl cp TO*service/TO*python/node_rpc_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/node_rpc_pb2_grpc.py`
+`microk8s.kubectl cp TO*service/TO*python/node_rpc_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/node_rpc_pb2_grpc.py`
 
-`kubectl cp TO*service/TO*python/sidechain_eth_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/sidechain_eth_pb2_grpc.py`
+`microk8s.kubectl cp TO*service/TO*python/sidechain_eth_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/sidechain_eth_pb2_grpc.py`
 
-`kubectl cp TO*service/TO*python/wallet_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/wallet_pb2_grpc.py`
+`microk8s.kubectl cp TO*service/TO*python/wallet_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/wallet_pb2_grpc.py`
 
  
 exit to primary:
 
-`kubectl exec -it <target-pod-name> /elastos-smartweb-service/run.sh`
+`microk8s.kubectl exec -it <target-pod-name> /elastos-smartweb-service/run.sh`
 
 .. and wait and watch .. and examine logs in case of errors, which are available at (TODO). 
      If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds.
