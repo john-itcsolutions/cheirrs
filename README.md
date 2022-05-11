@@ -961,9 +961,9 @@ Now perform each of the following 4 steps for each target-pod ie worker node, pa
 
 `microk8s.kubectl cp TO*/*service/test.sh <target-pod-name>:/elastos-smartweb-service/test.sh`
 
-`microk8s.kubectl cp TO*/*service/.env <target-pod-name>:/elastos-smartweb-service/.env`
+`microk8s.kubectl cp TO*/TO_.env_in_elastos-smartweb-service_<node-number-eg 1>/.env <target-pod-name>:/elastos-smartweb-service/.env`
 
-`microk8s.kubectl cp TO*/*service/.env.test <target-pod-name>:/elastos-smartweb-service/.env.test`
+`microk8s.kubectl cp TO*/TO_.env_in_elastos-smartweb-service_<node-number-eg 1>/.env.test <target-pod-name>:/elastos-smartweb-service/.env.test`
 
      2:
      
@@ -971,7 +971,7 @@ Now perform each of the following 4 steps for each target-pod ie worker node, pa
 
      3:
      
-`microk8s.kubectl cp TO*service/TO*database/__init__.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
+`microk8s.kubectl cp TO*service/TO_elastos-smartweb-service.grpc_adenine.database_<node-number-eg 1>/__init__.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
 
      4:
      
