@@ -952,6 +952,8 @@ You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root dir
 So in "primary" (in shared/cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the target elastos pods, after editing .env and .env.test to replace existing database and pod addresses with addresses obtained from the installation. Therefore, on primary:
 
 `cd ....path/to/shared/cheirrs`
+
+Now perform each of the following 4 steps for each target-pod ie worker node, paying particular attention to the .env, .env.test and __init__.py files,  where the database host address will need to be edited for each target-pod ie worker node, and similarly for the elastos pod addresses on each node in .env & .env.test:
      
      1:
 
@@ -985,6 +987,7 @@ So in "primary" (in shared/cheirrs root) "TO_BE_COPIED_TO_smartweb-service" dire
 
 `microk8s.kubectl cp TO*service/TO*python/wallet_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/wallet_pb2_grpc.py`
 
+ After you have covered all 5 nodes:
  
 exit to primary:
 
@@ -993,7 +996,7 @@ exit to primary:
 .. and wait and watch .. and examine logs in case of errors, which are available at (TODO). 
      If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds.
      
-     There is also a dbase_report.txt at / on each pod.
+     There is also a dbase_report.txt (just a structural summary) at / on each pod.
 
 
 _________________________________________________________________________________________________
