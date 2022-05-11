@@ -938,9 +938,9 @@ ALSO:
 _______________________________________________________________
      
 
-NOTE: As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITCSA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to edit this file carefully to suit your own database, at your
-`cheirrs/TO_BE_COPIED_INTO_smartweb-service/TO_elastos-smartweb-service.grpc_adenine.database/__init__.py` 
-(in local clones of this repo) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account, for example.
+NOTE: As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITOTCCA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to edit this file carefully to suit your own database, at your
+`shared/cheirrs/TO_BE_COPIED_INTO_smartweb-service/TO_elastos-smartweb-service.grpc_adenine.database/__init__.py` 
+(in the shared directory on "primary" with a local clone of this repo) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account, for example.
 
      
 The blockchain server ip-addresses in the .env, and .env.test files need to match the address of the kubernetes-worker-0 machine, here, as appropriate. Also the database details will require alteration.
@@ -952,53 +952,53 @@ file in the repo, rather in the cheirrs/TO*/*database/, which is where the file 
      
 You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) identically. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
 
-So in the host's - or in the vm - (in cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the worker-0 machine. Therefore:
+So in "primary" (in shared/cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the target elastos pods, after editing .env and .env.test to replace existing database and pod addresses with addresses obtained from the installation. Therefore, on primary:
 
-`cd ....path/to/cheirrs`
+`cd ....path/to/shared/cheirrs`
      
      1:
 
-`kubectl cp TO*/*service/*.sh <machine-number-worker-0>:/home/ubuntu/el* && juju scp TO*/*service/.env* <machine-number-worker-0>:/home/ubuntu/el*`
+`kubectl cp TO*/*service/run.sh <target-pod-name>:/elastos-smartweb-service/run.sh`
+
+`kubectl cp TO*/*service/test.sh <target-pod-name>:/elastos-smartweb-service/test.sh`
+
+`kubectl cp TO*/*service/.env <target-pod-name>:/elastos-smartweb-service/.env`
+
+`kubectl cp TO*/*service/.env.test <target-pod-name>:/elastos-smartweb-service/.env.test`
 
      2:
      
-`kubectl cp TO*service/TO*adenine/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine`
+`kubectl cp TO*service/TO*adenine/server.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/server.py`
 
      3:
      
-`kubectl cp TO*service/TO*database/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database`
+`kubectl cp TO*service/TO*database/__init__.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
 
      4:
      
-`kubectl cp TO*service/TO*python/*.py <machine-number-worker-0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python`
+`kubectl cp TO*service/TO*python/common_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/common_pb2_grpc.py`
+
+`kubectl cp TO*service/TO*python/health_check_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/health_check_pb2_grpc.py`
+
+`kubectl cp TO*service/TO*python/hive_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/hive_pb2_grpc.py`
+
+`kubectl cp TO*service/TO*python/node_rpc_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/node_rpc_pb2_grpc.py`
+
+`kubectl cp TO*service/TO*python/sidechain_eth_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/sidechain_eth_pb2_grpc.py`
+
+`kubectl cp TO*service/TO*python/wallet_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/wallet_pb2_grpc.py`
 
  
 Re-enter worker-0:
 
-`kubectl exec -it <machine-number-worker-0> /bin/bash`
+`kubectl exec -it <target-pod-name> /elastos-smartweb-service/run.sh`
 
-`cd el* && ./run.sh`
-
-.. and wait and watch .. and examine logs in case of errors, which are in the machines (`juju ssh <machine-number>`) at /var/log/juju/filename.log. 
-     If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds. The logs of units housed 
-     by other machines are available on those machines.
+.. and wait and watch .. and examine logs in case of errors, which are available at . 
+     If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds.
      
-     There is also a dbase_report.txt in /home/ubuntu on each vm.
+     There is also a dbase_report.txt in / on each pod.
 
 
-              ____________________________
-
-(Notes; 
-     
-1. You are user 'ubuntu' here (in all vm's), so if you, or any user, needs a new password, just
-
-`sudo passwd ubuntu` or `sudo passwd <user-name>`
-
-2. To add, for example, 2 load-balancer units, simply
-
-`juju add-unit -n 2 kubeapi-load-balancer`
-
-)
 _________________________________________________________________________________________________
      
      The following is a screenshot of the status board after successful installation:
