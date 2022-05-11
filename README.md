@@ -788,10 +788,12 @@ In order to simplify things:
 
  .. then you can just use "kubectl blah .." instead of "microk8s.kubectl blah ..".
  
- So far we opted to follow the page referred to above at kubegres, and avoided installing postgis. Keep It Simple Sweetheart!
+ So far we opted to follow the page referred to above at kubegres, and avoided installing postgis. Keeping It Simple Sweetheart!
  
  The best advice we can give now is to set up your Kubernetes system by following that reference. We have not managed to 
- arrange for Master/Master replication as yet. Everything happens from "primary". You should come back to here when you have Persistent Volume Claims, Persistent Volumes, Services, secrets, configmaps, Pods, 3 x Stateful Postgres (v 14.1) Sets and used node-affinity and anti-affinity to spread your pods uniquely and evenly on each worker node.
+ arrange for Master/Master replication as yet. Everything happens from "primary". You should come back to here when you have 
+ Persistent Volume Claims, Persistent Volumes, Services, secrets, configmaps, Pods, 3 x Stateful Postgres (v 14.1) Sets and 
+ used node-affinity and anti-affinity to spread your pods uniquely and evenly on each worker node.
  
  By following the instruction provided by Kubegres, we obtain the following sequence:
  
@@ -822,7 +824,7 @@ In order to simplify things:
  
  `kubectl apply -f nginx-mypv.yml`
 
-The final deployment steps are to create and edit your own version of what we call "pg-wendermaus.yaml" (in cheirrs/database-as-blockchin) and then:
+The final deployment steps are to create and edit your own version of what we call "pg-wendermaus.yaml" (in cheirrs/database-as-blockchain) and then:
 
 `kubectl apply -f pg-wendermaus.yaml`
 
@@ -836,15 +838,15 @@ ________________________________________________________________
  
 ## DATABASE: Internals
 
-You will need a database schema (we use 2 - the_general, and the_general_oseer) to serve as material for development.
+You will need a database schema (we use 2 - the_general, and the_general_oseer at this early stage) to serve as material for development.
 
 In our case when a single member-class network exists (such as our Real Estate Property dApps) we would be required 
-to separate the existing single network into several (3 at least) servers designed to keep everyone honest.
+to separate the existing single network into several (3 to provide a 'Mexican Standoff' arrangement) servers designed to keep everyone honest.
 
 In our case, with The General, we started the process of building the databases from schema backup .sql files:
 
 You need to do some trials to determine the leading Database Node (taken at this preliminary stage as a Master, with 2 
-secondary nodes. It will be necessary to develop a way of allowing Master/Master relationships.
+secondary nodes. It will be necessary to develop a way of allowing Master/Master relationships in the future.
 
 On primary:
 
@@ -856,7 +858,7 @@ Having copied the backup(s) to the root directory in the master pod, one "kubect
 
 `kubectl exec -it postgres-sample-0 -- /bin/bash`
 
-As long as the target pod ("your-dbpod-name-1-0", here) is in fact the Master, you will land in a pod from which you will
+As long as the target pod ("pg-wendermaus-1-0", here) is in fact the Master, you will land in a pod from which you will
 be able to restore your schema(s). If not, you will be informed you cannot write to a read-only database-copy. In that case try 
 a different pod. Having found the Master, from the container:
 
@@ -868,11 +870,11 @@ a different pod. Having found the Master, from the container:
 
 `createuser gmu` (For Elastos' purposes.)
 
-`psql <dbname> < backup.sql`, and similarly for other schemata. 
+`psql <dbname> < backup.sql`, and similarly for other schemata. In the final state, there will be one schema per member-class plus other utility schemata such as "iot" and an overseeing schema.
 
 At this stage it is envisaged that we would set up one schema for each member-class in an inter-enterprise network, plus an iot 
 schema and an oversight schema (to run Business Process Supervision from). Also the design would require only one database pod 
-per member-class (not per member as in the IBM paper). All pods would be situated together in the cloud (and probably replicated at a 
+per member-class (not "per member" as in the IBM paper). All pods would be situated together in the cloud (and probably replicated at a 
 site-level globally).
 
 At this point the remaining task is to construct the Elastos-Smartweb-Service server as a deployment with 3 replica pods, and connect them to the databases.
@@ -913,7 +915,11 @@ You can watch everything with:
 `watch -c kubectl get deployment,pod,statefulset,svc,configmap,pv,pvc -o wide`
 
 The next step involves configuring the elastos deployment to connect & access the database replicas. 
-This will be done from inside the elastos pods. 
+This will be done from inside each copy of the elastos pods. 
+
+`kubectl exec -it elastos-sample-0 -- /bin/bash`
+
+
 
 
 
