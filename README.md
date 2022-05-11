@@ -714,7 +714,7 @@ _________________________________________________________________
 
 `multipass launch -n node-1 -c 1 -m 3GB -d 50GB`
 
-`multipass launch -n node-2 -c 1 -m 3B -d 50GB`
+`multipass launch -n node-2 -c 1 -m 3GB -d 50GB`
 
 `multipass launch -n node-3 -c 1 -m 3GB -d 50GB`
 
