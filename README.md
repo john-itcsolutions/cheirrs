@@ -748,9 +748,10 @@ _________________________________________________________________
 
 It may take longer if your network is slow. Be patient
 
-ITOTCCA have also disovered "kubegres", and we are currently learning to set up a Master/Master replication system, 
+ITOTCCA have also disovered "kubegres", and we are currently investigating how to set up a Master/Master replication system, 
 so each network member (here each of the node-x's) functions as a peer of the others. The system works on Multipass 
-vm's, each running microk8s, and connected in a Kubernetes Cluster.
+vm's, each running microk8s, and connected in a Kubernetes Cluster. Eventually it is envisaged there would be no "primary" 
+node with only Master peers.
 
 The kubegres webpages can be followed from here:  https://www.kubegres.io/doc/getting-started.html
 
