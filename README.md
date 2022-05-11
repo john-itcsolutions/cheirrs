@@ -710,7 +710,7 @@ _________________________________________________________________
      
 `sudo snap install multipass`
      
-`multipass launch -n primary -c 1 -m 3GB -d 50GB`
+`multipass launch -n primary -c 1 -m 8GB -d 60GB`
 
 `multipass launch -n node-1 -c 1 -m 3GB -d 50GB`
 
