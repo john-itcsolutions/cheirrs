@@ -819,11 +819,11 @@ In order to simplify things:
  In the database-as-blockchain folder in the current repo you will find "my-pvc.yml" which actually contains one Persistent Volume Claim
  for each node (ie 3). Follow this model and apply your file:
  
- `kubectl apply -f my-pvc.yml`
+ `kubectl apply -f pvc.yml`
  
  The actual Persistent Volumes required are defined in cheirrs/database-as-blockchin/nginx-mypv.yml. Follow that model and:
  
- `kubectl apply -f nginx-mypv.yml`
+ `kubectl apply -f mypv.yml`
 
 The final deployment steps are to create and edit your own version of what we call "pg-wendermaus.yaml" (in cheirrs/database-as-blockchain) and then:
 
