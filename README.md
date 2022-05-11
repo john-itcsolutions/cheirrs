@@ -710,16 +710,20 @@ _________________________________________________________________
      
 `sudo snap install multipass`
      
-`multipass launch -n primary -c 1 -m 8GB -d 90GB`
+`multipass launch -n primary -c 1 -m 3GB -d 50GB`
 
-`multipass launch -n node-1 -c 1 -m 6GB -d 90GB`
+`multipass launch -n node-1 -c 1 -m 3GB -d 50GB`
 
-`multipass launch -n node-2 -c 1 -m 6GB -d 90GB`
+`multipass launch -n node-2 -c 1 -m 3B -d 50GB`
 
-`multipass launch -n node-3 -c 1 -m 6GB -d 90GB`
+`multipass launch -n node-3 -c 1 -m 3GB -d 50GB`
+
+`multipass launch -n node-4 -c 1 -m 3GB -d 50GB`
+
+`multipass launch -n node-5 -c 1 -m 3GB -d 50GB`
      
      (You can tweak those settings)
-     And end-up with 4 x LTS Ubuntu vm's to install the following software on.
+     And end-up with 6 x LTS Ubuntu vm's to install the following software on.
      
 `multipass shell primary`
 
@@ -751,7 +755,7 @@ It may take longer if your network is slow. Be patient
 ITOTCCA have also disovered "kubegres", and we are currently investigating how to set up a Master/Master replication system, 
 so each network member (here each of the node-x's) functions as a peer of the others. The system works on Multipass 
 vm's, each running microk8s, and connected in a Kubernetes Cluster. Eventually it is envisaged there would be no "primary" 
-node with only Master peers.
+node with only Master peers, and with the database set to replicate as a cluster of masters.
 
 The kubegres webpages can be followed from here:  https://www.kubegres.io/doc/getting-started.html
 
@@ -769,7 +773,7 @@ On primary, when everything is settled,
 
 .. and paste the resulting line, ending in ".. worker", into node-1. Repeat for nodes 2 and 3.
 
-You then have a small 3 node cluster of machines with a fourth acting as Control Plane Master ("primary").
+You then have a small 5 node cluster of machines with a sixth acting as Control Plane Master ("primary").
 
 On primary:
 
@@ -892,7 +896,7 @@ spec:
   selector:
     matchLabels:
       app: elastos
-  replicas: 3 # tells deployment to run 3 pods matching the template
+  replicas: 5 # tells deployment to run 5 pods matching the template
   template:
     metadata:
       labels:
@@ -995,7 +999,7 @@ exit to primary:
 .. and wait and watch .. and examine logs in case of errors, which are available at (TODO). 
      If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds.
      
-     There is also a dbase_report.txt in / on each pod.
+     There is also a dbase_report.txt at / on each pod.
 
 
 _________________________________________________________________________________________________
