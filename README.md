@@ -39,22 +39,24 @@ We base initial development such as this locally. It's cheaper!
 
 The schema above are labeled G(n,m) for the internetworked, multiple member class dApps. In reality there are only n schema with the member classes (m) being a data field in every table within the nth schema. In this way we can keep all transactions internal to a network on the same schema. The nth network is on the nth schema. The single member class, non-internetworked dApps (F(i)) are likewise constituted of all members of a network or dApp subscribers' group, on their own schema. Although this is the case with the set F(i), within a single network ie schema ie dApp, we will be able to use the field for a member's id to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. While the same is ideally the case for the G(n,m) set, such individual member Tables and dApps being theoretically possible, the design and coding would be expensive.
 
+# BlockBases or DataChains
+
 At the virtual server level, there will be one virtual Master copy of a database-and-server per member class, with the network extending across all private business subnets. This means that all signed-up Business Networks actually constitute sub-Networks of the entire system, where member-classes constitute 2nd level sub-networks, in their own combined Business Level network, ie subnets as network members of ITOTCCA's overall network including all signed up Business Networks. Please refer to the following figures.
 
 
-<img src="./kubernetesinstallation-08-11-2021-2.png">
+<img src="./datachains-slide1.png">
 
 
-<img src="./kubernetesinstallation-08-11-2021-2.png">
+<img src="./datachains-slide2.png">
 
 
-<img src="./kubernetesinstallation-08-11-2021-2.png">
+<img src="./datachains-slide3.png">
 
 
-<img src="./kubernetesinstallation-08-11-2021-2.png">
+<img src="./datachains-slide4.png">
 
 
-<img src="./kubernetesinstallation-08-11-2021-2.png">
+<img src="./datachains-slide5.png">
 
 
 
@@ -84,10 +86,6 @@ https://github.com/elastos/Elastos.Essentials
 Note that you may develop entirely on and for desktop computers with Ionic to get to a stage ready for deployment, however to make that dApp work with Elastos you would be required to employ the Elastos.Essentials utilities to connect to the required systems. If you develop also for mobile devices you need to upload the Essentials ".apk" file for Android and obtain various DID's and keys to securely connect on (for example) a USB-connected real mobile device using the Android Studio's "adb" tool. Aside from Android, iOS systems are currently being developed by Elastos for Essentials.
 
 You would also require some dev tools and the openjdk for Java, as well as nodejs@14.x:
-
-# BlockBases or DataChains
-
-The following 5 diagrams show various aspects of the deigns hinted at by IBM in the abovementioned article.
 
 # Base requirements 
 `sudo apt -y install openjdk-11-jdk build-essential curl dirmngr apt-transport-https lsb-release ca-certificates git`
