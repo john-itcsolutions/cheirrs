@@ -751,10 +751,210 @@ _________________________________________________________________
 
 *******************************************************
 
-Firstly get "kubectl on each master node:
+On each node, masters and workers:
 
-curl -LO https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl
+`sudo apt-get update`
 
+`sudo apt-get install -y apt-transport-https ca-certificates curl`
+
+`sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg`
+
+`echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list`
+
+`sudo apt-get update`
+
+`sudo apt-get install -y kubelet kubeadm kubectl`
+
+`sudo apt-mark hold kubelet kubeadm kubectl`
+
+Get fresh Docker. Firstly remove previous installation:
+
+`sudo apt-get remove docker docker-engine docker.io containerd runc`
+
+`sudo apt-get update`
+
+`sudo apt-get install \
+     ca-certificates \
+     curl \
+     gnupg \
+     lsb-release`
+     
+`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg`
+
+`echo \
+   "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null`
+   
+`sudo apt-get update`
+
+`sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin`
+
+`sudo usermod -aG docker $USER && newgrp docker`
+
+Test installation - you should not need to run as sudo:
+
+`docker run hello-world`
+
+`git clone https://github.com/Mirantis/cri-dockerd.git`
+
+Install cri-dockerd, following the instructions in that source code repository.
+
+`git clone https://github.com/Mirantis/cri-dockerd.git`
+
+`mkdir -p /usr/local/bi`
+
+`cd cri*`
+
+`mkdir bin`
+
+`sudo apt install golang-go  # version 2:1.13~1ubuntu2`
+
+`cd src && go get && go build -o ../bin/cri-dockerd`
+
+`sudo mkdir -p /usr/local/bin`
+
+`cd ../`
+
+`sudo install -o root -g root -m 0755 bin/cri-dockerd /usr/local/bin/cri-dockerd`
+
+`sudo cp -a packaging/systemd/* /etc/systemd/system`
+
+`sudo sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service`
+
+`sudo systemctl daemon-reload`
+
+`sudo systemctl enable cri-docker.service`
+
+`sudo systemctl enable --now cri-docker.socket`
+
+`cd src && go get && go build -o ../bin/cri-dockerd`
+
+`sudo systemctl enable --now cri-docker.socket`
+
+`sudo apt-get update`
+
+`nano kubeadm-config.yaml`
+
+then copy and paste the following text there:
+
+```
+apiVersion: kubeadm.k8s.io/v1beta3
+bootstrapTokens:
+- groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  token: abcdef.0123456789abcdef
+  ttl: 24h0m0s
+  usages:
+  - signing
+  - authentication
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: 10.32.84.196
+  bindPort: 6443
+nodeRegistration:
+  criSocket: unix:/run/cri-dockerd.sock
+  imagePullPolicy: IfNotPresent
+  name: master-1
+  taints: null
+---
+apiServer:
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta3
+certificatesDir: /etc/kubernetes/pki
+clusterName: kubernetes
+controllerManager: {}
+dns: {}
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+imageRepository: k8s.gcr.io
+kind: ClusterConfiguration
+kubernetesVersion: 1.24.0
+networking:
+  dnsDomain: cluster.local
+  serviceSubnet: 10.96.0.0/12
+scheduler: {}
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+authentication:
+  anonymous:
+    enabled: false
+  webhook:
+    cacheTTL: 0s
+    enabled: true
+  x509:
+    clientCAFile: /etc/kubernetes/pki/ca.crt
+authorization:
+  mode: Webhook
+  webhook:
+    cacheAuthorizedTTL: 0s
+    cacheUnauthorizedTTL: 0s
+cgroupDriver: systemd
+clusterDNS:
+- 10.96.0.10
+clusterDomain: cluster.local
+cpuManagerReconcilePeriod: 0s
+evictionPressureTransitionPeriod: 0s
+fileCheckFrequency: 0s
+healthzBindAddress: 127.0.0.1
+healthzPort: 10248
+httpCheckFrequency: 0s
+imageMinimumGCAge: 0s
+kind: KubeletConfiguration
+logging:
+  flushFrequency: 0
+  options:
+    json:
+      infoBufferSize: "0"
+  verbosity: 0
+memorySwap: {}
+nodeStatusReportFrequency: 0s
+nodeStatusUpdateFrequency: 0s
+resolvConf: /run/systemd/resolve/resolv.conf
+rotateCertificates: true
+runtimeRequestTimeout: 0s
+shutdownGracePeriod: 0s
+shutdownGracePeriodCriticalPods: 0s
+staticPodPath: /etc/kubernetes/manifests
+streamingConnectionIdleTimeout: 0s
+syncFrequency: 0s
+volumeStatsAggPeriod: 0s
+```
+
+`sudo kubeadm init --config kubeadm-config.yaml`
+
+[Notes: You may need to kill existing processes running on required ports:
+
+Do this with:
+
+`sudo kill -9 $(sudo lsof -t -i:10250)`
+
+ where port example is 10250
+ 
+ You may also need to remove files existing in
+ 
+ `/etc/kubernetes/manifests`
+ 
+ therefore:
+ 
+ `sudo rm -rf /etc/kubernetes/manifests/*`
+ ]
+ 
+ Upon success:
+ 
+ `mkdir -p $HOME/.kube`
+ 
+ `sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config`
+ 
+ `sudo chown $(id -u):$(id -g) $HOME/.kube/config`
+ 
+ A network plugin is required. We chose Flannel:
+ 
+ `kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml`
+
+
+ 
+ 
 
 
 ________________________________________________________________
