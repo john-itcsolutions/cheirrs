@@ -748,8 +748,19 @@ _________________________________________________________________
 `multipass launch -n master-6 -c 2 -m 3GB -d 50GB`
      
      (You can tweak those settings)
-     And end-up with 6 x LTS Ubuntu vm's which we will set up as 3 master nodes and 3 worker nodes using "kubeadm".
+     And end-up with 7 x LTS Ubuntu vm's which we will set up as 7 master nodes using "kubeadm".
      
+     
+     Then mount a shared directory to enable access to your host:
+     
+     On each vm
+     
+`mkdir shared`
+
+`exit`
+
+`multipass mount path/to/your/working/directory master-<x>:~/shared/`
+
 
 *******************************************************
 
