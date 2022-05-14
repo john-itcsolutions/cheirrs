@@ -732,8 +732,6 @@ _________________________________________________________________
      Ubuntu virtual machines (Kubernetes "nodes"), on this second partition (ie dual-boot Ubuntu/Ubuntu)}.
      
 `sudo snap install multipass`
-     
-`multipass launch -n primary -c 1 -m 8GB -d 60GB`
 
 `multipass launch -n node-1 -c 1 -m 3GB -d 50GB`
 
@@ -746,113 +744,8 @@ _________________________________________________________________
 `multipass launch -n node-5 -c 1 -m 3GB -d 50GB`
      
      (You can tweak those settings)
-     And end-up with 6 x LTS Ubuntu vm's to install the following software on.
+     And end-up with 5 x LTS Ubuntu vm's which we will set up as 5 master nodes using "kubeadm".
      
-`multipass shell primary`
-
-    is how to enter the vm.
-     
-     Inside the vm, you should create a place to mount your Host's working directory:
-     
-`mkdir ~/shared`
-     
-     You will need to mount your working directory on the Host to the vm:
-     
-`exit`
-     
- `multipass mount /path/to/working/dir primary:~/shared/`
-     
-     On the vm (
-     
-`multipass shell primary`
-     
-     )
-     
-     This, and the entire process of installation to the point of having blockchains running on the workers 
-     (node-x's) & connected to PostgreSQL + PostGIS replicated database, IOTA client connected and following
-     the Tangle, together with a Node-Red-Industrial pod on each worker, took me well over 24 hours to complete. 
-
-
-It may take longer if your network is slow. Be patient
-
-ITOTCCA have also disovered "kubegres", and we are currently investigating how to set up a Master/Master replication system, 
-so each network member (here each of the node-x's) functions as a peer of the others. The system works on Multipass 
-vm's, each running microk8s, and connected in a Kubernetes Cluster. Eventually it is envisaged there would be no "primary" 
-node with only Master peers, and with the database set to replicate as a cluster of masters.
-
-The kubegres webpages can be followed from here:  https://www.kubegres.io/doc/getting-started.html
-
-On each node as it becomes ready:
-
-`sudo snap install microk8s --classic`
-
-`sudo usermod -aG microk8s $USER && newgrp microk8s && sudo su - $USER`
-     
-`sudo iptables -P FORWARD ACCEPT`
-
-On primary, when everything is settled,
-
-`microk8s add-node`
-
-.. and paste the resulting line, ending in ".. worker", into node-1. Repeat for nodes 2 and 3.
-
-You then have a small 5 node cluster of machines with a sixth acting as Control Plane Master ("primary").
-
-On primary:
-
-`microk8s enable dns storage ingress`
-     
-     (Check staus)
-     
-`microk8s status --wait-ready`
-
-On primary, again;
-
-`sudo snap install kubectl --classic`
-
- So far we opted to follow the page referred to above at kubegres, and avoided installing postgis. Keeping It Simple Sweetheart!
- 
- The best advice we can give now is to set up your Kubernetes system by following that reference. We have not managed to 
- arrange for Master/Master replication as yet. Everything happens from "primary". You should come back to here when you have 
- Persistent Volume Claims, Persistent Volumes, Services, secrets, configmaps, Pods, 3 x Stateful Postgres (v 14.1) Sets and 
- used node-affinity and anti-affinity to spread your pods uniquely and evenly on each worker node.
- 
- By following the instruction provided by Kubegres, we obtain the following sequence:
- 
- `microk8s.kubectl apply -f https://raw.githubusercontent.com/reactive-tech/kubegres/v1.15/kubegres.yaml`
- 
- Check status:
- 
- `watch -c microk8s.kubectl get all -n kubegres-system`
- 
- When ready:
- 
- Check that your storage situation is functioning:
- 
- `microk8s.kubectl get sc`
- 
- Assuming positive result (otherwise set up storage with `microk8s enable storage`):
- 
- Create and edit a secrets yaml file following the kubegres instructions, and keep it private. Then:
- 
- `microk8s.kubectl apply -f my-postgres-secret.yaml`
- 
- In the database-as-blockchain folder in the current repo you will find "my-pvc.yml" which actually contains one Persistent Volume Claim
- for each node (ie 3). Follow this model and apply your file:
- 
- `microk8s.kubectl apply -f pvc.yml`
- 
- The actual Persistent Volumes required are defined in cheirrs/database-as-blockchin/nginx-mypv.yml. Follow that model and:
- 
- `microk8s.kubectl apply -f mypv.yml`
-
-The final deployment steps are to create and edit your own version of what we call "pg-wendermaus.yaml" (in cheirrs/database-as-blockchain) and then:
-
-`microk8s.kubectl apply -f pg-wendermaus.yaml`
-
-You can watch the results of deployments as they finalise with:
-
-`watch -c microk8s.kubectl get pod,statefulset,svc,configmap,pv,pvc -o wide`
 
 *******************************************************
 
