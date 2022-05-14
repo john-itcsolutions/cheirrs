@@ -814,7 +814,7 @@ Install cri-dockerd, following the instructions in that source code repository.
 
 `git clone https://github.com/Mirantis/cri-dockerd.git`
 
-`mkdir -p /usr/local/bi`
+`mkdir -p /usr/local/bin`
 
 `cd cri*`
 
