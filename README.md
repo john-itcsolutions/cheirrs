@@ -934,6 +934,9 @@ syncFrequency: 0s
 volumeStatsAggPeriod: 0s
 ```
 
+Note that you need to alter Line 17 of the above file to match the vm name 
+of the machine onto which you are installing kubeadm.
+
 `sudo kubeadm init --config kubeadm-config.yaml`
 
 [Notes: You may need to kill existing processes running on required ports:
