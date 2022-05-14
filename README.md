@@ -733,17 +733,19 @@ _________________________________________________________________
      
 `sudo snap install multipass`
 
+`multipass launch -n master-0 -c 2 -m 3GB -d 50GB`
+
 `multipass launch -n master-1 -c 2 -m 3GB -d 50GB`
 
 `multipass launch -n master-2 -c 2 -m 3GB -d 50GB`
 
 `multipass launch -n master-3 -c 2 -m 3GB -d 50GB`
 
-`multipass launch -n worker-1 -c 2 -m 3GB -d 50GB`
+`multipass launch -n master-4 -c 2 -m 3GB -d 50GB`
 
-`multipass launch -n worker-2 -c 2 -m 3GB -d 50GB`
+`multipass launch -n master-5 -c 2 -m 3GB -d 50GB`
 
-`multipass launch -n worker-3 -c 2 -m 3GB -d 50GB`
+`multipass launch -n master-6 -c 2 -m 3GB -d 50GB`
      
      (You can tweak those settings)
      And end-up with 6 x LTS Ubuntu vm's which we will set up as 3 master nodes and 3 worker nodes using "kubeadm".
@@ -751,7 +753,7 @@ _________________________________________________________________
 
 *******************************************************
 
-On each node, masters and workers:
+On each node:
 
 `sudo apt-get update`
 
