@@ -733,21 +733,29 @@ _________________________________________________________________
      
 `sudo snap install multipass`
 
-`multipass launch -n node-1 -c 1 -m 3GB -d 50GB`
+`multipass launch -n master-1 -c 2 -m 3GB -d 50GB`
 
-`multipass launch -n node-2 -c 1 -m 3GB -d 50GB`
+`multipass launch -n master-2 -c 2 -m 3GB -d 50GB`
 
-`multipass launch -n node-3 -c 1 -m 3GB -d 50GB`
+`multipass launch -n master-3 -c 2 -m 3GB -d 50GB`
 
-`multipass launch -n node-4 -c 1 -m 3GB -d 50GB`
+`multipass launch -n worker-1 -c 2 -m 3GB -d 50GB`
 
-`multipass launch -n node-5 -c 1 -m 3GB -d 50GB`
+`multipass launch -n worker-2 -c 2 -m 3GB -d 50GB`
+
+`multipass launch -n worker-3 -c 2 -m 3GB -d 50GB`
      
      (You can tweak those settings)
-     And end-up with 5 x LTS Ubuntu vm's which we will set up as 5 master nodes using "kubeadm".
+     And end-up with 6 x LTS Ubuntu vm's which we will set up as 3 master nodes and 3 worker nodes using "kubeadm".
      
 
 *******************************************************
+
+Firstly get "kubectl on each master node:
+
+curl -LO https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl
+
+
 
 ________________________________________________________________
  
