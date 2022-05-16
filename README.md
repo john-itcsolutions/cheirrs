@@ -909,13 +909,9 @@ Now perform each of the following 4 steps for each vm , paying particular attent
      
      1:
 
-`juju scp shared/cheirrs/TO*/*service/run.sh <machine numder kubernetes-worker/0>:/elastos-smartweb-service/run.sh`
+`juju scp shared/cheirrs/TO*/*service/* <machine numder kubernetes-worker/0>:/elastos-smartweb-service/`
 
-`juju scp shared/cheirrs/TO*/*service/test.sh <machine numder kubernetes-worker/0>:/elastos-smartweb-service/test.sh`
-
-`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/.env <machine numder kubernetes-worker/0>:/elastos-smartweb-service/.env`
-
-`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<node-number-eg 1>/.env.test <machine numder kubernetes-worker/0>:/elastos-smartweb-service/.env.test`
+`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/* <machine numder kubernetes-worker/0>:/elastos-smartweb-service/`
 
      2:
      
@@ -927,17 +923,8 @@ Now perform each of the following 4 steps for each vm , paying particular attent
 
      4:
      
-`juju scp shared/cheirrs/TO*service/TO*python/common_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/common_pb2_grpc.py`
+`juju scp shared/cheirrs/TO*service/TO*python/* <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/`
 
-`juju scp shared/cheirrs/TO*service/TO*python/health_check_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/health_check_pb2_grpc.py`
-
-`juju scp shared/cheirrs/TO*service/TO*python/hive_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/hive_pb2_grpc.py`
-
-`juju scp shared/cheirrs/TO*service/TO*python/node_rpc_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/node_rpc_pb2_grpc.py`
-
-`juju scp shared/cheirrs/TO*service/TO*python/sidechain_eth_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/sidechain_eth_pb2_grpc.py`
-
-`juju scp shared/cheirrs/TO*service/TO*python/wallet_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/wallet_pb2_grpc.py`
 
  After you have covered all 4 nodes:
  
