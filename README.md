@@ -901,9 +901,9 @@ Now perform each of the following 4 steps for each vm , paying particular attent
      
      1:
 
-`juju scp shared/cheirrs/TO*/*service/* <machine numder kubernetes-worker/0>:/elastos-smartweb-service/`
+`juju scp shared/cheirrs/TO*/*service/* <machine numder kubernetes-worker/0>:~/elastos-smartweb-service/`
 
-`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/* <machine numder kubernetes-worker/0>:/elastos-smartweb-service/`
+`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/* <machine numder kubernetes-worker/0>:~/elastos-smartweb-service/`
 
      2:
      
