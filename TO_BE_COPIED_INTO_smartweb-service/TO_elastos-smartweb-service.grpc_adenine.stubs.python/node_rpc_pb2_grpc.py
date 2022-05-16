@@ -16,8 +16,8 @@ class NodeRpcStub(object):
         """
         self.RpcMethod = channel.unary_unary(
                 '/node_rpc.NodeRpc/RpcMethod',
-                request_serializer=node__rpc__pb2.Request.SerializeToString,
-                response_deserializer=node__rpc__pb2.Response.FromString,
+                request_serializer=node_rpc__pb2.Request.SerializeToString,
+                response_deserializer=node_rpc__pb2.Response.FromString,
                 )
 
 
@@ -36,8 +36,8 @@ def add_NodeRpcServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'RpcMethod': grpc.unary_unary_rpc_method_handler(
                     servicer.RpcMethod,
-                    request_deserializer=node__rpc__pb2.Request.FromString,
-                    response_serializer=node__rpc__pb2.Response.SerializeToString,
+                    request_deserializer=node_rpc__pb2.Request.FromString,
+                    response_serializer=node_rpc__pb2.Response.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -60,7 +60,7 @@ class NodeRpc(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/node_rpc.NodeRpc/RpcMethod',
-            node__rpc__pb2.Request.SerializeToString,
-            node__rpc__pb2.Response.FromString,
+            node_rpc__pb2.Request.SerializeToString,
+            node_rpc__pb2.Response.FromString,
             options, channel_credentials,
             call_credentials, compression, wait_for_ready, timeout, metadata)
