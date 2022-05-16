@@ -20,7 +20,7 @@ logging.basicConfig(
 db_name = 'haus'
 db_user = 'gmu'
 db_password = 'gmu'
-db_host = '10.189.249.104'
+db_host = '10.189.249.212'
 db_port = '5432'
 
 database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
@@ -80,7 +80,7 @@ Max = [[]]
 mAX = 0
 tables_totals_summary = [[]]
 
-schemata_names = ['public', 'das_fuhrwerk', 'member_class_0', 'member_class_1', 'member_class_2', 'member_class_3', 'member_class_0_oseer', 'member_class_1_oseer', 'member_class_2_oseer', 'member_class_3_oseer', 'iot', 'tiger', 'tiger_data', 'topology']
+schemata_names = ['public', 'das_fuhrwerk', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'member_class_0', 'member_class_1', 'member_class_2', 'member_class_3', 'member_class_0_oseer', 'member_class_1_oseer', 'member_class_2_oseer', 'member_class_3_oseer', 'iot', 'tiger', 'tiger_data', 'topology']
 f = open('/home/ubuntu/dbase_report.txt', 'w')
 for schema in schemata_names:
     n += 1 
