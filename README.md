@@ -24,12 +24,12 @@ To this end, we are striving to implement a Hybrid model with 2 layers. We inten
 
 gRPC protocols replace the older style REST APIs, for communicating requests, and data inputs, from the client, and responses from the blockchain &/or database back to the client; all this occurs through the smart-web server, employing a "microservices" architecture. Here the gRPC protocols are implemented in Python. The smart-web server has Carrier installed onboard, guaranteeing security. Carrier is also installed via plugin on the Ionic dApp clients (which are developed hierarchically inside Elastos.Essentials) as well as manually on the IoT Edge client/servers (running 'node-red').
 
-To tackle a full Kubernetes installation locally, ideally you would need a 32 GB RAM (minimum); 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, your Kubeflow installation will go much more easily with an 8 core Host processor rather than a 4 core one. You really need an Accelerator NVIDIA GPU of at least 10GB vRAM. The current state of our Infrastructure can be represented figuratively:
+To tackle the full set of Kubernetes installations locally, ideally you would need (for 4 multipass vm's with a juju 'kubernetes-core' installation on each) a 64 GB RAM (minimum); 16 core cpu; 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, you really need an Accelerator NVIDIA GPU of at least 10GB vRAM. The current state of our Infrastructure can be represented figuratively:
 
 <img src="./ITCSA_Plan_2.png">
 
 
-The following figure represents the 'betrieb' controller with its 'werk' model, as opposed to 'lernenmaschine', the other model, on 'kubefluss' controller (based on microk8s). We install the Kubeflow (kubefluss/lernenmaschine) model first.
+The following figure represents any of the the 'master-<x>' controllers with their 'werk-<x>' models, as opposed to 'lernenmaschine', the other model, on 'kubefluss' controller (based on microk8s). We install the Kubeflow (kubefluss/lernenmaschine) model first.
 
 We base initial development such as this locally. It's cheaper!
 
@@ -37,7 +37,7 @@ We base initial development such as this locally. It's cheaper!
 
 <img src="./kubernetesinstallation-08-11-2021-2.png">
 
-The schema above are labeled G(n,m) for the internetworked, multiple member class dApps. In reality there are only n schema with the member classes (m) being a data field in every table within the nth schema. In this way we can keep all transactions internal to a network on the same schema. The nth network is on the nth schema. The single member class, non-internetworked dApps (F(i)) are likewise constituted of all members of a network or dApp subscribers' group, on their own schema. Although this is the case with the set F(i), within a single network ie schema ie dApp, we will be able to use the field for a member's id to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. While the same is ideally the case for the G(n,m) set, such individual member Tables and dApps being theoretically possible, the design and coding would be expensive.
+The schema above are labeled G(n,m) for the internetworked, multiple member class dApps. In reality there is one schema/member-class (m-c: see https://itotchaincloud.com.au/the-general, across all business subnets. The single member class, non-internetworked dApps (F(i)) are likewise constituted of all members of a network or dApp subscribers' group, on their own single-member-class schema. Although this is the case with the set F(i), within a single network ie schema ie dApp (in the F(i) case), we will be able to use the field for a member's id to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. While the same is ideally the case for the G(n,m) set, such individual member Tables and dApps being theoretically possible, the design and coding would be expensive.
 
 # BlockBases or DataChains
 
@@ -72,7 +72,7 @@ Usually IoT notifications are dealt with on a "Report-by-Exception" basis, at th
 
 The technology of the fee-free IOTA "Trust Layer", being developed for IoT, is already at version 2.0 and has plans to implement Smart Contracts (presumably fee-less also). ITCSA is incorporating IOTA as our provided Trust Layer of choice for IoT operations. IOTA adds a layer of reference against which all IoT actions can be validated. The absence of fees is made possible by having each transaction validate 2 others before completion. In this way there is no "Mining" involved, as such. IOTA is designed to support Industry 4.0 Standards, and is currently popular in Europe (due to the German-originated Industrie 4.0 standards, with IOTA's headquarters in Berlin. Language translation is natively provided in German, French and Italian). The IOTA response  cycle-time is measured in seconds.
 
-We utilise one "oseer" schema per network/member-class, so there is one schema for each of the n x m member-class networks, and one for each of the F(i) non-internetworked future dApps, as well as one for each of the A, B and C dApps (Community Housing, RealEstate and convey-IT, respectively). Our schema called 'das_fuhrwerk' is the Head Overseeing Schema, for top level customer on-boarding, usage tracking and payments, to "oversee the overseers" and to provide our own company's Enterprise dApp for our accounting, planning and administration purposes.
+We utilise one "oseer" schema per member-class, so there is one schema for each of the n x m member-classes across all sub-networks, and one for each of the F(i) non-internetworked future dApps, as well as one for each of the A, B and C dApps (Community Housing, RealEstate and convey-IT, respectively). Our schema called 'das_fuhrwerk' is the Head Overseeing Schema, for top level customer on-boarding, usage tracking and payments, to "oversee the overseers" and to provide our own company's Enterprise dApp for our accounting, planning and administration purposes.
 
 You need to develop initially on docker. ITCSA uses Ubuntu 20.04 as the host platform, with Python 3.8. DO NOT TRY TO USE PYTHON 3.10 (as on JammyJellyfish Ubuntu 22.04) for Elastos development on Docker.
 You will not need an Extreme Gaming level of computer for Docker-based (initial - eg. database) work without Kubernetes.
@@ -733,22 +733,17 @@ _________________________________________________________________
      
 `sudo snap install multipass`
 
-`multipass launch -n master-0 -c 2 -m 3GB -d 50GB`
+`multipass launch -n master-0 -c 3 -m 14GB -d 50GB`
 
-`multipass launch -n master-1 -c 2 -m 3GB -d 50GB`
+`multipass launch -n master-1 -c 3 -m 14GB -d 50GB`
 
-`multipass launch -n master-2 -c 2 -m 3GB -d 50GB`
+`multipass launch -n master-2 -c 3 -m 14GB -d 50GB`
 
-`multipass launch -n master-3 -c 2 -m 3GB -d 50GB`
+`multipass launch -n master-3 -c 3 -m 14GB -d 50GB`
 
-`multipass launch -n master-4 -c 2 -m 3GB -d 50GB`
-
-`multipass launch -n master-5 -c 2 -m 3GB -d 50GB`
-
-`multipass launch -n master-6 -c 2 -m 3GB -d 50GB`
      
      (You can tweak those settings)
-     And end-up with 7 x LTS Ubuntu vm's which we will set up as 7 master nodes using "kubeadm".
+     And end-up with 4 x LTS Ubuntu vm's which we will set up as 4 master nodes using "juju/lxd".
      
      
      Then mount a shared directory to enable access to your host:
@@ -764,242 +759,61 @@ _________________________________________________________________
 
 *******************************************************
 
-On each node:
-
-`sudo apt-get update`
-
-`sudo apt-get install -y apt-transport-https ca-certificates curl`
-
-`sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg`
-
-`echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list`
-
-`sudo apt-get update`
-
-`sudo apt-get install -y kubelet kubeadm kubectl`
-
-`sudo apt-mark hold kubelet kubeadm kubectl`
-
-Get fresh Docker. Firstly remove previous installation:
-
-`sudo apt-get remove docker docker-engine docker.io containerd runc`
-
-`sudo apt-get update`
-
-`sudo apt-get install \
-     ca-certificates \
-     curl \
-     gnupg \
-     lsb-release`
-     
-`curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg`
-
-`echo \
-   "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null`
-   
-`sudo apt-get update`
-
-`sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin`
-
-`sudo usermod -aG docker $USER && newgrp docker`
-
-Test installation - you should not need to run as sudo:
-
-`docker run hello-world`
-
-`git clone https://github.com/Mirantis/cri-dockerd.git`
-
-Install cri-dockerd, following the instructions in that source code repository.
-
-`git clone https://github.com/Mirantis/cri-dockerd.git`
-
-`mkdir -p /usr/local/bin`
-
-`cd cri*`
-
-`mkdir bin`
-
-`sudo apt install golang-go  # version 2:1.13~1ubuntu2`
-
-`cd src && go get && go build -o ../bin/cri-dockerd`
-
-`sudo mkdir -p /usr/local/bin`
-
-`cd ../`
-
-`sudo install -o root -g root -m 0755 bin/cri-dockerd /usr/local/bin/cri-dockerd`
-
-`sudo cp -a packaging/systemd/* /etc/systemd/system`
-
-`sudo sed -i -e 's,/usr/bin/cri-dockerd,/usr/local/bin/cri-dockerd,' /etc/systemd/system/cri-docker.service`
-
-`sudo systemctl daemon-reload`
-
-`sudo systemctl enable cri-docker.service`
-
-`sudo systemctl enable --now cri-docker.socket`
-
-`cd src && go get && go build -o ../bin/cri-dockerd`
-
-`sudo systemctl enable --now cri-docker.socket`
-
-`sudo apt-get update`
-
-`nano kubeadm-config.yaml`
-
-then copy and paste the following text there:
-
-```
-apiVersion: kubeadm.k8s.io/v1beta3
-bootstrapTokens:
-- groups:
-  - system:bootstrappers:kubeadm:default-node-token
-  token: abcdef.0123456789abcdef
-  ttl: 24h0m0s
-  usages:
-  - signing
-  - authentication
-kind: InitConfiguration
-localAPIEndpoint:
-  advertiseAddress: 10.32.84.196
-  bindPort: 6443
-nodeRegistration:
-  criSocket: unix:/run/cri-dockerd.sock
-  imagePullPolicy: IfNotPresent
-  name: master-1
-  taints: null
----
-apiServer:
-  timeoutForControlPlane: 4m0s
-apiVersion: kubeadm.k8s.io/v1beta3
-certificatesDir: /etc/kubernetes/pki
-clusterName: kubernetes
-controllerManager: {}
-dns: {}
-etcd:
-  local:
-    dataDir: /var/lib/etcd
-imageRepository: k8s.gcr.io
-kind: ClusterConfiguration
-kubernetesVersion: 1.24.0
-networking:
-  dnsDomain: cluster.local
-  serviceSubnet: 10.96.0.0/12
-scheduler: {}
----
-apiVersion: kubelet.config.k8s.io/v1beta1
-authentication:
-  anonymous:
-    enabled: false
-  webhook:
-    cacheTTL: 0s
-    enabled: true
-  x509:
-    clientCAFile: /etc/kubernetes/pki/ca.crt
-authorization:
-  mode: Webhook
-  webhook:
-    cacheAuthorizedTTL: 0s
-    cacheUnauthorizedTTL: 0s
-cgroupDriver: systemd
-clusterDNS:
-- 10.96.0.10
-clusterDomain: cluster.local
-cpuManagerReconcilePeriod: 0s
-evictionPressureTransitionPeriod: 0s
-fileCheckFrequency: 0s
-healthzBindAddress: 127.0.0.1
-healthzPort: 10248
-httpCheckFrequency: 0s
-imageMinimumGCAge: 0s
-kind: KubeletConfiguration
-logging:
-  flushFrequency: 0
-  options:
-    json:
-      infoBufferSize: "0"
-  verbosity: 0
-memorySwap: {}
-nodeStatusReportFrequency: 0s
-nodeStatusUpdateFrequency: 0s
-resolvConf: /run/systemd/resolve/resolv.conf
-rotateCertificates: true
-runtimeRequestTimeout: 0s
-shutdownGracePeriod: 0s
-shutdownGracePeriodCriticalPods: 0s
-staticPodPath: /etc/kubernetes/manifests
-streamingConnectionIdleTimeout: 0s
-syncFrequency: 0s
-volumeStatsAggPeriod: 0s
-```
-
-Note that you need to alter Line 17 of the above file to match the vm name 
-of the machine onto which you are installing kubeadm.
-
-`sudo kubeadm init --config kubeadm-config.yaml`
-
-[Notes: You may need to kill existing processes running on required ports:
-
-Do this with:
-
-`sudo kill -9 $(sudo lsof -t -i:10250)`
-
- where port example is 10250
+In each vm:
+	
+`sudo snap install juju --classic`
+	
+`juju bootstrap localhost master-<x>`
+	
+`juju add-model werk-<x>`
+	
+`juju deploy kubernetes-core`
+	
+`juju config calico vxlan=CrossSubnet`
+	
+`juju config calico ignore-loose-rpf=true`
+	
+`juju remove-unit easyrsa/0 --force` & maybe repeat once or twice ..
+	
+`juju remove-machine 0/lxd/0 --force` & again 
+	
+`juju add-unit easyrsa`
+	
+`watch -c juju status --color`
+	
+	You should now be looking at the status board of one vm with kubernetes converging.
+	When every process is complete except possibly the control-plane and/or worker 
+	may be in a 'wait' state:
+	
+`juju add-unit kubernetes-worker`
+	
+	When this is complete:
+	
+`juju deploy -n 2 postgresql pg-wodehouse`
  
- You may also need to remove files existing in
- 
- `/etc/kubernetes/manifests`
- 
- therefore:
- 
- `sudo rm -rf /etc/kubernetes/manifests/*`
- ]
- 
- Upon success:
- 
- `mkdir -p $HOME/.kube`
- 
- `sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config`
- 
- `sudo chown $(id -u):$(id -g) $HOME/.kube/config`
- 
- A network plugin is required. We chose Flannel:
- 
- `kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml`
-
-
- 
- 
-
+This completes the servers-setup.
 
 ________________________________________________________________
  
 ## DATABASE: Internals
 
-You will need a database schema (we use 2 - the_general, and the_general_oseer at this early stage) to serve as material for development.
+You will need a set of 4 member-class schemata with another 4 overseer schemata (we use 2 - the_general, 
+and the_general_oseer  and copied them 4 times, at this early stage) to serve as material for development.
 
-In our case when a single member-class network exists (such as our Real Estate Property dApps) we would be required 
-to separate the existing single network into several (3 to provide a 'Mexican Standoff' arrangement) servers designed to keep everyone honest.
+In our case, if a single member-class network existed solo (such as any of our Real Estate Property dApps) we would be required 
+to separate the existing single network into several (3 to provide a 'Mexican Standoff' arrangement) servers 
+designed to keep everyone honest.
 
-In our case, with The General, we started the process of building the databases from schema backup .sql files:
+In our case, with The General, we started the process of building the databases from schema backup .sql files,
+and put all backups in a single folder:
 
-You need to do some trials to determine the leading Database Node (taken at this preliminary stage as a Master, with 2 
-secondary nodes. It will be necessary to develop a way of allowing Master/Master relationships in the future.
+`juju scp path/to/*.sql pg-wodehouse-1-0:/home/ubuntu`
 
-On primary:
 
-`microk8s.kubectl cp path/to/backup.sql pg-wendermaus-1-0:/backup.sql`
 
-You may need to choose a different pod number to find the master.
-
-Having copied the backup(s) to the root directory in the master pod, one "kubectl execs" into the container with:
-
-`microk8s.kubectl exec -it postgres-sample-0 -- /bin/bash`
-
-As long as the target pod ("pg-wendermaus-1-0", here) is in fact the Master, you will land in a pod from which you will
-be able to restore your schema(s). If not, you will be informed you cannot write to a read-only database-copy. In that case try 
-a different pod. Having found the Master, from the container:
+Having copied the backup(s) to the user "ubuntu's" home directory in the master postgres pod, one `juju ssh <machine number postgres master>`
+	
+	In the postgres machine now:
 
 `sudo passwd postgres` and enter your password twice to change existing unknown password.
 
