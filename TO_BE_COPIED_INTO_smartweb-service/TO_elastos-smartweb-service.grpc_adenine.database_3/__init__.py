@@ -20,7 +20,7 @@ logging.basicConfig(
 db_name = 'haus'
 db_user = 'gmu'
 db_password = 'gmu'
-db_host = '10.238.74.44'
+db_host = '10.1.139.67'
 db_port = '5432'
 
 database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
@@ -45,7 +45,7 @@ def db_relation_changed():
     # connection that triggered the hook into our existing connections,
     # it is easier to iterate over all active related databases and
     # reset the entire list of connections.
-    conn_str_tmpl = "dbname={dbname} user={user} host={host} port={port}"
+    conn_str_tmpl = "dbname={db_name} user={db_user} host={db_host} port={db_port}"
     master_conn_str = None
     slave_conn_strs = []
     for db_unit in related_units():
@@ -80,8 +80,8 @@ Max = [[]]
 mAX = 0
 tables_totals_summary = [[]]
 
-schemata_names = ['public', 'cheirrs', 'cheirrs_oseer', 'chubba_morris', 'chubba_morris_oseer', 'convey_it', 'convey_it_oseer', 'das_fuhrwerk', 'iot', 'the_general',  'the_general_oseer', 'tiger', 'tiger_data', 'topology']
-f = open('/home/ubuntu/dbase_report.txt', 'w')
+schemata_names = ['public', 'member_class_1', 'member_class_2', 'member_class_3', 'member_class_4', 'member_class_5', 'network_oseer', 'iot', 'tiger', 'tiger_data', 'topology']
+f = open('/dbase_report.txt', 'w')
 for schema in schemata_names:
     n += 1 
     if n > 1:
@@ -123,6 +123,6 @@ if mAX - l == 0:
 else:
     print('WARNING!! Totals for Tables not equal! ie', mAX, 'and', l)
 print('Total Columns =', cols)
-print('Summary available in "/home/ubuntu/dbase_report.txt"')
+print('Summary available in "/dbase_report.txt"')
 if __name__ == '__main__':
     hooks.execute(sys.argv)
