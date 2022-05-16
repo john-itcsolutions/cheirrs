@@ -805,80 +805,72 @@ to separate the existing single network into several (3 to provide a 'Mexican St
 designed to keep everyone honest.
 
 In our case, with The General, we started the process of building the databases from schema backup .sql files,
-and put all backups in a single folder:
+and put all backups and scripts into a single folder, and copied '*' to postgres masters:
 
-`juju scp path/to/*.sql pg-wodehouse-1-0:/home/ubuntu`
+`juju scp path/to/* pg-wodehouse:/home/ubuntu/`
 
 
 
-Having copied the backup(s) to the user "ubuntu's" home directory in the master postgres pod, one `juju ssh <machine number postgres master>`
+Having copied the backup(s) and scripts (cheirrs/database-as-blockchain/*) to the user "ubuntu's" home directory in the master postgres pod, one does
+	
+`juju ssh <machine number postgres master>`
 	
 	In the postgres machine now:
 
 `sudo passwd postgres` and enter your password twice to change existing unknown password.
 
-`su postgres`  You are at / - the root directory - and your backup.sql is there too.
+`su postgres`  You are at /home/ubuntu - and your backup.sql's are there too.
 
 `createdb <dbname>`
 
 `createuser gmu` (For Elastos' purposes.)
 
-`psql <dbname> < backup.sql`, and similarly for other schemata. In the final state, there will be one schema per member-class plus other utility schemata such as "iot" and an overseeing schema.
+`psql <dbname> < backup.sql`, and similarly for other schemata. In the final state, there will be one schema per 
+member-class plus other utility schemata such as "iot" and an overseeing schema for each member class.
+			     
+			     OR, if you copy all scripts from cheirrs/database-as-blockchain to /home/ubuntu in the master postgres:
+			     
+`./dbase_resetup.sh`
+			     
+			     Be careful here as you will probably need to adjust dbase_resetup.sh to suit you!
+			     
+	You will also need to deal with users and passwords as well as setting allowed search paths for user 'gmu' to all schemata.
 
 At this stage it is envisaged that we would set up one schema for each member-class in an inter-enterprise network, plus an iot 
-schema and an oversight schema (to run Business Process Supervision from). Also the design would require only one database pod 
-per member-class (not "per member" as in the IBM paper). All pods would be situated together in the cloud (and probably replicated at a 
-site-level globally).
+schema and a set of oversight schemata (to run Business Process Supervision from). Also the design would 
+require only one database server (though replicated) per member-class - ie one vm per member-class - 
+(not "per member" as in the IBM paper). 
 
-At this point the remaining task is to construct the Elastos-Smartweb-Service server as a deployment with 3 replica pods, and connect them to the databases.
+All pods would be situated together in the cloud (and probably replicated at a site-level globally).
 
-See the following ..
-
-elastos-deployment.yaml:
-```
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: elastos-smartweb-service
-spec:
-  selector:
-    matchLabels:
-      app: elastos
-  replicas: 5 # tells deployment to run 5 pods matching the template
-  template:
-    metadata:
-      labels:
-        app: elastos
-    spec:
-      containers:
-      - name: elastos
-        image: cyberrepublic/elastos-smartweb-service:latest
-        ports:
-        - containerPort: 80
-```
-
-Apply the above file:
-
-On primary:
-
-`microk8s.kubectl apply -f elastos-deployment.yaml`
-
-You can watch everything with:
-
-`watch -c microk8s.kubectl get deployment,pod,statefulset,svc,configmap,pv,pvc -o wide`
-
-The next step involves configuring the elastos deployment to connect & access the database replicas. 
-This will be done from inside each copy of the elastos pods. 
-
-`microk8s.kubectl exec -it elastos-sample-0 -- /bin/bash`
-
-and take a look around ..
-
-
+If you use (or adapt) our scripts to sequentially restore your backups and set up postgis, etc, you should copy these to /home/ubuntu
+in each database master, together with your own sql backups. 
 _______________________________________________________
 
 ## Getting PostGIS and Open Street Maps
+	
+	As user 'ubuntu' in each vm's postgres master:
+			     
+`sudo apt-get install python-software-properties`
 
+`sudo add-apt-repository ppa:ubuntugis/ppa`
+
+	Also as 'ubuntu'
+	
+`sudo passwd postgres` and type your chosen password twice, then
+	
+`su postgres`
+	
+	Now, as user 'postgres' (you will have landed in "/home/ubuntu" with all files needed):
+	
+`./dbase_setup_2.sh'
+			     
+`su postgres`
+			     
+`./dbase_setup_3.sh`
+	
+This completes database setup.
+	
 _______________________________________________________________
 
 ALSO:
@@ -886,6 +878,12 @@ ALSO:
 ## Blockchains-Database Server 
 
      We turn to finish setting up the Blockchain/Database gRPC Server Deployment.
+			     
+     In each multipass vm, in /home/ubuntu; 
+			     
+`juju ssh <machine number kubernetes-worker/0>`
+	
+`git clone --recurse-submodules https://github.com/cyber-republic/elastos-smartweb-service.git`
      
 _______________________________________________________________
      
@@ -903,54 +901,55 @@ Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "re
      
 You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) similarly. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
 
-So in "primary" (in shared/cheirrs root) "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the target elastos pods, after editing .env and .env.test to replace existing database and pod addresses with addresses obtained from the installation. Therefore, on primary:
+So in shared/cheirrs root "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the target elastos pods, after editing .env and .env.test to replace existing database and pod addresses with addresses obtained from the installation. Therefore, on primary:
 
 `cd ....path/to/shared/cheirrs`
 
-Now perform each of the following 4 steps for each target-pod ie worker node, paying particular attention to the .env, .env.test and __init__.py files,  where the database host address will need to be edited for each target-pod ie worker node, and similarly for the elastos pod addresses on each node in .env & .env.test:
+Now perform each of the following 4 steps for each vm , paying particular attention to the .env, .env.test and __init__.py files,  where the database host address will need to be edited for each target-pod ie worker node, and similarly for the elastos pod addresses (== worker/0 addresses) on each node in .env & .env.test:
      
      1:
 
-`microk8s.kubectl cp TO*/*service/run.sh <target-pod-name>:/elastos-smartweb-service/run.sh`
+`juju scp shared/cheirrs/TO*/*service/run.sh <machine numder kubernetes-worker/0>:/elastos-smartweb-service/run.sh`
 
-`microk8s.kubectl cp TO*/*service/test.sh <target-pod-name>:/elastos-smartweb-service/test.sh`
+`juju scp shared/cheirrs/TO*/*service/test.sh <machine numder kubernetes-worker/0>:/elastos-smartweb-service/test.sh`
 
-`microk8s.kubectl cp TO*/TO_.env_in_elastos-smartweb-service_<node-number-eg 1>/.env <target-pod-name>:/elastos-smartweb-service/.env`
+`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/.env <machine numder kubernetes-worker/0>:/elastos-smartweb-service/.env`
 
-`microk8s.kubectl cp TO*/TO_.env_in_elastos-smartweb-service_<node-number-eg 1>/.env.test <target-pod-name>:/elastos-smartweb-service/.env.test`
+`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<node-number-eg 1>/.env.test <machine numder kubernetes-worker/0>:/elastos-smartweb-service/.env.test`
 
      2:
      
-`microk8s.kubectl cp TO*service/TO*adenine/server.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/server.py`
+`juju scp shared/cheirrs/TO*service/TO*adenine/server.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/server.py`
 
      3:
      
-`microk8s.kubectl cp TO*service/TO_elastos-smartweb-service.grpc_adenine.database_<node-number-eg 1>/__init__.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
+`juju scp shared/cheirrs/TO*service/TO_elastos-smartweb-service.grpc_adenine.database_<node-number-eg 1>/__init__.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
 
      4:
      
-`microk8s.kubectl cp TO*service/TO*python/common_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/common_pb2_grpc.py`
+`juju scp shared/cheirrs/TO*service/TO*python/common_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/common_pb2_grpc.py`
 
-`microk8s.kubectl cp TO*service/TO*python/health_check_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/health_check_pb2_grpc.py`
+`juju scp shared/cheirrs/TO*service/TO*python/health_check_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/health_check_pb2_grpc.py`
 
-`microk8s.kubectl cp TO*service/TO*python/hive_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/hive_pb2_grpc.py`
+`juju scp shared/cheirrs/TO*service/TO*python/hive_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/hive_pb2_grpc.py`
 
-`microk8s.kubectl cp TO*service/TO*python/node_rpc_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/node_rpc_pb2_grpc.py`
+`juju scp shared/cheirrs/TO*service/TO*python/node_rpc_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/node_rpc_pb2_grpc.py`
 
-`microk8s.kubectl cp TO*service/TO*python/sidechain_eth_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/sidechain_eth_pb2_grpc.py`
+`juju scp shared/cheirrs/TO*service/TO*python/sidechain_eth_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/sidechain_eth_pb2_grpc.py`
 
-`microk8s.kubectl cp TO*service/TO*python/wallet_pb2_grpc.py <target-pod-name>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/wallet_pb2_grpc.py`
+`juju scp shared/cheirrs/TO*service/TO*python/wallet_pb2_grpc.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/wallet_pb2_grpc.py`
 
- After you have covered all 5 nodes:
+ After you have covered all 4 nodes:
  
-exit to primary:
+in each:
 
-`microk8s.kubectl exec -it <target-pod-name> /elastos-smartweb-service/run.sh`
-
+`juju ssh <machine number kubernetes-worker/0>` 
+	
+`elastos-smartweb-service/run.sh`
 .. and wait and watch .. and examine logs in case of errors, which are available at (TODO). 
      If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds.
      
-     There is also a dbase_report.txt (just a structural summary) at / on each pod.
+     There is also a dbase_report.txt (just a structural summary) at /home/ubuntu on each pod.
 
 
 _________________________________________________________________________________________________
