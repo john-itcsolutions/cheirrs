@@ -850,8 +850,6 @@ _______________________________________________________
 ## Getting PostGIS and Open Street Maps
 	
 	As user 'ubuntu' in each vm's postgres master:
-			     
-`sudo apt-get install python-software-properties`
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
