@@ -790,6 +790,8 @@ In each vm:
 	When this is complete:
 	
 `juju deploy -n 2 postgresql pg-wodehouse`
+	
+`juju config pg-a admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,<ip-addr-worker-1>[,<ip-addr-worker-2>]`
  
 This completes the servers-setup.
 
