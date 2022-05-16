@@ -853,13 +853,7 @@ _______________________________________________________
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
-	Also as 'ubuntu'
-	
-`sudo passwd postgres` and type your chosen password twice, then
-	
-`su postgres`
-	
-	Now, as user 'postgres' (you will have landed in "/home/ubuntu" with all files needed):
+	Also as 'ubuntu':
 	
 `./dbase_setup_2.sh'
 			     
