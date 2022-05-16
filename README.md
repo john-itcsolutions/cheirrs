@@ -912,15 +912,7 @@ Now perform each of the following 4 steps for each vm , paying particular attent
 	
      2:
      
-`juju scp shared/cheirrs/TO*service/TO*adenine/server.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/server.py`
-
-     3:
-     
 `juju scp shared/cheirrs/TO*service/TO_elastos-smartweb-service.grpc_adenine.database_<node-number-eg 1>/__init__.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
-
-     4:
-     
-`juju scp shared/cheirrs/TO*service/TO*python/* <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/stubs/python/`
 
 
  After you have covered all 4 nodes:
