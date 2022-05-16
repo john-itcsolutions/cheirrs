@@ -855,7 +855,7 @@ _______________________________________________________
 
 	Also as 'ubuntu':
 	
-`./dbase_setup_2.sh'
+`./dbase_setup_2.sh`
 			     
 `su postgres`
 			     
