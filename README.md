@@ -899,7 +899,7 @@ So in shared/cheirrs root "TO_BE_COPIED_TO_smartweb-service" directory are scrip
 
 `cd ....path/to/shared/cheirrs`
 
-Now perform each of the following 4 steps for each vm , paying particular attention to the .env, .env.test and __init__.py files,  where the database host address will need to be edited for each target-pod ie worker node, and similarly for the elastos pod addresses (== worker/0 addresses) on each node in .env & .env.test:
+Now perform each of the following 2 steps for each vm , paying particular attention to the .env, .env.test and __init__.py files,  where the database host address will need to be edited for each target-pod ie worker node, and similarly for the elastos pod addresses (== worker/0 addresses) on each node in .env & .env.test:
      
      1:
 
@@ -954,8 +954,7 @@ _____________________________________________________________
      
 To be continued ..
 _____________________________________________________________
-
-##THE FOLLOWING REQUIRES A LOT OF WORK.    
+ 
 ## Enter kubernetes-worker-1, to set-up an IoT server with Python-gRPC, 
 ## node-red-industrial, Carrier and IOTA client, on their own vm.
      
@@ -1129,6 +1128,10 @@ ________________________________________________________________________________
      2.  We have a minor problem involving shaping Australian Address data for our requirements
      3.  The generation of an acceptable JWT token to authenticate to SmartWeb
      4.  Get the Nodejs Wrapper package for Carrier working properly
+     5.  Follow the IBM article above to implement the various points outlined in the paper, in code.
+     6. Do everything necessary to make a Postgres Database become "like a Blockchain".
+     7. Continue to use the Elastos Blockchain systems for dApps at front end and to provide several useful services,
+	including Distributed Id's (DID Sidechain), Carrier Security and more.
      
  _________________________________________________________________________________________________________________________________________________
      
