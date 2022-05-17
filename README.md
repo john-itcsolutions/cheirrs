@@ -733,13 +733,13 @@ _________________________________________________________________
      
 `sudo snap install multipass`
 
-`multipass launch -n master-0 -c 3 -m 14GB -d 50GB`
+`multipass launch -n master-0 -c 3 -m 12GB -d 50GB`
 
-`multipass launch -n master-1 -c 3 -m 14GB -d 50GB`
+`multipass launch -n master-1 -c 3 -m 12GB -d 50GB`
 
-`multipass launch -n master-2 -c 3 -m 14GB -d 50GB`
+`multipass launch -n master-2 -c 3 -m 12GB -d 50GB`
 
-`multipass launch -n master-3 -c 3 -m 14GB -d 50GB`
+`multipass launch -n ordering -c 3 -m 12GB -d 50GB`
 
      
      (You can tweak those settings)
@@ -799,12 +799,16 @@ ________________________________________________________________
  
 # DATABASE: Internals
 
-You will need a set of 4 member-class schemata with another 4 overseer schemata (we use 2 - the_general, 
-and the_general_oseer  and copied them 4 times, at this early stage) to serve as material for development.
+You will need a set of 3 member-class schemata with another 3 overseer schemata (we use 2 - the_general, 
+and the_general_oseer  and copied them 3 times, at this early stage) to serve as material for development.
 
 In our case, if a single member-class network existed solo (such as any of our Real Estate Property dApps) we would be required 
 to separate the existing single network into several (3 to provide a 'Mexican Standoff' arrangement) servers 
 designed to keep everyone honest.
+	
+We also need to set up the ordering service on the 4th vm. This service also requires a database to keep records of transaction flows.
+Therefore the setup is similar. The nature and structure of the schema is quite different though. This schema needs to be replicated 
+for security, as for the others.	
 
 In our case, with The General, we started the process of building the databases from schema backup .sql files,
 and put all backups and scripts into a single folder, and copied '*' to postgres masters:
