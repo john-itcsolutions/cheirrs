@@ -20,7 +20,7 @@ These developments have caused ITOTCCA to review our monolithic design, opting n
 
 However, in the above article, it is envisaged that a section of non-internetworked transactions would be outside the network. This implies that a company's own employees, and their connecting devices, can be trusted more than the internetworked transaction parties. We believe this to be highly questionable.
 
-To this end, we are striving to implement a Hybrid model with 2 layers. We intend to offer a system which, for even the most trivial of transactions or actions, records traces on the Elastos Blockchains, an immutable source of Truth which also provides a Distributed Identity Blockchain (DID Sidechain). This will mesh with the Postgres 'DataChain' to provide indisputable Identification of players across the entire system. Elastos is a Global Network Operating System with permissioned Blockchains. Naturally the bulk Corporate Data will belong on the new databases, but there is a role to be played by the  flexibility and mobility of the Elastos system, especially when we consider the strengths of Carrier and the DID Sidechain together. So we still intend to utilise the Elastos-Smartweb-Service github repo and docker image to play the role of joining the DataChains systems to the Blockchains systems, by acting as a very smart webserver and database server and blockchain server; all at once.
+To this end, we are striving to implement a Hybrid model with 2 layers. We intend to offer a system which, for even the most trivial of transactions or actions, records traces on the Elastos Blockchains, an immutable source of Truth which also provides a Distributed Identity Blockchain (DID Sidechain). This will mesh with the Postgres 'DataChain' to provide indisputable Identification of players across the entire system. Elastos is a Global Network Operating System with permissioned Blockchains. Naturally the bulk Corporate Data will belong on the new databases, but there is a role to be played by the  flexibility and mobility of the Elastos system, especially when we consider the strengths of Elastos Essentials and dApps, Carrier's security and the DID Sidechain together. So we still intend to utilise the Elastos-Smartweb-Service github repo and docker image to play the role of joining the DataChains systems to the Blockchains systems, by acting as a very smart webserver and database server and blockchain server; all at once.
 
 gRPC protocols replace the older style REST APIs, for communicating requests, and data inputs, from the client, and responses from the blockchain &/or database back to the client; all this occurs through the smart-web server, employing a "microservices" architecture. Here the gRPC protocols are implemented in Python. The smart-web server has Carrier installed onboard, guaranteeing security. Carrier is also installed via plugin on the Ionic dApp clients (which are developed hierarchically inside Elastos.Essentials) as well as manually on the IoT Edge client/servers (running 'node-red').
 
@@ -37,7 +37,7 @@ We base initial development such as this locally. It's cheaper!
 
 <img src="./kubernetesinstallation-08-11-2021-2.png">
 
-The schema above are labeled G(n,m) for the internetworked, multiple member class dApps. In reality there is one schema/member-class (m-c: see https://itotchaincloud.com.au/the-general, across all business subnets. The single member class, non-internetworked dApps (F(i)) are likewise constituted of all members of a network or dApp subscribers' group, on their own single-member-class schema. Although this is the case with the set F(i), within a single network ie schema ie dApp (in the F(i) case), we will be able to use the field for a member's id to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. While the same is ideally the case for the G(n,m) set, such individual member Tables and dApps being theoretically possible, the design and coding would be expensive.
+The schema above are labeled G(n,m) for the internetworked, multiple member class dApps. In reality there is one schema/member-class (m-c: see https://itotchaincloud.com.au/the-general), across all business subnets. The single member classes, ie non-internetworked dApps (F(i)), are likewise constituted of all members of a network or dApp subscribers' group, on their own single-member-class schema. Although this is the case with the set F(i), within a single network ie schema ie dApp (in the F(i) case), we will be able to use the field for a member's id to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. While the same is ideally the case for the G(n,m) set, such individual member Tables and dApps being theoretically possible, the design and coding would be expensive.
 
 # BlockBases or DataChains
 
@@ -723,13 +723,12 @@ To be continued.
 
 _________________________________________________________________
 
-## A Second Model on a second controller:
+# A Second Model on a second controller:
 
 (The database schemata for ITOTCCA's project are private and available only under certain conditions.)
      
    {  If you have implemented a kubeflow installation (above) on one partition of the Host (on a microk8s cloud/controller),
-     you will need to obtain multipass to allow creation of four (a master control plane machine called 'primary', with node-1, node-2 and node-3)    
-     Ubuntu virtual machines (Kubernetes "nodes"), on this second partition (ie dual-boot Ubuntu/Ubuntu)}.
+     you will need to obtain multipass to allow creation of four Ubuntu virtual machines (Kubernetes "nodes"), on this second partition (ie dual-boot Ubuntu/Ubuntu)}.
      
 `sudo snap install multipass`
 
@@ -797,7 +796,7 @@ This completes the servers-setup.
 
 ________________________________________________________________
  
-## DATABASE: Internals
+# DATABASE: Internals
 
 You will need a set of 4 member-class schemata with another 4 overseer schemata (we use 2 - the_general, 
 and the_general_oseer  and copied them 4 times, at this early stage) to serve as material for development.
@@ -867,9 +866,9 @@ This completes database setup.
 	
 _______________________________________________________________
 
-ALSO:
+# ALSO:
 
-## Blockchains-Database Server 
+# Blockchains-Database Server 
 
      We turn to finish setting up the Blockchain/Database gRPC Server Deployment.
 			     
@@ -878,18 +877,25 @@ ALSO:
 `juju ssh <machine number kubernetes-worker/0>`
 	
 `git clone --recurse-submodules https://github.com/cyber-republic/elastos-smartweb-service.git`
-     
+	
+	While we're at it, on one vm in the shared folder (thus available to all vm's plus Host)
+	
+`git clone https://github.com/john-itcsolutions/cheirrs.git`
+	
+	
+	
 _______________________________________________________________
      
 
-NOTE: As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITOTCCA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to edit this file carefully to suit your own database, at your
+# NOTE:
+	As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITOTCCA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to edit this file carefully to suit your own database, at your
 `shared/cheirrs/TO_BE_COPIED_INTO_smartweb-service/TO_elastos-smartweb-service.grpc_adenine.database/__init__.py` 
 (in the shared directory on "primary" with a local clone of this repo) to enable it to work properly as a Python init file. This init file will be run by the system before running the server at /grpc_adenine/server.py. You would have to keep these 2 versions of `__init__.py` in sync with each other if you need to edit `__init__.py`, and want to use your own github account, for example.
 
      
 The blockchain server ip-addresses in the .env, and .env.test files on each elastos pod, need to match the address of the targeted pod. Also the database details will require alteration.
      
-Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules" at 'cheirrs' cloning-time (we actually forked the elastos repo), you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above). Actually there is no need to alter the __init__.py file in the repo, rather in the cheirrs/TO*/*database/, which is where the file will be copied (soon) to the vm's.
+Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules",  and 'cheirrs' at cloning-time, you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above). Actually there is no need to alter the __init__.py file in the repo, rather in the cheirrs/TO*/*database/, which is where the file will be copied (soon) to the vm's.
      
      So, edit cheirrs/TO*/*database/__init__.py to insert your schema names, database name & database url.
      
@@ -932,11 +938,11 @@ ________________________________________________________________________________
      
      The following is a screenshot of the status board after successful installation:
      
-<img src="./Screenshot from 2022-05-10 14-56-57.png">
+<img src="./Screenshot from 2022-05-17 11-40-11.png">
      
      stdout of Blockchains looks like:
      
-<img src="./Screenshot from 2021-08-04 17-11-17.png">
+<img src="./Screenshot from 2022-05-17 11-36-43.png">
      
 
 _____________________________________________________________
