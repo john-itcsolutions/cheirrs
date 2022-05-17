@@ -37,7 +37,8 @@ We base initial development such as this locally. It's cheaper!
 
 <img src="./kubernetesinstallation-08-11-2021-2.png">
 
-The schema above are labeled G(n,m) for the internetworked, multiple member class dApps. In reality there is one schema/member-class (m-c: see https://itotchaincloud.com.au/the-general), across all business subnets. The single member classes, ie non-internetworked dApps (F(i)), are likewise constituted of all members of a network or dApp subscribers' group, on their own single-member-class schema. Although this is the case with the set F(i), within a single network ie schema ie dApp (in the F(i) case), we will be able to use the field for a member's id to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. While the same is ideally the case for the G(n,m) set, such individual member Tables and dApps being theoretically possible, the design and coding would be expensive.
+The schema above are labeled G(n,m) for the internetworked, multiple member class dApps. In reality there is one schema/member-class (m-c: see https://itotchaincloud.com.au/the-general), across all business subnets. The single member classes, ie non-internetworked dApps (F(i)), are likewise constituted of all members of a network or dApp subscribers' group, on their own single-member-class schema. Although this is the case with the set F(i), within a single network ie schema ie dApp (in the F(i) case), we will be able to use the field for a member's id to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. While the same is ideally the case for the G(n,m) set, such individual member Tables and dApps being theoretically possible, the design and coding would be expensive. Thus, by following the IBM research lead, we can say there would be one copy of the above installation per member-class, and arranged, configured and coded to ensure these databases interact as Masters in a data-intensive Blockchain-type assemblage. Therefore possibly as many as 3 for cheirrs, chubba morris and convey-it, plus as many of the internetworked member classes as existed on their own Business Subnets alongside other member-classes from other Business Subnets. eg 
+member-class(n,m) with n == business sub-network id and m == member-class id. Within member classes there may be many (or few) actual independent members (Companies).
 
 # BlockBases or DataChains
 
@@ -962,7 +963,7 @@ To be continued ..
 _____________________________________________________________
  
 ## Enter kubernetes-worker-1, to set-up an IoT server with Python-gRPC, 
-## node-red-industrial, Carrier and IOTA client, on their own vm.
+## node-red-industrial, Carrier and IOTA client, on their own vm's.
      
 `juju ssh <machine-number-worker-1>`
 
