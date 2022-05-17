@@ -123,6 +123,6 @@ if mAX - l == 0:
 else:
     print('WARNING!! Totals for Tables not equal! ie', mAX, 'and', l)
 print('Total Columns =', cols)
-print('Summary available in "/dbase_report.txt"')
+print('Summary available in "~/dbase_report.txt"')
 if __name__ == '__main__':
     hooks.execute(sys.argv)
