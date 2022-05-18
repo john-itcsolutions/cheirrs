@@ -965,8 +965,8 @@ _____________________________________________________________
 To be continued ..
 _____________________________________________________________
  
-## Enter kubernetes-worker-1, to set-up an IoT server with Python-gRPC, 
-## node-red-industrial, Carrier and IOTA client, on their own vm's.
+## Enter kubernetes-worker-0, to set-up an IoT server with Python-gRPC, 
+## node-red-industrial, Carrier and IOTA client.
      
 `juju ssh <machine-number-worker-1>`
 
@@ -993,20 +993,20 @@ with gRPC as well as the IOTA node.js client:)
      
              on the Host (acting as an Edge server)
      
-Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
+Also, in worker-0 (`juju ssh machine-number-worker-0`),
      
 `sudo snap install node-red-industrial`
      
      and go to your own host's LAN address, on a new tab in the 
      browser, with port `1891`,
-     then, in worker-1, 
+     then, in worker-0, 
      
      from the home directory, and go to your worker-1's address with port 1891
      in a browser tab on your Host. If using multipass you may need to use the URL of 
 
 `0.0.0.0:1891` 
      
-     to obtain access to the multipass>juju>[worker-1] vm. 
+     to obtain access to the multipass>juju>[worker-0] vm. 
      
     These 2 pages can interact, and generate and forward messages, events and commands.
      
@@ -1015,35 +1015,26 @@ Also, in worker-1 (`juju ssh <machine-number-worker-1>`,
      in some way. The events and messages (originating on iot devices connected to "edge" 
      raspberry-pi (or Industrial Pi) units or similar, in the field) will be logged on the IOTA 
      Tangle and your database, via javascript functions in node-red wrapped in Carrier and 
-     using the gRPC protocols on worker-1, to the "smart-web" server.
+     using the gRPC protocols on worker-0, to the "smart-web" server.
      
      As noted elsewhere, the required response times of some machinery and systems means 
      sub-millisecond cycles, which cannot be achieved without dedicated Edge-client/server 
      support geographically close to sites, when actuation is involved. Otherwise, 
      notification functions can be handled directly to the Cloud. 
      
-     In order for the node-red server on the worker to talk to the "smart-web" servers we need 
-     to clone the smartweb client from elastos in worker-1:
-     
-`git clone https://github.com/cyber-republic/python-grpc-adenine.git`
-     
      Follow the README.md instructions on the repo site to build the client.
      
      Similarly we need to allow (Elastos) Carrier-shielded communication between "edge" (here, Host),
-     and worker-1. For this, on both Edge (Host here) and worker-1, we require the Carrier Native SDK and to follow this by installing the 
+     and worker-0. For this, on both Edge (Host here) and worker-0, we require the Carrier Native SDK and to follow this by installing the 
      Carrier Nodejs Wrapper package. This would need to also occur on Real-World Edge Clients running node-red-industrial.
      
      https://github.com/elastos/Elastos.NET.Carrier.Nodejs.SDK and 
      https://github.com/elastos/Elastos.NET.Carrier.Native.SDK have details.
-     
-     We are currently having a problem related to the same errors when we ran "test.sh" from 
-     smart-web, when we try to complete the connection between node-red and smart-web via the grpc client 
-     (cohabiting with the node-red server). It appears to relate to configuration/provision of a jwt token at 
-     authentication in both cases.
+  
      
      The installation of IOTA client proceeds as follows (repeat for Host - ie Edge):
      
-     In worker-1:
+     In worker-0:
      
 `mkdir iota && cd iota`
      
@@ -1079,12 +1070,12 @@ for validation of IoT actions and events.
      Please refer to https://client-lib.docs.iota.org/docs/libraries/nodejs/examples 
      for a full explanation of all topics to which an application may subscribe on IOTA. 
      
-     The launch of the client, on both Edge (Host) and worker-1, occurs with:
+     The launch of the client, on both Edge (Host) and worker-0, occurs with:
      
 `node index`   from the iota root directory.
      
      By choosing the node.js version of the IOTA client, we get the ability to easily communicate with the other 
-     apps on the worker-1 vm, and on the Edge server (Host here).
+     apps on the worker-0 vm, and on the Edge server (Host here).
      
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - 
      as well as the server can show pages similar to this). Here is shown the "Edge" site page mimicked by 
@@ -1102,7 +1093,7 @@ for validation of IoT actions and events.
      
 ## Obtain and install Carrier and the Carrier Nodejs Wrapper:
      
-     In worker-1:
+     On Edge clients:
      
 `git clone https://github.com/elastos/Elastos.NET.Carrier.Native.SDK.git`
      
@@ -1120,8 +1111,7 @@ $ make
 $ make install
      
      Follow instructions on repo from here.
-     
-     Repeat the above on Edge clients.
+
      
      NOTE: We have not yet succeeded in installing the Nodejs Wrapper.
 
