@@ -732,15 +732,13 @@ _________________________________________________________________
      
 `sudo snap install multipass`
 
-`multipass launch -n master-0 -c 3 -m 8GB -d 50GB`
+`multipass launch -n master-0 -c 3 -m 12GB -d 50GB`
 
-`multipass launch -n master-1 -c 3 -m 8GB -d 50GB`
+`multipass launch -n master-1 -c 3 -m 12GB -d 50GB`
 
-`multipass launch -n master-2 -c 3 -m 8GB -d 50GB`
-	
-`multipass launch -n master-3 -c 3 -m 8GB -d 50GB`
+`multipass launch -n master-2 -c 3 -m 12GB -d 50GB`
 
-`multipass launch -n order-0 -c 3 -m 8GB -d 50GB`
+`multipass launch -n order-0 -c 3 -m 12GB -d 50GB`
 
      
      (You can tweak those settings)
