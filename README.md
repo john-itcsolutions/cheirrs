@@ -56,7 +56,7 @@ At the virtual server level, there will be one virtual Master copy of a database
 <img src="./datachains-slide4.png">
 
 
-<img src="./datachains-slide5.png">
+<img src="./datachains-slide5_2.png">
 
 
 
