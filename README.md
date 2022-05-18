@@ -729,17 +729,19 @@ _________________________________________________________________
 (The database schemata for ITOTCCA's project are private and available only under certain conditions.)
      
    {  If you have implemented a kubeflow installation (above) on one partition of the Host (on a microk8s cloud/controller),
-     you will need to obtain multipass to allow creation of four Ubuntu virtual machines (Kubernetes "nodes"), on this second partition (ie dual-boot Ubuntu/Ubuntu)}.
+     you will need to obtain multipass to allow creation of five Ubuntu virtual machines (Kubernetes "nodes"), on this second partition (ie dual-boot Ubuntu/Ubuntu)}.
      
 `sudo snap install multipass`
 
-`multipass launch -n master-0 -c 3 -m 12GB -d 50GB`
+`multipass launch -n master-0 -c 3 -m 8GB -d 50GB`
 
-`multipass launch -n master-1 -c 3 -m 12GB -d 50GB`
+`multipass launch -n master-1 -c 3 -m 8GB -d 50GB`
 
-`multipass launch -n master-2 -c 3 -m 12GB -d 50GB`
+`multipass launch -n master-2 -c 3 -m 8GB -d 50GB`
+	
+`multipass launch -n master-3 -c 3 -m 8GB -d 50GB`
 
-`multipass launch -n ordering -c 3 -m 12GB -d 50GB`
+`multipass launch -n order-0 -c 3 -m 8GB -d 50GB`
 
      
      (You can tweak those settings)
