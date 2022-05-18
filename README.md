@@ -28,7 +28,7 @@ To tackle the full set of Kubernetes installations locally, ideally you would ne
 <img src="./ITCSA_Plan_2.png">
 
 
-The following figure represents any of the the 'master-<x>' controllers with their 'werk-<x>' models, as opposed to 'lernenmaschine', the other model, on 'kubefluss' controller (based on microk8s). We install the Kubeflow (kubefluss/lernenmaschine) model first.
+The following figure represents any of the 'master-x' controllers with their 'werk-x' models, as opposed to 'lernenmaschine', the other model, on 'kubefluss' controller (based on microk8s). We install the Kubeflow (kubefluss/lernenmaschine) model first. We are still working on the design of the Transaction Ordering Service.
 
 We base initial development such as this locally. It's cheaper!
 
