@@ -1131,8 +1131,11 @@ ________________________________________________________________________________
      
  ## SUMMARY:
      
-     At this point we have a handful of problems preventing the werk model from working with a kubeflow model without resorting to multipass 
-     for the Elastos/Node-Red/IOTA/PostgreSQL+GIS model:
+     At this point we have a handful of problems preventing the werk model from functioning with a 
+     kubeflow model without resorting to multipass (which worked poorly). The fundamental problem is 
+     that the 2 installations require different types of controllers. We chose to partition the main 
+     drive and place kubeflow on one bootable partition with the juju/lxd/kubernetes system on the second.
+     	for the Elastos/Node-Red/IOTA/PostgreSQL+GIS model:
      
      1.  Complete MAAS setup to allow desktop hosting of two controllers thus allowing our (TensorFlow) 
          'lernenmaschine' model to be implemented alongside 'werk'
