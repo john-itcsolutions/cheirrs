@@ -1140,9 +1140,11 @@ ________________________________________________________________________________
      3.  The generation of an acceptable JWT token to authenticate to SmartWeb
      4.  Get the Nodejs Wrapper package for Carrier working properly
      5.  Follow the IBM article above to implement the various points outlined in the paper, in code.
-     6. Do everything necessary to make a Postgres Database become "like a Blockchain".
-     7. Continue to use the Elastos Blockchain systems for dApps at front end and to provide several useful services,
-	including Distributed Id's (DID Sidechain), Carrier Security and more.
+     6.  Do everything necessary to make a Postgres Database become "like a Blockchain".
+     	   -  Understand how to make the Ordering Service function
+     8.  Continue to use the Elastos Blockchain systems for dApps at front end and to provide several useful services,
+	 including Distributed Id's (DID Sidechain), Carrier Security and more.
+     9.  Learn how to provide authentication from Elastos DID Sidechain to Postgres DataChain/BlockBase system.
      
  _________________________________________________________________________________________________________________________________________________
      
