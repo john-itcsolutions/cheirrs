@@ -292,38 +292,44 @@ Nevertheless as a model of how to proceed, you will require 2 shell scripts foll
 
 In root directory of Project;
 
-`nano docker_dbase_setup_1.sh`
+`nano docker_dbase_setup_0.sh`
 
-Insert the following content, follow the pattern,  and adapt as required to your own db_name and schema names. Note that the actual schema_backup.sql files need to exist in the root directory when you run this script.
+In what follows, we assume you can "pg_dumpall" your entire db. We have called the dump "pg-wodehouse.sql".
+
+Insert the following content, follow the pattern,  and adapt as required to your own db_name. Note that the actual pg-wodehouse.sql file need to exist in the root directory when you run this script.
 
 ```
 #!/bin/bash
 
-# docker_dbase_setup_1.sh 
+# docker_dbase_setup_0.sh 
 
-docker exec -i postgis_container createuser -U postgres gmu && docker exec -i postgis_container createdb -U postgres haus && cat das_fuhrwerk_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat cheirrs_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat cheirrs_oseer_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat chubba_morris_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat chubba_morris_oseer_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat convey_it_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat convey_it_oseer_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat iot_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat the_general_backup.sql | docker exec -i postgis_container psql -U postgres -d haus && sleep 2 && cat the_general_oseer_backup.sql | docker exec -i postgis_container psql -U postgres -d haus
+docker exec -i postgis_container createuser -U postgres gmu && cat /media/postgres/d680746b-b70e-4ed1-ab1a-66c90dbe71ec6/home/postgres/Public/DFbase_test/pg-wodehouse.sql | docker exec -i postgis_container psql -U postgres
 
 ```
 
 Now create a follow-up script in the root directory
 
-`nano docker_dbase_setup_3.sh`
+`nano docker_dbase_setup_1.sh`
 
 Insert the following text and replace with your own db_name (most of this is to provide schemata and extensions for the 'gis' part of postgis, the final 2 sql scripts addressing elastos requirements):
 
-`docker exec -i postgis_container psql -d db_name -U postgres -c "ALTER ROLE gmu WITH PASSWORD 'gmu';" -c 'CREATE SCHEMA IF NOT EXISTS postgis;' -c 'CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;' -c 'CREATE SCHEMA IF NOT EXISTS topology;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;' -c 'CREATE SCHEMA IF NOT EXISTS postgis_sfcgal;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_sfcgal WITH SCHEMA postgis_sfcgal;' -c 'CREATE SCHEMA IF NOT EXISTS fuzzystrmatch;' -c 'CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA fuzzystrmatch;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer WITH SCHEMA address_standardizer;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer_data_us;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer_data_us WITH SCHEMA address_standardizer_data_us;' -c 'CREATE SCHEMA IF NOT EXISTS tiger;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;' -c 'CREATE SCHEMA IF NOT EXISTS tiger_data;' -c 'CREATE EXTENSION IF NOT EXISTS tiger_data WITH SCHEMA tiger;'  && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i insert_rows_scripts.sql'`
+`#!/bin/bash
+
+# docker_dbase_setup_1.sh
+
+docker exec -i postgis_container psql -d db_name -U postgres -c "ALTER ROLE gmu WITH PASSWORD 'gmu';" -c 'CREATE SCHEMA IF NOT EXISTS postgis;' -c 'CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;' -c 'CREATE SCHEMA IF NOT EXISTS topology;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;' -c 'CREATE SCHEMA IF NOT EXISTS postgis_sfcgal;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_sfcgal WITH SCHEMA postgis_sfcgal;' -c 'CREATE SCHEMA IF NOT EXISTS fuzzystrmatch;' -c 'CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA fuzzystrmatch;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer WITH SCHEMA address_standardizer;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer_data_us;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer_data_us WITH SCHEMA address_standardizer_data_us;' -c 'CREATE SCHEMA IF NOT EXISTS tiger;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;' -c 'CREATE SCHEMA IF NOT EXISTS tiger_data;' -c 'CREATE EXTENSION IF NOT EXISTS tiger_data WITH SCHEMA tiger;'  && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i insert_rows_scripts.sql'`
 
 We have a running database on port 5432 (since issuing "docker-compose up").
 
 So:
 
-`./docker_dbase_setup_1.sh`
+`./docker_dbase_setup_0.sh`
 
 And wait until complete.
 
 Then:
 
-`docker_dbase_setup_3.sh`
+`docker_dbase_setup_1.sh`
 
 You now need to edit the `elastos-smartweb-service/.env.example` file to reflect your own docker network addresses. The database ip-address
 is found as above from 
