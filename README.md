@@ -303,7 +303,7 @@ Insert the following content, follow the pattern,  and adapt as required to your
 
 # docker_dbase_setup_0.sh 
 
-docker exec -i postgis_container createuser -U postgres gmu && cat /media/postgres/d680746b-b70e-4ed1-ab1a-66c90dbe71ec6/home/postgres/Public/DFbase_test/pg-wodehouse.sql | docker exec -i postgis_container psql -U postgres
+docker exec -i postgis_container createuser -U postgres gmu && cat pg-wodehouse.sql | docker exec -i postgis_container psql -U postgres
 
 ```
 
