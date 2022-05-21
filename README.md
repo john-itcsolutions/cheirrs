@@ -740,17 +740,15 @@ _________________________________________________________________
      
 `sudo snap install multipass`
 
-`multipass launch -n master-0 -c 3 -m 12GB -d 50GB`
+`multipass launch -n master-0 -c 4 -m 12GB -d 50GB`
 
-`multipass launch -n master-1 -c 3 -m 12GB -d 50GB`
+`multipass launch -n master-1 -c 4 -m 12GB -d 50GB`
 
-`multipass launch -n master-2 -c 3 -m 12GB -d 50GB`
-
-`multipass launch -n order-0 -c 3 -m 12GB -d 50GB`
+`multipass launch -n order-0 -c 4 -m 12GB -d 50GB`
 
      
      (You can tweak those settings)
-     And end-up with 4 x LTS Ubuntu vm's which we will set up as 4 master nodes using "juju/lxd".
+     And end-up with 3 x LTS Ubuntu vm's which we will set up as 3 master nodes using "juju/lxd".
      
      
      Then mount a shared directory to enable access to your host:
@@ -791,10 +789,7 @@ In each vm:
 	You should now be looking at the status board of one vm with kubernetes converging.
 	When every process is complete except possibly the control-plane and/or worker 
 	may be in a 'wait' state:
-	
-`juju add-unit kubernetes-worker`
-	
-	When this is complete:
+
 	
 `juju deploy -n 2 postgresql pg-wodehouse`
 	
