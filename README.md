@@ -74,7 +74,7 @@ The technology of the fee-free IOTA "Trust Layer", being developed for IoT, is a
 
 We utilise one "oseer" schema per member-class, so there is one schema for each of the n x m member-classes across all sub-networks, and one for each of the F(i) non-internetworked future dApps, as well as one for each of the A, B and C dApps (Community Housing, RealEstate and convey-IT, respectively). Our schema called 'das_fuhrwerk' is the Head Overseeing Schema, for top level customer on-boarding, usage tracking and payments, to "oversee the overseers" and to provide our own company's Enterprise dApp for our accounting, planning and administration purposes.
 
-You need to develop initially on docker. ITCSA uses Ubuntu 20.04 as the host platform, with Python 3.8. DO NOT TRY TO USE PYTHON 3.10 (as on JammyJellyfish Ubuntu 22.04) for Elastos development on Docker.
+You need to develop initially on docker. ITOTCCA uses Ubuntu 22.04 as the host platform, with Python 3.8. DO NOT TRY TO USE PYTHON 3.10 (as is default on JammyJellyfish Ubuntu 22.04) for Elastos development on Docker.
 You will not need an Extreme Gaming level of computer for Docker-based (initial - eg. database) work without Kubernetes.
 
 See our website at https://www.itotchaincloud.com.au/kubernetes-yaml-file-example/ for an older but more visual idea of this project and others.
@@ -243,7 +243,7 @@ Open elastos-smartweb-service/run.sh in an editor and comment out the top lines 
 #cd tools
 #./postgres.sh
 #cd ..
-virtualenv -p `which python3` venv
+virtualenv -p `which python` venv
 
 source venv/bin/activate
 
@@ -415,7 +415,7 @@ cd python-grpc-adenine
 ```
 Setup virtualenv:
 ```
-virtualenv -p `which python3` venv;
+virtualenv -p `which python` venv;
 source venv/bin/activate;
 ```
 Install dependencies:
@@ -428,7 +428,7 @@ cp .env.example .env;
 ```
 Run sample.py:
 ```
-python3 sample.py
+python sample.py
 ```
 
 Remember it is more efficient to have postgis processing data wherever possible, and not having the smartweb server doing 
