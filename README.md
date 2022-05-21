@@ -879,7 +879,8 @@ _______________________________________________________________
 
      We turn to finish setting up the Blockchain/Database gRPC Server Deployment.
 			     
-     In each multipass vm, in /home/ubuntu; 
+     In each multipass vm (except in ordering service vm, as there is no need for blockchain access here)
+     , in /home/ubuntu; 
 			     
 `juju ssh <machine number kubernetes-worker/0>`
 	
