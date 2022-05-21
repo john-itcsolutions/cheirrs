@@ -929,13 +929,13 @@ Now perform each of the following 2 steps for each vm , paying particular attent
 `juju scp shared/cheirrs/TO*service/TO_elastos-smartweb-service.grpc_adenine.database_<node-number-eg 1>/__init__.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
 
 
- After you have covered all 4 nodes:
+ After you have covered the 2 master-x nodes:
  
 in each:
 
 `juju ssh <machine number kubernetes-worker/0>` 
 	
-`elastos-smartweb-service/run.sh`
+`cd elastos-smartweb-service && ./run.sh`
 .. and wait and watch .. and examine logs in case of errors, which are available at (TODO). 
      If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds.
      
@@ -969,10 +969,10 @@ _____________________________________________________________
 To be continued ..
 _____________________________________________________________
  
-## Enter kubernetes-worker-0, to set-up an IoT server with Python-gRPC, 
+## In master-0 and master-1, enter kubernetes-worker-0, to set-up an IoT server with Python-gRPC, 
 ## node-red-industrial, Carrier and IOTA client.
      
-`juju ssh <machine-number-worker-1>`
+`juju ssh <machine-number-worker-0>`
 
 (To install nodejs and npm, needed for Node-red, the Carrier wrapper and to connect 
 with gRPC as well as the IOTA node.js client:)
@@ -1038,7 +1038,7 @@ Also, in worker-0 (`juju ssh machine-number-worker-0`),
      
      The installation of IOTA client proceeds as follows (repeat for Host - ie Edge):
      
-     In worker-0:
+     In worker-0, master-0 & master-1:
      
 `mkdir iota && cd iota`
      
