@@ -846,7 +846,7 @@ member-class plus other utility schemata such as "iot" and an overseeing schema 
 
 At this stage it is envisaged that we would set up one schema for each member-class in an inter-enterprise network, plus an iot 
 schema and a set of oversight schemata (to run Business Process Supervision from). Also the design would 
-require only one database server (though replicated) per member-class - ie one vm per member-class - 
+require only one database server (though replicated) per member-class (plus one for the ordering service) - ie one vm per member-class - 
 (not "per member" as in the IBM paper). 
 
 All pods would be situated together in the cloud (and probably replicated at a site-level globally).
