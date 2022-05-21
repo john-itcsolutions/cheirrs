@@ -801,8 +801,8 @@ ________________________________________________________________
  
 # DATABASE: Internals
 
-You will need a set of 3 member-class schemata with another 3 overseer schemata (we use 2 - the_general, 
-and the_general_oseer  and copied them 3 times, at this early stage) to serve as material for development.
+You will need a set of 2 member-class schemata with another 2 overseer schemata (we use 2 - the_general, 
+and the_general_oseer  and copied them 2 times, at this early stage) to serve as material for development.
 
 In our case, if a single member-class network existed solo (such as any of our Real Estate Property dApps) we would be required 
 to separate the existing single network into several (3 to provide a 'Mexican Standoff' arrangement) servers 
