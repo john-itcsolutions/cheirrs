@@ -243,7 +243,7 @@ Open elastos-smartweb-service/run.sh in an editor and comment out the top lines 
 #cd tools
 #./postgres.sh
 #cd ..
-virtualenv -p `which python` venv
+virtualenv -p /usr/bin/python3.8 venv
 
 source venv/bin/activate
 
@@ -251,7 +251,7 @@ pip install -r requirements.txt
 
 export PYTHONPATH="$PYTHONPATH:$PWD/grpc_adenine/stubs/"
 
-python3 grpc_adenine/server.py
+python grpc_adenine/server.py
 ```
 
 so that the run.sh script does not attempt to start any "postgres" container (we are using "postgis/postgis" 
