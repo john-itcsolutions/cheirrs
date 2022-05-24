@@ -182,13 +182,13 @@ Get Docker and Docker-compose (see above). Pull 2 container images:
 
 `docker pull postgis/postgis`
 
-create a home folder for your docker-based project `mkdir path/to/<my-project> && cd path/to/<my-project>`
+create one home folder for each of your "member_class_x" projects `mkdir path/to/my-project-x && cd path/to/my-project-x`
 
-Make a file called docker-compose.yml
+Make a set of files all called docker-compose.yml in each my-project-x folder:
 
 `nano docker-compose.yml`
 
-Insert the following text:
+Insert the following text, varying "x" and the names in each folder:
 ```
 version: '3.3'
 networks:
@@ -199,18 +199,19 @@ networks:
 
 services:
   db:
-    container_name: postgis_container
+    container_name: postgis_container_your_member_class_name_x
     image: postgis/postgis
+    command: postgres -c wal_level=logical -c max_wal_senders=150 -c max_replication_slots=150
     restart: always
     networks:
       static-network:
-        ipv4_address: 172.20.128.2
+        ipv4_address: 172.20.128.x
     environment:
       POSTGRES_PASSWORD: yoursecret
     volumes:
       - ./data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - "543x:5432"
 
   pgadmin:
     container_name: pgadmin4_container
@@ -227,7 +228,102 @@ services:
 
 ```
 
-Next we have to clone the Elastos Smartweb blockchain and database server package to the Project root directory:
+Before running the elastos run script you would usually need to restore the schemata you have in the form of 
+schema-backups (safest in .sql format). Consistent with following text, we show how our company has developed 
+2 simple scripts to restore the entire database (including all schemata) at once. This assumes you have developed
+at least some of your own schemata already. As noted below we do not release our actual schema backups.
+
+Nevertheless as a model of how to proceed, you will require 2 shell scripts following these patterns:
+
+In root directory of each project;
+
+`nano docker_dbase_setup_0.sh`
+
+In what follows, we assume you can "pg_dumpall" your entire db. We have called the dump "pg-wodehouse.sql".
+
+Insert the following content, follow the pattern,  and adapt as required to your own db_name. Note that the actual pg-wodehouse.sql file needs to exist in the root directory when you run this script.
+
+```
+#!/bin/bash
+
+# docker_dbase_setup_0.sh 
+
+docker exec -i postgis_container createuser -U postgres gmu && cat pg-wodehouse.sql | docker exec -i postgis_container_x psql -U postgres
+
+```
+
+Now create a follow-up script in the root directory
+
+`nano docker_dbase_setup_1.sh`
+
+Insert the following text and replace with your own container & db_name, and note the final 2 sql scripts adress elastos requirements):
+
+```
+#!/bin/bash
+
+# docker_dbase_setup_1.sh
+
+docker exec -i postgis_container_x psql -d db_name -U postgres -c "ALTER ROLE gmu WITH PASSWORD 'gmu';" && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i insert_rows_scripts.sql'
+```
+This needs to be repeated for each member_class project directory, remembering to change the container names.
+
+You need a copy of any one of the docker-compose.yml files to reside like an anchor in the parent directory of all your project folders. The name of the parent directory gives the overall network a name so every database copy can see each other one. You will be running your "docker-compose up" commands from this directory, but you need to copy and paste the section like this from each project directory's docker-compose.yml into the parent folder's docker-compose.yml file:
+
+```
+services:
+  db:
+    container_name: postgis_container_your_member_class_name_x
+    image: postgis/postgis
+    command: postgres -c wal_level=logical -c max_wal_senders=150 -c max_replication_slots=150
+    restart: always
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.x
+    environment:
+      POSTGRES_PASSWORD: yoursecret
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "543x:5432"
+ ```
+ fresh each time you start a member_class's server (so the ipv4 address and port number change as well as the name of the container you are running).
+
+Now we have a running database on each port 54xy but if you go to localhost:5050 (pg-admin4) each database server will be on 5432 since pg-admin works with in-container ports. To see each database we need to register a server for each member_class database copy, making the name of the server match the directory name of each member-class. Insert ip address (but always use port 5432 here) from the appropriate docker-compose.yml. 
+So, in each project directory (sub-directory, really, if the parent is taken as the main Project Directory):
+
+`./docker_dbase_setup_0.sh`
+
+And wait until complete.
+
+Then:
+
+`docker_dbase_setup_1.sh`
+
+You will need a copy of your overall database (pg-wodehouse.sql) which you copy to each member_class project.
+
+After all database copies are up and running, you can set about coding "Logical Replication" on all servers. Basically each server is required to publish all tables and each server requires a set of subscriptions covering all other servers.
+
+So, in each server proceed as follows.
+
+`docker exec -it postgis_container_order bash`
+
+`su postgres`
+
+`psql haus`
+
+`CREATE PUBLICATION geordnet_publication FOR ALL TABLES;`
+
+Ending with a full set of servers with Publications of ALL TABLES.
+
+And then subscribe every server to every other server's Publications with (eg):
+
+`CREATE SUBSCRIPTION geordnet_member_class_x_y_subscription CONNECTION 'host=172.20.128.x port=5432 dbname=haus' PUBLICATION geordnet_publication;`
+
+Thus Logical Replication is implemented.
+
+The next step is to investigate how to involve the Order Service in the ordering of transactions by consensus from the other servers, and propogating the finalised Blocks throughout the system. Stay tuned!
+
+Next we have to clone the Elastos Smartweb blockchain and database server package to the Sub-Project root directories:
 
 `git clone --recurse-submodules https://github.com/cyber-republic/elastos-smartweb-service.git`
 
@@ -283,55 +379,7 @@ and search for the container's ip-address, or just copy it from the docker-compo
 Enter this in 'Database server address' in PgAdmin4. 
 The database server address is a static address because we defined a static network in the docker-compose.yml file.
 
-Before running the elastos run script you would usually need to restore the schemata you have in the form of 
-schema-backups (safest in .sql format). Consistent with following text, we show how our company has developed 
-2 simple scripts to restore the entire database (including all schemata) at once. This assumes you have developed
-at least some of your own schemata already. As noted below we do not release our actual schema backups.
 
-Nevertheless as a model of how to proceed, you will require 2 shell scripts following these patterns:
-
-In root directory of Project;
-
-`nano docker_dbase_setup_0.sh`
-
-In what follows, we assume you can "pg_dumpall" your entire db. We have called the dump "pg-wodehouse.sql".
-
-Insert the following content, follow the pattern,  and adapt as required to your own db_name. Note that the actual pg-wodehouse.sql file need to exist in the root directory when you run this script.
-
-```
-#!/bin/bash
-
-# docker_dbase_setup_0.sh 
-
-docker exec -i postgis_container createuser -U postgres gmu && cat pg-wodehouse.sql | docker exec -i postgis_container psql -U postgres
-
-```
-
-Now create a follow-up script in the root directory
-
-`nano docker_dbase_setup_1.sh`
-
-Insert the following text and replace with your own db_name (most of this is to provide schemata and extensions for the 'gis' part of postgis, the final 2 sql scripts addressing elastos requirements):
-
-```
-#!/bin/bash
-
-# docker_dbase_setup_1.sh
-
-docker exec -i postgis_container psql -d db_name -U postgres -c "ALTER ROLE gmu WITH PASSWORD 'gmu';" -c 'CREATE SCHEMA IF NOT EXISTS postgis;' -c 'CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA postgis;' -c 'CREATE SCHEMA IF NOT EXISTS topology;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_topology WITH SCHEMA topology;' -c 'CREATE SCHEMA IF NOT EXISTS postgis_sfcgal;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_sfcgal WITH SCHEMA postgis_sfcgal;' -c 'CREATE SCHEMA IF NOT EXISTS fuzzystrmatch;' -c 'CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA fuzzystrmatch;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer WITH SCHEMA address_standardizer;' -c 'CREATE SCHEMA IF NOT EXISTS address_standardizer_data_us;' -c 'CREATE EXTENSION IF NOT EXISTS address_standardizer_data_us WITH SCHEMA address_standardizer_data_us;' -c 'CREATE SCHEMA IF NOT EXISTS tiger;' -c 'CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder WITH SCHEMA tiger;' -c 'CREATE SCHEMA IF NOT EXISTS tiger_data;' -c 'CREATE EXTENSION IF NOT EXISTS tiger_data WITH SCHEMA tiger;'  && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i insert_rows_scripts.sql'
-```
-
-We have a running database on port 5432 (since issuing "docker-compose up").
-
-So:
-
-`./docker_dbase_setup_0.sh`
-
-And wait until complete.
-
-Then:
-
-`docker_dbase_setup_1.sh`
 
 You now need to edit the `elastos-smartweb-service/.env.example` file to reflect your own docker network addresses. The database ip-address
 is found as above from 
