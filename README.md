@@ -359,6 +359,8 @@ In the Project root directory, at the command line type:
 
 (If you scroll down to "Postscript" below, you will see why we recommend that first you issue:
 
+`sudo kill -9 $(sudo lsof -t -i:5432)`
+
 `sudo kill -9 $(sudo lsof -t -i:8001)`
 
 ), then:
