@@ -317,7 +317,7 @@ Ending with a full set of servers with Publications of ALL TABLES.
 
 And then subscribe every server to every other server's Publications with (eg):
 
-`CREATE SUBSCRIPTION geordnet_member_class_x_y_subscription CONNECTION 'host=172.20.128.x port=5432 dbname=haus' PUBLICATION geordnet_publication;`
+`CREATE SUBSCRIPTION geordnet_member_class_x_y_subscription CONNECTION 'host=172.20.128.x port=5432 dbname=haus password=your??postgres??password' PUBLICATION geordnet_publication;`
 
 Thus Logical Replication is implemented.
 
