@@ -271,7 +271,7 @@ You need a copy of any one of the docker-compose.yml files to reside like an anc
 
 ```
 services:
-  db_order_z:
+  db_x:
     container_name: postgis_container_your_member_class_name_x
     image: postgis/postgis
     command: postgres -c wal_level=logical -c max_wal_senders=300 -c max_replication_slots=300
@@ -327,7 +327,7 @@ There should be as many servers in this "partitioned" set as in the original set
 
 ```
 services:
-  db:
+  db_order_z:
     container_name: postgis_container_order_member_class_name_z
     image: postgis/postgis
     command: postgres -c wal_level=logical -c max_wal_senders=300 -c max_replication_slots=300
