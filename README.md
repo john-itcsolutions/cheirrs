@@ -274,7 +274,7 @@ services:
   db:
     container_name: postgis_container_your_member_class_name_x
     image: postgis/postgis
-    command: postgres -c wal_level=logical -c max_wal_senders=150 -c max_replication_slots=150
+    command: postgres -c wal_level=logical -c max_wal_senders=300 -c max_replication_slots=300
     restart: always
     networks:
       static-network:
@@ -311,17 +311,39 @@ So, in each server proceed as follows.
 
 `psql haus`
 
-`CREATE PUBLICATION geordnet_publication FOR ALL TABLES;`
+`CREATE PUBLICATION member_class_x_publication FOR ALL TABLES;`
 
 Ending with a full set of servers with Publications of ALL TABLES.
 
 And then subscribe every server to every other server's Publications with (eg):
 
-`CREATE SUBSCRIPTION geordnet_member_class_x_y_subscription CONNECTION 'host=172.20.128.x port=5432 dbname=haus password=your??postgres??password' PUBLICATION geordnet_publication;`
+`CREATE SUBSCRIPTION member_class_x_member_class_y_subscription CONNECTION 'host=172.20.128.x port=5432 dbname=haus password=your??postgres??password' PUBLICATION member_class_x_publication;`
 
 Thus Logical Replication is implemented.
 
-The next step is to investigate how to involve the Order Service in the ordering of transactions by consensus from the other servers, and propogating the finalised Blocks throughout the system. Stay tuned!
+The next step is to investigate how to involve the Order Service in the ordering of transactions by consensus from the other servers, and propogating the finalised Blocks throughout the system. We require a partitioned set of Order_Member_Class_x servers including only a new database "geordnet".
+
+There should be as many servers in this "partitioned" set as in the original set. These servers require a different docker-compose.yml. See below:
+
+```
+services:
+  db:
+    container_name: postgis_container_order_member_class_name_z
+    image: postgis/postgis
+    command: postgres -c wal_level=logical -c max_wal_senders=300 -c max_replication_slots=300
+    restart: always
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.z
+    environment:
+      POSTGRES_PASSWORD: yoursecret
+    volumes:
+      - ./data_z:/var/lib/postgresql/data
+    ports:
+      - "543z:5432"
+ ```
+
+The above code needs to be copied (as for the previous set) to the overall parent Project Directory, but only over the "services \ db-z: .. etc" section, in the existing docker-compose.yml file, leaving the first section and last sections intact so as to preserve the pgadmin4 and static network settings. When the databases from this "partition" are rolled out they will have a structure of schemata, tables and columns identical, and the database (which we call "geordnet") will consist of the same number of copies as the original partition, but with a very different set of tables (identical) in each schema. eg of one schema in "geordnet_member_class_z" database is "geordnet_member_class_w" with 2 tables (same for each table in each schema), 1. transactions, and 2. blocks. Transactions has a. username of client b. procedure executed and arguments (json) c. block_id d. Unique identifier == hash (a, b, c) e. Signature on hash(a, b, c, d) using client's private key. Block Table has a. Block-id b. set of transactions (json) c. metadata associated with the consensus protocol d.hash of the previous block e. hash of the current block, i.e., hash (a, b, c, d) f. Digital signature on the hash of the current block by the orderer node.
 
 Next we have to clone the Elastos Smartweb blockchain and database server package to the Sub-Project root directories:
 
