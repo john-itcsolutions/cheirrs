@@ -271,7 +271,7 @@ You need a copy of any one of the docker-compose.yml files to reside like an anc
 
 ```
 services:
-  db:
+  db_order_z:
     container_name: postgis_container_your_member_class_name_x
     image: postgis/postgis
     command: postgres -c wal_level=logical -c max_wal_senders=300 -c max_replication_slots=300
