@@ -201,7 +201,7 @@ services:
   db:
     container_name: postgis_container_your_member_class_name_x
     image: postgis/postgis
-    command: postgres -c wal_level=logical -c max_wal_senders=150 -c max_replication_slots=150
+    command: postgres -c wal_level=logical -c max_worker_processes=400 -c max_wal_senders=300 -c max_replication_slots=300
     restart: always
     networks:
       static-network:
@@ -274,7 +274,7 @@ services:
   db_x:
     container_name: postgis_container_your_member_class_name_x
     image: postgis/postgis
-    command: postgres -c wal_level=logical -c max_wal_senders=300 -c max_replication_slots=300
+    command: postgres -c wal_level=logical -c max_worker_processes=400 -c max_wal_senders=300 -c max_replication_slots=300
     restart: always
     networks:
       static-network:
