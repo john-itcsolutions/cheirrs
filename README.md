@@ -1,7 +1,7 @@
 ## INTRODUCTION:
 
 # CHEIRRS
-This project was based on  Lxd, Juju, Charms and Kubernetes; merged with Cyber Republic's Elastos Smartweb gRPC-based Blockchain and Database Server. Database ORM, reflection (at initialisation) and querying uses SQLAlchemy. Although there has been a major shift in the foundations of 'cheirrs', with a new discovery by us of research by IBM from 2019 which could potentially remove the need of our customers to actually invest any more than a modicum of Trust in ITOTCCA, with the concept of "Blockchain meets Database". The blockchain end of a transaction still occurs first, followed by writing or reading of data to or from Postgres, via the "etcd" (or you can use redis) cluster on the Kubernetes installation. However our intention is to follow the lead of research from IBM in India, where apparently a practical way of making a database as immutable and tamper-proof as a blockchain, for the purposes of Smart Contract Trading and any internetworked transactions. The paper, Blockchain Meets Database: Design and Implementation of a Blockchain Relational Database
+This project was based on  Lxd, Juju, Charms and Kubernetes; merged with Cyber Republic's Elastos Smartweb gRPC-based Blockchain and Database Server. Database ORM, reflection (at initialisation) and querying uses SQLAlchemy. Although there has been a major shift in the foundations of 'cheirrs', with a new discovery by us of research by IBM from 2019 which could potentially remove the need of our customers to actually invest any more than a modicum of Trust in ITOTCCA, with the concept of "Blockchain meets Database". The blockchain end of a transaction still occurs first, followed by writing or reading of data to or from Postgres, via the "etcd" (or you can use redis) cluster on the Kubernetes installation. However our intention is to follow the lead of research from IBM in India, where apparently a practical way of making a database as immutable and tamper-proof as a blockchain, has been discovered, for the purposes of Smart Contract Trading and any internetworked transactions. The paper, Blockchain Meets Database: Design and Implementation of a Blockchain Relational Database
 ∗
 Senthil Nathan 1 , Chander Govindarajan 1 , Adarsh Saraf 1 ,
 Manish Sethi 2 , and Praveen Jayachandran 1
@@ -13,9 +13,9 @@ IBM Research India, 2 IBM Industry Platforms USA
 .. refer to this link:  https://arxiv.org/pdf/1903.01919.pdf ..
 
 
-has revealed that it is possible to provide Trust in a natural way in networking between Companies, whilst basically distrusting each other, by making a network of Postgres Databases behave like a large-data-capacity blockchain. To ITOTCCA, this is revolutionary. Prospective customers will no longer have to trust our company to any extent as far as daily operational security is concerned. Neither do they have to trust other companies. The idea is to allow the machines operated by each Company to keep each other honest. There is a hole in the plan, in that if globally over 50% of Ordering nodes were to be caused to act fraudulently, the factor of Trust would be destroyed. Elsewhere (on our website at itotchaincloud.com.au/security) we note the contribution of Rong Chen and Elastos in devising a hardware enhancement which is necessary for Blockchain Miners to be fitted with in order to be able to participate in Mining. This device ensures by design that no corps can act together in a gang of >50% ownership and direction. The idea is currently operational with Elastos. If a similar device were fitted to ordering servers, collusion could possibly be prevented. This requires investigation.
+has revealed that it is possible to provide Trust in a natural way in networking between Companies, whilst basically distrusting each other, by making a network of Postgres Databases behave like a large-data-capacity blockchain. To ITOTCCA, this is revolutionary. Prospective customers will no longer have to trust our company to any extent as far as daily operational security is concerned. Neither do they have to trust other companies. The idea is to allow the machines operated by each Company to keep each other honest. There is a hole in the plan, in that if globally over 50% of Ordering nodes were to be caused to act fraudulently, the factor of Trust would be destroyed. Elsewhere (on our website at itotchaincloud.com.au/security) we note the contribution of Rong Chen and Elastos in devising a hardware enhancement which is necessary for Blockchain Miners to be fitted with in order to be able to participate in Mining. This device ensures by design that no corps can act together in a gang of >50% ownership and direction. The idea is currently operational with Elastos. If a similar device were fitted to ordering servers, collusion could possibly be prevented. This requires investigation. Alternatively, it may be possible to utilise the Elastos Blockchains to provide a Fraud Check service against the database.
 
-These developments have caused ITOTCCA to review our monolithic design, opting now for an isolation of Business Networks from each other and restricting the scope of connectivity to be strictly internal to each separate Business Network (of course external web-connections will still be possible, but safely shielded under Carrier (see itotchaincloud.com.au/security). Networks are independent now. The design is now to have a range of cloud servers per Business Network. Each member-class would ideally take responsibility for its own virtual hardware. The virtual servers are all to be  linked between member-class nodes within a Master/Master replication system. All member-classes carry identical copies of the entire network's databases, with one strictly private Business Channel per member, enforced by the hardware/software in the cloud. Here, the machines are designed to be ensuring clean play all the time, following the blockchain model.
+These developments have caused ITOTCCA to review our monolithic design, opting now for an isolation of Business Networks from each other and restricting the scope of connectivity to be strictly internal to each separate Business Network (of course external web-connections will still be possible, but safely shielded under Carrier (see itotchaincloud.com.au/security). Networks are independent now. The design is now to have a range of cloud servers per Business Network. Each member-class (represented by its own schema) would ideally take responsibility for its own virtual hardware. The virtual servers are all to be  linked between member-class nodes within a Master/Master replication system. All member-classes carry identical copies of the entire network's databases, with one strictly private Business Channel per member, enforced by the hardware/software in the cloud. Here, the machines are designed to be ensuring clean play all the time, following the blockchain model.
 
 However, in the above article, it is envisaged that a section of non-internetworked transactions would be outside the network. This implies that a company's own employees, and their connecting devices, can be trusted more than the internetworked transaction parties. We believe this to be highly questionable.
 
@@ -23,7 +23,7 @@ To this end, we are striving to implement a Hybrid model with 2 layers. We inten
 
 gRPC protocols replace the older style REST APIs, for communicating requests, and data inputs, from the client, and responses from the blockchain &/or database back to the client; all this occurs through the smart-web server, employing a "microservices" architecture. Here the gRPC protocols are implemented in Python. The smart-web server has Carrier installed onboard, guaranteeing security. Carrier is also installed via plugin on the Ionic dApp clients (which are developed hierarchically inside Elastos.Essentials) as well as manually on the IoT Edge client/servers (running 'node-red').
 
-To tackle the full set of Kubernetes installations locally, ideally you would need (for 4 multipass vm's with a juju 'kubernetes-core' installation on each) a 64 GB RAM (minimum); 16 core cpu; 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, you really need an Accelerator NVIDIA GPU of at least 10GB vRAM. The current state of our Infrastructure can be represented figuratively:
+To tackle the full set of Kubernetes installations locally, ideally you would need (for 4 multipass vm's with a juju 'kubernetes-core' installation on each) a 64 GB RAM (minimum); 16 core cpu; 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, you really need an Accelerator NVIDIA GPU of at least 10GB vRAM. This allows approximately one ordering service and two member classes to develop with. However the most powerful way to develop here is to use Docker (see below). The current state of our Infrastructure can be represented figuratively:
 
 <img src="./ITCSA_Plan_2.png">
 
@@ -66,7 +66,7 @@ This system also has the capacity for the Smart-Web server to intercept orders (
 
 The actual "Things" generating messages and signals are connected at the sites by raspberry-pi "edge" clients or similar (eg one of Canonical's Partners offers "Industrial Pi" with Ubuntu Certification, ready for the Ubuntu "Core" reduced-footprint Operating System). The administration of the IoT system occurs on the IoT dApps, connected by node-red as well as python-grpc to the server(s) and by the IOTA onboard client to the "Tangle" for event validation (as for the node-red cloud  server and the edge server). The IoT Admin dApp can be split effectively to allow networks to be under your own control and respomsibility. Both notification and actuation are possible, however with actuation, the response time of the system needs to be considered, as a cloud based server may not satisfy the sub-millisecond requirements of some machinery. Edge-based servers would need to handle such operations. The systems such as this are communicating Notifications to the Smart-Web Servers for database and blockchain recording purposes and to allow IoT Administrators to act as appropriate. Also the SmarWeb server will be able to direct an Enterprise Data Item received which requires IoT (Operationaal Technology) actuation (eg a Sales Order for manufacturing) to the Node-Red server to be introduced into a production line. Flexible manufacturing. That is, any electronic control required is provided either by the IoT devices themselves, or via components like Industrial Pi servers, locally, for groups of devices, but some types of initiation can occur through the Enterprise IT system. All communications are shielded securely on networks by Elastos Carrier, requiring the Carrier-Native and its Nodejs and Cordova "wrapper" packages to allow node.js and typescript apps to access Carrier.
 
-ITCSA chooses to implement the industrial version "node-red-industrial" of node-red. Both these packages enable the visual programming of connections between IoT devices, edge client/servers and the main IoT server in the cloud, including the specification of node.js functions and system calls to be generated upon events, all varietiies of networked intercommunications, ordering of connections, etc. The main differences between node-red and node-red-industrial are concerned with Industry 4.0 readiness, with the industrial version implementing such features as an interface for Bosch-Rexroth's ctrl-X automation-of-movement Operational Technology system, for factories of the future. 
+ITOTCCA chooses to implement the industrial version "node-red-industrial" of node-red. Both these packages enable the visual programming of connections between IoT devices, edge client/servers and the main IoT server in the cloud, including the specification of node.js functions and system calls to be generated upon events, all varietiies of networked intercommunications, ordering of connections, etc. The main differences between node-red and node-red-industrial are concerned with Industry 4.0 readiness, with the industrial version implementing such features as an interface for Bosch-Rexroth's ctrl-X automation-of-movement Operational Technology system, for factories of the future. 
 
 Usually IoT notifications are dealt with on a "Report-by-Exception" basis, at the cloud level, however a continuous set of signals is often required at the edge level, to maintain control. 
 
@@ -74,8 +74,8 @@ The technology of the fee-free IOTA "Trust Layer", being developed for IoT, is a
 
 We utilise one "oseer" schema per member-class, so there is one schema for each of the n x m member-classes across all sub-networks, and one for each of the F(i) non-internetworked future dApps, as well as one for each of the A, B and C dApps (Community Housing, RealEstate and convey-IT, respectively). Our schema called 'das_fuhrwerk' is the Head Overseeing Schema, for top level customer on-boarding, usage tracking and payments, to "oversee the overseers" and to provide our own company's Enterprise dApp for our accounting, planning and administration purposes.
 
-You need to develop initially on docker. ITOTCCA uses Ubuntu 22.04 as the host platform, with Python 3.8. DO NOT TRY TO USE PYTHON 3.10 (as is default on JammyJellyfish Ubuntu 22.04) for Elastos development on Docker.
-You will not need an Extreme Gaming level of computer for Docker-based (initial - eg. database) work without Kubernetes.
+You need to develop initially on docker. ITOTCCA uses Ubuntu 22.04 as the host platform, with Python 3.8. DO NOT TRY TO USE PYTHON 3.10 (as is default on JammyJellyfish Ubuntu 22.04) for THE Elastos components of development on Docker.
+You will not need an Extreme Gaming level of computer for Docker-based (initial - eg. database) work without Kubernetes. We have a 26 schema system taking about 16GB of RAM and not stressing the cpu at all.
 
 See our website at https://www.itotchaincloud.com.au/kubernetes-yaml-file-example/ for an older but more visual idea of this project and others.
 
@@ -198,21 +198,6 @@ networks:
         - subnet: 172.20.0.0/16
 
 services:
-  db:
-    container_name: postgis_container_your_member_class_name_x
-    image: postgis/postgis
-    command: postgres -c wal_level=logical -c max_worker_processes=400 -c max_wal_senders=300 -c max_replication_slots=300
-    restart: always
-    networks:
-      static-network:
-        ipv4_address: 172.20.128.x
-    environment:
-      POSTGRES_PASSWORD: yoursecret
-    volumes:
-      - ./data:/var/lib/postgresql/data
-    ports:
-      - "543x:5432"
-
   pgadmin:
     container_name: pgadmin4_container
     image: dpage/pgadmin4
@@ -222,11 +207,55 @@ services:
         ipv4_address: 172.20.128.3
     environment:
       PGADMIN_DEFAULT_EMAIL: you@example.com
-      PGADMIN_DEFAULT_PASSWORD: yoursecret
+      PGADMIN_DEFAULT_PASSWORD: your_password
     ports:
       - "5050:80"
+      
+  db-0_0:
+    container_name: member_class_0_0
+    image: postgis/postgis
+    command: postgres -c wal_level=logical -c max_worker_processes=35 -c max_logical_replication_workers=35 -c max_wal_senders=45 -c max_replication_slots=35
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=your_password
+      - APP_DB_USER=gmu
+      - APP_DB_PASS=gmu
+      - APP_DB_NAME=lagerhaus
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.43
+    volumes:
+      - ./data_46:/var/lib/postgresql/data2
+    ports:
+      - "5473:5432"
 
 ```
+
+There also needs to be a set of ordering nodes (one for each member-class schema) set out as follows:
+
+```
+  db-order-0_0:
+    container_name: order_member_class_0_0
+    image: postgis/postgis
+    command: postgres -c wal_level=replica
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=your_password
+      - APP_DB_USER=gmu
+      - APP_DB_PASS=gmu
+      - APP_DB_NAME=geordnet
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.51
+    volumes:
+      - ./data_54:/var/lib/postgresql/data2
+    ports:
+      - "5481:5432"
+```
+
+These containers need to be run in turn by entering the all-sub-projects parent folder and always including the pgadmin4 container but altering the db and db-order containers copied and pasted from their sub-project folders (dummy docker-compose.yml files) one at a time in separate terminals (all located at the sub-projects' parent directory (where all "docker-compose up" commands are run) to enable multi-threading.
 
 Before running the elastos run script you would usually need to restore the schemata you have in the form of 
 schema-backups (safest in .sql format). Consistent with following text, we show how our company has developed 
@@ -237,22 +266,20 @@ Nevertheless as a model of how to proceed, you will require 2 shell scripts foll
 
 In root directory of each project;
 
-`nano docker_dbase_setup_0.sh`
+`nano docker_dbase_resetup.sh`
 
-In what follows, we assume you can "pg_dumpall" your entire db. We have called the dump "pg-wodehouse.sql".
-
-Insert the following content, follow the pattern,  and adapt as required to your own db_name. Note that the actual pg-wodehouse.sql file needs to exist in the root directory when you run this script.
+Insert the following content, follow the pattern,  and adapt as required to your own db and schema names. Create a folder "essentials" and copy the script there. Inside that folder
 
 ```
 #!/bin/bash
 
-# docker_dbase_setup_0.sh 
+# docker_dbase_resetup.sh script
 
-docker exec -i postgis_container createuser -U postgres gmu && cat pg-wodehouse.sql | docker exec -i postgis_container_x psql -U postgres
+createuser gmu && createdb lagerhaus && psql lagerhaus < das_fuhrwerk_backup.sql && echo "das_fuhrwerk" && psql lagerhaus < das_fuhrwerk_oseer.sql && echo "das_fuhrwerk_oseer" && psql lagerhaus < cheirrs_backup.sql && echo "cheirrs" && psql lagerhaus < cheirrs_oseer_backup.sql && echo "cheirrs_oseer" && psql lagerhaus < chubba_morris_backup.sql && echo "chubba_morris" && psql lagerhaus < chubba_morris_oseer_backup.sql && echo "chubba_morris_oseer" && psql lagerhaus < convey_it_backup.sql && echo "convey_it" && psql lagerhaus < convey_it_oseer_backup.sql && echo "convey_it_oseer" && psql lagerhaus < member_class_0_0_backup.sql && echo "member_class_0_0" && psql lagerhaus < member_class_0_0_oseer_backup.sql && echo "member_class_0_0_oseer" && psql lagerhaus < member_class_0_1_backup.sql && echo "member_class_0_1" && psql lagerhaus < member_class_0_1_oseer_backup.sql && echo "member_class_0_1_oseer" && psql lagerhaus < member_class_0_2_backup.sql && echo "member_class_0_2" && psql lagerhaus < member_class_0_2_oseer_backup.sql && echo "member_class_0_2_oseer" && psql lagerhaus < member_class_1_0_backup.sql && echo "member_class_1_0" && psql lagerhaus < member_class_1_0_oseer_backup.sql && echo "member_class_1_0_oseer" && psql lagerhaus < member_class_1_1_backup.sql && echo "member_class_1_1" && psql lagerhaus < member_class_1_1_oseer_backup.sql && echo "member_class_1_1_oseer" && psql lagerhaus < member_class_1_2_backup.sql && echo "member_class_1_2" && psql lagerhaus < member_class_1_2_oseer_backup.sql && echo "member_class_1_2_oseer" && psql lagerhaus < member_class_1_3_backup.sql && echo "member_class_1_3" && psql lagerhaus < member_class_1_3_oseer_backup.sql && echo "member_class_1_3_oseer" && psql lagerhaus < member_class_1_4_backup.sql && echo "member_class_1_4" && psql lagerhaus < member_class_1_4_oseer_backup.sql && echo "member_class_1_4_oseer" && psql lagerhaus < iot_backup.sql && echo "iot" && echo "iot and thus FINISHED!"
 
 ```
 
-Now create a follow-up script in the root directory
+Now create a follow-up script in the same directory
 
 `nano docker_dbase_setup_1.sh`
 
@@ -263,53 +290,213 @@ Insert the following text and replace with your own container & db_name, and not
 
 # docker_dbase_setup_1.sh
 
-docker exec -i postgis_container_x psql -d db_name -U postgres -c "ALTER ROLE gmu WITH PASSWORD 'gmu';" && cat create_table_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i create_table_scripts.sql' && cat insert_rows_scripts.sql | docker exec -i postgis_container psql -U postgres -d db_name -c '\i insert_rows_scripts.sql'
+psql lagerhaus -c '\i create_table_scripts.sql' && psql lagerhaus -c '\i insert_rows_scripts.sql'
 ```
-This needs to be repeated for each member_class project directory, remembering to change the container names.
 
-You need a copy of any one of the docker-compose.yml files to reside like an anchor in the parent directory of all your project folders. The name of the parent directory gives the overall network a name so every database copy can see each other one. You will be running your "docker-compose up" commands from this directory, but you need to copy and paste the section like this from each project directory's docker-compose.yml into the parent folder's docker-compose.yml file:
+In the essentials folder you require a full set of your own schemata sql backup files.
+
+Next create a "geordnet" folder next to "essentials". In this folder place a shell script file similar to the following (adapt as needed):
+```
+createdb geordnet && psql geordnet < geordnet_cheirrs.sql && psql geordnet < geordnet_cheirrs_oseer.sql && psql geordnet < geordnet_chubba_morris.sql && psql geordnet < geordnet_chubba_morris_oseer.sql && psql geordnet < geordnet_convey_it.sql && psql geordnet < geordnet_convey_it_oseer.sql && psql geordnet < geordnet_das_fuhrwerk.sql && psql geordnet < geordnet_das_fuhrwerk_oseer.sql && psql geordnet < geordnet_iot.sql && psql geordnet < geordnet_0_0.sql && psql geordnet < geordnet_0_0_oseer.sql && psql geordnet < geordnet_0_1.sql && psql geordnet < geordnet_0_1_oseer.sql && psql geordnet < geordnet_0_2.sql && psql geordnet < geordnet_0_2_oseer.sql && psql geordnet < geordnet_1_0.sql && psql geordnet < geordnet_1_0_oseer.sql && psql geordnet < geordnet_1_1.sql && psql geordnet < geordnet_1_1_oseer.sql && psql geordnet < geordnet_1_2.sql && psql geordnet < geordnet_1_2_oseer.sql && psql geordnet < geordnet_1_3.sql && psql geordnet < geordnet_1_3_oseer.sql && psql geordnet < geordnet_1_4.sql && psql geordnet < geordnet_1_4_oseer.sql 
+```
+
+Then add the following set of files (in correspondence with the schemata in "essentials" but prefixed with "geordnet_" as a set of names. A typical PostgreSQL backup of a geordnet file is as follows:
 
 ```
-services:
-  db_x:
-    container_name: postgis_container_your_member_class_name_x
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.5 (Debian 13.5-1.pgdg110+1)
+-- Dumped by pg_dump version 13.5 (Debian 13.5-1.pgdg110+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: geordnet_member_class_0_0; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA geordnet_member_class_0_0;
+
+
+ALTER SCHEMA geordnet_member_class_0_0 OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: blocks; Type: TABLE; Schema: geordnet_member_class_0_0; Owner: postgres
+--
+
+CREATE TABLE geordnet_member_class_0_0.blocks (
+    id bigint NOT NULL,
+    tx_set json NOT NULL,
+    consensus_metadata json NOT NULL,
+    prev_block_hash character varying(256) NOT NULL,
+    curr_block_hash_a_b_c_d character varying(256) NOT NULL,
+    sig_on_hash_curr_block_by_order_node character varying(256) NOT NULL
+);
+
+
+ALTER TABLE geordnet_member_class_0_0.blocks OWNER TO postgres;
+
+--
+-- Name: transactions; Type: TABLE; Schema: geordnet_member_class_0_0; Owner: postgres
+--
+
+CREATE TABLE geordnet_member_class_0_0.transactions (
+    client_uname character varying(128) NOT NULL,
+    proc_and_args json NOT NULL,
+    block_id bigint NOT NULL,
+    hash_a_b_c character varying(256) NOT NULL,
+    sig_a_b_c_d_client_priv_key character varying(256) NOT NULL
+);
+
+
+ALTER TABLE geordnet_member_class_0_0.transactions OWNER TO postgres;
+
+--
+-- Data for Name: blocks; Type: TABLE DATA; Schema: geordnet_member_class_0_0; Owner: postgres
+--
+
+COPY geordnet_member_class_0_0.blocks (id, tx_set, consensus_metadata, prev_block_hash, curr_block_hash_a_b_c_d, sig_on_hash_curr_block_by_order_node) FROM stdin;
+\.
+
+
+--
+-- Data for Name: transactions; Type: TABLE DATA; Schema: geordnet_member_class_0_0; Owner: postgres
+--
+
+COPY geordnet_member_class_0_0.transactions (client_uname, proc_and_args, block_id, hash_a_b_c, sig_a_b_c_d_client_priv_key) FROM stdin;
+\.
+
+
+--
+-- Name: blocks blocks_pkey; Type: CONSTRAINT; Schema: geordnet_member_class_0_0; Owner: postgres
+--
+
+ALTER TABLE ONLY geordnet_member_class_0_0.blocks
+    ADD CONSTRAINT blocks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: transactions transactions_pkey; Type: CONSTRAINT; Schema: geordnet_member_class_0_0; Owner: postgres
+--
+
+ALTER TABLE ONLY geordnet_member_class_0_0.transactions
+    ADD CONSTRAINT transactions_pkey PRIMARY KEY (hash_a_b_c);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
+```
+
+There should be, au fin du jour, as many geordnet_x_y.sql files as exist in the essentials folder, but residing in the "geordnet" folder.
+
+Each corresponding geordnet schema is associated with its own main database schema as a part of the transaction ordering system.
+
+You need a copy of any one of the docker-compose.yml files to reside like an anchor in the parent directory of all your project folders. The name of the parent directory gives the overall network a name so every database copy can see each other one. You will be running your "docker-compose up" commands from this directory, but you need to copy and paste the section like this from each project directory's docker-compose.yml into the parent folder's docker-compose.yml file - the copied section goes OVER the existing db code every time, as you roll out the containers, each one in a new terminal. NOTE You will be required to paste the following into these terminals to allow non-root access:
+
+`sudo usermod -aG docker $USER && newgrp docker`
+
+In the end, this procedure gives a multi-threaded set of containers all connected to pg-admin4:
+
+```
+db-0_0:
+    container_name: member_class_0_0
     image: postgis/postgis
-    command: postgres -c wal_level=logical -c max_worker_processes=400 -c max_wal_senders=300 -c max_replication_slots=300
+    command: postgres -c wal_level=logical -c max_worker_processes=35 -c max_logical_replication_workers=35 -c max_wal_senders=45 -c max_replication_slots=35
     restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=your_password
+      - APP_DB_USER=gmu
+      - APP_DB_PASS=gmu
+      - APP_DB_NAME=lagerhaus
     networks:
       static-network:
-        ipv4_address: 172.20.128.x
-    environment:
-      POSTGRES_PASSWORD: yoursecret
+        ipv4_address: 172.20.128.43
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - ./data_46:/var/lib/postgresql/data2
     ports:
-      - "543x:5432"
- ```
+      - "5473:5432"
+
+```
  fresh each time you start a member_class's server (so the ipv4 address and port number change as well as the name of the container you are running).
 
-Now we have a running database on each port 54xy but if you go to localhost:5050 (pg-admin4) each database server will be on 5432 since pg-admin works with in-container ports. To see each database we need to register a server for each member_class database copy, making the name of the server match the directory name of each member-class. Insert ip address (but always use port 5432 here) from the appropriate docker-compose.yml. 
-So, in each project directory (sub-directory, really, if the parent is taken as the main Project Directory):
+The ordering nodes require a different docker-compose fragment (from above):
 
-`./docker_dbase_setup_0.sh`
+```
+  db-order-0_0:
+    container_name: order_member_class_0_0
+    image: postgis/postgis
+    command: postgres -c wal_level=replica
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=your_password
+      - APP_DB_USER=gmu
+      - APP_DB_PASS=gmu
+      - APP_DB_NAME=geordnet
+    networks:
+      static-network:
+        ipv4_address: 172.20.128.51
+    volumes:
+      - ./data_54:/var/lib/postgresql/data2
+    ports:
+      - "5481:5432"
+```
+
+Now we have a running database on each port 54xy but if you go to localhost:5050 (pg-admin4) each database server will be on 5432 since pg-admin works with in-container ports. To see each database we need to register a server for each member_class database copy, making the name of the server correspond to the directory name of each member-class. Insert ip address (but always use port 54xy:5432 here, varying x and y uniquely) from the appropriate docker-compose.yml. 
+So, in the parent folder of "essentials" and "geordnet" compress both folders with:
+
+`tar zcvf essentials.tar.gz ./essentials`
+
+and:
+
+`tar zcvf geordnet.tar.gz ./geordnet`
+
+Then "docker cp" essentials.tar.gz to every db container and similarly for geordnet.tar.gz to every db-order container.
+
+Inside each container - 
+
+`docker exec -it container_name bash`
+
+- then
+
+`mkdir postgres && chown postgres postgres && mv *.tar.gz postgres/ && su postgres`
+
+and
+
+`cd postgres`
+
+Untar the file and run the script(s) - 2 scripts in "essentials", one in "geordnet" (in diferent containers). This will restore the lagerhaus and geordnet databases in the appropriate containers.
 
 And wait until complete.
 
 Then:
 
-`docker_dbase_setup_1.sh`
-
-You will need a copy of your overall database (pg-wodehouse.sql) which you copy to each member_class project.
-
 After all database copies are up and running, you can set about coding "Logical Replication" on all servers. Basically each server is required to publish all tables and each server requires a set of subscriptions covering all other servers.
 
 So, in each server proceed as follows.
 
-`docker exec -it postgis_container_order bash`
+`docker exec -it postgis_container_x_y bash`
 
 `su postgres`
 
-`psql haus`
+`psql lagerhaus`
 
 `CREATE PUBLICATION member_class_x_publication FOR ALL TABLES;`
 
@@ -317,33 +504,14 @@ Ending with a full set of servers with Publications of ALL TABLES.
 
 And then subscribe every server to every other server's Publications with (eg):
 
-`CREATE SUBSCRIPTION member_class_x_member_class_y_subscription CONNECTION 'host=172.20.128.x port=5432 dbname=haus password=your??postgres??password' PUBLICATION member_class_x_publication;`
+`CREATE SUBSCRIPTION member_class_x_member_class_y_subscription CONNECTION 'host=172.20.128.x port=5432 dbname=lagerhaus password=your??postgres??password' PUBLICATION member_class_x_publication;`
 
 Thus Logical Replication is implemented.
 
-The next step is to investigate how to involve the Order Service in the ordering of transactions by consensus from the other servers, and propogating the finalised Blocks throughout the system. We require a partitioned set of Order_Member_Class_x servers including only a new database "geordnet".
+The next step is to investigate how to involve the Order Service in the ordering of transactions by consensus from the other servers, and propogating the finalised Blocks throughout the system. We require a partitioned set of Order_Member_Class_x servers including only the new database "geordnet".
 
-There should be as many servers in this "partitioned" set as in the original set. These servers require a different docker-compose.yml. See below:
 
-```
-services:
-  db_order_z:
-    container_name: postgis_container_order_member_class_name_z
-    image: postgis/postgis
-    command: postgres -c wal_level=logical -c max_wal_senders=300 -c max_replication_slots=300
-    restart: always
-    networks:
-      static-network:
-        ipv4_address: 172.20.128.z
-    environment:
-      POSTGRES_PASSWORD: yoursecret
-    volumes:
-      - ./data_z:/var/lib/postgresql/data
-    ports:
-      - "543z:5432"
- ```
-
-The above code needs to be copied (as for the previous set) to the overall parent Project Directory, but only over the "services \ db-z: .. etc" section, in the existing docker-compose.yml file, leaving the first section and last sections intact so as to preserve the pgadmin4 and static network settings. When the databases from this "partition" are rolled out they will have a structure of schemata, tables and columns identical, and the database (which we call "geordnet") will consist of the same number of copies as the original partition, but with a very different set of tables (identical) in each schema. eg of one schema in "geordnet_member_class_z" database is "geordnet_member_class_w" with 2 tables (same for each table in each schema), 1. transactions, and 2. blocks. Transactions has a. username of client b. procedure executed and arguments (json) c. block_id d. Unique identifier == hash (a, b, c) e. Signature on hash(a, b, c, d) using client's private key. Block Table has a. Block-id b. set of transactions (json) c. metadata associated with the consensus protocol d.hash of the previous block e. hash of the current block, i.e., hash (a, b, c, d) f. Digital signature on the hash of the current block by the orderer node.
+The above code needs to be copied (as for the previous set) to the overall parent Project Directory, but only over the "services \ db-z: .. etc" section, in the existing docker-compose.yml file, leaving the first (network definition) section and pg-admin4 sections intact so as to preserve the pgadmin4 and static network settings. When the databases from this "partition" are rolled out they will have a structure of schemata, tables and columns identical, and the database (which we call "geordnet") will consist of the same number of copies as the original partition, but with a very different set of tables (identical) in each schema. eg of one schema in "geordnet_member_class_z" database is "geordnet_member_class_w" with 2 tables (same for each table in each schema), 1. transactions, and 2. blocks. Transactions has a. username of client b. procedure executed and arguments (json) c. block_id d. Unique identifier == hash (a, b, c) e. Signature on hash(a, b, c, d) using client's private key. Block Table has a. Block-id b. set of transactions (json) c. metadata associated with the consensus protocol d.hash of the previous block e. hash of the current block, i.e., hash (a, b, c, d) f. Digital signature on the hash of the current block by the orderer node.
 
 Next we have to clone the Elastos Smartweb blockchain and database server package to the Sub-Project root directories:
 
