@@ -15,15 +15,15 @@ IBM Research India, 2 IBM Industry Platforms USA
 
 has revealed that it is possible to provide Trust in a natural way in networking between Companies, whilst basically distrusting each other, by making a network of Postgres Databases behave like a large-data-capacity blockchain. To ITOTCCA, this is revolutionary. Prospective customers will no longer have to trust our company to any extent as far as daily operational security is concerned. Neither do they have to trust other companies. The idea is to allow the machines operated by each Company to keep each other honest. There is a hole in the plan, in that if globally over 50% of Ordering nodes were to be caused to act fraudulently, the factor of Trust would be destroyed. Elsewhere (on our website at itotchaincloud.com.au/security) we note the contribution of Rong Chen and Elastos in devising a hardware enhancement which is necessary for Blockchain Miners to be fitted with in order to be able to participate in Mining. This device ensures by design that no corps can act together in a gang of >50% ownership and direction. The idea is currently operational with Elastos. If a similar device were fitted to ordering servers, collusion could possibly be prevented. This requires investigation. Alternatively, it may be possible to utilise the Elastos Blockchains to provide a Fraud Check service against the database.
 
-These developments have caused ITOTCCA to review our monolithic design, opting now for an isolation of Business Networks from each other and restricting the scope of connectivity to be strictly internal to each separate Business Network (of course external web-connections will still be possible, but safely shielded under Carrier (see itotchaincloud.com.au/security). Networks are independent now. The design is now to have a range of cloud servers per Business Network. Each member-class (represented by its own schema) would ideally take responsibility for its own virtual hardware. The virtual servers are all to be  linked between member-class nodes within a Master/Master replication system. All member-classes carry identical copies of the entire network's databases, with one strictly private Business Channel per member, enforced by the hardware/software in the cloud. Here, the machines are designed to be ensuring clean play all the time, following the blockchain model.
+These developments have caused ITOTCCA to review our monolithic design, opting now for an isolation of Business Networks at the permissions level from each other and restricting the scope of connectivity to be strictly internal to each separate Business Network (of course external web-connections will still be possible, but safely shielded by whitelists under Carrier (see itotchaincloud.com.au/security). Future enterprise growth in network demand requires networks to be performance optimised and segmented (isolated) to provide access with performance. The design is now to have a range of cloud servers per Business Network, usually with one "site" per Member Class. Each member-class (represented by its own schema) would ideally take responsibility for its own virtual hardware. The virtual servers are all to be  linked between member-class nodes within a Master/Master replication system. All member-classes carry identical copies of the entire network's databases, with one strictly private Business Channel per member (company), enforced by the hardware/software in the cloud. Here, the machines are designed with the goal of ensuring clean play all the time, following the blockchain model.
 
 However, in the above article, it is envisaged that a section of non-internetworked transactions would be outside the network. This implies that a company's own employees, and their connecting devices, can be trusted more than the internetworked transaction parties. We believe this to be highly questionable.
 
-To this end, we are striving to implement a Hybrid model with 2 layers. We intend to offer a system which, for even the most trivial of transactions or actions, records traces on the Elastos Blockchains, an immutable source of Truth which also provides a Distributed Identity Blockchain (DID Sidechain). This will mesh with the Postgres 'DataChain' to provide indisputable Identification of players across the entire system. Elastos is a Global Network Operating System with permissioned Blockchains. Naturally the bulk Corporate Data will belong on the new databases, but there is a role to be played by the  flexibility and mobility of the Elastos system, especially when we consider the strengths of Elastos Essentials and dApps, Carrier's security and the DID Sidechain together. So we still intend to utilise the Elastos-Smartweb-Service github repo and docker image to play the role of joining the DataChains systems to the Blockchains systems, by acting as a very smart webserver and database server and blockchain server; all at once.
+To this end, we are striving to implement a Hybrid model with 2 layers. We intend to offer a system which, for even the most trivial of transactions or actions, records traces on the Elastos Blockchains, an immutable source of Truth which also provides a Distributed Identity Blockchain (DID Sidechain). This will mesh with the Postgres 'DataChain' (or 'BlockBase') to provide indisputable Identification of players across the entire system. Elastos is a Global Network Operating System with permissioned Blockchains. Naturally the bulk Corporate Data will belong on the new databases, but there is a role to be played by the  flexibility and mobility of the Elastos system, especially when we consider the strengths of Elastos Essentials and dApps, Carrier's security and the DID Sidechain together. So we still intend to utilise the Elastos-Smartweb-Service github repo and docker image to play the role of joining the DataChains systems to the Blockchains systems, by acting as a very smart webserver and database server and blockchain server; all at once.
 
 gRPC protocols replace the older style REST APIs, for communicating requests, and data inputs, from the client, and responses from the blockchain &/or database back to the client; all this occurs through the smart-web server, employing a "microservices" architecture. Here the gRPC protocols are implemented in Python. The smart-web server has Carrier installed onboard, guaranteeing security. Carrier is also installed via plugin on the Ionic dApp clients (which are developed hierarchically inside Elastos.Essentials) as well as manually on the IoT Edge client/servers (running 'node-red').
 
-To tackle the full set of Kubernetes installations locally, ideally you would need (for 4 multipass vm's with a juju 'kubernetes-core' installation on each) a 64 GB RAM (minimum); 16 core cpu; 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, you really need an Accelerator NVIDIA GPU of at least 10GB vRAM. This allows approximately one ordering service and two member classes to develop with. However the most powerful way to develop here is to use Docker (see below). The current state of our Infrastructure can be represented figuratively:
+To tackle the full set of Kubernetes installations locally, ideally you would need (for 3 multipass vm's with a juju 'kubernetes-core' installation on each) a 64 GB RAM (minimum); 16 core cpu; 250 GB SSD; + HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, you really need an Accelerator NVIDIA GPU of at least 10GB vRAM. This allows approximately one ordering service and two member classes to develop with. However the most powerful way to develop here is to use Docker (see below). The current state of our Infrastructure can be represented figuratively:
 
 <img src="./ITCSA_Plan_2.png">
 
@@ -984,7 +984,7 @@ _________________________________________________________________
 
 `multipass launch -n master-1 -c 4 -m 12GB -d 50GB`
 
-`multipass launch -n order-0 -c 4 -m 12GB -d 50GB`
+`multipass launch -n master-2 -c 4 -m 12GB -d 50GB`
 
      
      (You can tweak those settings)
@@ -1048,18 +1048,38 @@ In our case, if a single member-class network existed solo (such as any of our R
 to separate the existing single network into several (3 to provide a 'Mexican Standoff' arrangement) servers 
 designed to keep everyone honest.
 	
-We also need to set up the ordering service on the 4th vm. This service also requires a database to keep records of transaction flows.
-Therefore the setup is similar. The nature and structure of the schema is quite different though. This schema needs to be replicated 
-for security, as for the others.	
+The ordering services will run alongside the main system and will have its own elastos webserver. The database is separate to the main, with 2 tables per schema - blocks and transactions (see Docker section above).	
 
-In our case, with The General, we started the process of building the databases from schema backup .sql files,
-and put all backups and scripts into a single folder, and copied '*' to postgres masters:
+In our case, with The General, we started the process of building the main databases from 3 schema backup .sql files,
+and put all backups and scripts into a single folder, and copied '*' to postgres masters, into a folder we will now make:
 
-`juju scp path/to/* pg-wodehouse:/home/ubuntu/`
+`juju ssh <machine number postgres master>`
 
+As user ubuntu:
 
+`mkdir main && chown postgres main`
 
-Having copied the backup(s) and scripts (cheirrs/database-as-blockchain/*) to the user "ubuntu's" home directory in the master postgres pod, one does
+The ordering services will run alongside the "main" database, so create:
+
+`mkdir ordering && chown postgres ordering`
+
+`exit`
+
+`juju scp path/to/main_backups_and_scripts pg-wodehouse:/home/ubuntu/main/`
+
+A sample backup of an ordering service database is shown in the Docker section above. By editing and replacing the existing schema name you can have your own name and define a new database in pg-wodehouse entitled 'geordnet' then  prepare to restore the ordering schema with in the new database with:
+
+`nano start_geordnet`
+
+Copy and paste this:
+
+`createdb geordnet && psql geordnet < ordering_service_name.sql`
+
+make sure to install both the startup script and the ordering schema backup together and:
+
+`juju scp path/to/scripts/* pg-wodehouse:/home/ubuntu/ordering/`
+
+Having copied the backup(s) and scripts (cheirrs/database-as-blockchain/*) to the user "ubuntu's" /home/ubuntu/main and /home/ubuntu/ordering directories in the master postgres pod, one does
 	
 `juju ssh <machine number postgres master>`
 	
@@ -1069,29 +1089,30 @@ Having copied the backup(s) and scripts (cheirrs/database-as-blockchain/*) to th
 
 `su postgres`  You are at /home/ubuntu - and your backup.sql's are there too.
 
-`createdb <dbname>`
+`cd ordering`
+
+`./start_geordnet`
+
+When done;
 
 `createuser gmu` (For Elastos' purposes.)
 
-`psql <dbname> < backup.sql`, and similarly for other schemata. In the final state, there will be one schema per 
+`createdb db_name`
+
+`psql <db_name> < backup.sql`, and similarly for other schemata. In the final state, there will be one schema per 
 member-class plus other utility schemata such as "iot" and an overseeing schema for each member class.
 			     
-			     OR, if you copy all scripts from cheirrs/database-as-blockchain to /home/ubuntu in the master postgres:
-			     
-`./dbase_resetup.sh`
-			     
-			     Be careful here as you will probably need to adjust dbase_resetup.sh to suit you!
 			     
 	You will also need to deal with users and passwords as well as setting allowed search paths for user 'gmu' to all schemata.
 
 At this stage it is envisaged that we would set up one schema for each member-class in an inter-enterprise network, plus an iot 
 schema and a set of oversight schemata (to run Business Process Supervision from). Also the design would 
-require only one database server (though replicated) per member-class (plus one for the ordering service) - ie one vm per member-class - 
+require only one database server (though replicated) per member-class (plus one for the ordering service in a production setup) - ie one vm per member-class - 
 (not "per member" as in the IBM paper). 
 
 All pods would be situated together in the cloud (and probably replicated at a site-level globally).
 
-If you use (or adapt) our scripts to sequentially restore your backups and set up postgis, etc, you should copy these to /home/ubuntu
+If you use (or adapt) our scripts to sequentially restore your backups and set up postgis, etc, you should copy these to /home/ubuntu/main
 in each database master, together with your own sql backups. 
 _______________________________________________________
 
@@ -1377,10 +1398,11 @@ ________________________________________________________________________________
      4.  Get the Nodejs Wrapper package for Carrier working properly
      5.  Follow the IBM article above to implement the various points outlined in the paper, in code.
      6.  Do everything necessary to make a Postgres Database become "like a Blockchain".
-     	   -  Understand how to make the Ordering Service function
-     8.  Continue to use the Elastos Blockchain systems for dApps at front end and to provide several useful services,
+     	   -  Understand how to make the Ordering Service function, in particular investigate Serialisable 
+	   Snapshot Isolation and the methods for obtaining Consensus. 
+     7.  Continue to use the Elastos Blockchain systems for dApps at front end and to provide several useful services,
 	 including Distributed Id's (DID Sidechain), Carrier Security and more.
-     9.  Learn how to provide authentication from Elastos DID Sidechain to Postgres DataChain/BlockBase system.
+     8.  Learn how to provide authentication from Elastos DID Sidechain to Postgres DataChain/BlockBase system.
      
  _________________________________________________________________________________________________________________________________________________
      
