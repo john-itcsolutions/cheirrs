@@ -295,10 +295,7 @@ psql lagerhaus -c '\i create_table_scripts.sql' && psql lagerhaus -c '\i insert_
 
 In the essentials folder you require a full set of your own schemata sql backup files.
 
-Next create a "geordnet" folder next to "essentials". In this folder place a shell script file similar to the following (adapt as needed):
-```
-createdb geordnet && psql geordnet < geordnet_cheirrs.sql && psql geordnet < geordnet_cheirrs_oseer.sql && psql geordnet < geordnet_chubba_morris.sql && psql geordnet < geordnet_chubba_morris_oseer.sql && psql geordnet < geordnet_convey_it.sql && psql geordnet < geordnet_convey_it_oseer.sql && psql geordnet < geordnet_das_fuhrwerk.sql && psql geordnet < geordnet_das_fuhrwerk_oseer.sql && psql geordnet < geordnet_iot.sql && psql geordnet < geordnet_0_0.sql && psql geordnet < geordnet_0_0_oseer.sql && psql geordnet < geordnet_0_1.sql && psql geordnet < geordnet_0_1_oseer.sql && psql geordnet < geordnet_0_2.sql && psql geordnet < geordnet_0_2_oseer.sql && psql geordnet < geordnet_1_0.sql && psql geordnet < geordnet_1_0_oseer.sql && psql geordnet < geordnet_1_1.sql && psql geordnet < geordnet_1_1_oseer.sql && psql geordnet < geordnet_1_2.sql && psql geordnet < geordnet_1_2_oseer.sql && psql geordnet < geordnet_1_3.sql && psql geordnet < geordnet_1_3_oseer.sql && psql geordnet < geordnet_1_4.sql && psql geordnet < geordnet_1_4_oseer.sql 
-```
+Next create a "geordnet" folder next to "essentials".
 
 Then add the following set of files (in correspondence with the schemata in "essentials" but prefixed with "geordnet_" as a set of names. A typical PostgreSQL backup of a geordnet file is as follows:
 
@@ -403,6 +400,8 @@ ALTER TABLE ONLY geordnet_member_class_0_0.transactions
 
 ```
 
+These files should be created by editing and replacing the schema name repeatedly, then "saving as".
+
 There should be, au fin du jour, as many geordnet_x_y.sql files as exist in the essentials folder, but residing in the "geordnet" folder.
 
 Each corresponding geordnet schema is associated with its own main database schema as a part of the transaction ordering system.
@@ -449,7 +448,7 @@ The ordering nodes require a different docker-compose fragment (from above):
       - POSTGRES_PASSWORD=your_password
       - APP_DB_USER=gmu
       - APP_DB_PASS=gmu
-      - APP_DB_NAME=geordnet
+      - APP_DB_NAME=lagerhaus
     networks:
       static-network:
         ipv4_address: 172.20.128.51
@@ -460,15 +459,11 @@ The ordering nodes require a different docker-compose fragment (from above):
 ```
 
 Now we have a running database on each port 54xy but if you go to localhost:5050 (pg-admin4) each database server will be on 5432 since pg-admin works with in-container ports. To see each database we need to register a server for each member_class database copy, making the name of the server correspond to the directory name of each member-class. Insert ip address (but always use port 54xy:5432 here, varying x and y uniquely) from the appropriate docker-compose.yml. 
-So, in the parent folder of "essentials" and "geordnet" compress both folders with:
+So, in the parent folder of "essentials" compress the folder with:
 
 `tar zcvf essentials.tar.gz ./essentials`
 
-and:
-
-`tar zcvf geordnet.tar.gz ./geordnet`
-
-Then "docker cp" essentials.tar.gz to every db container and similarly for geordnet.tar.gz to every db-order container.
+Then "docker cp" essentials.tar.gz to every db container .
 
 Inside each container - 
 
@@ -482,7 +477,7 @@ and
 
 `cd postgres`
 
-Untar the file and run the script(s) - 2 scripts in "essentials", one in "geordnet" (in diferent containers). This will restore the lagerhaus and geordnet databases in the appropriate containers.
+Untar the file and run the script(s) - 2 scripts in "essentials". This will restore the lagerhaus database in the appropriate containers.
 
 And wait until complete.
 
