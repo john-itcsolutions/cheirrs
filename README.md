@@ -1043,9 +1043,9 @@ The ordering services will run alongside the "main" database, so create:
 
 `exit`
 
-`juju scp path/to/main_backups_and_scripts pg-wodehouse:/home/ubuntu/main/`
+`juju scp path/to/main_backups_and_scripts/* pg-wodehouse:/home/ubuntu/main/`
 
-A sample backup of an ordering service database is shown in the Docker section above. By editing and replacing the existing schema name you can have your own name and define a new database in pg-wodehouse entitled 'geordnet' then  prepare to restore the ordering schema with in the new database with:
+A sample backup of an ordering service database is shown in the Docker section above. By editing and replacing the existing schema name you can have your own name and define a new database in pg-wodehouse entitled 'geordnet' then  prepare to restore the ordering schema within the new database with:
 
 `nano start_geordnet`
 
