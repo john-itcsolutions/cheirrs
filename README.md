@@ -515,6 +515,10 @@ The next step is to investigate how to involve the Ordering Service in the order
 
 The above code needs to be copied (as for the previous set) to the overall parent Project Directory, but only over the "services \ db-z: .. etc" section, in the existing docker-compose.yml file, leaving the first (network definition) section and pg-admin4 sections intact so as to preserve the pgadmin4 and static network settings. When the databases from this "partition" are rolled out they will have a structure of schemata, tables and columns identical, and the ordering nodes have a much simpler set of 2 tables per server ("Transactions" & "Blocks"), (identical) in each schema. eg of one schema in "geordnet_member_class_z" schema is "geordnet_member_class_w" with 2 tables (same for each table in each schema), 1. transactions, and 2. blocks. Transactions has a. username of client b. procedure executed and arguments (json) c. block_id d. Unique identifier == hash (a, b, c) e. Signature on hash(a, b, c, d) using client's private key. Block Table has a. Block-id b. set of transactions (json) c. metadata associated with the consensus protocol d.hash of the previous block e. hash of the current block, i.e., hash (a, b, c, d) f. Digital signature on the hash of the current block by the orderer node.
 
+Our final (nearly!) Docker Installation of 50 servers linked to a pgadmin4 container looks like:
+
+<img src="./Screenshot from 2022-05-31 21-43-58.png">
+
 Next we have to clone the Elastos Smartweb blockchain and database server package to the Sub-Project root directories:
 
 `git clone --recurse-submodules https://github.com/cyber-republic/elastos-smartweb-service.git`
@@ -546,34 +550,6 @@ so that the run.sh script does not attempt to start any "postgres" container (we
 image as the postgis_container, however it will already be running when "./run.sh" is executed - see below)
 
 Note that for postgres database development the progress is easier if you are user "postgres" on the Host.
-
-In the Project root directory, at the command line type:
-
-(If you scroll down to "Postscript" below, you will see why we recommend that first you issue:
-
-`sudo kill -9 $(sudo lsof -t -i:5432)`
-
-`sudo kill -9 $(sudo lsof -t -i:8001)`
-
-), then:
-
-`docker-compose up`
-
-and remember that the clean way to bring the Project back down is:
-
-`docker-compose down`  (possibly after ctrl-c or ctrl-z in the running docker terminal to halt the processes)
-
-Navigate to 127.0.0.1:5050 by entering that address/port into the address bar in your browser.
-
-Sign in to the pgadmin4 application and create a server. You will need to check 
-
-`docker inspect container postgis_container`
-
-and search for the container's ip-address, or just copy it from the docker-compose.yml file. 
-Enter this in 'Database server address' in PgAdmin4. 
-The database server address is a static address because we defined a static network in the docker-compose.yml file.
-
-
 
 You now need to edit the `elastos-smartweb-service/.env.example` file to reflect your own docker network addresses. The database ip-address
 is found as above from 
