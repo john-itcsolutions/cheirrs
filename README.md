@@ -517,7 +517,7 @@ The above code needs to be copied (as for the previous set) to the overall paren
 
 Our final (nearly!) Docker Installation of 50 servers linked to a pgadmin4 container looks like:
 
-<img src="./Screenshot from 2022-05-31 21-43-58.png">
+<img src="./Screenshot from 2022-06-02 22-48-43.png">
 
 Next we have to clone the Elastos Smartweb blockchain and database server package to the Sub-Project root directories:
 
