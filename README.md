@@ -954,19 +954,21 @@ _________________________________________________________________
 (The database schemata for ITOTCCA's project are private and available only under certain conditions.)
      
    {  If you have implemented a kubeflow installation (above) on one partition of the Host (on a microk8s cloud/controller),
-     you will need to obtain multipass to allow creation of five Ubuntu virtual machines (Kubernetes "nodes"), on this second partition (ie dual-boot Ubuntu/Ubuntu)}.
+     you will need to obtain multipass to allow creation of four Ubuntu virtual machines (Kubernetes "nodes"), on this second partition (ie dual-boot Ubuntu/Ubuntu)}.
      
 `sudo snap install multipass`
 
-`multipass launch -n master-0 -c 4 -m 12GB -d 50GB`
+`multipass launch -n master-0 -c 5 -m 12GB -d 1000GB`
 
-`multipass launch -n master-1 -c 4 -m 12GB -d 50GB`
+`multipass launch -n master-1 -c 5 -m 12GB -d 1000GB`
 
-`multipass launch -n master-2 -c 4 -m 12GB -d 50GB`
+`multipass launch -n master-2 -c 5 -m 12GB -d 100GB`
+
+
 
      
      (You can tweak those settings)
-     And end-up with 3 x LTS Ubuntu vm's which we will set up as 3 master nodes using "juju/lxd".
+     And end-up with 4 x LTS Ubuntu vm's which we will set up as 4 master nodes using "juju/lxd".
      
      
      Then mount a shared directory to enable access to your host:
@@ -977,12 +979,12 @@ _________________________________________________________________
 
 `exit`
 
-`multipass mount path/to/your/working/directory master-<x>:~/shared/`
+`multipass mount path/to/your/working/directory mast/order-<x>:~/shared/`
 
 
 *******************************************************
 
-In each vm:
+# In each vm:
 	
 `sudo snap install juju --classic`
 	
@@ -1011,7 +1013,7 @@ In each vm:
 	
 `juju deploy -n 2 postgresql pg-wodehouse`
 	
-`juju config pg-wodehouse admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,<ip-addr-worker-1>[,<ip-addr-worker-2>]`
+`juju config pg-wodehouse admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,[<ip-addr-worker-1>][,<ip-addr-worker-2>]`
  
 This completes the servers' setup.
 
@@ -1020,58 +1022,30 @@ ________________________________________________________________
 # DATABASE: Internals
 
 You will need a set of 2 member-class schemata with another 2 overseer schemata (we use 2 - the_general, 
-and the_general_oseer  and copied them 2 times, at this early stage) to serve as material for development.
+and the_general_oseer  and copied them 2 times, at this early stage) to serve as material for development. 
+The ordering service strictly requires a second replicating postgresql database connected to an associated 
+vm or worker running elastos-smartweb-service (say, on worker-1 or maybe on a separate vm by itself), but 
+also needs to be able to communicate with the other ordering nodes on separate vm's.
 
 In our case, if a single member-class network existed solo (such as any of our Real Estate Property dApps) we would be required 
-to separate the existing single network into several (3 to provide a 'Mexican Standoff' arrangement) servers 
-designed to keep everyone honest.
+to separate the existing networks into several (3 to provide a 'Mexican Standoff' arrangement) servers 
+designed to keep everyone honest. Das_Fuhrwerk would provide one extra with any third member acting as a dummy policing server only (if necessary due to lack of second customer).
 	
-The ordering services will run alongside the main system and will have its own elastos webserver. The database is separate to the main, with 2 tables per schema - blocks and transactions (see Docker section above).	
+The ordering services will run alongside the main system and will have their own elastos webservers. The database is part of the main, with 2 tables per ordering schema - blocks and transactions (see Docker section above), and one ordering schema per main vm.	
 
 In our case, with The General, we started the process of building the main databases from 3 schema backup .sql files,
 and put all backups and scripts into a single folder, and copied '*' to postgres masters, into a folder we will now make:
 
-`juju ssh <machine number postgres master>`
+The ordering services will run within the "main" database servers as schemata operating inside masters (to economise for home development
+- not recommended for production architecture).
 
-As user ubuntu:
+`juju scp path/to/main_backups_and_scripts/* pg-wodehouse:/home/ubuntu/`
 
-`mkdir main && chown postgres main`
+`juju ssh pg-wodehouse/<0 or 1 or ..>`
 
-The ordering services will run alongside the "main" database, so create:
+`sudo passwd postgres`
 
-`mkdir ordering && chown postgres ordering`
-
-`exit`
-
-`juju scp path/to/main_backups_and_scripts/* pg-wodehouse:/home/ubuntu/main/`
-
-A sample backup of an ordering service database is shown in the Docker section above. By editing and replacing the existing schema name you can have your own name and define a new database in pg-wodehouse entitled 'geordnet' then  prepare to restore the ordering schema within the new database with:
-
-`nano start_geordnet`
-
-Copy and paste this:
-
-`createdb geordnet && psql geordnet < ordering_service_name.sql`
-
-make sure to install both the startup script and the ordering schema backup together and:
-
-`juju scp path/to/scripts/* pg-wodehouse:/home/ubuntu/ordering/`
-
-Having copied the backup(s) and scripts (cheirrs/database-as-blockchain/*) to the user "ubuntu's" /home/ubuntu/main and /home/ubuntu/ordering directories in the master postgres pod, one does
-	
-`juju ssh <machine number postgres master>`
-	
-	In the postgres machine now:
-
-`sudo passwd postgres` and enter your password twice to change existing unknown password.
-
-`su postgres`  You are at /home/ubuntu - and your backup.sql's are there too.
-
-`cd ordering`
-
-`./start_geordnet`
-
-When done;
+`su postgres`
 
 `createuser gmu` (For Elastos' purposes.)
 
@@ -1090,9 +1064,28 @@ require only one database server (though replicated) per member-class (plus one 
 
 All pods would be situated together in the cloud (and probably replicated at a site-level globally).
 
-If you use (or adapt) our scripts to sequentially restore your backups and set up postgis, etc, you should copy these to /home/ubuntu/main
+If you use (or adapt) our scripts to sequentially restore your backups and set up postgis, etc, you should copy these to /home/ubuntu/
 in each database master, together with your own sql backups. 
-_______________________________________________________
+
+A sample backup of an ordering service database is shown in the Docker section above. By editing and replacing the existing schema name you can have your own name and then  prepare to restore the ordering schema within the lagerhaus or `<db_name>` database with:
+
+`nano start_geordnet`
+
+Copy and paste this:
+
+`psql lagerhaus < ordering_service_name_1.sql && psql lagerhaus < ordering-service-name-2.sql && psql lagerhaus < ordering-service-name-3.sql`
+
+make sure to install both the startup script and the ordering schema backup together and:
+
+`juju scp path/to/scripts/* pg-wodehouse:/home/ubuntu/`
+
+`juju ssh pg-wodehouse/<0 or 1 or ..>`
+
+`su postgres`
+
+`./start_geordnet`
+
+____________________________________________________
 
 ## Getting PostGIS and Open Street Maps
 	
@@ -1109,7 +1102,47 @@ _______________________________________________________
 `./dbase_setup_3.sh`
 	
 This completes database setup.
+
+
+_______________________________________________________________
+
+
+# Logical Replication
+
+We must create publications to start the system of logical replication. On each main server:
+
+`juju ssh <machine-number-postgres-master>`
+
+`psql lagerhaus`
+
+In principle the next step would be:
+
+`CREATE PUBLICATION member-class_0_"N"_publication FOR TABLES SELECT v_list`
+
+where the variable "v_list" is derived from the "home" tables associated with the "home" schema on each vm
+and its associated "oseer" and ordering schemata only (if you follow our business process idea). This requires the 
+"CREATE PUBLICATION" SQL to be executed from within a PLpgSQL function that extracts the "home" schema 
+and associated "oseer" and ordering schemata tables only, and creates an array containing these tables, called "v_list"
+such that each vm is only publishing its own tables, not those belonging to other servers. We are currently
+working on this function.
+
+One would then create as many subscriptions as there are "other" schemata (on the other servers) on each server (1 publication but many
+subscriptions on each server).
+
+These would be like:
+
+`CREATE SUBSCRIPTION <this_server_all_schemata>_other_server_<k>_subscr CONNECTION 'host=<ip-addr-k> port=5432 dbname=mydb connect_timeout=10' PUBLICATION <publication_name-k>`
+
+`CREATE SUBSCRIPTION <this_server_all_schemata>_other_server_<l>_subscr CONNECTION 'host=<ip-addr-l> port=5432 dbname=mydb connect_timeout=10' PUBLICATION <publication_name-l>`
+
+etc., and where definition of target publishing servers is given by ip-address/port.
+
+The runtime properties of the postgresql servers need to be configured such that the following docker command is implemented on postgresql's in kubernetes-style:
+
+command: postgres -c wal_level=logical -c max_worker_processes=35 -c max_logical_replication_workers=35 -c max_wal_senders=45 -c max_replication_slots=35
 	
+The actual numbers can be tweaked to suit.
+
 _______________________________________________________________
 
 # ALSO:
@@ -1168,7 +1201,7 @@ Now perform each of the following 2 steps for each vm , paying particular attent
 `juju scp shared/cheirrs/TO*service/TO_elastos-smartweb-service.grpc_adenine.database_<node-number-eg 1>/__init__.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
 
 
- After you have covered the 2 master-x nodes:
+ After you have covered the 3 master-x nodes:
  
 in each:
 
