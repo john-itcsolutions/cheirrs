@@ -494,9 +494,9 @@ So, in each non-ordering server proceed as follows.
 
 `su postgres`
 
-`psql lagerhaus`
+We are currently working on a plpgsql function to form an array (v_list) containing all tables to be published from each schema. These should consist of only the "home schema" on the vm and its oseer schema corresponding. The following is the main line in the function, however it will need to be executed from within the plpgsql function body.
 
-`CREATE PUBLICATION member_class_x_publication FOR ALL TABLES;`
+`CREATE PUBLICATION member_class_x_publication FOR SELECT v_list;`
 
 Ending with a full set of servers with Publications of ALL TABLES.
 
@@ -968,7 +968,7 @@ _________________________________________________________________
 
      
      (You can tweak those settings)
-     And end-up with 4 x LTS Ubuntu vm's which we will set up as 4 master nodes using "juju/lxd".
+     And end-up with 3 x LTS Ubuntu vm's which we will set up as 3 master nodes using "juju/lxd".
      
      
      Then mount a shared directory to enable access to your host:
@@ -1012,7 +1012,7 @@ _________________________________________________________________
 	
 `juju add-unit kubernetes-worker`
 
-then add databases (replicated as Master-Slave within vm's, and Master_Master between vm's.
+then add databases (replicated as Master-Slave within vm's, and Master_Master between vm's, via Logical Replication).
 
 `juju deploy -n 2 postgresql pg-wodehouse`
 	
@@ -1024,8 +1024,8 @@ ________________________________________________________________
  
 # DATABASE: Internals
 
-You will need a set of 2 member-class schemata with another 2 overseer schemata (we use 2 - the_general, 
-and the_general_oseer  and copied them 2 times, at this early stage) to serve as material for development. 
+You will need a set of 3 member-class schemata with another 3 overseer schemata (we use 2 - the_general, 
+and the_general_oseer  and copied them 3 times, at this early stage) to serve as material for development. 
 The ordering service strictly requires a second replicating postgresql database connected to an associated 
 vm or worker running elastos-smartweb-service (say, on worker-1 or maybe on a separate vm by itself), but 
 also needs to be able to communicate with the other ordering nodes on separate vm's.
