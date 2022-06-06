@@ -958,11 +958,11 @@ _________________________________________________________________
      
 `sudo snap install multipass`
 
-`multipass launch -n master-0 -c 5 -m 12GB -d 1000GB`
+`multipass launch -n master-0 -c 5 -m 16GB -d 100GB`
 
-`multipass launch -n master-1 -c 5 -m 12GB -d 1000GB`
+`multipass launch -n master-1 -c 5 -m 16GB -d 100GB`
 
-`multipass launch -n master-2 -c 5 -m 12GB -d 100GB`
+`multipass launch -n master-2 -c 5 -m 16GB -d 100GB`
 
 
 
@@ -1008,12 +1008,15 @@ _________________________________________________________________
 	
 	You should now be looking at the status board of one vm with kubernetes converging.
 	When every process is complete except possibly the control-plane and/or worker 
-	may be in a 'wait' state:
-
+	may be in a 'wait' state, add a second worker to accommodate the ordering node for each vm:
 	
+`juju add-unit kubernetes-worker`
+
+then add databases (replicated as Master-Slave within vm's, and Master_Master between vm's.
+
 `juju deploy -n 2 postgresql pg-wodehouse`
 	
-`juju config pg-wodehouse admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,[<ip-addr-worker-1>][,<ip-addr-worker-2>]`
+`juju config pg-wodehouse admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,<ip-addr-worker-1>[,<ip-addr-worker-2>]`
  
 This completes the servers' setup.
 
