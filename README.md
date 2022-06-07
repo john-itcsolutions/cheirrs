@@ -145,7 +145,7 @@ The source code (such as it is), is at https://github.com/john-itcsolutions/a-ge
 
 In order to progress to a version of our dApp (at au.com.itcsolutions.cheirrs.0.01) that can provide connection to the Elastos DID, Hive and other systems, we have had to carefully insert that repo's files into a copy of the Elastos.Essentials repo locally (at Elastos.Essentials/App/src/). There are some files (such as src/app/app-routing.module.ts) which need to be merged very carefully. We also added a "pages" directory in src/app/ and copied all our hundreds of developed pages there. There is still work to be done in this area, but note that as we do not own the Elastos.Essentials wrapper app we are unable to host our own merged code on any git repo. This development seems to have to be completed entirely locally. 
 
-A selective approach must be taken when considering whether files should be copied as-is or not copied or merged with existing files at a finer-grained level. The benefits are that a secure and fully authenticated environment is gained for an otherwise straightforward Ionic App, where consumers/clients own their data in a hybrid web 2.0/web 3.0 arrangement. The web 2.0 part refers to the necessary centralised database in the cloud on Kubernetes, and the web 3.0 part refers to the blockchains and general Elastos connectivities. There are risks to our clients due to the necessity of using a centralised database. This "web 2.0" side of the arrangement is not as secure as a Blockchain. We cannot physically store all enterprise data on chains. They become choked. This means we require a tight plan to ensure the security of our databases from fraud and other tampering. Reference to https://itcsolutions.com.au/security should ease potential clients' minds. Vigilance is the answer to this problem.
+A selective approach must be taken when considering whether files should be copied as-is or not copied or merged with existing files at a finer-grained level. The benefits are that a secure and fully authenticated environment is gained for an otherwise straightforward Ionic App, where consumers/clients own their data in a hybrid web2/web3 arrangement. The web2 part refers to the necessary centralised database in the cloud on Kubernetes, and the web3 part refers to the blockchains and general Elastos connectivities. There are now greatly minimised risks to our clients due to the necessity of using a centralised database. This "web2" side of the arrangement is now as secure as a Blockchain. We cannot physically store all enterprise data on chains. They become choked. This means we require a tight plan to ensure the security of our databases from fraud and other tampering. Reference to itotchaincloud.com.au/security should ease potential clients' minds. Vigilance is part of the answer to this problem. The other part is developing a DataChain or BlockBase as detailed above. The database thereby becomes immutable, just like a BlockChain.
 
 ## ________________________________________________________________________________________________________________________
 
@@ -175,9 +175,9 @@ You will also require docker-compose
 
 `sudo apt install docker-compose`
 
-The docker-based development on this project is adapted from the code in:
+The docker-based development on this project is partly adapted from the code in:
 
-https://github.com/cyber-republic/elastos-smartweb-service  (smartweb-server, providing blockchain access, containerised by ITCSA)
+https://github.com/cyber-republic/elastos-smartweb-service  (smartweb-server, providing blockchain access, containerised by ITOTCCA)
 
 and
 
@@ -316,6 +316,8 @@ Insert the following text and replace with your own container & db_name, and not
 
 psql lagerhaus -c '\i create_table_scripts.sql' && psql lagerhaus -c '\i insert_rows_scripts.sql'
 ```
+
+These scripts are found in the elastos repo.
 
 In the essentials folder you require a full set of your own schemata sql backup files.
 
@@ -1042,17 +1044,20 @@ _________________________________________________________________
 	
 	You should now be looking at the status board of one vm with kubernetes converging.
 	When every process is complete except possibly the control-plane and/or worker 
-	may be in a 'wait' state, add a second worker to accommodate the ordering node for each vm:
+	may be in a 'wait' state, add a second worker to accommodate the ordering node (which
+	will run a second "elastos-smartweb-service" blockchains-and-server for each vm, but pointed
+	to the appropriate ordering service schema on each vm's database):
 	
 `juju add-unit kubernetes-worker`
 
-then add databases (replicated as Master-Slave within vm's, and Master_Master between vm's, via Logical Replication).
+then add databases (replicated as Master-Slave within vm's, and which we will set up Logical Replication for
+via Master_Master Publishing and Subscribing between vm's).
 
 `juju deploy -n 2 postgresql pg-wodehouse`
 	
 `juju config pg-wodehouse admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,<ip-addr-worker-1>[,<ip-addr-worker-2>]`
  
-This completes the servers' setup.
+This completes the servers' setup. (When done in each of the 3 vm's).
 
 ________________________________________________________________
  
@@ -1159,8 +1164,8 @@ In principle the next step would be:
 where the variable "v_list" is derived from the "home" tables associated with the "home" schema on each vm
 and its associated "oseer" and ordering schemata only (if you follow our business process idea). This requires the 
 "CREATE PUBLICATION" SQL to be executed from within a PLpgSQL function that extracts the "home" schema 
-and associated "oseer" and ordering schemata tables only, and creates an array containing these tables, called "v_list"
-such that each vm is only publishing its own tables, not those belonging to other servers. We are currently
+and associated "oseer" schema tables only, and creates an array containing these tables, called "v_list"
+such that each vm is only publishing its own tables, not re-publishing those belonging to other servers. We are currently
 working on this function.
 
 One would then create as many subscriptions as there are "other" schemata (on the other servers) on each server (1 publication but many
@@ -1168,13 +1173,13 @@ subscriptions on each server).
 
 These would be like:
 
-`CREATE SUBSCRIPTION <this_server_all_schemata>_other_server_<k>_subscr CONNECTION 'host=<ip-addr-k> port=5432 dbname=mydb connect_timeout=10' PUBLICATION <publication_name-k>`
+`CREATE SUBSCRIPTION <this_server_relevant_schemata>_other_server_<k>_subscr CONNECTION 'host=<ip-addr-k> port=5432 dbname=mydb connect_timeout=10' PUBLICATION <publication_name-k>`
 
-`CREATE SUBSCRIPTION <this_server_all_schemata>_other_server_<l>_subscr CONNECTION 'host=<ip-addr-l> port=5432 dbname=mydb connect_timeout=10' PUBLICATION <publication_name-l>`
+`CREATE SUBSCRIPTION <this_server_relevant_schemata>_other_server_<l>_subscr CONNECTION 'host=<ip-addr-l> port=5432 dbname=mydb connect_timeout=10' PUBLICATION <publication_name-l>`
 
 etc., and where definition of target publishing servers is given by ip-address/port.
 
-The runtime properties of the postgresql servers need to be configured such that the following docker command is implemented on postgresql's in kubernetes-style:
+The runtime properties of the postgresql servers need to be configured such that the following docker command is implemented on postgresql's in kubernetes-style, as a configuration means:
 
 command: postgres -c wal_level=logical -c max_worker_processes=35 -c max_logical_replication_workers=35 -c max_wal_senders=45 -c max_replication_slots=35
 	
@@ -1188,10 +1193,9 @@ _______________________________________________________________
 
      We turn to finish setting up the Blockchain/Database gRPC Server Deployment.
 			     
-     In each multipass vm (except in ordering service vm, as there is no need for blockchain access here)
-     , in /home/ubuntu; 
+     In each multipass vm, and on each worker, in /home/ubuntu; 
 			     
-`juju ssh <machine number kubernetes-worker/0>`
+`juju ssh <machine number kubernetes-worker/0-OR-1>`
 	
 `git clone --recurse-submodules https://github.com/cyber-republic/elastos-smartweb-service.git`
 	
@@ -1222,7 +1226,7 @@ So in shared/cheirrs root "TO_BE_COPIED_TO_smartweb-service" directory are scrip
 
 `cd ....path/to/shared/cheirrs`
 
-Now perform each of the following 2 steps for each vm , paying particular attention to the .env, .env.test and __init__.py files,  where the database host address will need to be edited for each target-pod ie worker node, and similarly for the elastos pod addresses (== worker/0 addresses) on each node in .env & .env.test:
+Now perform each of the following 2 steps for each vm, and within that, for each worker, paying particular attention to the .env, .env.test and __init__.py files,  where the database host address will need to be edited for each target-pod ie worker node, and similarly for the elastos pod addresses (== worker/0-OR-1 addresses) on each node in .env & .env.test:
      
      1:
 
@@ -1242,7 +1246,7 @@ Now perform each of the following 2 steps for each vm , paying particular attent
  
 in each:
 
-`juju ssh <machine number kubernetes-worker/0>` 
+`juju ssh <machine number kubernetes-worker/0-OR-1>` 
 	
 `cd elastos-smartweb-service && ./run.sh`
 .. and wait and watch .. and examine logs in case of errors, which are available at (TODO). 
@@ -1278,7 +1282,7 @@ _____________________________________________________________
 To be continued ..
 _____________________________________________________________
  
-## In master-0 and master-1, enter kubernetes-worker-0, to set-up an IoT server with Python-gRPC, 
+## In master-0, master-1, and master-2 enter kubernetes-worker-0, to set-up an IoT server with Python-gRPC, 
 ## node-red-industrial, Carrier and IOTA client.
      
 `juju ssh <machine-number-worker-0>`
