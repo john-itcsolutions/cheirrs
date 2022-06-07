@@ -136,6 +136,8 @@ Our dApp Front End (Ionic-alone version) looks like this at the current stage of
 
 Our dApp for general internetworked supply and trading business situations looks like this (The General):
 
+The source code (such as it is), is at https://github.com/john-itcsolutions/a-general
+
 
 <img src="./Screenshot from 2022-05-31 21-39-09.png">
 
