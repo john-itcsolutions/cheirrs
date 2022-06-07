@@ -133,6 +133,14 @@ Our dApp Front End (Ionic-alone version) looks like this at the current stage of
 
 <img src="./Screenshot from 2021-06-17 18-11-23.png">
 
+
+Our dApp for general internetworked supply and trading business situations looks like this (The General):
+
+
+<img src="./Screenshot from 2022-05-31 21-39-09.png">
+
+
+
 In order to progress to a version of our dApp (at au.com.itcsolutions.cheirrs.0.01) that can provide connection to the Elastos DID, Hive and other systems, we have had to carefully insert that repo's files into a copy of the Elastos.Essentials repo locally (at Elastos.Essentials/App/src/). There are some files (such as src/app/app-routing.module.ts) which need to be merged very carefully. We also added a "pages" directory in src/app/ and copied all our hundreds of developed pages there. There is still work to be done in this area, but note that as we do not own the Elastos.Essentials wrapper app we are unable to host our own merged code on any git repo. This development seems to have to be completed entirely locally. 
 
 A selective approach must be taken when considering whether files should be copied as-is or not copied or merged with existing files at a finer-grained level. The benefits are that a secure and fully authenticated environment is gained for an otherwise straightforward Ionic App, where consumers/clients own their data in a hybrid web 2.0/web 3.0 arrangement. The web 2.0 part refers to the necessary centralised database in the cloud on Kubernetes, and the web 3.0 part refers to the blockchains and general Elastos connectivities. There are risks to our clients due to the necessity of using a centralised database. This "web 2.0" side of the arrangement is not as secure as a Blockchain. We cannot physically store all enterprise data on chains. They become choked. This means we require a tight plan to ensure the security of our databases from fraud and other tampering. Reference to https://itcsolutions.com.au/security should ease potential clients' minds. Vigilance is the answer to this problem.
