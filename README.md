@@ -153,11 +153,23 @@ A selective approach must be taken when considering whether files should be copi
 
 Docker for Ubuntu: https://docs.docker.com/engine/install/ubuntu/  - SAFEST WAY!
 
+Alternatively, for an ubuntu vm with docker already set up, such that you can use the system directly from Ubuntu Host Desktop:
+
+-- get multipass:
+
+`sudo snap install multipass`
+
+Launch docker:
+
+`multipass launch docker`
+
+(Very Simple!)
+
 Remember to
 
 `sudo usermod -aG docker $USER && newgrp docker`
 
-after install is complete.
+after install is complete, in every terminal you wish to use to interface to Docker.
 
 You will also require docker-compose
 
@@ -418,7 +430,7 @@ There should be, au fin du jour, as many geordnet_x_y.sql files as exist in the 
 
 Each corresponding geordnet schema is associated with its own main database schema as a part of the transaction ordering system.
 
-You need a copy of any one of the docker-compose.yml files to reside like an anchor in the parent directory of all your project folders. The name of the parent directory gives the overall network a name so every database copy can see each other one. You will be running your "docker-compose up" commands from this directory, but you need to copy and paste the section as follows from each project directory's docker-compose.yml into the parent folder's docker-compose.yml file - the copied section goes OVER the existing db code every time, as you roll out the containers, each one in a new terminal. NOTE 1: You must retain the static network and pgadmin4 sections in each "docker-compose up" invocation. NOTE 2: You will be required to paste the following into these terminals to allow non-root access:
+You need a copy of any one of the docker-compose.yml files to reside like an anchor in the parent directory of all your project folders. The name of the parent directory gives the overall network a name so every database copy can see each other one. You will be running your "docker-compose up" commands from this directory, but you need to copy and paste the section as follows from each project directory's docker-compose.yml into the parent folder's docker-compose.yml file - the copied section goes OVER the existing db code every time, as you roll out the containers, each one in a new terminal (but from the same directory). NOTE 1: You must retain the static network and pgadmin4 sections in each "docker-compose up" invocation. NOTE 2: You will be required to paste the following into these terminals to allow non-root access:
 
 `sudo usermod -aG docker $USER && newgrp docker`
 
@@ -516,14 +528,26 @@ And then subscribe every non-ordering server to every other non-ordering server'
 
 `CREATE SUBSCRIPTION member_class_x_member_class_y_subscription CONNECTION 'host=172.20.128.x port=5432 dbname=lagerhaus password=your??postgres??password' PUBLICATION member_class_x_publication;`
 
-Each ordering node must be subscribed to its own Member Class server Publication.
+Each ordering node must be subscribed to its own Member Class server Publication (only).
 
 Thus Logical Replication is implemented.
 
 The next step is to investigate how to involve the Ordering Service in the ordering of transactions by consensus from the other servers, and propogating the finalised Blocks throughout the system. We require a partitioned set of Order_Member_Class_x servers including on the database "lagerhaus".
 
 
-The above code needs to be copied (as for the previous set) to the overall parent Project Directory, but only over the "services \ db-z: .. etc" section, in the existing docker-compose.yml file, leaving the first (network definition) section and pg-admin4 sections intact so as to preserve the pgadmin4 and static network settings. When the databases from this "partition" are rolled out they will have a structure of schemata, tables and columns identical, and the ordering nodes have a much simpler set of 2 tables per server ("Transactions" & "Blocks"), (identical) in each schema. eg of one schema in "geordnet_member_class_z" schema is "geordnet_member_class_w" with 2 tables (same for each table in each schema), 1. transactions, and 2. blocks. Transactions has a. username of client b. procedure executed and arguments (json) c. block_id d. Unique identifier == hash (a, b, c) e. Signature on hash(a, b, c, d) using client's private key. Block Table has a. Block-id b. set of transactions (json) c. metadata associated with the consensus protocol d.hash of the previous block e. hash of the current block, i.e., hash (a, b, c, d) f. Digital signature on the hash of the current block by the orderer node.
+# About the docker-compose.yml file to run:
+
+The above code needs to be copied (as for the previous set) to the overall parent Project Directory, but only over the "services \ db-z: .. etc" section, in the existing docker-compose.yml file, leaving the first (network definition) section and pg-admin4 sections intact so as to preserve the pgadmin4 and static network settings. 
+
+
+When the databases from this "partition" are rolled out they will have a structure of schemata, tables and columns identical to each other, but the ordering nodes have a much simpler set of 2 tables per server ("Transactions" & "Blocks"), (identical) in each schema. eg of one schema might be "geordnet_member_class_z" schema with 2 tables, 1. transactions, and 2. blocks. 
+
+Transactions has a. username of client b. procedure executed and arguments (json) c. block_id d. Unique identifier == hash (a, b, c) e. Signature on hash(a, b, c, d) using client's private key. 
+
+Block Table has a. Block-id b. set of transactions (json) c. metadata associated with the consensus protocol d.hash of the previous block e. hash of the current block, i.e., hash (a, b, c, d) f. Digital signature on the hash of the current block by the orderer node.
+
+________________________________________________________________________________________________________________________
+
 
 Our final (nearly!) Docker Installation of 50 servers linked to a pgadmin4 container looks like:
 
