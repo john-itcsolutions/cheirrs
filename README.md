@@ -560,7 +560,7 @@ Next we have to clone the Elastos Smartweb blockchain and database server packag
 `git clone --recurse-submodules https://github.com/cyber-republic/elastos-smartweb-service.git`
 
 With the development of the database enabled after we run the docker-compose file (administer and develop at 
-127.0.0.1:5050 on your Host), the "run.sh" script as defined in the Elastos repo we just cloned needs to be edited.
+0.0.0.0:5050 on your Host), the "run.sh" script as defined in the Elastos repo we just cloned needs to be edited.
 
 Open elastos-smartweb-service/run.sh in an editor and comment out the top lines as shown here:
 
