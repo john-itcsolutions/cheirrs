@@ -994,11 +994,11 @@ _________________________________________________________________
      
 `sudo snap install multipass`
 
-`multipass launch -n master-0 -c 5 -m 16GB -d 100GB`
+`multipass launch -n master-0 -c 7 -m 16GB -d 100GB`
 
-`multipass launch -n master-1 -c 5 -m 16GB -d 100GB`
+`multipass launch -n master-1 -c 7 -m 16GB -d 100GB`
 
-`multipass launch -n master-2 -c 5 -m 16GB -d 100GB`
+`multipass launch -n master-2 -c 7 -m 16GB -d 100GB`
 
 
 
