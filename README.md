@@ -1024,7 +1024,7 @@ _________________________________________________________________
      
      Then mount a shared directory to enable access to your host:
      
-     On each vm
+     On each vm (`multipass shell master-x/pgadmin`)
      
 `mkdir shared`
 
