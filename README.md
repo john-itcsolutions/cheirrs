@@ -1040,11 +1040,40 @@ In master-0 vm:
 
 `microk8s enable dns dashboard istio community`
 
-To set up database in each of the master-x vm's:
+To set up database in each of the master-x vm's, we require a deployment which downloads and 
+containerises a docker postgis image. However we first need to enable the openebs storage system:
+
+In master-0
+
+`microk8s enable openebs`
+
+You require a Persistent Volume Claim to suit using the jiva system, so:
+
+`nano jiva-pv-claim-<x>`
+
+in each master-x vm.
+
+Insert the following text"
+
+```
+
+```
+
+
+
+Therefore you need to open a file called postgis-x-deployment.yaml
+where x is 0 or 1 or 2 depending on the vm this is executed in:
 	
-`juju config calico vxlan=CrossSubnet`
+`nano postgis-<x>-deployment.yaml`
+
+and insert the following text, adjusting names etc to suit your own installation:
+
+```
+
+```
+You then apply the files in each master-x vm with:
 	
-`juju config calico ignore-loose-rpf=true`
+`microk8s kubectl apply -f postgis-<x>-deployment.yaml`
 	
 `juju remove-unit easyrsa/0 --force` & maybe repeat once or twice ..
 	
