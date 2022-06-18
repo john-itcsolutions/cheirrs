@@ -358,7 +358,22 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: blocks; Type: TABLE; Schema: geordnet_member_class_0_0; Owner: postgres
+-- Name: blocks; Type: TABLE; Schema: geordnet_member_class_0_0; Owner: postgresapiVersion: v1
+
+kind: PersistentVolume
+
+metadata:
+    name: postgres-pv-volume
+    labels:
+        type: local
+spec:
+    storageClassName: openebs-jiva-csi-default
+    capacity:
+        storage: 5Gi
+    accessModes:
+    - ReadWriteOnce
+    hostPath:
+        path: "/mnt/data"
 --
 
 CREATE TABLE geordnet_member_class_0_0.blocks (
@@ -1054,7 +1069,22 @@ Now make the persistent volumes (in each vm)
 Insert (in each vm):
 
 ```
+apiVersion: v1
 
+kind: PersistentVolume
+
+metadata:
+    name: postgis-pv-<x>
+    labels:
+        type: local
+spec:
+    storageClassName: openebs-jiva-csi-default
+    capacity:
+        storage: 5Gi
+    accessModes:
+    - ReadWriteOnce
+    hostPath:
+        path: "/mnt/data"
 ```
 
 Apply with:
@@ -1063,14 +1093,24 @@ Apply with:
 
 You also require a set of Persistent Volume Claims to suit, using the jiva system, so:
 
-`nano jiva-pv-claim-<x>`
+`nano jiva-pv-claim-<x>.yaml`
 
 in each master-x vm.
 
 Insert the following text:
 
 ```
-
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: jiva-pv-claim-<x>
+spec:
+  storageClassName: openebs-jiva-csi-default
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5G
 ```
 
 
@@ -1085,7 +1125,18 @@ You then need to create an appropriate set of services for the databases:
 Inserting:
 
 ```
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgis-<x>-service
+  labels:
+    app: postgis-<x>
+spec:
+  type: NodePort
+  ports:
+  - port: 5432
+  selector:
+    app: postgis-<x>
 ```
 
 Apply with:
@@ -1100,34 +1151,257 @@ where x is 0 or 1 or 2 depending on the vm this is executed in:
 and insert the following text, adjusting names etc to suit your own installation:
 
 ```
-
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgis-<x>
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgis-<x>
+  template:
+    metadata:
+      labels:
+        app: postgis-<x>
+    spec:
+      volumes:
+      - name: postgis-pv-<x>
+        persistentVolumeClaim:
+          claimName: jiva-pv-claim-<x>
+      containers:
+      - name: postgis-<x>
+        image: postgis/postgis
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_PASSWORD
+          value: <your-password>
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgis-pv-<x>
+      nodeName: master-<x>
 ```
 
 Apply with:
 
 `microk8s kubectl apply -f postgis-<x>-deployment.yaml`
-	
-`juju remove-machine 0/lxd/0 --force` & again 
-	
-`juju add-unit easyrsa`
-	
-`watch -c juju status --color`
-	
-	You should now be looking at the status board of one vm with kubernetes converging.
-	When every process is complete except possibly the control-plane and/or worker 
-	may be in a 'wait' state, add a second worker to accommodate the ordering node (which
-	will run a second "elastos-smartweb-service" blockchains-and-server for each vm, but pointed
-	to the appropriate ordering service schema on each vm's database):
-	
-`juju add-unit kubernetes-worker`
 
-then add databases (replicated as Master-Slave within vm's, and which we will set up Logical Replication for
-via Master_Master Publishing and Subscribing between vm's).
+At this stage you need to ensure you have an accessible docker hub account and you
+know the password.
 
-`juju deploy -n 2 postgresql pg-wodehouse`
+We are going to create an accessible elastos-smartweb-service image and push it to your docker hub account:
+
+In each master-x vm:
+
+`git clone https://github.com/cyber-republic/elastos-smartweb-service.git`
+
+`docker build -t elastos-smartweb-service elastos-smartweb-service .`
+
+`docker login`
+
+Enter your docker username and password ..
+
+`docker push <your-docker-user-account>/elastos-smartweb-service`
+
+Now we are ready to install a secret called regcred:
+
+`microk8s kubectl create secret docker-registry regcred --docker-server=<your-registry-server> --docker-username=<your-docker-username> --docker-password=<your-pword> --docker-email=<your-email>`
+
+Where <your-registry-server> == https://index.docker.io/v1/ if you have the normal docker hub account.
+
+Then you can organise the folllowing files, called elastos-x, one for each master-x vm.
 	
-`juju config pg-wodehouse admin_addresses=127.0.0.1,0.0.0.0,<ip-addr-worker-0>,<ip-addr-worker-1>[,<ip-addr-worker-2>]`
- 
+`nano elastos-<x>.yaml`
+	
+	and insert:
+	
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: elastos-<x>
+spec:
+  containers:
+  - name: elastos-<x>
+    image: johnitcsolutionscomau/elastos-smartweb-service
+  imagePullSecrets:
+  - name: regcred
+  nodeName: master-<x>	
+```
+
+Now apply with:
+	
+`microk8s kubectl apply -f elastos-<x>.yaml`
+	
+	(in each master-x vm).
+	
+You need to supply a "run.sh" file to each elastos container:
+	
+`nano run.sh`
+
+Insert:
+
+```
+#!/bin/bash
+
+virtualenv -p `which python3` venv
+
+source venv/bin/activate
+
+pip install charmhelpers
+
+pip install -r requirements.txt
+
+export PYTHONPATH="$PYTHONPATH:$PWD/grpc_adenine/stubs/"
+
+python3 grpc_adenine/server.py
+```
+
+Save then:
+	
+`microk8s kubectl cp run.sh elastos-<x>:/elastos-smartweb-service/`
+	
+Now, open a blank file called __init__.py:
+	
+`nano __init__.py`
+	
+	Insert:
+	
+```
+from sqlalchemy_wrapper import SQLAlchemy
+from sqlalchemy import create_engine, MetaData, Table, Column, ForeignKey, inspect
+from sqlalchemy.ext.automap import automap_base
+import os
+import sys
+from decouple import config
+from charmhelpers.core.hookenv  import (
+    Hooks, config, relation_set, relation_get,
+    local_unit, related_units, remote_unit)
+
+import logging
+# Set up logging
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.DEBUG,
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
+# Connect to the database
+db_name = 'wodehouse'
+db_user = 'gmu'
+db_password = 'gmu'
+db_host = '10.1.36.83'
+db_port = '5432'
+
+database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+
+try:
+    db_engine = create_engine(database_uri)
+    connection = SQLAlchemy(database_uri)
+except Exception as e:
+    logging.fatal(f"Error while connecting to the database: {e}")
+
+hooks = Hooks()
+hook = hooks.hook
+
+@hook
+def db_relation_joined():
+    relation_set('database', 'wodehouse')  # Explicit database name
+    relation_set('roles', 'reporting,standard')  # DB roles required
+    relation_set('extensions', 'postgis,osm2pgrouting') # Get PostGIS
+@hook('db-relation-changed', 'db-relation-departed')
+def db_relation_changed():
+    # Rather than try to merge in just this particular database
+    # connection that triggered the hook into our existing connections,
+    # it is easier to iterate over all active related databases and
+    # reset the entire list of connections.
+    conn_str_tmpl = "dbname={db_name} user={db_user} host={db_host} port={db_port}"
+    master_conn_str = None
+    slave_conn_strs = []
+    for db_unit in related_units():
+        if relation_get('database', db_unit) != config('database'):
+            continue  # Not yet acknowledged requested database name.
+
+        allowed_units = relation_get('allowed-units') or ''  # May be None
+        if local_unit() not in allowed_units.split():
+            continue  # Not yet authorized.
+
+        conn_str = conn_str_tmpl.format(**relation_get(unit=db_unit))
+        remote_state = relation_get('state', db_unit)
+
+        if remote_state == 'standalone' and len(db_unit) == 1:
+            master_conn_str = conn_str
+        elif remote_state == 'master':
+            master_conn_str = conn_str
+        elif remote_state == 'hot standby':
+            slave_conn_strs.append(conn_str)
+
+    update_my_db_config(master=master_conn_str, slaves=slave_conn_strs)
+
+# Utilise metadata inspection to reflect database/schema details
+meta = MetaData()
+insp = inspect(db_engine)
+cols = 0
+n = 0
+m = 0
+l = 0
+p = 0
+Max = [[]]
+mAX = 0
+tables_totals_summary = [[]]
+schemata_names = insp.get_schema_names()
+f = open('/home/ubuntu/dbase_report.txt', 'w')
+for schema in schemata_names:
+    n += 1 
+    if n > 1:
+        Max.append((last_schema, 'Tables =', m, 'Schema Id', n-1))
+        mAX += m
+        m = 0
+    if len(list(insp.get_table_names(schema))) == 0:
+        print(schema, '. NULL')
+        last_schema = schema
+        m = 0
+    for table in insp.get_table_names(schema):
+        this_table = Table(table, meta)
+        insp.reflect_table(this_table, None)
+        f.write('\n\n' + schema + '.' + str(this_table) + '\n\n')
+        for column in this_table.c:
+            f.write(str(column) + '\n')
+            cols += 1
+        m += 1
+        l += 1
+        if str(this_table)[0:3] == 'acc':
+            p += 1
+        print(schema, '.', this_table)
+        last_schema = schema
+    tables_totals_summary.append((last_schema, 'Total Tables =', m, 'Accounting_Tables =', p, 'Other_Tables =', m-p, 'Schema Id', n))
+    p = 0
+f.close()
+Max.append((last_schema, 'Tables =', m, 'Schema Id', n))
+mAX += m 
+if n == len(schemata_names):
+    print('All', n, 'schemata, with', l, 'total tables reflected')
+else:
+    print('WARNING!! Number of Schemata does not match! \nie', n, '(after processing), and', len(schemata_names), '\n(latter is original schemata_names list length')
+
+print(str(tables_totals_summary).replace("),", "),\n"))
+
+print('Total tables by "Max" =', mAX)
+if mAX - l == 0:
+    print('Totals for Tables agree.')
+else:
+    print('WARNING!! Totals for Tables not equal! ie', mAX, 'and', l)
+print('Total Columns =', cols)
+print('Summary available in "~/dbase_report.txt"')
+print('Done!')
+if __name__ == '__main__':
+    hooks.execute(sys.argv)
+```
+	
 This completes the servers' setup. (When done in each of the 3 vm's).
 
 ________________________________________________________________
@@ -1152,52 +1426,44 @@ and put all backups and scripts into a single folder, and copied '*' to postgres
 The ordering services will run within the "main" database servers as schemata operating inside masters (to economise for home development
 - not recommended for production architecture).
 
-`juju scp path/to/main_backups_and_scripts/* pg-wodehouse:/home/ubuntu/`
+`microk8s kubectl cp path/to/main_backups_and_scripts/* postgis-<x>-<uuuuuuuuuuuu>:/`
+	
+	(Use `microk8s kubectl get pods` to see full names of pods)
+	
+`microk8s kubectl exec -i postgis-<x>-<uuuuuuuuuuuuu> -- createdb -U postgres wodehouse`
+	
+`microk8s kubectl exec -i postgis-<x>-<uuuuuuuuuuuuu> -- createuser -U postgres gmu`	
 
-`juju ssh pg-wodehouse/<0 or 1 or ..>`
-
-`sudo passwd postgres`
-
-`su postgres`
-
-`createuser gmu` (For Elastos' purposes.)
-
-`createdb db_name`
-
-`psql <db_name> < backup.sql`, and similarly for other schemata. In the final state, there will be one schema per 
-member-class plus other utility schemata such as "iot" and an overseeing schema for each member class.
-			     
-			     
-	You will also need to deal with users and passwords as well as setting allowed search paths for user 'gmu' to all schemata.
+Now, in each master-x, in the folder housing your database schema backups:
+	
+`microk8s kubectl exec -i postgis-<x>-<uuuuuuuuuuuuu> -- psql -U postgres wodehouse < backup-<a>.sql`
+	
+`microk8s kubectl exec -i postgis-<x>-<uuuuuuuuuuuuu> -- psql -U postgres wodehouse < backup-<b>.sql`
+	
+`microk8s kubectl exec -i postgis-<x>-<uuuuuuuuuuuuu> -- psql -U postgres wodehouse < backup-<c>.sql`
 
 At this stage it is envisaged that we would set up one schema for each member-class in an inter-enterprise network, plus an iot 
 schema and a set of oversight schemata (to run Business Process Supervision from). Also the design would 
-require only one database server (though replicated) per member-class (plus one for the ordering service in a production setup) - ie one vm per member-class - 
+require only one database server (though replicated) per member-class (plus one for the ordering service in a production setup only) - ie one vm per member-class - 
 (not "per member" as in the IBM paper). 
 
 All pods would be situated together in the cloud (and probably replicated at a site-level globally).
 
-If you use (or adapt) our scripts to sequentially restore your backups and set up postgis, etc, you should copy these to /home/ubuntu/
+If you use (or adapt) our scripts to sequentially restore your backups and set up postgis, etc, you should copy these to /
 in each database master, together with your own sql backups. 
 
-A sample backup of an ordering service database is shown in the Docker section above. By editing and replacing the existing schema name you can have your own name and then  prepare to restore the ordering schema within the lagerhaus or `<db_name>` database with:
+A sample backup of an ordering service database is shown in the Docker section above. By editing and replacing the existing schema name you can have your own name and then  prepare to restore the ordering schemata within the wodehouse or `<db_name>` database with:
 
-`nano start_geordnet`
-
-Copy and paste this:
-
-`psql lagerhaus < ordering_service_name_1.sql && psql lagerhaus < ordering-service-name-2.sql && psql lagerhaus < ordering-service-name-3.sql`
-
-make sure to install both the startup script and the ordering schema backup together and:
-
-`juju scp path/to/scripts/* pg-wodehouse:/home/ubuntu/`
-
-`juju ssh pg-wodehouse/<0 or 1 or ..>`
-
-`su postgres`
-
-`./start_geordnet`
-
+`microk8s kubectl exec -i postgis-<x>-<uuuuuuuuuuuuu> -- psql -U postgres wodehouse < ordering-service-backup-<a>.sql`
+	
+`microk8s kubectl exec -i postgis-<x>-<uuuuuuuuuuuuu> -- psql -U postgres wodehouse < ordering-service-backup-<b>.sql`
+	
+`microk8s kubectl exec -i postgis-<x>-<uuuuuuuuuuuuu> -- psql -U postgres wodehouse < ordering-service-backup-<c>.sql`
+	
+(In each master-x).
+	
+	
+	
 ____________________________________________________
 
 ## Getting PostGIS and Open Street Maps
