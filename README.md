@@ -994,13 +994,13 @@ _________________________________________________________________
      
 `sudo snap install multipass`
 
-`multipass launch -n master-0 -c 7 -m 16GB -d 100GB`
+`multipass launch -n master-0 -c 6 -m 14GB -d 100GB`
 
-`multipass launch -n master-1 -c 7 -m 16GB -d 100GB`
+`multipass launch -n master-1 -c 6 -m 14GB -d 100GB`
 
-`multipass launch -n master-2 -c 7 -m 16GB -d 100GB`
+`multipass launch -n master-2 -c 6 -m 14GB -d 100GB`
 
-
+`multipass launch -n pgadmin -c 4 -m 100GB -d 50GB`
 
      
      (You can tweak those settings)
@@ -1015,20 +1015,32 @@ _________________________________________________________________
 
 `exit`
 
-`multipass mount path/to/your/working/directory mast/order-<x>:~/shared/`
+`multipass mount path/to/your/working/directory master-<x>:~/shared/`
 
 
 *******************************************************
 
-# In each vm:
+# In each master-x vm:
+
+We will work with microk8s for enhanced networking:
 	
-`sudo snap install juju --classic`
+`sudo snap install microk8s --classic`
 	
-`juju bootstrap localhost master-<x>`
+`sudo usermod -aG microk8s $USER && newgrp microk8s`
 	
-`juju add-model werk-<x>`
-	
-`juju deploy kubernetes-core`
+When all 3 master-x's are done,
+
+in master-0:
+
+`microk8s add-node`
+
+Copy and paste script (not worker version) to each of other master-x vm's.
+
+In master-0 vm:
+
+`microk8s enable dns dashboard istio community`
+
+To set up database in each of the master-x vm's:
 	
 `juju config calico vxlan=CrossSubnet`
 	
