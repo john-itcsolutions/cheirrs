@@ -1468,7 +1468,11 @@ ____________________________________________________
 
 ## Getting PostGIS and Open Street Maps
 	
-	As user 'ubuntu' in each vm's postgres master:
+	As user 'ubuntu' in each vm's postgis master:
+	
+	(ie `microk8s kubectl exec -it postgis-<x>-<zzzzzzzzzzzz> -- bash`)
+	
+	Inside postgis containers as user ubuntu:
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
