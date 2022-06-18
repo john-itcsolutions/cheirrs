@@ -1611,6 +1611,8 @@ in each:
 
 `microk8s kubectl exec -it elastos-<x> -- bash` 
 	
+`sudo kill -9 $(sudo lsof -t -i:8001)`
+	
 `cd elastos-smartweb-service && ./run.sh`
 .. and wait and watch .. and examine logs in case of errors, which are available at (TODO). 
      If all is well, you should be looking at the blockchains' log, on stdout, as the cycles roll every 30 seconds.
@@ -1670,20 +1672,19 @@ with gRPC as well as the IOTA node.js client:)
      
              on the Host (acting as an Edge server)
      
-Also, in worker-0 (`juju ssh machine-number-worker-0`),
+Also, in elastos-x (`microk8s kubectl exec -it elastos<x> -- bash`),
      
 `sudo snap install node-red-industrial`
+	
+	You can visit (on the Host) `localhost:1891`
      
-     and go to your own host's LAN address, on a new tab in the 
+     and go to 0.0.0.0, on a new tab in the 
      browser, with port `1891`,
-     then, in worker-0, 
-     
-     from the home directory, and go to your worker-1's address with port 1891
-     in a browser tab on your Host. Use the URL of 
+     then, in elastos-x,
 
 `0.0.0.0:1891` 
      
-     to obtain access to the multipass>juju>[worker-0] vm. 
+     to obtain access to the multipass>microk8s>[elastos-x] vm/container. 
      
     These 2 pages can interact, and generate and forward messages, events and commands.
      
@@ -1711,7 +1712,7 @@ Also, in worker-0 (`juju ssh machine-number-worker-0`),
      
      The installation of IOTA client proceeds as follows (repeat for Host - ie Edge):
      
-     In worker-0, master-0 & master-1:
+     In elastos-x:
      
 `mkdir iota && cd iota`
      
@@ -1745,14 +1746,13 @@ run()
 The approach we have taken here is to rely on Message exchanges on MQTT 
 for validation of IoT actions and events.
      Please refer to https://client-lib.docs.iota.org/docs/libraries/nodejs/examples 
-     for a full explanation of all topics to which an application may subscribe on IOTA. 
+     for a full explanation of all "topics" to which an application may subscribe on IOTA. 
      
-     The launch of the client, on both Edge (Host) and worker-0, occurs with:
-     
-`node index`   from the iota root directory.
+     The launch of the client, on both Edge (Host) and elastos-x, occurs with:
+     `node index`   from the iota root directory.
      
      By choosing the node.js version of the IOTA client, we get the ability to easily communicate with the other 
-     apps on the worker-0 vm, and on the Edge server (Host here).
+     apps on the elastos-x container, and on the Edge server (Host here).
      
      A typical node-red site appears as follows (all clients - eg raspberry-pi edge clients - 
      as well as the server can show pages similar to this). Here is shown the "Edge" site page mimicked by 
@@ -1803,18 +1803,16 @@ ________________________________________________________________________________
      drive and place kubeflow on one bootable partition with the juju/lxd/kubernetes system on the second.
      	for the Elastos/Node-Red/IOTA/PostgreSQL+GIS model:
      
-     1.  Complete MAAS setup to allow desktop hosting of two controllers thus allowing our (TensorFlow) 
-         'lernenmaschine' model to be implemented alongside 'werk'
-     2.  We have a minor problem involving shaping Australian Address data for our requirements
-     3.  The generation of an acceptable JWT token to authenticate to SmartWeb
-     4.  Get the Nodejs Wrapper package for Carrier working properly
-     5.  Follow the IBM article above to implement the various points outlined in the paper, in code.
-     6.  Do everything necessary to make a Postgres Database become "like a Blockchain".
+     1.  We have a minor problem involving shaping Australian Address data for our requirements
+     2.  The generation of an acceptable JWT token to authenticate to SmartWeb
+     3.  Get the Nodejs Wrapper package for Carrier working properly
+     4.  Follow the IBM article above to implement the various points outlined in the paper, in code.
+     5.  Do everything necessary to make a Postgres Database become "like a Blockchain".
      	   -  Understand how to make the Ordering Service function, in particular investigate Serialisable 
 	   Snapshot Isolation and the methods for obtaining Consensus. 
-     7.  Continue to use the Elastos Blockchain systems for dApps at front end and to provide several useful services,
+     6.  Continue to use the Elastos Blockchain systems for dApps at front end and to provide several useful services,
 	 including Distributed Id's (DID Sidechain), Carrier Security and more.
-     8.  Learn how to provide authentication from Elastos DID Sidechain to Postgres DataChain/BlockBase system.
+     7.  Learn how to provide authentication from Elastos DID Sidechain to Postgres DataChain/BlockBase system.
      
  _________________________________________________________________________________________________________________________________________________
      
