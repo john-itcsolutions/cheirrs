@@ -1026,7 +1026,7 @@ We will work with microk8s for enhanced networking:
 	
 `sudo snap install microk8s --classic`
 	
-`sudo usermod -aG microk8s $USER && newgrp microk8s`
+`sudo usermod -aG microk8s $USER && sudo chown -f -R $USER ~/.kube && newgrp microk8s`
 	
 When all 3 master-x's are done,
 
@@ -1047,21 +1047,52 @@ In master-0
 
 `microk8s enable openebs`
 
-You require a Persistent Volume Claim to suit using the jiva system, so:
+Now make the persistent volumes (in each vm)
+
+`nano postgis-pv-<x>.yaml`
+
+Insert (in each vm):
+
+```
+
+```
+
+Apply with:
+
+`microk8s kubectl apply -f postgis-pv-<x>.yaml`
+
+You also require a set of Persistent Volume Claims to suit, using the jiva system, so:
 
 `nano jiva-pv-claim-<x>`
 
 in each master-x vm.
 
-Insert the following text"
+Insert the following text:
 
 ```
 
 ```
 
 
+Apply with:
 
-Therefore you need to open a file called postgis-x-deployment.yaml
+`microk8s kubectl apply -f jiva-pv-claim-<x>.yaml`
+
+You then need to create an appropriate set of services for the databases:
+
+`nano postgis-<x>-service.yaml`
+
+Inserting:
+
+```
+
+```
+
+Apply with:
+
+`microk8s kubectl apply -f postgis-<x>-service.yaml`
+
+Next, you need to open files called postgis-x-deployment.yaml
 where x is 0 or 1 or 2 depending on the vm this is executed in:
 	
 `nano postgis-<x>-deployment.yaml`
@@ -1071,11 +1102,10 @@ and insert the following text, adjusting names etc to suit your own installation
 ```
 
 ```
-You then apply the files in each master-x vm with:
-	
+
+Apply with:
+
 `microk8s kubectl apply -f postgis-<x>-deployment.yaml`
-	
-`juju remove-unit easyrsa/0 --force` & maybe repeat once or twice ..
 	
 `juju remove-machine 0/lxd/0 --force` & again 
 	
