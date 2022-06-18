@@ -1401,6 +1401,10 @@ print('Done!')
 if __name__ == '__main__':
     hooks.execute(sys.argv)
 ```
+
+Copy __init__.py to the 3 elastos-x containers:
+	
+	
 	
 This completes the servers' setup. (When done in each of the 3 vm's).
 
@@ -1476,38 +1480,63 @@ ____________________________________________________
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
-	Also as 'ubuntu':
+`exit`
 	
+	Now on master-x:
+	
+`microk8s kubectl cp dbase_setup_2.sh postgis-<x>-<zzzzzzzzzzzz>:/`
+	
+`microk8s kubectl cp dbase_setup_3.sh postgis-<x>-<zzzzzzzzzzzz>:/`
+	
+`microk8s kubectl exec -it postgis-<x>-<zzzzzzzzzz> -- bash`
+	
+	Inside postgis-x again as 'ubuntu':
+
 `./dbase_setup_2.sh`
-			     
+	
 `su postgres`
-			     
+	
 `./dbase_setup_3.sh`
 	
 This completes database setup.
 
-
+                                                                                                                
 _______________________________________________________________
 
 
 # Logical Replication
 
-We must create publications to start the system of logical replication. On each main server:
+We must create publications to start the system of logical replication. On each main server, ie:
 
-`juju ssh <machine-number-postgres-master>`
+`microk8s kubectl exec -it postgis-<x>-<uuuuuuuuuuuuu> -- bash`
 
-`psql lagerhaus`
+`psql wodehouse`
 
-In principle the next step would be:
+`SET search_path TO schema-<x>;'
+	
+`CREATE PUBLICATION member_class_<x>_publication FOR ALL TABLES;`
+	
+`exit`
+	
+`microk8s kubectl exec -it postgis-<y>-<vvvvvvvvvvvv> -- bash`
 
-`CREATE PUBLICATION member-class_0_"N"_publication FOR TABLES SELECT v_list`
+`psql wodehouse`
 
-where the variable "v_list" is derived from the "home" tables associated with the "home" schema on each vm
-and its associated "oseer" and ordering schemata only (if you follow our business process idea). This requires the 
-"CREATE PUBLICATION" SQL to be executed from within a PLpgSQL function that extracts the "home" schema 
-and associated "oseer" schema tables only, and creates an array containing these tables, called "v_list"
-such that each vm is only publishing its own tables, not re-publishing those belonging to other servers. We are currently
-working on this function.
+`SET search_path TO schema-<y>;'
+	
+`CREATE PUBLICATION member_class_<y>_publication FOR ALL TABLES;`
+	
+`exit`
+	
+`microk8s kubectl exec -it postgis-<z>-<wwwwwwwwwwwww> -- bash`
+
+`psql wodehouse`
+
+`SET search_path TO schema-<z>;'
+	
+`CREATE PUBLICATION member_class_<z>_publication FOR ALL TABLES;`
+	
+`exit`
 
 One would then create as many subscriptions as there are "other" schemata (on the other servers) on each server (1 publication but many
 subscriptions on each server).
@@ -1520,9 +1549,15 @@ These would be like:
 
 etc., and where definition of target publishing servers is given by ip-address/port.
 
-The runtime properties of the postgresql servers need to be configured such that the following docker command is implemented on postgresql's in kubernetes-style, as a configuration means:
+The runtime properties of the postgresql servers need to be configured such that the following data
+is implemented on the postgresql's in kubernetes-style, as a configuration measure. This means editing the
+/etc/postgresql/main/12(13?)/postgresql.conf on each database container, and altering the following values:
 
-command: postgres -c wal_level=logical -c max_worker_processes=35 -c max_logical_replication_workers=35 -c max_wal_senders=45 -c max_replication_slots=35
+wal_level=logical 
+max_worker_processes=15 
+max_logical_replication_workers=15 
+max_wal_senders=25 
+max_replication_slots=15
 	
 The actual numbers can be tweaked to suit.
 
@@ -1534,17 +1569,13 @@ _______________________________________________________________
 
      We turn to finish setting up the Blockchain/Database gRPC Server Deployment.
 			     
-     In each multipass vm, and on each worker, in /home/ubuntu; 
+In each multipass vm, and on each worker, in /; 
 			     
-`juju ssh <machine number kubernetes-worker/0-OR-1>`
+`microk8s kubectl exec -it elastos-<x> -- bash`
 	
 `git clone --recurse-submodules https://github.com/cyber-republic/elastos-smartweb-service.git`
 	
-	While we're at it, on one vm in the shared folder (thus available to all vm's plus Host)
-	
-`git clone https://github.com/john-itcsolutions/cheirrs.git`
-	
-	
+
 	
 _______________________________________________________________
      
@@ -1556,14 +1587,6 @@ _______________________________________________________________
 
      
 The blockchain server ip-addresses in the .env, and .env.test files on each elastos pod, need to match the address of the targeted pod. Also the database details will require alteration.
-     
-Presuming you have obtained a fresh clone of "elastos-smartweb-service" with "recurse-submodules",  and 'cheirrs' at cloning-time, you will need to ensure the __init__.py within grpc_adenine/database directory is updated to our repo's version (as discussed above). Actually there is no need to alter the __init__.py file in the repo, rather in the cheirrs/TO*/*database/, which is where the file will be copied (soon) to the vm's.
-     
-     So, edit cheirrs/TO*/*database/__init__.py to insert your schema names, database name & database url.
-     
-You also need to treat the "run.sh" and "test.sh" (which are in cheirrs root directory also) similarly. So we will copy them soon to elastos-smartweb-service over the existing "run.sh" and "test.sh". Postgres connections in Kubernetes are not possible in the fashion assumed by "run.sh" and "test.sh" in elastos by default.
-
-So in shared/cheirrs root "TO_BE_COPIED_TO_smartweb-service" directory are scripts and modules in .sh, .env, .env.test and .py that have had to be altered from those provided in the experimental Elastos-smartweb-service repo. These should be copied over the existing files in the target elastos pods, after editing .env and .env.test to replace existing database and pod addresses with addresses obtained from the installation. Therefore, on primary:
 
 `cd ....path/to/shared/cheirrs`
 
@@ -1571,23 +1594,22 @@ Now perform each of the following 2 steps for each vm, and within that, for each
      
      1:
 
-`juju scp shared/cheirrs/TO*/*service/* <machine numder kubernetes-worker/0>:~/elastos-smartweb-service/`
+`microk8s kubectl cp shared/cheirrs/TO*/*service/* elastos-<x>:/elastos-smartweb-service/`
 
-`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/.env <machine numder kubernetes-worker/0>:~/elastos-smartweb-service/`
-	
+`microk8s kubectl cp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/.env elastos-<x>:/elastos-smartweb-service/`
 
-`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/.env.test <machine numder kubernetes-worker/0>:~/elastos-smartweb-service/`
+`microk8s kubectl cp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/.env.test elastos-<x>:/elastos-smartweb-service/`
 	
      2:
      
-`juju scp shared/cheirrs/TO*service/TO_elastos-smartweb-service.grpc_adenine.database_<node-number-eg 1>/__init__.py <machine numder kubernetes-worker/0>:/home/ubuntu/elastos-smartweb-service/grpc_adenine/database/__init__.py`
+`microk8s kubectl cp shared/cheirrs/TO*service/TO_elastos-smartweb-service.grpc_adenine.database_<node-number-eg 1>/__init__.py elastos-<x>:/elastos-smartweb-service/grpc_adenine/database/__init__.py`
 
 
  After you have covered the 3 master-x nodes:
  
 in each:
 
-`juju ssh <machine number kubernetes-worker/0-OR-1>` 
+`microk8s kubectl exec -it elastos-<x> -- bash` 
 	
 `cd elastos-smartweb-service && ./run.sh`
 .. and wait and watch .. and examine logs in case of errors, which are available at (TODO). 
@@ -1598,11 +1620,8 @@ in each:
 
 _________________________________________________________________________________________________
      
-     The following is a screenshot of the status board after successful installation:
      
-<img src="./Screenshot from 2022-05-17 11-40-11.png">
-     
-     stdout of Blockchains looks like:
+     Stdout of Blockchains looks like:
      
 <img src="./Screenshot from 2022-05-17 11-36-43.png">
      
@@ -1612,7 +1631,7 @@ _____________________________________________________________
 
 ## TESTING the smartweb-service/Blockchains/Postgresql System
 
-     Enter kubernetes-worker-0 and:
+     Copy test.sh to the elastos-x's after editing along the lines of run.sh, enter elastos-x and:
      
      `cd el*`
      
@@ -1623,10 +1642,10 @@ _____________________________________________________________
 To be continued ..
 _____________________________________________________________
  
-## In master-0, master-1, and master-2 enter kubernetes-worker-0, to set-up an IoT server with Python-gRPC, 
+## In master-0, master-1, and master-2 enter elastos-x, to set-up an IoT server with Python-gRPC, 
 ## node-red-industrial, Carrier and IOTA client.
      
-`juju ssh <machine-number-worker-0>`
+`microk8s kubectl exec -it elastos-<x> -- bash`
 
 (To install nodejs and npm, needed for Node-red, the Carrier wrapper and to connect 
 with gRPC as well as the IOTA node.js client:)
@@ -1660,7 +1679,7 @@ Also, in worker-0 (`juju ssh machine-number-worker-0`),
      then, in worker-0, 
      
      from the home directory, and go to your worker-1's address with port 1891
-     in a browser tab on your Host. If using multipass you may need to use the URL of 
+     in a browser tab on your Host. Use the URL of 
 
 `0.0.0.0:1891` 
      
