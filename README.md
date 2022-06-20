@@ -1213,7 +1213,7 @@ Now we are ready to install a secret called regcred:
 
 `microk8s kubectl create secret docker-registry regcred --docker-server=<your-registry-server> --docker-username=<your-docker-username> --docker-password=<your-pword> --docker-email=<your-email>`
 
-Where <your-registry-server> == https://index.docker.io/v1/ if you have the normal docker hub account.
+Where "your-registry-server" == https://index.docker.io/v1/ if you have the normal docker hub account.
 
 Then you can organise the folllowing files, called elastos-x, one for each master-x vm.
 	
