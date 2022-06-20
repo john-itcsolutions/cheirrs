@@ -1197,7 +1197,7 @@ know the password.
 
 We are going to create an accessible elastos-smartweb-service image and push it to your docker hub account:
 
-In each master-x vm:
+In any master-x vm:
 
 `git clone https://github.com/cyber-republic/elastos-smartweb-service.git`
 
