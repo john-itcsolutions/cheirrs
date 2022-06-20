@@ -1173,8 +1173,8 @@ spec:
       - name: postgis-<x>
         image: postgis/postgis
         imagePullPolicy: IfNotPresent
-	command: ["ALTER SYSTEM"]
-        args: ["wal_level=logical","max_worker_processes=15","max_logical_replication_workers=15","max_wal_senders=25","max_replication_slots=15"]
+	command: ["psql postgres"]
+        args: ["-c", "ALTER SYSTEM wal_level=logical;", "-c", "ALTER SYSTEM max_worker_processes=15;", "-c", "ALTER SYSTEM max_logical_replication_workers=15;", "-c", "ALTER SYSTEM max_wal_senders=25;", "-c", "ALTER SYSTEM max_replication_slots=15;"]
         ports:
         - containerPort: 5432
         env:
