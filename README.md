@@ -43,7 +43,7 @@ member-class(n,m) with n == business sub-network id and m == member-class id. Wi
 
 This is a schematic of our 3 + 1 node development setup.
 
-<img src="./devel-schematic-27-06-2022A.png">
+<img src="./devel-schematic-27-06-2022B.png">
 
 At the virtual server level, there will be one virtual Master copy of a database-and-server per member class, with the network extending across all private business subnets. This means that all signed-up Business Networks actually constitute sub-Networks of the entire system, where member-classes constitute 2nd level sub-networks, in their own combined Business Level network, ie subnets as network members of ITOTCCA's overall network including all signed up Business Networks. Please refer to the following figures.
 
