@@ -1330,6 +1330,27 @@ committed after a consensus seeking process between the Bucordo servers, followi
 above-mentioned IBM research paper. The process is completed with a checkpointing procedure as detailed in 
 the paper, and available on Postgres.
 
+We are now commencing work on that adaptation.
+
+Now, on kubernetes-worker-0:
+
+`juju ssh <machine-number-worker-0>`
+
+`git clone https://github.com/cyber-republic/elastos-smartweb-service.git`
+
+`sudo snap install node-red-industrial`
+
+`mkdir iota && cd iota`
+
+In el*service, there is a hidden .env.example file you can find with 
+
+`ls el* -a`
+
+`nano .env*`
+
+Edit the database details top suit and the target address for this elastos server
+and save as .env and then as .env.test.
+
 You need to supply a "run.sh" file to each elastos container:
 	
 `nano run.sh`
@@ -1354,7 +1375,7 @@ python3 grpc_adenine/server.py
 
 Save then:
 	
-`microk8s kubectl cp run.sh elastos-<x>:/elastos-smartweb-service/`
+`juju scp run.sh kubernetes-worker/0:/elastos-smartweb-service/`
 	
 Now, open a blank file called __init__.py:
 	
@@ -1503,24 +1524,21 @@ ________________________________________________________________
  
 # DATABASE: Internals
 
-You will need a set of 3 member-class schemata with another 3 overseer schemata (we use 2 - the_general, 
-and the_general_oseer  and copied them 3 times, at this early stage) to serve as material for development. 
-The ordering service strictly requires a second replicating postgresql database connected to an associated 
-vm or worker running elastos-smartweb-service (say, on worker-1 or maybe on a separate vm by itself), but 
-also needs to be able to communicate with the other ordering nodes on separate vm's.
+You will need a set of 3 member-class schemata (one covering iot) with another 2 overseer schemata (we use 2 - the_general, 
+and the_general_oseer  and copied them 2 times, at this early stage, with our own iot schema - having no "oseer") to serve as material for development. 
+
+The bucordo ordering and replication service strictly requires at least 2 other replicating bucordo databases connected to 
+their associated base servers, themselves connected to an elastos-smartweb-service.
 
 In our case, if a single member-class network existed solo (such as any of our Real Estate Property dApps) we would be required 
-to separate the existing networks into several (3 to provide a 'Mexican Standoff' arrangement) servers 
-designed to keep everyone honest. Das_Fuhrwerk would provide one extra with any third member acting as a dummy policing server only (if necessary due to lack of second customer).
+to separate the existing networks into 3 (to provide a 'Mexican Standoff' arrangement) servers designed to keep everyone honest. Das_Fuhrwerk would provide one extra, with any third member acting as a dummy policing server only (if necessary due to lack of second customer).
 	
-The ordering services will run alongside the main system and will have their own elastos webservers. The database is part of the main, with 2 tables per ordering schema - blocks and transactions (see Docker section above), and one ordering schema per main vm.	
+The ordering services will run alongside the main system.	
 
 In our case, with The General, we started the process of building the main databases from 3 schema backup .sql files,
 and put all backups and scripts into a single folder, and copied '*' to postgres masters, into a folder we will now make:
 
-The ordering services will run within the "main" database servers as schemata operating inside masters (to economise for home development
-- not recommended for production architecture).
-
+<!--
 `microk8s kubectl cp path/to/main_backups_and_scripts/* postgis-<x>-<uuuuuuuuuuuu>:/`
 	
 	(Use `microk8s kubectl get pods` to see full names of pods)
@@ -1556,32 +1574,30 @@ A sample backup of an ordering service database is shown in the Docker section a
 `microk8s kubectl exec -i postgis-<x>-<uuuuuuuuuuuuu> -- psql -U postgres wodehouse < ordering-service-backup-<c>.sql`
 	
 (In each master-x).
-	
+-->	
 	
 	
 ____________________________________________________
 
 ## Getting PostGIS and Open Street Maps
 	
-	As user 'ubuntu' in each vm's postgis master:
+	As user 'ubuntu' in each vm's pg-wodehouse master:
 	
-	(ie `microk8s kubectl exec -it postgis-<x>-<zzzzzzzzzzzz> -- bash`)
-	
-	Inside postgis containers as user ubuntu:
+	Inside postgres vm's as user ubuntu:
 
 `sudo add-apt-repository ppa:ubuntugis/ppa`
 
 `exit`
 	
-	Now on master-x:
+	Now on node-x:
 	
-`microk8s kubectl cp dbase_setup_2.sh postgis-<x>-<zzzzzzzzzzzz>:/`
+`juju scp dbase_setup_2.sh <machine number pg-wodehouse>:/`
 	
-`microk8s kubectl cp dbase_setup_3.sh postgis-<x>-<zzzzzzzzzzzz>:/`
+`juju scp dbase_setup_3.sh <machine number pg-wodehouse>:/`
 	
-`microk8s kubectl exec -it postgis-<x>-<zzzzzzzzzz> -- bash`
+`juju ssh <machine-number-pg-wodehouse>`
 	
-	Inside postgis-x again as 'ubuntu':
+	Inside pg-wodehouse, again as 'ubuntu':
 
 `./dbase_setup_2.sh`
 	
@@ -1589,11 +1605,11 @@ ____________________________________________________
 	
 `./dbase_setup_3.sh`
 	
-This completes database setup.
+This completes pg-wodehouse database setup.
 
                                                                                                                 
 _______________________________________________________________
-
+<!--
 
 # Logical Replication
 
@@ -1669,7 +1685,7 @@ In each multipass vm, and on each worker, in /;
 
 	
 _______________________________________________________________
-     
+ -->    
 
 # NOTE:
 	As we don't own or control the elastos sub-modules, and since the `elastos-smartweb-service/grpc_adenine/database/__init__.py` file is not fully usable as it is, in the elastos-smartweb-service module (as-cloned), we have included ITOTCCA's version of `__init__.py` in a folder in the cheirrs root directory. This version caters for initialising the SQLAlchemy interface from the existing database, and generating a full set of Database Models, using SQLAlchemy's ORM & methods of Database Metadata Reflection. However you need to edit this file carefully to suit your own database, at your
@@ -1685,22 +1701,22 @@ Now perform each of the following 2 steps for each vm, and within that, for each
      
      1:
 
-`microk8s kubectl cp shared/cheirrs/TO*/*service/* elastos-<x>:/elastos-smartweb-service/`
+`juju scp shared/cheirrs/TO*/*service/* <worker-0>:/elastos-smartweb-service/`
 
-`microk8s kubectl cp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/.env elastos-<x>:/elastos-smartweb-service/`
+`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/.env elastos-<x>:/elastos-smartweb-service/`
 
-`microk8s kubectl cp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/.env.test elastos-<x>:/elastos-smartweb-service/`
+`juju scp shared/cheirrs/TO*/TO_.env_in_elastos-smartweb-service_<vm-"master-number"eg 1>/.env.test elastos-<x>:/elastos-smartweb-service/`
 	
      2:
      
-`microk8s kubectl cp shared/cheirrs/TO*service/TO_elastos-smartweb-service.grpc_adenine.database_<node-number-eg 1>/__init__.py elastos-<x>:/elastos-smartweb-service/grpc_adenine/database/__init__.py`
+`juju scp shared/cheirrs/TO*service/TO_elastos-smartweb-service.grpc_adenine.database_<node-number-eg 1>/__init__.py elastos-<x>:/elastos-smartweb-service/grpc_adenine/database/__init__.py`
 
 
- After you have covered the 3 master-x nodes:
+ After you have covered the 3 node-x nodes:
  
 in each:
 
-`microk8s kubectl exec -it elastos-<x> -- bash` 
+`juju ssh <worker-0>` 
 	
 `sudo kill -9 $(sudo lsof -t -i:8001)`
 	
@@ -1738,7 +1754,7 @@ _____________________________________________________________
 ## In master-0, master-1, and master-2 enter elastos-x, to set-up an IoT server with Python-gRPC, 
 ## node-red-industrial, Carrier and IOTA client.
      
-`microk8s kubectl exec -it elastos-<x> -- bash`
+`juju ssh <kubernetes-worker-0>`
 
 (To install nodejs and npm, needed for Node-red, the Carrier wrapper and to connect 
 with gRPC as well as the IOTA node.js client:)
@@ -1763,21 +1779,13 @@ with gRPC as well as the IOTA node.js client:)
      
              on the Host (acting as an Edge server)
      
-Also, in elastos-x (`microk8s kubectl exec -it elastos<x> -- bash`),
+Also, in worker-0 (`juju ssh <machine-number-worker-0>`),
      
 `sudo snap install node-red-industrial`
-	
-	You can visit (on the Host) `localhost:1891`
-     
-     and go to 0.0.0.0, on a new tab in the 
-     browser, with port `1891`,
-     then, in elastos-x,
 
-`0.0.0.0:1891` 
-     
-     to obtain access to the multipass>microk8s>[elastos-x] vm/container. 
-     
-    These 2 pages can interact, and generate and forward messages, events and commands.
+You will require a desktop remote client to be installed (see below).
+	
+	You can then visit (on the Host) `<worker-0-ip-addr>:1891`
      
      Eventually the idea is to be able to "log" and respond (in appropriate timeframes
      corresponding to the message origin and content) to events considered as "exceptional"
@@ -1799,11 +1807,10 @@ Also, in elastos-x (`microk8s kubectl exec -it elastos<x> -- bash`),
      
      https://github.com/elastos/Elastos.NET.Carrier.Nodejs.SDK and 
      https://github.com/elastos/Elastos.NET.Carrier.Native.SDK have details.
-  
      
-     The installation of IOTA client proceeds as follows (repeat for Host - ie Edge):
+The installation of IOTA client proceeds as follows (repeat for Host - ie Edge):
      
-     In elastos-x:
+     In worker-0:
      
 `mkdir iota && cd iota`
      
@@ -1883,8 +1890,7 @@ $ make install
      
      NOTE: We have not yet succeeded in installing the Nodejs Wrapper.
 
-_________________________________________________________________________________________________________________________________________
-     
+_______________________________________________________________________
      
  ## SUMMARY:
      
@@ -1906,7 +1912,7 @@ ________________________________________________________________________________
      7.  Learn how to provide authentication from Elastos DID Sidechain to Postgres DataChain/BlockBase system, and in
 	general how to continue development of the Ionic and Elastos.Essentials packages in tandem.
      
- _________________________________________________________________________________________________________________________________________________
+ ___________________________________________________________________________________________________________________
      
 ## THE FUTURE:
      
