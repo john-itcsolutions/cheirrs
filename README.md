@@ -1318,19 +1318,21 @@ The database structure for 'bucordo' is non-existent presently.
 
 Since Postgres does not natively provide for multi-master logical replication there is an existing open-source, 
 Multi-Master replication system on a site called www.bucardo.org, however it relies on a single replicating 
-bucardo master server to handle all replication using a PLperl database on Postgres. The present structure of 
+bucardo master server to handle all replication using PLperl functions on a Postgres database. The present structure of 
 that software is such that users must invest their trust in the superuser of the Bucardo system. This is counter 
 to our own principles of developing Automated Trust in our systems. To counteract this weakness in Bucardo we are 
 intending to develop an Open Source adaptation of the system that will use similar Perl functions as Bucardo, however
-will be employing as many "Bucordo" servers as there are Member-Class base-level database servers. The Bucordo servers 
-will be informed of updates only on "their own" database base-level servers and will then update the remaining Bucordo 
-servers which will then update "their own" base-level database servers. The remaining work will involve an Ordering 
-Process for each Block of transactions, designed to determine the agreed order in which transactions are to be 
-committed after a consensus seeking process between the Bucordo servers, following the method detailed in the 
-above-mentioned IBM research paper. The process is completed with a checkpointing procedure as detailed in 
-the paper, and available on Postgres.
+will be employing as many "Bucordo" servers as there are Member-Class base-level database servers (as opposed to the 
+single Bucardo server). The Bucordo servers will be informed of updates only on "their own" database base-level servers 
+and will then update the remaining Bucordo servers which will then update "their own" base-level database servers. The 
+remaining work will involve an Ordering Process for each Block of transactions (similar to a Blockchain), designed to 
+determine the "agreed" order in which transactions are to be committed after a consensus-seeking process between the 
+Bucordo servers, following the method detailed in the above-mentioned IBM research paper. The process is completed with 
+a checkpointing procedure as detailed in the paper, and readily available on Postgres.
 
-We are now commencing work on that adaptation.
+We are now commencing work on that adaptation. We intend to open source the bucordo project and repository.
+
+See https://github.com/john-itcsolutions/bucordo .
 
 Now, on kubernetes-worker-0:
 
