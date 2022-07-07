@@ -1015,13 +1015,13 @@ _________________________________________________________________
      
 `sudo snap install multipass`
 
-`multipass launch -n master-0 -c 6 -m 14GB -d 100GB`
+`multipass launch -n node-0 -c 6 -m 14GB -d 50GB`
 
-`multipass launch -n master-1 -c 6 -m 14GB -d 100GB`
+`multipass launch -n node-1 -c 6 -m 14GB -d 50GB`
 
-`multipass launch -n master-2 -c 6 -m 14GB -d 100GB`
+`multipass launch -n node-2 -c 6 -m 14GB -d 50GB`
 
-`multipass launch -n pgadmin -c 4 -m 10GB -d 50GB`
+`multipass launch -n pgadmin-n-red-dtop -c 2 -m 10GB -d 50GB`
 
      
      (You can tweak those settings)
@@ -1030,15 +1030,15 @@ _________________________________________________________________
      
      Then mount a shared directory to enable access to your host:
      
-     On each vm (`multipass shell master-x/pgadmin`)
+     On each vm (`multipass shell node-x/pgadmin`)
      
 `mkdir shared`
 
 `exit`
 
-`multipass mount path/to/your/working/directory master-<x>:~/shared/`
+`multipass mount path/to/your/working/directory node-<x>:~/shared/`
 
-
+<!--
 *******************************************************
 
 # In each master-x vm:
@@ -1221,7 +1221,7 @@ Now we are ready to install a secret called regcred:
 
 Where "your-registry-server" == https://index.docker.io/v1/ if you have the normal docker hub account.
 
-Then you can organise the folllowing files, called elastos-x, one for each master-x vm.
+Then you can organise the folllowing files, called elastos-x, one for each node-x vm.
 	
 `nano elastos-<x>.yaml`
 	
@@ -1247,6 +1247,89 @@ Now apply with:
 	
 	(in each master-x vm).
 	
+-->
+
+In each vm (ie node-x):
+
+`sudo snap install juju --classic`
+
+`juju bootstrap localhost node-<x>`
+
+You may need to re-run this command at the end to finish cleanly
+
+`juju add-model werk-<x>`
+
+`juju deploy kubernetes-core`
+
+`juju remove-unit easyrsa/0 --force` 
+
+(& repeated)
+
+`juju remove-machine 0/lxd/0 --force`
+
+(& repeated)
+
+`juju add-unit easyrsa`
+
+When all units are deployed except possibly the master (control-plane) and/or 
+worker is in a wait state (but with ports assigned):
+
+`juju deploy postgresql pg-wodehouse`
+
+(single Master)
+
+`juju deploy postgresql bucordo`
+
+(single Master)
+
+When settled, enter bucordo machine:
+
+`juju ssh <machine-number-bucordo>`
+
+`apt install postgresql-plperl-12`
+
+`perl -MCPAN -e 'install Bundle::DBI'`
+
+`perl -MCPAN -e 'install DBD::Pg'`
+
+`perl -MCPAN -e 'install DBIx::Safe'`
+
+Create 'bucordo' database:
+
+`sudo passwd postgres`
+
+`su postgres`
+
+`createdb bucordo`
+
+`psql bucordo`
+
+`CREATE EXTENSION plperl;`
+
+`\q`
+
+`exit`
+
+`exit`
+
+Now back on node-x.
+
+The database structure for 'bucordo' is non-existent presently.
+
+Since Postgres does not natively provide for multi-master logical replication there is an existing open-source, 
+Multi-Master replication system on a site called www.bucardo.org, however it relies on a single replicating 
+bucardo master server to handle all replication using a PLperl database on Postgres. The present structure of 
+that software is such that users must invest their trust in the superuser of the Bucardo system. This is counter 
+to our own principles of developing Automated Trust in our systems. To counteract this weakness in Bucardo we are 
+intending to develop an Open Source adaptation of the system that will use similar Perl functions as Bucardo, however
+will be employing as many "Bucordo" servers as there are Member-Class base-level database servers. The Bucordo servers 
+will be informed of updates only on "their own" database base-level servers and will then update the remaining Bucordo 
+servers which will then update "their own" base-level database servers. The remaining work will involve an Ordering 
+Process for each Block of transactions, designed to determine the agreed order in which transactions are to be 
+committed after a consensus seeking process between the Bucordo servers, following the method detailed in the 
+above-mentioned IBM research paper. The process is completed with a checkpointing procedure as detailed in 
+the paper, and available on Postgres.
+
 You need to supply a "run.sh" file to each elastos container:
 	
 `nano run.sh`
