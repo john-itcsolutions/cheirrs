@@ -1255,7 +1255,7 @@ In each vm (ie node-x):
 
 `juju bootstrap localhost node-<x>`
 
-You may need to re-run this command at the end to finish cleanly
+You may need to re-run the above command at the end to finish cleanly
 
 `juju add-model werk-<x>`
 
