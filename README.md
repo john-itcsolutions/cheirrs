@@ -1338,10 +1338,6 @@ Now, on kubernetes-worker-0:
 
 `git clone https://github.com/cyber-republic/elastos-smartweb-service.git`
 
-`sudo snap install node-red-industrial`
-
-`mkdir iota && cd iota`
-
 In el*service, there is a hidden .env.example file you can find with 
 
 `ls el* -a`
@@ -1678,7 +1674,7 @@ _______________________________________________________________
 			     
 In each multipass vm, and on each worker, in /; 
 			     
-`microk8s kubectl exec -it elastos-<x> -- bash`
+`juju ssh <worker-0>`
 	
 `git clone --recurse-submodules https://github.com/cyber-republic/elastos-smartweb-service.git`
 	
@@ -1751,7 +1747,7 @@ _____________________________________________________________
 To be continued ..
 _____________________________________________________________
  
-## In master-0, master-1, and master-2 enter elastos-x, to set-up an IoT server with Python-gRPC, 
+## In node-0, node-1, and node-2 enter worker-0, to set-up an IoT server with Python-gRPC, 
 ## node-red-industrial, Carrier and IOTA client.
      
 `juju ssh <kubernetes-worker-0>`
