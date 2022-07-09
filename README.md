@@ -66,8 +66,7 @@ Please refer to the current Multi-Master database replication system being adapt
 at https://github.com/john-itcsolutions/bucordo. Bucardo is a Single Superuser, Single (Bucardo) Master system, 
 providing fine-grained Multi-Master replication of substrate database servers.
 
-Bucordo is aimed at achieving Trust with a Multi-Bucordo-Master system replicating and ordering transactions 
-for a substrate of working-level databases (all acting as Masters), such that the substrate servers are "owned" by their respective Bucordo server, which receives updates from transactions executed on their "own" substrate server, that are then sent as update notifications to all other bucordo database servers, for subsequent updating on the other "owned" substrate servers.
+Bucordo is quite different, and is aimed at achieving Trust with a Multi-Bucordo-Master system replicating and ordering transactions for a substrate of working-level databases (all acting as Masters), such that the substrate servers are "owned" by their respective Bucordo server, which receives updates from transactions executed on their "own" substrate server, that are then sent as update notifications to all other bucordo database servers, for subsequent updating on the other "owned" substrate servers. Thus there are as many Bucordo servers as there are Substrate Database Servers. By contrast there is only one Bucardo Master in a typical Bucardo system.
 
 ITOTCCA maintains an organisation of servers based on "Member Classes" so that there is one substrate server and one bucordo server per member-class installation, or "site". Member Classes may be participants in netowrks with other Member Classes (eg Member-Classes involved in a Supply Chain), or a Member Class may stand alone and not be internetworked - eg a Real Estate Agency (Distributed) Enterprise App.
 
