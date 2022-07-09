@@ -25,7 +25,7 @@ gRPC protocols replace the older style REST APIs, for communicating requests, an
 
 To tackle the full set of Kubernetes installations locally, ideally you would need (for 3 multipass vm's with a microk8s installation on each) a 64 GB RAM (minimum); 16 core cpu; 250+ GB SSD; + second HDD: PC (x86_64). eg an Extreme Gaming Computer. If you intend to include Machine Learning/AI capabilities, you really need an Accelerator NVIDIA GPU of at least 10GB vRAM. This allows approximately three member classes with corresponding Ordering Services (residing on the second workers) to develop with. However the most powerful way to develop here is to use Docker (see below). The current state of our Infrastructure can be represented figuratively:
 
-<img src="./ITCSA_Plan_2.png">
+<img src="./ITCSA_Plan_3.png">
 
 
 The following figure represents any of the 'master-x' controllers with their 'werk-x' models, as opposed to 'lernenmaschine', the other model, on 'kubefluss' controller (based on microk8s). We install the Kubeflow (kubefluss/lernenmaschine) model first. We are still working on the design of the Transaction Ordering Service.
@@ -34,7 +34,7 @@ We base initial development such as this locally. It's cheaper!
 
 
 
-<img src="./kubernetesinstallation-08-11-2021-2.png">
+<img src="./kubernetes-02-05-2022.png">
 
 The schema above are labeled G(n,m) for the internetworked, multiple member class dApps. In reality there is one schema/member-class (m-c: see https://itotchaincloud.com.au/the-general), across all business subnets. The single member classes, ie non-internetworked dApps (F(i)), are likewise constituted of all members of a network or dApp subscribers' group, on their own single-member-class schema. Although this is the case with the set F(i), within a single network ie schema ie dApp (in the F(i) case), we will be able to use the field for a member's id to distinguish between members' different dApp requirements and proliferate different (custom) tables and processes within a single network/dApp/schema. While the same is ideally the case for the G(n,m) set, such individual member Tables and dApps being theoretically possible, the design and coding would be expensive. Thus, by following the IBM research lead, we can say there would be one copy of the above installation per member-class, and arranged, configured and coded to ensure these databases interact as Masters in a data-intensive Blockchain-type assemblage. Therefore possibly as many as 3 for cheirrs, chubba morris and convey-it, plus as many of the internetworked member classes as existed on their own Business Subnets alongside other member-classes from other Business Subnets. eg 
 member-class(n,m) with n == business sub-network id and m == member-class id. Within member classes there may be many (or few) actual independent members (Companies).
