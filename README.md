@@ -62,6 +62,19 @@ At the virtual server level, there will be one virtual Master copy of a database
 
 <img src="./datachains-slide5_2.png">
 
+Please refer to the current Multi-Master database replication system being adapted from "Bucardo", ie "Bucordo"
+at https://github.com/john-itcsolutions/bucordo. Bucardo is a Single Superuser, Single (Bucardo) Master system, 
+providing fine-grained Multi-Master replication of substrate database servers.
+
+Bucordo is aimed at achieving Trust with a Multi-Bucordo-Master system replicating and ordering transactions 
+for a substrate of working-level databases (all acting as Masters), such that the substrate servers are "owned" by their respective Bucordo server, which receives updates from transactions executed on their "own" substrate server, that are then sent as update notifications to all other bucordo database servers, for subsequent updating on the other "owned" substrate servers.
+
+ITOTCCA maintains an organisation of servers based on "Member Classes" so that there is one substrate server and one bucordo server per member-class installation, or "site". Member Classes may be participants in netowrks with other Member Classes (eg Member-Classes involved in a Supply Chain), or a Member Class may stand alone and not be internetworked - eg a Real Estate Agency (Distributed) Enterprise App.
+
+The important thing is to establish Automated Trust, where the machines involved keep all players honest, as in a Blockchain.
+
+_______________________________________________________________________________________
+_______________________________________________________________________________________
 
 
 The Internet of Things (IoT) system revolves around the IoT node-red servers on the Edge Client/Servers, being in communication with node-red server residing in the cloud and communicating via gRPC protocol buffers with separate Smart-Web server. The smart-web server receives notifications from the node-red server and passes on relevant IoT events to both blockchains and database, also communicating with the IoT Admin dApp.
