@@ -244,7 +244,6 @@ services:
   db-0_0:
     container_name: member_class_0_0
     image: postgis/postgis
-    command: postgres -c wal_level=logical -c max_worker_processes=35 -c max_logical_replication_workers=35 -c max_wal_senders=45 -c max_replication_slots=35
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -256,7 +255,7 @@ services:
       static-network:
         ipv4_address: 172.20.128.43
     volumes:
-      - ./data_46:/var/lib/postgresql/data2
+      - ./data_46:/var/lib/postgresql/data
     ports:
       - "5473:5432"
 
@@ -265,22 +264,21 @@ services:
 There also needs to be a set of ordering nodes (one for each member-class schema) set out as follows:
 
 ```
-  db-order-0_0:
-    container_name: order_member_class_0_0
+  db-bucordo-0_0:
+    container_name: bucordo_member_class_0_0
     image: postgis/postgis
-    command: postgres -c wal_level=replica
     restart: always
     environment:
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=bucordo
       - POSTGRES_PASSWORD=your_password
-      - APP_DB_USER=gmu
-      - APP_DB_PASS=gmu
-      - APP_DB_NAME=lagerhaus
+      - APP_DB_USER=bucordo
+      - APP_DB_PASS=bucordo
+      - APP_DB_NAME=bucordo
     networks:
       static-network:
         ipv4_address: 172.20.128.51
     volumes:
-      - ./data_54:/var/lib/postgresql/data2
+      - ./data_54:/var/lib/postgresql/data
     ports:
       - "5481:5432"
 ```
@@ -305,7 +303,7 @@ Insert the following content, follow the pattern,  and adapt as required to your
 
 # docker_dbase_resetup.sh script
 
-createuser gmu && createdb lagerhaus && psql lagerhaus < das_fuhrwerk_backup.sql && echo "das_fuhrwerk" && psql lagerhaus < das_fuhrwerk_oseer.sql && echo "das_fuhrwerk_oseer" && psql lagerhaus < cheirrs_backup.sql && echo "cheirrs" && psql lagerhaus < cheirrs_oseer_backup.sql && echo "cheirrs_oseer" && psql lagerhaus < chubba_morris_backup.sql && echo "chubba_morris" && psql lagerhaus < chubba_morris_oseer_backup.sql && echo "chubba_morris_oseer" && psql lagerhaus < convey_it_backup.sql && echo "convey_it" && psql lagerhaus < convey_it_oseer_backup.sql && echo "convey_it_oseer" && psql lagerhaus < iot_backup.sql && echo "iot" && psql lagerhaus < member_class_0_0_backup.sql && echo "member_class_0_0" && psql lagerhaus < member_class_0_0_oseer_backup.sql && echo "member_class_0_0_oseer" && psql lagerhaus < member_class_0_1_backup.sql && echo "member_class_0_1" && psql lagerhaus < member_class_0_1_oseer_backup.sql && echo "member_class_0_1_oseer" && psql lagerhaus < member_class_0_2_backup.sql && echo "member_class_0_2" && psql lagerhaus < member_class_0_2_oseer_backup.sql && echo "member_class_0_2_oseer" && psql lagerhaus < member_class_1_0_backup.sql && echo "member_class_1_0" && psql lagerhaus < member_class_1_0_oseer_backup.sql && echo "member_class_1_0_oseer" && psql lagerhaus < member_class_1_1_backup.sql && echo "member_class_1_1" && psql lagerhaus < member_class_1_1_oseer_backup.sql && echo "member_class_1_1_oseer" && psql lagerhaus < member_class_1_2_backup.sql && echo "member_class_1_2" && psql lagerhaus < member_class_1_2_oseer_backup.sql && echo "member_class_1_2_oseer" && psql lagerhaus < member_class_1_3_backup.sql && echo "member_class_1_3" && psql lagerhaus < member_class_1_3_oseer_backup.sql && echo "member_class_1_3_oseer" && psql lagerhaus < member_class_1_4_backup.sql && echo "member_class_1_4" && psql lagerhaus < member_class_1_4_oseer_backup.sql && echo "member_class_1_4_oseer" && psql lagerhaus < iot_backup.sql && echo "iot" && echo "iot and thus FINISHED main section!" && psql lagerhaus < geordnet_cheirrs.sql && psql lagerhaus < geordnet_cheirrs_oseer.sql && psql lagerhaus < geordnet_chubba_morris.sql && psql lagerhaus < geordnet_chubba_morris_oseer.sql && psql lagerhaus < geordnet_convey_it.sql && psql lagerhaus < geordnet_convey_it_oseer.sql && psql lagerhaus < geordnet_das_fuhrwerk.sql && psql lagerhaus < geordnet_das_fuhrwerk_oseer.sql && psql lagerhaus < geordnet_iot.sql && psql lagerhaus < geordnet_0_0.sql && psql lagerhaus < geordnet_0_0_oseer.sql && psql lagerhaus < geordnet_0_1.sql && psql lagerhaus < geordnet_0_1_oseer.sql && psql lagerhaus < geordnet_0_2.sql && psql lagerhaus < geordnet_0_2_oseer.sql && psql lagerhaus < geordnet_1_0.sql && psql lagerhaus < geordnet_1_0_oseer.sql && psql lagerhaus < geordnet_1_1.sql && psql lagerhaus < geordnet_1_1_oseer.sql && psql lagerhaus < geordnet_1_2.sql && psql lagerhaus < geordnet_1_2_oseer.sql && psql lagerhaus < geordnet_1_3.sql && psql lagerhaus < geordnet_1_3_oseer.sql && psql lagerhaus < geordnet_1_4.sql && psql lagerhaus < geordnet_1_4_oseer.sql && echo "DONE!"
+createuser gmu && createdb lagerhaus && psql lagerhaus < das_fuhrwerk_backup.sql && echo "das_fuhrwerk" && psql lagerhaus < das_fuhrwerk_oseer.sql && echo "das_fuhrwerk_oseer" && psql lagerhaus < cheirrs_backup.sql && echo "cheirrs" && psql lagerhaus < cheirrs_oseer_backup.sql && echo "cheirrs_oseer" && psql lagerhaus < chubba_morris_backup.sql && echo "chubba_morris" && psql lagerhaus < chubba_morris_oseer_backup.sql && echo "chubba_morris_oseer" && psql lagerhaus < convey_it_backup.sql && echo "convey_it" && psql lagerhaus < convey_it_oseer_backup.sql && echo "convey_it_oseer" && psql lagerhaus < iot_backup.sql && echo "iot" && psql lagerhaus < member_class_0_0_backup.sql && echo "member_class_0_0" && psql lagerhaus < member_class_0_0_oseer_backup.sql && echo "member_class_0_0_oseer" && psql lagerhaus < member_class_0_1_backup.sql && echo "member_class_0_1" && psql lagerhaus < member_class_0_1_oseer_backup.sql && echo "member_class_0_1_oseer" && psql lagerhaus < member_class_0_2_backup.sql && echo "member_class_0_2" && psql lagerhaus < member_class_0_2_oseer_backup.sql && echo "member_class_0_2_oseer" && psql lagerhaus < member_class_1_0_backup.sql && echo "member_class_1_0" && psql lagerhaus < member_class_1_0_oseer_backup.sql && echo "member_class_1_0_oseer" && psql lagerhaus < member_class_1_1_backup.sql && echo "member_class_1_1" && psql lagerhaus < member_class_1_1_oseer_backup.sql && echo "member_class_1_1_oseer" && psql lagerhaus < member_class_1_2_backup.sql && echo "member_class_1_2" && psql lagerhaus < member_class_1_2_oseer_backup.sql && echo "member_class_1_2_oseer" && psql lagerhaus < member_class_1_3_backup.sql && echo "member_class_1_3" && psql lagerhaus < member_class_1_3_oseer_backup.sql && echo "member_class_1_3_oseer" && psql lagerhaus < member_class_1_4_backup.sql && echo "member_class_1_4" && psql lagerhaus < member_class_1_4_oseer_backup.sql && echo "member_class_1_4_oseer" && psql lagerhaus < iot_backup.sql && echo "iot" && echo "iot and thus FINISHED main section!" && echo "DONE!"
 
 ```
 
@@ -327,9 +325,8 @@ These scripts are found in the elastos repo.
 
 In the essentials folder you require a full set of your own schemata sql backup files.
 
-Next create a "geordnet" folder next to "essentials".
-
-Then add the following set of files (in correspondence with the schemata in "essentials" but prefixed with "geordnet_" as a set of names. A typical PostgreSQL backup of a geordnet file is as follows:
+The following fragments were added to the parent project "bucardo"s schema to cover the formation of transaction blocks
+on bucordo, as an ordering and replication service.
 
 ```
 --
@@ -447,12 +444,6 @@ ALTER TABLE ONLY geordnet_member_class_0_0.transactions
 
 ```
 
-These files should be created by editing and replacing the schema name repeatedly, then "saving as".
-
-There should be, au fin du jour, as many geordnet_x_y.sql files as exist in the essentials folder, but residing in the "geordnet" folder.
-
-Each corresponding geordnet schema is associated with its own main database schema as a part of the transaction ordering system.
-
 You need a copy of any one of the docker-compose.yml files to reside like an anchor in the parent directory of all your project folders. The name of the parent directory gives the overall network a name so every database copy can see each other one. You will be running your "docker-compose up" commands from this directory, but you need to copy and paste the section as follows from each project directory's docker-compose.yml into the parent folder's docker-compose.yml file - the copied section goes OVER the existing db code every time, as you roll out the containers, each one in a new terminal (but from the same directory). NOTE 1: You must retain the static network and pgadmin4 sections in each "docker-compose up" invocation. NOTE 2: You will be required to paste the following into these terminals to allow non-root access:
 
 `sudo usermod -aG docker $USER && newgrp docker`
@@ -463,7 +454,6 @@ In the end, this procedure gives a multi-threaded set of containers all connecte
 db-0_0:
     container_name: member_class_0_0
     image: postgis/postgis
-    command: postgres -c wal_level=logical -c max_worker_processes=35 -c max_logical_replication_workers=35 -c max_wal_senders=45 -c max_replication_slots=35
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -475,7 +465,7 @@ db-0_0:
       static-network:
         ipv4_address: 172.20.128.43
     volumes:
-      - ./data_46:/var/lib/postgresql/data2
+      - ./data_46:/var/lib/postgresql/data
     ports:
       - "5473:5432"
 
@@ -485,22 +475,21 @@ db-0_0:
 The ordering nodes require a different docker-compose fragment (from above):
 
 ```
-  db-order-0_0:
-    container_name: order_member_class_0_0
+  db-bucordo-0_0:
+    container_name: bucordo_member_class_0_0
     image: postgis/postgis
-    command: postgres -c wal_level=replica
     restart: always
     environment:
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=bucordo
       - POSTGRES_PASSWORD=your_password
-      - APP_DB_USER=gmu
-      - APP_DB_PASS=gmu
-      - APP_DB_NAME=lagerhaus
+      - APP_DB_USER=bucordo
+      - APP_DB_PASS=bucordo
+      - APP_DB_NAME=bucordo
     networks:
       static-network:
         ipv4_address: 172.20.128.51
     volumes:
-      - ./data_54:/var/lib/postgresql/data2
+      - ./data_54:/var/lib/postgresql/data
     ports:
       - "5481:5432"
 ```
@@ -511,7 +500,7 @@ So, in the parent folder of "essentials" compress the folder with:
 
 `tar zcvf essentials.tar.gz ./essentials`
 
-Then "docker cp" essentials.tar.gz to every db container .
+Then "docker cp" essentials.tar.gz to every base-db container .
 
 Inside each container - 
 
@@ -531,31 +520,60 @@ And wait until complete.
 
 Then:
 
-After all database copies are up and running, you can set about coding "Logical Replication" on all servers. Basically each server is required to publish all tables and each server requires a set of subscriptions covering all other servers. The ordering nodes require a subscription to their own Member Class servers, in correspondence.
-
 So, in each non-ordering server proceed as follows.
 
 `docker exec -it postgis_container_x_y bash`
 
 `su postgres`
 
-We are currently working on a plpgsql function to form an array (v_list) containing all tables to be published from each schema. These should consist of only the "home schema" on the vm and its oseer schema corresponding. The following is the main line in the function, however it will need to be executed from within the plpgsql function body.
+The next step is to investigate how to involve the Ordering Service in the ordering of transactions by consensus from the other servers, and propogating the finalised Blocks throughout the system. We require a set of Bucordo_Member_Class_x servers with the database "bucordo".
 
-`CREATE PUBLICATION member_class_x_publication FOR SELECT v_list;`
+Now, from a convenient working directory, clone our forked bucardo repo called "bucordo",
 
-Ending with a full set of servers with Publications of ALL TABLES.
+`git clone https://github.com/john-itcsolutions/bucordo.git`
 
-You can also complete this directly in PgAdmin4.
+`cd bucordo`
 
-And then subscribe every non-ordering server to every other non-ordering server's Publications with (eg):
+Here you will find our updated bucordo.schema file as well as the original bucardo repo,
+refactored as "bucordo".
 
-`CREATE SUBSCRIPTION member_class_x_member_class_y_subscription CONNECTION 'host=172.20.128.x port=5432 dbname=lagerhaus password=your??postgres??password' PUBLICATION member_class_x_publication;`
+`docker cp bucordo.schema <machine-number-bucordo>:~/`
 
-Each ordering node must be subscribed to its own Member Class server Publication (only).
+and same for other bucordo installations.
 
-Thus Logical Replication is implemented.
+Enter bucordo container:
 
-The next step is to investigate how to involve the Ordering Service in the ordering of transactions by consensus from the other servers, and propogating the finalised Blocks throughout the system. We require a partitioned set of Order_Member_Class_x servers including on the database "lagerhaus".
+`docker exec -it <container-name-bucordo>`
+
+`sudo mkdir /usr/include/postgresql`
+
+`sudo apt update`
+
+`sudo apt install build-essential`
+
+`apt install postgresql-plperl-13`
+
+`perl -MCPAN -e 'install Bundle::DBI'`
+
+`perl -MCPAN -e 'install DBD::Pg'`
+
+`perl -MCPAN -e 'install DBIx::Safe'`
+
+`psql bucordo`
+
+`CREATE EXTENSION plperl;`
+
+`\q`
+
+`psql bucordo < bucordo.schema`
+
+`exit`
+
+`exit`
+
+Repeat once for each bucordo installation.
+
+The database structure for 'bucordo' is incomplete presently.
 
 
 # About the docker-compose.yml file to run:
@@ -563,7 +581,7 @@ The next step is to investigate how to involve the Ordering Service in the order
 The above code needs to be copied (as for the previous set) to the overall parent Project Directory, but only over the "services \ db-z: .. etc" section, in the existing docker-compose.yml file, leaving the first (network definition) section and pg-admin4 sections intact so as to preserve the pgadmin4 and static network settings. 
 
 
-When the databases from this "partition" are rolled out they will have a structure of schemata, tables and columns identical to each other, but the ordering nodes have a much simpler set of 2 tables per server ("Transactions" & "Blocks"), (identical) in each schema. eg of one schema might be "geordnet_member_class_z" schema with 2 tables, 1. transactions, and 2. blocks. 
+When the databases from this "partition" are rolled out they will have a structure of schemata, tables and columns identical to each other, but the ordering nodes have a much simpler set of tables per server (essentially the "bucardo" database plus  tables "Transactions" & "Blocks"), identical in each schema.
 
 Transactions has a. username of client b. procedure executed and arguments (json) c. block_id d. Unique identifier == hash (a, b, c) e. Signature on hash(a, b, c, d) using client's private key. 
 
@@ -580,8 +598,12 @@ Next we have to clone the Elastos Smartweb blockchain and database server packag
 
 `git clone --recurse-submodules https://github.com/cyber-republic/elastos-smartweb-service.git`
 
+Alternatively you could build an image from a running elastos container, say, developed from a debian base-image.
+
 With the development of the database enabled after we run the docker-compose file (administer and develop at 
 0.0.0.0:5050 on your Host), the "run.sh" script as defined in the Elastos repo we just cloned needs to be edited.
+
+You would do this before committing the container as an image.
 
 Open elastos-smartweb-service/run.sh in an editor and comment out the top lines as shown here:
 
@@ -608,8 +630,7 @@ image as the postgis_container, however it will already be running when "./run.s
 
 Note that for postgres database development the progress is easier if you are user "postgres" on the Host.
 
-You now need to edit the `elastos-smartweb-service/.env.example` file to reflect your own docker network addresses. The database ip-address
-is found as above from 
+You now need to edit the `elastos-smartweb-service/.env.example` file to reflect your own docker network addresses. The database ip-address is found as above from 
 
 `docker container inspect postgis_container`
 
@@ -1282,9 +1303,28 @@ worker is in a wait state (but with ports assigned):
 
 (single Master)
 
-When settled, enter bucordo machine:
+Now, clone our forked bucardo repo called "bucordo",
+
+`git clone https://github.com/john-itcsolutions/bucordo.git`
+
+`cd bucordo`
+
+Here you will find our updated bucordo.schema file as well as the original bucardo repo,
+refactored as "bucordo".
+
+`juju scp bucordo.schema <machine-number-bucordo>:~/`
+
+and same for other bucordo installations.
+
+Enter bucordo machine:
 
 `juju ssh <machine-number-bucordo>`
+
+`sudo mkdir /usr/include/postgresql`
+
+`sudo apt update`
+
+`sudo apt install build-essential`
 
 `apt install postgresql-plperl-12`
 
@@ -1296,9 +1336,9 @@ When settled, enter bucordo machine:
 
 Create 'bucordo' database:
 
-`sudo passwd postgres`
+`sudo adduser bucordo`
 
-`su postgres`
+`su bucordo`
 
 `createdb bucordo`
 
@@ -1308,13 +1348,17 @@ Create 'bucordo' database:
 
 `\q`
 
+`psql bucordo < bucordo.schema`
+
 `exit`
 
 `exit`
+
+Repeat once for each bucordo installation.
 
 Now back on node-x.
 
-The database structure for 'bucordo' is non-existent presently.
+The database structure for 'bucordo' is incomplete presently.
 
 Since Postgres does not natively provide for multi-master logical replication there is an existing open-source, 
 Multi-Master replication system on a site called www.bucardo.org, however it relies on a single replicating 
