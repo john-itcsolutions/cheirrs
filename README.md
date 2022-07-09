@@ -326,60 +326,32 @@ These scripts are found in the elastos repo.
 In the essentials folder you require a full set of your own schemata sql backup files.
 
 The following fragments were added to the parent project "bucardo"s schema to cover the formation of transaction blocks
-on bucordo, as an ordering and replication service.
+on bucordo, as an ordering and replication service. We also refactored all occurrences of "bucardo" to "bucordo".
 
 ```
 --
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.5 (Debian 13.5-1.pgdg110+1)
--- Dumped by pg_dump version 13.5 (Debian 13.5-1.pgdg110+1)
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
 
 --
--- Name: geordnet_member_class_0_0; Type: SCHEMA; Schema: -; Owner: postgres
+-- Name: bucordo; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
-CREATE SCHEMA geordnet_member_class_0_0;
+CREATE SCHEMA bucordo;
 
 
-ALTER SCHEMA geordnet_member_class_0_0 OWNER TO postgres;
+ALTER SCHEMA bucordo OWNER TO postgres;
 
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: blocks; Type: TABLE; Schema: geordnet_member_class_0_0; Owner: postgresapiVersion: v1
+-- Name: blocks; Type: TABLE; Schema: bucordo; Owner: postgres
 
-kind: PersistentVolume
-
-metadata:
-    name: postgres-pv-volume
-    labels:
-        type: local
-spec:
-    storageClassName: openebs-jiva-csi-default
-    capacity:
-        storage: 5Gi
-    accessModes:
-    - ReadWriteOnce
-    hostPath:
-        path: "/mnt/data"
---
-
-CREATE TABLE geordnet_member_class_0_0.blocks (
+CREATE TABLE bucordo.blocks (
     id bigint NOT NULL,
     tx_set json NOT NULL,
     consensus_metadata json NOT NULL,
@@ -389,13 +361,13 @@ CREATE TABLE geordnet_member_class_0_0.blocks (
 );
 
 
-ALTER TABLE geordnet_member_class_0_0.blocks OWNER TO postgres;
+ALTER TABLE bucordo.blocks OWNER TO postgres;
 
 --
--- Name: transactions; Type: TABLE; Schema: geordnet_member_class_0_0; Owner: postgres
+-- Name: transactions; Type: TABLE; Schema: bucordo; Owner: postgres
 --
 
-CREATE TABLE geordnet_member_class_0_0.transactions (
+CREATE TABLE bucordo.transactions (
     client_uname character varying(128) NOT NULL,
     proc_and_args json NOT NULL,
     block_id bigint NOT NULL,
@@ -404,37 +376,37 @@ CREATE TABLE geordnet_member_class_0_0.transactions (
 );
 
 
-ALTER TABLE geordnet_member_class_0_0.transactions OWNER TO postgres;
+ALTER TABLE bucordo.transactions OWNER TO postgres;
 
 --
--- Data for Name: blocks; Type: TABLE DATA; Schema: geordnet_member_class_0_0; Owner: postgres
+-- Data for Name: blocks; Type: TABLE DATA; Schema: bucordo; Owner: postgres
 --
 
-COPY geordnet_member_class_0_0.blocks (id, tx_set, consensus_metadata, prev_block_hash, curr_block_hash_a_b_c_d, sig_on_hash_curr_block_by_order_node) FROM stdin;
+COPY bucordo.blocks (id, tx_set, consensus_metadata, prev_block_hash, curr_block_hash_a_b_c_d, sig_on_hash_curr_block_by_order_node) FROM stdin;
 \.
 
 
 --
--- Data for Name: transactions; Type: TABLE DATA; Schema: geordnet_member_class_0_0; Owner: postgres
+-- Data for Name: transactions; Type: TABLE DATA; Schema: bucordo; Owner: postgres
 --
 
-COPY geordnet_member_class_0_0.transactions (client_uname, proc_and_args, block_id, hash_a_b_c, sig_a_b_c_d_client_priv_key) FROM stdin;
+COPY bucordo.transactions (client_uname, proc_and_args, block_id, hash_a_b_c, sig_a_b_c_d_client_priv_key) FROM stdin;
 \.
 
 
 --
--- Name: blocks blocks_pkey; Type: CONSTRAINT; Schema: geordnet_member_class_0_0; Owner: postgres
+-- Name: blocks blocks_pkey; Type: CONSTRAINT; Schema: bucordo; Owner: postgres
 --
 
-ALTER TABLE ONLY geordnet_member_class_0_0.blocks
+ALTER TABLE ONLY bucordo.blocks
     ADD CONSTRAINT blocks_pkey PRIMARY KEY (id);
 
 
 --
--- Name: transactions transactions_pkey; Type: CONSTRAINT; Schema: geordnet_member_class_0_0; Owner: postgres
+-- Name: transactions transactions_pkey; Type: CONSTRAINT; Schema: bucordo; Owner: postgres
 --
 
-ALTER TABLE ONLY geordnet_member_class_0_0.transactions
+ALTER TABLE ONLY bucordo.transactions
     ADD CONSTRAINT transactions_pkey PRIMARY KEY (hash_a_b_c);
 
 
