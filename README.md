@@ -1,3 +1,20 @@
+## PLEASE NOTE THAT THIS REPO HAS MOVED TO:
+
+https://bitbucket.org/itotcca-admin/cheirrs
+
+Thanks.
+
+
+
+
+
+
+
+
+
+
+
+
 ## INTRODUCTION:
 
 # CHEIRRS
